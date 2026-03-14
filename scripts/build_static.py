@@ -20,7 +20,7 @@ from serve_web import PAGE_TEMPLATE, build_digest_page, build_topic_page
 SITE_DIR = Path(__file__).parent.parent / "docs"
 
 # GitHub Pages serves this repo at /knowledge/ — adjust if the repo is renamed.
-SITE_BASE_PATH = "/knowledge"
+SITE_BASE_PATH = "/daily_knowledge"
 
 
 def _fix_paths(page_html: str) -> str:
