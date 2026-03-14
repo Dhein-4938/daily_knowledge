@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(crontab -l)",
+      "Read(//etc/**)",
+      "Bash(python3:*)",
+      "Bash(curl:*)",
+      "Read(//mnt/c/Users/ml493/obsidian/agentOS/**)",
+      "Read(//mnt/c/Users/ml493/obsidian/agentOS/.obsidian/**)",
+      "Bash(find:*)",
+      "Bash(chmod:*)",
+      "Bash(pip3 install:*)"
+    ]
+  }
+}

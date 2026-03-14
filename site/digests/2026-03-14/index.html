@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 14, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 14, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~14 min</div></div>
+<nav class="topic-nav"><a href="#quantum_mechanics">Quantum Mechanics</a><a href="#crispr">CRISPR-Cas9</a><a href="#black_holes">Black Holes</a><a href="#protein_folding">Protein Folding</a></nav>
+<article id="quantum_mechanics"><div class="topic-header"><h2>Quantum Mechanics</h2><div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~3 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Quantum mechanics (QM) is the fundamental theory governing matter and radiation at atomic and subatomic scales. Its state space is a <strong>complex Hilbert space</strong> $\mathcal{H}$, and the state of a system is encoded in a normalized vector $|\psi\rangle \in \mathcal{H}$ — the <em>wave function</em>.</div></div>
+
+<p>Time evolution is unitary and governed by the <strong>Schrödinger equation</strong>:</p>
+
+<p>$$i\hbar \frac{\partial}{\partial t}|\psi(t)\rangle = \hat{H}|\psi(t)\rangle$$</p>
+
+<p>where $\hat{H}$ is the Hamiltonian operator. Observable quantities correspond to self-adjoint operators $\hat{A}$; a measurement yields eigenvalue $a_n$ with probability $|\langle a_n | \psi \rangle|^2$ (Born rule), collapsing $|\psi\rangle$ to $|a_n\rangle$.</p>
+
+<p>Classical mechanics emerges as an approximation in the limit $\hbar \to 0$ (or equivalently, when action $S \gg \hbar$), formalized via the <a href="/knowledge/topic/WKB Approximation">WKB Approximation</a> and <a href="/knowledge/topic/Ehrenfest's Theorem">Ehrenfest's Theorem</a>.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>QM is not merely a theory of the small — it is the bedrock of:</p>
+
+<ul>
+<li><strong>Chemistry</strong>: molecular bonding, spectroscopy, reaction rates (<a href="/knowledge/topic/Quantum Chemistry">Quantum Chemistry</a>)</li>
+<li><strong>Materials science</strong>: band theory, superconductivity, topological phases</li>
+<li><strong>Technology</strong>: transistors, lasers, MRI, and increasingly <a href="/knowledge/topic/Quantum Computing">Quantum Computing</a></li>
+<li><strong>Cosmology</strong>: quantum fluctuations seeding large-scale structure</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Non-obvious connection</div><div>The success of QM in thermodynamics is as striking as in mechanics. Planck's 1900 quantization of oscillator energies ($E = n\hbar\omega$) resolved the ultraviolet catastrophe of <a href="/knowledge/topic/Blackbody Radiation">Blackbody Radiation</a> — the first crack in classical physics, born from statistical necessity rather than dynamical insight.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Superposition &amp; Interference</strong></p>
+<p>States can be linearly combined: $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$. Interference between probability amplitudes — not probabilities themselves — is the source of distinctly quantum phenomena like the double-slit pattern.</p>
+
+<p><strong>2. Heisenberg Uncertainty Principle</strong></p>
+<p>For conjugate observables $\hat{x}$ and $\hat{p}$:</p>
+
+<p>$$\sigma_x \sigma_p \geq \frac{\hbar}{2}$$</p>
+
+<p>This is not a measurement disturbance artifact but a fundamental property of non-commuting operators ($[\hat{x}, \hat{p}] = i\hbar$). Robertson's inequality generalizes it: $\sigma_A \sigma_B \geq \frac{1}{2}|\langle[\hat{A},\hat{B}]\rangle|$.</p>
+
+<p><strong>3. Entanglement</strong></p>
+<p>A two-particle state that cannot be factored as $|\psi_A\rangle \otimes |\psi_B\rangle$ is <em>entangled</em>. Bell's theorem (1964) proves no local hidden-variable theory can reproduce QM's predictions — confirmed experimentally (Aspect 1982, loophole-free tests 2015). Entanglement is the core resource in <a href="/knowledge/topic/Quantum Information Theory">Quantum Information Theory</a>.</p>
+
+<p><strong>4. The Measurement Problem</strong></p>
+<p>The formalism is silent on <em>when</em> and <em>why</em> the wave function "collapses." This is genuinely unresolved. Interpretations — Copenhagen, Many-Worlds (<a href="/knowledge/topic/Everett Interpretation">Everett Interpretation</a>), Bohmian mechanics, QBism — agree on predictions but differ radically on ontology.</p>
+
+<p><strong>5. Path Integral Formulation</strong></p>
+<p>Feynman's alternative: the amplitude for a transition is a sum over <em>all</em> paths weighted by $e^{iS/\hbar}$, where $S$ is the classical action. Equivalent to operator QM but geometrically illuminating and essential for <a href="/knowledge/topic/Quantum Field Theory">Quantum Field Theory</a>.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research frontiers include:</p>
+
+<ul>
+<li><strong>Quantum error correction &amp; fault tolerance</strong>: stabilizer codes, surface codes — prerequisite for scalable quantum computation</li>
+<li><strong>Quantum gravity</strong>: reconciling QM with general relativity remains open; candidate frameworks include <a href="/knowledge/topic/Loop Quantum Gravity">Loop Quantum Gravity</a> and string theory</li>
+<li><strong>Many-body quantum systems</strong>: tensor network methods (DMRG, MERA) for simulating strongly correlated matter</li>
+<li><strong>Quantum thermodynamics</strong>: formalizing work, heat, and entropy at quantum scales, where thermal and quantum fluctuations compete</li>
+<li><strong>Foundations</strong>: decoherence theory has largely displaced naïve Copenhagen collapse, but the measurement problem and the ontological status of $|\psi\rangle$ remain contested</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/knowledge/topic/Wave-Particle Duality">Wave-Particle Duality</a></li>
+<li><a href="/knowledge/topic/Quantum Field Theory">Quantum Field Theory</a></li>
+<li><a href="/knowledge/topic/Quantum Computing">Quantum Computing</a></li>
+<li><a href="/knowledge/topic/Bell's Theorem and Nonlocality">Bell's Theorem and Nonlocality</a></li>
+<li><a href="/knowledge/topic/Density Matrix and Open Quantum Systems">Density Matrix and Open Quantum Systems</a></li>
+<li><a href="/knowledge/topic/Path Integral Formulation">Path Integral Formulation</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Classicality from quantum</strong>: Decoherence explains the <em>appearance</em> of collapse via entanglement with the environment — but does it genuinely solve the measurement problem, or merely relocate it? What would a satisfying solution require?</li>
+</ol>
+
+<ol>
+<li><strong>Entanglement vs. information</strong>: Bell violations rule out local realism, but quantum correlations cannot transmit information superluminally. Is nonlocality a feature of reality or an artifact of how we decompose composite systems?</li>
+</ol>
+
+<ol>
+<li><strong>Discreteness as fundamental</strong>: QM quantizes energy levels, angular momentum, and charge. Is discreteness a deep ontological fact, or does it emerge from an underlying continuous structure (e.g., continuous field configurations in QFT)?</li>
+</ol>
+<pre><code>
+
+
+---
+*Wikipedia source: [Quantum Mechanics](https://en.wikipedia.org/wiki/Quantum_mechanics) · Retrieved 2026-03-14*
+
+**Recent arXiv papers:**
+- [MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning](https://arxiv.org/abs/2603.12266v1) (2026)
+- [OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams](https://arxiv.org/abs/2603.12265v1) (2026)
+- [$Ψ_0$: An Open Foundation Model Towards Universal Humanoid Loco-Manipulation](https://arxiv.org/abs/2603.12263v1) (2026)</code></pre></div></article>
+<article id="crispr"><div class="topic-header"><h2>CRISPR-Cas9</h2><div class="topic-meta">Science · Genomics &nbsp;·&nbsp; ~3 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>CRISPR-Cas9 is a programmable RNA-guided endonuclease system repurposed from a prokaryotic adaptive immune mechanism. In bacteria and archaea, <strong>clustered regularly interspaced short palindromic repeats</strong> (CRISPRs) store short fragments of past phage DNA; the Cas9 protein uses transcribed spacer sequences to identify and cleave matching foreign DNA on re-infection.</p>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>The minimal two-component system for genome editing: a <strong>single guide RNA</strong> (sgRNA = crRNA + tracrRNA fusion) that provides ~20 nt of target specificity, and the <strong>Cas9 endonuclease</strong> (from <em>S. pyogenes</em>, SpCas9) that executes the double-strand break (DSB). Targeting requires a <strong>protospacer adjacent motif</strong> (PAM), canonically <code>5′-NGG-3′</code> for SpCas9, immediately 3′ of the target sequence.</div></div>
+
+<p>The cleavage mechanism involves two nuclease domains: <strong>HNH</strong> cleaves the strand complementary to the guide, <strong>RuvC</strong> cleaves the non-complementary strand. The resulting blunt-ended DSB ~3 bp upstream of the PAM is repaired by the cell via:</p>
+
+<p>$$
+\text{DSB} \xrightarrow{\text{NHEJ}} \text{indels (knockout)} \quad \text{or} \quad \xrightarrow{\text{HDR}} \text{precise edit (template required)}
+$$</p>
+
+<p>NHEJ (non-homologous end joining) is error-prone and fast; HDR (homology-directed repair) is accurate but restricted to S/G2 phase and requires a donor template.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>CRISPR-Cas9 democratized genome editing by replacing the laborious protein-engineering required by ZFNs and TALENs with simple RNA design — a guide RNA can be synthesized in days for ~$10. This shift in accessibility has:</p>
+
+<ul>
+<li><strong>Basic research</strong>: Loss-of-function screens at genome scale; precise knock-ins for reporter tagging.</li>
+<li><strong>Medicine</strong>: <em>In vivo</em> and <em>ex vivo</em> therapeutic editing — sickle cell disease (exa-cel, 2023 FDA approval) being the first approved CRISPR therapy.</li>
+<li><strong>Agriculture</strong>: Disease-resistant crops, yield improvement without transgene insertion.</li>
+<li><strong>Diagnostics</strong>: SHERLOCK and DETECTR leverage Cas13/Cas12 collateral cleavage for nucleic acid detection (conceptually adjacent to Cas9 biology).</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The Nobel Prize in Chemistry 2020 (Charpentier & Doudna) was awarded unusually quickly for a technology still in active clinical translation — a signal of how transformative the field viewed the mechanistic insight, not just the applications.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>PAM constraint</strong>: SpCas9's NGG PAM covers ~1 in 8 bp of a random genome, but targetable space is further limited by guide GC content requirements and secondary structure. Engineered variants (SpRY, SpCas9-NG) relax PAM requirements.</li>
+</ol>
+
+<ol>
+<li><strong>Off-target activity</strong>: Guide-target mismatches are tolerated, especially in the <strong>seed region</strong> distal to the PAM. Off-target DSBs can cause translocations. GUIDE-seq, CIRCLE-seq, and CHANGE-seq are unbiased detection methods; high-fidelity variants (eSpCas9, HiFi Cas9) reduce off-target rates by >100×.</li>
+</ol>
+
+<ol>
+<li><strong>Delivery bottleneck</strong>: Efficient, tissue-specific delivery <em>in vivo</em> remains the primary translational hurdle. LNPs (lipid nanoparticles), AAV, and RNP electroporation are leading modalities, each with cargo-size and immunogenicity tradeoffs.</li>
+</ol>
+
+<ol>
+<li><strong>Base editors and prime editors</strong>: Fusing catalytically impaired Cas9 (nickase or dCas9) to deaminases (CBEs, ABEs) or reverse transcriptase (prime editors) enables single-nucleotide changes and small insertions <strong>without</strong> DSBs, dramatically expanding the precision toolkit.</li>
+</ol>
+
+<ol>
+<li><strong>Epigenome and transcriptome control</strong>: dCas9 fused to transcriptional activators (CRISPRa) or repressors (CRISPRi) allows reversible gene regulation without DNA modification — a powerful tool for dissecting gene networks.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active research fronts include: (1) <strong>in vivo base/prime editing</strong> for monogenic liver and CNS disorders; (2) <strong>anti-CRISPR proteins</strong> (Acr) as tunable off-switches; (3) <strong>large-sequence integration</strong> via PASTE (prime editing + serine integrase); (4) immune evasion strategies against Cas9 pre-existing immunity; and (5) CRISPR-based <strong>epigenetic editing</strong> for durable silencing without sequence alteration.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/knowledge/topic/Homologous Recombination and DSB Repair">Homologous Recombination and DSB Repair</a></li>
+<li><a href="/knowledge/topic/Adaptive Immunity in Prokaryotes">Adaptive Immunity in Prokaryotes</a></li>
+<li><a href="/knowledge/topic/Base Editing and Prime Editing">Base Editing and Prime Editing</a></li>
+<li><a href="/knowledge/topic/RNA-Guided Nucleases — ZFN TALEN Comparison">RNA-Guided Nucleases — ZFN TALEN Comparison</a></li>
+<li><a href="/knowledge/topic/Gene Therapy Delivery Vectors">Gene Therapy Delivery Vectors</a></li>
+<li><a href="/knowledge/topic/Epigenome Editing and CRISPRi-CRISPRa">Epigenome Editing and CRISPRi-CRISPRa</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>HDR efficiency is strongly cell-cycle-dependent — what engineering strategies could decouple precision editing from cell-cycle phase, and what are the tradeoffs of each?</li>
+</ol>
+
+<ol>
+<li>Off-target detection methods differ substantially in sensitivity and bias. How should a clinical program choose a detection assay, and what statistical threshold constitutes an acceptable off-target profile?</li>
+</ol>
+
+<ol>
+<li>If dCas9-based CRISPRi can silence genes without DNA cleavage, under what circumstances is a permanent DSB-based edit <em>preferable</em> to reversible transcriptional repression?</li>
+</ol>
+<pre><code>
+
+
+---
+*Wikipedia source: [CRISPR-Cas9](https://en.wikipedia.org/wiki/CRISPR) · Retrieved 2026-03-14*
+
+**Recent arXiv papers:**
+- [GRADE: Benchmarking Discipline-Informed Reasoning in Image Editing](https://arxiv.org/abs/2603.12264v1) (2026)
+- [Trust Your Critic: Robust Reward Modeling and Reinforcement Learning for Faithful Image Editing and Generation](https://arxiv.org/abs/2603.12247v1) (2026)
+- [SceneAssistant: A Visual Feedback Agent for Open-Vocabulary 3D Scene Generation](https://arxiv.org/abs/2603.12238v1) (2026)</code></pre></div></article>
+<article id="black_holes"><div class="topic-header"><h2>Black Holes</h2><div class="topic-meta">Science · Astrophysics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>black hole</strong> is a region of spacetime where gravity is so extreme that the escape velocity exceeds $c$, making it causally disconnected from the rest of the universe beyond a boundary called the <strong>event horizon</strong>.</div></div>
+
+<p>The existence of black holes follows directly from <a href="/knowledge/topic/General Relativity">General Relativity</a>: Einstein's field equations,</p>
+
+<p>$$G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$$</p>
+
+<p>admit exact solutions describing the curved geometry around a sufficiently compact mass. The simplest is the <strong>Schwarzschild solution</strong> (1916), giving the metric for a static, non-rotating black hole:</p>
+
+<p>$$ds^2 = -\left(1 - \frac{r_s}{r}\right)c^2\,dt^2 + \left(1 - \frac{r_s}{r}\right)^{-1}dr^2 + r^2\,d\Omega^2$$</p>
+
+<p>where $r_s = 2GM/c^2$ is the <strong>Schwarzschild radius</strong> — the event horizon for this geometry. Crucially, crossing the event horizon is locally undetectable; no tidal spike, no flash. The singularity lies strictly <em>inside</em>.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Black holes sit at the intersection of nearly every major branch of physics:</p>
+
+<ul>
+<li><strong>Gravity at its extreme</strong> — they are the cleanest laboratory for strong-field GR, where post-Newtonian approximations fail entirely.</li>
+<li><strong>Thermodynamics and information</strong> — Hawking's result that black holes radiate like a blackbody with temperature $T_H = \hbar c^3 / (8\pi G M k_B)$ fused quantum field theory with gravity, spawning the still-open <a href="/knowledge/topic/Black Hole Information Paradox">Black Hole Information Paradox</a>.</li>
+<li><strong>Galaxy formation</strong> — supermassive black holes ($M \sim 10^6$–$10^{10}\,M_\odot$) sit at galactic cores and regulate star formation via AGN feedback. Sagittarius A* ($\approx 4.3 \times 10^6\,M_\odot$) anchors the Milky Way.</li>
+<li><strong>Multi-messenger astronomy</strong> — binary black hole mergers are the loudest sources of <a href="/knowledge/topic/Gravitational Waves">Gravitational Waves</a>, providing tests of GR in the highly-dynamical regime.</li>
+</ul>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Singularity ≠ physical prediction.</strong> The central singularity (infinite curvature) is widely interpreted as a GR breakdown rather than a real feature — a cue that <a href="/knowledge/topic/Quantum Gravity">Quantum Gravity</a> is needed, not a literal infinitely-dense point.</li>
+</ol>
+
+<ol>
+<li><strong>Hawking radiation is cosmologically negligible today.</strong> Stellar-mass black holes ($M \gtrsim 3\,M_\odot$) absorb CMB photons <em>faster</em> than they emit Hawking radiation. Only sub-millimeter primordial black holes would be evaporating now.</li>
+</ol>
+
+<ol>
+<li><strong>Hair theorems constrain the phase space.</strong> The <strong>no-hair theorem</strong> states that stationary black holes are fully characterized by just three quantities: mass $M$, charge $Q$, and angular momentum $J$. Real astrophysical black holes are described by the <a href="/knowledge/topic/Kerr Metric">Kerr Metric</a> ($Q \approx 0$, $J \neq 0$).</li>
+</ol>
+
+<ol>
+<li><strong>Accretion, not the hole itself, is luminous.</strong> Infalling plasma forms a magnetized accretion disk; friction heats it to X-ray temperatures. This powers quasars — some of the highest-luminosity objects in the universe — and is detectable across cosmic distances.</li>
+</ol>
+
+<ol>
+<li><strong>Detection is always indirect.</strong> Event horizons cannot be imaged directly; what the <a href="/knowledge/topic/Event Horizon Telescope">Event Horizon Telescope</a> captured is the <em>photon ring</em> — a bright ring formed by gravitationally lensed emission just outside $r = 3GM/c^2$ (the photon sphere).</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP: The Shadow Is Not the Horizon</div><div>The EHT "black hole image" shows a shadow roughly $2.6\times$ the Schwarzschild diameter, not the horizon itself. The photon sphere at $r = 3r_s/2$ is what sculpts the observable silhouette.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research frontiers include: resolving the <strong>information paradox</strong> (firewalls vs. fuzzball vs. island formula approaches in holography), constraining <strong>primordial black holes</strong> as dark matter candidates, gravitational-wave parameter estimation from LIGO/Virgo/KAGRA observations of compact binary mergers, and near-horizon tests with VLBI arrays.</div></div>
+
+<p>The island formula from <a href="/knowledge/topic/Holography and AdS/CFT">Holography and AdS/CFT</a> has recently offered a semiclassical derivation of a unitary Page curve, suggesting information is <em>not</em> permanently lost — though the mechanism in asymptotically flat spacetime remains contested.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/knowledge/topic/General Relativity">General Relativity</a></li>
+<li><a href="/knowledge/topic/Hawking Radiation">Hawking Radiation</a></li>
+<li><a href="/knowledge/topic/Black Hole Information Paradox">Black Hole Information Paradox</a></li>
+<li><a href="/knowledge/topic/Gravitational Waves">Gravitational Waves</a></li>
+<li><a href="/knowledge/topic/Kerr Metric">Kerr Metric</a></li>
+<li><a href="/knowledge/topic/Event Horizon Telescope">Event Horizon Telescope</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>If the no-hair theorem holds exactly, what becomes of quantum information imprinted on infalling matter — and is the firewall argument a genuine paradox or a failure of semiclassical reasoning?</li>
+<li>Hawking temperature scales as $T_H \propto 1/M$: what are the observational or experimental strategies that could ever detect this radiation, even in principle?</li>
+<li>Supermassive black holes appear to co-evolve with their host galaxies ($M_\bullet$–$\sigma$ relation), yet their sphere of influence is tiny relative to galaxy scales — what physical mechanism couples them?</li>
+</ol>
+<pre><code>
+
+
+---
+*Wikipedia source: [Black Holes](https://en.wikipedia.org/wiki/Black_hole) · Retrieved 2026-03-14*
+
+**Recent arXiv papers:**
+- [OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams](https://arxiv.org/abs/2603.12265v1) (2026)
+- [HumDex:Humanoid Dexterous Manipulation Made Easy](https://arxiv.org/abs/2603.12260v1) (2026)
+- [Emergent Anomalous Hall Effect from Surface States in the Altermagnet MnTe Thin Films](https://arxiv.org/abs/2603.12259v1) (2026)</code></pre></div></article>
+<article id="protein_folding"><div class="topic-header"><h2>Protein Folding</h2><div class="topic-meta">Science · Biochemistry &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Protein folding is the process by which a newly synthesized, linear polypeptide chain — a random coil in sequence space — spontaneously collapses into a unique, thermodynamically stable three-dimensional conformation called the <strong>native state</strong>.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Anfinsen's Dogma</div><div>The native state is fully determined by the primary structure (amino acid sequence). This was experimentally established by Christian Anfinsen in 1972 using ribonuclease A, earning him the Nobel Prize. It implies: <strong>sequence → structure → function</strong>.</div></div>
+
+<p>The energy landscape framework is the dominant theoretical lens. Folding is viewed as a descent on a <strong>funnel-shaped free energy landscape</strong>:</p>
+
+<p>$$\Delta G_{\text{fold}} = \Delta H - T\Delta S$$</p>
+
+<p>where the enthalpic gain from favorable contacts (hydrophobic collapse, hydrogen bonds, van der Waals) must outweigh the enormous conformational entropy cost of fixing the chain. The native state sits at the global free-energy minimum — stable but not rigidly inert.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<ul>
+<li><strong>Function is structure</strong>: Enzymes, receptors, antibodies, and structural proteins are all useless or harmful if misfolded. The shape of an active site is non-negotiable.</li>
+<li><strong>Disease</strong>: Misfolding underlies Alzheimer's (Aβ amyloid), Parkinson's (α-synuclein), Type II diabetes (IAPP), prion diseases (PrP), and cystic fibrosis. In each case, aberrant aggregation into <strong>amyloid fibrils</strong> — β-sheet-rich, protease-resistant deposits — drives pathology.</li>
+<li><strong>Drug design</strong>: Targeting folding intermediates or chaperone interactions is a live therapeutic strategy.</li>
+<li><strong>Biotechnology</strong>: Recombinant protein production frequently battles inclusion body formation; understanding folding is essential for yield and activity.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Prions as Information Carriers</div><div>Prion propagation (e.g., scrapie, CJD) demonstrates that a misfolded conformation can act as a <em>structural template</em>, converting correctly folded copies without any nucleic acid. This is a striking exception to the central dogma's informational assumptions.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Levinthal's Paradox</strong>: Random search of all backbone dihedral angles would take longer than the age of the universe ($$\sim 10^{300}$$ conformations). Proteins fold in microseconds to seconds. Resolution: folding is not a random walk — the funnel landscape biases the search.</li>
+</ol>
+
+<ol>
+<li><strong>Folding kinetics depend on size and topology</strong>: Small single-domain proteins (< ~100 residues) often fold in a two-state, cooperative transition. Larger proteins traverse <strong>intermediates</strong> — partially structured states that can be on- or off-pathway. Proline <em>cis/trans</em> isomerization is a common rate-limiting step in slow folders.</li>
+</ol>
+
+<ol>
+<li><strong>Chaperones don't encode structure</strong>: Molecular chaperones (Hsp70, GroEL/GroES) prevent aggregation and provide a protected environment, but they do not template the final fold. They enforce Anfinsen's rule by suppressing kinetic traps.</li>
+</ol>
+
+<ol>
+<li><strong>Intrinsically Disordered Proteins (IDPs)</strong>: A large fraction of the proteome — especially in eukaryotes — contains regions that remain unfolded under physiological conditions yet are functional. IDPs challenge the structure → function paradigm; they often fold only upon binding a partner (<strong>coupled folding and binding</strong>).</li>
+</ol>
+
+<ol>
+<li><strong>Contact order</strong>: Proteins where native contacts span distant sequence positions fold more slowly. This empirical rule ($$CO = \frac{1}{N \cdot L} \sum_{\text{contacts}} \Delta S_{ij}$$) links topology to kinetics.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p><strong>AlphaFold2</strong> (DeepMind, 2021) and its successors effectively solved <em>single-chain structure prediction</em> from sequence to near-crystallographic accuracy, a 50-year grand challenge. The PDB has been supplemented with hundreds of millions of predicted structures via the AlphaFold Protein Structure Database.</p>
+
+<p>Open research frontiers include:</p>
+<ul>
+<li><strong>Protein complex and multimer folding</strong> (AlphaFold-Multimer, RoseTTAFold)</li>
+<li><strong>Dynamic ensembles and IDP characterization</strong> — static structure prediction doesn't capture conformational heterogeneity</li>
+<li><strong>Co-translational folding</strong> — how ribosome exit tunnel geometry and translation speed shape folding outcomes</li>
+<li><strong>De novo protein design</strong> (RFdiffusion, ProteinMPNN) — inverting the folding problem to engineer sequences for target folds</li>
+<li><strong>Mechanistic simulation</strong> — all-atom MD and enhanced sampling methods to resolve folding pathways, not just end states</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/knowledge/topic/Thermodynamic Free Energy Landscapes">Thermodynamic Free Energy Landscapes</a></li>
+<li><a href="/knowledge/topic/Amyloid Fibrils and Prion Diseases">Amyloid Fibrils and Prion Diseases</a></li>
+<li><a href="/knowledge/topic/Molecular Dynamics Simulation">Molecular Dynamics Simulation</a></li>
+<li><a href="/knowledge/topic/AlphaFold and Structure Prediction">AlphaFold and Structure Prediction</a></li>
+<li><a href="/knowledge/topic/Intrinsically Disordered Proteins">Intrinsically Disordered Proteins</a></li>
+<li><a href="/knowledge/topic/Protein Structure Hierarchy">Protein Structure Hierarchy</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>AlphaFold solves the <em>prediction</em> problem but not the <em>mechanism</em> problem — can understanding folding pathways and intermediates reveal drug targets that static structure cannot?</li>
+<li>If IDPs violate sequence → structure → function, what is the minimal revised framework that still has predictive power?</li>
+<li>Levinthal's paradox was "solved" by the funnel model, but is the funnel itself an oversimplification? What does it obscure about multi-domain or co-translational folding?</li>
+</ol>
+<pre><code>
+
+
+---
+*Wikipedia source: [Protein Folding](https://en.wikipedia.org/wiki/Protein_folding) · Retrieved 2026-03-14*
+
+**Recent arXiv papers:**
+- [EVATok: Adaptive Length Video Tokenization for Efficient Visual Autoregressive Generation](https://arxiv.org/abs/2603.12267v1) (2026)
+- [OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams](https://arxiv.org/abs/2603.12265v1) (2026)
+- [GRADE: Benchmarking Discipline-Informed Reasoning in Image Editing](https://arxiv.org/abs/2603.12264v1) (2026)</code></pre></div></article>
+</div>
+</body>
+</html>
