@@ -17,7 +17,7 @@ from config import DAILY_DIR
 from read_today import extract_topic_ids, find_topic_file
 from serve_web import PAGE_TEMPLATE, build_digest_page, build_topic_page
 
-SITE_DIR = Path(__file__).parent.parent / "site"
+SITE_DIR = Path(__file__).parent.parent / "docs"
 
 # GitHub Pages serves this repo at /knowledge/ — adjust if the repo is renamed.
 SITE_BASE_PATH = "/knowledge"
