@@ -18,7 +18,33 @@ MathJax = {
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -50,6 +76,11 @@ MathJax = {
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
   }
   .topic-nav a {
     background: #1e2a45;
@@ -62,6 +93,13 @@ MathJax = {
     transition: background 0.15s;
   }
   .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
   /* Topic article */
   article {
     margin-bottom: 3.5rem;
@@ -155,12 +193,64 @@ MathJax = {
   }
   /* Single topic page */
   .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
 </style>
 </head>
 <body>
 <div class="page">
-<div class="digest-header"><h1>Daily Knowledge Digest — Archive</h1><div class="meta">1 digests</div></div><ul style="list-style:none;padding:0"><li><a href="/daily_knowledge/digests/2026-03-14/">March 14, 2026</a></li>
+<div class="digest-header"><h1>Daily Knowledge Digest — Archive</h1><div class="meta">2 digests</div></div><div style="margin-bottom:0.8rem"><button class="cat-filter" data-cat="Science" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:20px;padding:0.25rem 0.75rem;margin:0 0.3rem 0.5rem 0;font-size:0.88rem;cursor:pointer">Science</button><button class="cat-filter" data-cat="Tech" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:20px;padding:0.25rem 0.75rem;margin:0 0.3rem 0.5rem 0;font-size:0.88rem;cursor:pointer">Tech</button><button class="cat-filter" data-cat="Math" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:20px;padding:0.25rem 0.75rem;margin:0 0.3rem 0.5rem 0;font-size:0.88rem;cursor:pointer">Math</button><button class="cat-filter" data-cat="Logic" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:20px;padding:0.25rem 0.75rem;margin:0 0.3rem 0.5rem 0;font-size:0.88rem;cursor:pointer">Logic</button><button class="cat-filter" data-cat="" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:20px;padding:0.25rem 0.75rem;margin:0 0.3rem 0.5rem 0;font-size:0.88rem;cursor:pointer">All</button></div><input id="archive-search" type="search" placeholder="Search digests…" style="width:100%;padding:0.5rem 0.8rem;margin-bottom:1rem;background:#111828;color:#e0e0f0;border:1px solid #2e4a6e;border-radius:6px;font-size:1rem"><ul id="archive-list" style="list-style:none;padding:0"><li><a href="/daily_knowledge/digests/2026-03-15/">March 15, 2026</a></li>
+<li><a href="/daily_knowledge/digests/2026-03-14/">March 14, 2026</a> <span style="color:#7a8db0;font-size:0.88rem">~14 min · Quantum Mechanics, CRISPR-Cas9, Black Holes, Protein Folding</span></li>
 </ul>
+<script>
+(function() {
+  var idx = null;
+  var activeCategory = '';
+  fetch('/daily_knowledge/search-index.json')
+    .then(r => r.json()).then(data => { idx = data; renderList(); });
+
+  function renderList() {
+    if (!idx) return;
+    var q = (document.getElementById('archive-search') || {}).value || '';
+    q = q.trim().toLowerCase();
+    var list = document.getElementById('archive-list');
+    list.innerHTML = '';
+    idx.filter(e => {
+      var matchQ = !q || e.label.toLowerCase().includes(q) || e.summary.toLowerCase().includes(q);
+      var matchCat = !activeCategory || (e.categories && e.categories.includes(activeCategory));
+      return matchQ && matchCat;
+    }).forEach(e => {
+      var li = document.createElement('li');
+      li.innerHTML = '<a href="' + e.href + '">' + e.label + '</a>'
+        + (e.summary ? ' <span style="color:#7a8db0;font-size:0.88rem">' + e.summary + '</span>' : '');
+      list.appendChild(li);
+    });
+  }
+
+  var input = document.getElementById('archive-search');
+  if (input) input.addEventListener('input', renderList);
+
+  document.querySelectorAll('.cat-filter').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      activeCategory = this.dataset.cat;
+      document.querySelectorAll('.cat-filter').forEach(b => b.style.background = '#1e2a45');
+      this.style.background = '#2a3d5e';
+      renderList();
+    });
+  });
+})();
+</script>
 </div>
 </body>
 </html>

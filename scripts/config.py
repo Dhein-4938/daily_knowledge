@@ -15,6 +15,9 @@ CRON_LOG_FILE = META_DIR / "cron.log"
 
 WOLFRAM_APP_ID = os.environ.get("WOLFRAM_APP_ID")
 
+CLAUDE_MODEL = "claude-sonnet-4-6"
+USER_AGENT = "DailyKnowledgeBot/1.0 (personal Obsidian vault; contact: dhein@localhost)"
+
 TOPICS_PER_DAY = 4
 COOLDOWN_DAYS = 60
 MAX_WIKIPEDIA_CHARS = 3000

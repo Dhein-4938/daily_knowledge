@@ -9,7 +9,12 @@
       "Read(//mnt/c/Users/ml493/obsidian/agentOS/.obsidian/**)",
       "Bash(find:*)",
       "Bash(chmod:*)",
-      "Bash(pip3 install:*)"
+      "Bash(pip3 install:*)",
+      "Bash(git add:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git:*)",
+      "Bash(wc:*)"
     ]
   }
 }

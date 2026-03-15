@@ -1,6 +1,7 @@
 from datetime import date
 from pathlib import Path
 import yaml
+import config
 from config import VAULT_ROOT, CATEGORY_DIRS
 
 
@@ -16,7 +17,7 @@ def build_frontmatter(topic: dict, sources: list[dict], status: str, confidence:
         "confidence": confidence,
         "read_time_minutes": read_time,
         "sources": sources,
-        "generated_by": "claude-sonnet-4-6",
+        "generated_by": config.CLAUDE_MODEL,
         "reviewed": False,
         "discussion_ready": True,
     }

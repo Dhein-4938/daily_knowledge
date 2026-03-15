@@ -3,7 +3,8 @@
 # Crontab entry:
 #   0 7 * * * /home/dhein/projects/knowledge/scripts/cron-daily.sh >> /home/dhein/projects/knowledge/Meta/cron.log 2>&1
 
-set -e
+set -eo pipefail
+trap 'echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] ERROR at line $LINENO" >> "$LOG"' ERR
 
 REPO=/home/dhein/projects/knowledge
 LOG=$REPO/Meta/cron.log

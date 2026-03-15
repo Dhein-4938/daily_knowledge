@@ -2,13 +2,10 @@ import xml.etree.ElementTree as ET
 from datetime import date, datetime, timezone
 from typing import Optional
 import requests
-import feedparser
-from config import WOLFRAM_APP_ID, STALENESS_THRESHOLD_FAST_MONTHS, STALENESS_THRESHOLD_SLOW_YEARS, FAST_MOVING_FIELDS
-
-USER_AGENT = "DailyKnowledgeBot/1.0 (personal Obsidian vault; contact: dhein@localhost)"
+from config import WOLFRAM_APP_ID, STALENESS_THRESHOLD_FAST_MONTHS, STALENESS_THRESHOLD_SLOW_YEARS, FAST_MOVING_FIELDS, USER_AGENT
 
 WIKIPEDIA_API = "https://en.wikipedia.org/w/api.php"
-ARXIV_API = "http://export.arxiv.org/api/query"
+ARXIV_API = "https://export.arxiv.org/api/query"
 WOLFRAM_API = "http://api.wolframalpha.com/v1/result"
 
 
@@ -91,37 +88,6 @@ def fetch_arxiv(query: str, max_results: int = 3) -> Optional[list[dict]]:
                 "url": arxiv_id_url,
             })
         return results if results else None
-    except Exception:
-        return None
-
-
-def fetch_rss_feed(url: str, max_items: int = 5) -> Optional[list[dict]]:
-    try:
-        feed = feedparser.parse(url)
-        if feed.bozo and not feed.entries:
-            return None
-        items = []
-        for entry in feed.entries[:max_items]:
-            items.append({
-                "title": entry.get("title", ""),
-                "summary": entry.get("summary", ""),
-                "link": entry.get("link", ""),
-                "published": entry.get("published", ""),
-            })
-        return items if items else None
-    except Exception:
-        return None
-
-
-def fetch_wolfram_short(query: str) -> Optional[str]:
-    if not WOLFRAM_APP_ID:
-        return None
-    try:
-        params = {"i": query, "appid": WOLFRAM_APP_ID}
-        resp = requests.get(WOLFRAM_API, params=params, timeout=10)
-        if resp.status_code == 200:
-            return resp.text.strip()
-        return None
     except Exception:
         return None
 
