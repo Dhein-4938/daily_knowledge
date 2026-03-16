@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 16, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 16, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~15 min</div></div>
+<nav class="topic-nav"><a href="#zk_proofs">Zero-Knowledge Proofs</a><a href="#homomorphic_encryption">Homomorphic Encryption</a><a href="#reinforcement_learning">Reinforcement Learning</a><a href="#quantum_computing">Quantum Computing</a></nav>
+<article id="zk_proofs"><div class="topic-header"><h2>Zero-Knowledge Proofs<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Cryptography &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>zero-knowledge proof (ZKP)</strong> is a two-party protocol between a <strong>prover</strong> $\mathcal{P}$ and a <strong>verifier</strong> $\mathcal{V}$ where $\mathcal{P}$ convinces $\mathcal{V}$ that a statement $x \in L$ (for some language $L$) is true, without revealing <em>any</em> information beyond the truth of the statement itself.</div></div>
+
+<p>Formally, a ZKP for a language $L$ must satisfy three properties:</p>
+
+<ul>
+<li><strong>Completeness</strong>: If $x \in L$ and $\mathcal{P}$ is honest, $\mathcal{V}$ accepts with high probability.</li>
+<li><strong>Soundness</strong>: If $x \notin L$, no cheating prover $\mathcal{P}^*$ can convince $\mathcal{V}$ to accept except with negligible probability $\epsilon$.</li>
+<li><strong>Zero-knowledge</strong>: There exists a probabilistic polynomial-time <strong>simulator</strong> $\mathcal{S}$ such that for all $x \in L$, the simulated transcript $\mathcal{S}(x)$ is computationally (or statistically, or perfectly) indistinguishable from a real transcript $\langle \mathcal{P}, \mathcal{V} \rangle(x)$.</li>
+</ul>
+
+<p>The simulator argument is the crux: if a transcript can be produced <em>without the secret</em>, it carries no information about it. The three flavors of zero-knowledge — <strong>perfect</strong>, <strong>statistical</strong>, and <strong>computational</strong> — reflect how strongly the transcripts must match.</p>
+
+<p>$$\{\mathcal{S}(x)\}_{x \in L} \approx_c \{\langle \mathcal{P}(w), \mathcal{V} \rangle(x)\}_{x \in L}$$</p>
+
+<p>where $w$ is the witness and $\approx_c$ denotes computational indistinguishability.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>ZKPs untangle a fundamental tension: <em>proving knowledge requires demonstrating it, but demonstration risks disclosure.</em> Applications span a wide surface:</p>
+
+<ul>
+<li><strong>Blockchain &amp; privacy coins</strong> (Zcash, Tornado Cash): prove a transaction is valid without revealing sender, receiver, or amount.</li>
+<li><strong>Authentication</strong>: prove knowledge of a password without transmitting it (resists replay attacks structurally).</li>
+<li><strong>Regulatory compliance</strong>: prove a balance exceeds a threshold or that a computation was run correctly, without exposing underlying data.</li>
+<li><strong>Verifiable computation (zkEVM, zkRollups)</strong>: a prover executes a program off-chain and furnishes a succinct proof; the verifier checks the proof cheaply on-chain, enabling Layer-2 scaling.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Non-transferability is a feature, not a bug</div><div>Because $\mathcal{V}$ could have simulated the transcript themselves, they cannot use it to convince a third party. This makes ZKPs qualitatively different from ordinary proofs — conviction is <em>personal</em>, not universal.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Interactive vs. Non-Interactive (NIZK)</strong>: Interactive proofs require multiple rounds of challenge-response. The <strong>Fiat–Shamir heuristic</strong> collapses this into a single message by replacing the verifier's random challenge with a cryptographic hash $H(x, \text{commitment})$, assuming a random oracle. In the <strong>Common Reference String (CRS)</strong> model, NIZKs exist unconditionally.</li>
+</ol>
+
+<ol>
+<li><strong>Sigma Protocols</strong>: A canonical 3-move structure (commit → challenge → response) underlies most practical ZKPs. Composing Sigma protocols via AND/OR logic enables proofs of complex statements without redesigning from scratch.</li>
+</ol>
+
+<ol>
+<li><strong>SNARKs and STARKs</strong>: </li>
+</ol>
+<ul>
+<li><strong>zk-SNARKs</strong> (Succinct Non-interactive ARguments of Knowledge): proof size $O(1)$, verification in milliseconds, but require a <strong>trusted setup</strong> (a toxic waste ceremony). Security rests on elliptic-curve pairings.</li>
+<li><strong>zk-STARKs</strong>: transparent setup (no trusted party), post-quantum secure (hash-based), but larger proof sizes ($O(\log^2 n)$).</li>
+</ul>
+
+<ol>
+<li><strong>Arithmetization</strong>: Arbitrary computations are reduced to polynomial constraints over a finite field $\mathbb{F}_p$ — typically via <strong>R1CS</strong> (Rank-1 Constraint Systems) or <strong>AIR</strong> (Algebraic Intermediate Representation). The prover's job becomes convincing $\mathcal{V}$ that a polynomial vanishes on a prescribed domain.</li>
+</ol>
+
+<ol>
+<li><strong>Soundness amplification</strong>: A single-round protocol may have high soundness error $\epsilon$. Running $k$ independent rounds drives error to $\epsilon^k$, but interaction blows up. The Fiat–Shamir transformation achieves this non-interactively in the random oracle model.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research fronts include:</p>
+
+<ul>
+<li><strong>Proof recursion / folding schemes</strong>: Nova, SuperNova, and HyperNova allow incremental verifiable computation (IVC), where a proof verifies a prior proof, enabling unbounded computation with bounded verifier cost.</li>
+<li><strong>zkEVM standardization</strong>: multiple competing implementations (Polygon zkEVM, zkSync Era, Scroll) differ in EVM-equivalence level and proof backend; benchmarking is ongoing.</li>
+<li><strong>Post-quantum ZKPs</strong>: lattice-based and hash-based approaches are maturing; STARK-based systems already offer post-quantum soundness, but efficiency gaps remain versus pairing-based SNARKs.</li>
+<li><strong>MPC-in-the-head</strong>: paradigm enabling ZKPs from symmetric-key primitives (e.g., Picnic signature scheme), with implications for post-quantum identification.</li>
+<li><strong>Hardware acceleration</strong>: ZKP proving is computationally intensive ($O(n \log n)$ FFTs, multi-scalar multiplications); dedicated ASICs and FPGAs are an active engineering frontier.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Interactive Proof Systems">Interactive Proof Systems</a></li>
+<li><a href="/daily_knowledge/topic/Elliptic Curve Cryptography">Elliptic Curve Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/Commitment Schemes">Commitment Schemes</a></li>
+<li><a href="/daily_knowledge/topic/SNARKs and Proof Systems">SNARKs and Proof Systems</a></li>
+<li><a href="/daily_knowledge/topic/Blockchain Scalability and Layer-2">Blockchain Scalability and Layer-2</a></li>
+<li><a href="/daily_knowledge/topic/Computational Complexity — BPP and IP">Computational Complexity — BPP and IP</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The simulator definition of zero-knowledge is <em>semantic</em> — it says nothing about how the proof <em>feels</em> to generate. Can a proof be zero-knowledge yet still leak side-channel information in practice? How does the model fail to capture this?</li>
+</ol>
+
+<ol>
+<li>Trusted setup ceremonies (like those for Groth16) are "trust on first use" events — if any one participant is honest, the setup is secure. How does this compare to the trust assumptions in certificate authority hierarchies, and is it actually stronger in practice?</li>
+</ol>
+
+<ol>
+<li>ZKPs can prove correct execution of arbitrary programs. Does this dissolve the distinction between "proof of knowledge" and "proof of computation," and what are the philosophical implications for what it means to <em>know</em> something in a cryptographic sense?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof" target="_blank" rel="noopener"&gt;Zero-Knowledge Proofs&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.13228v1" target="_blank" rel="noopener">PhysMoDPO: Physically-Plausible Humanoid Motion with Preference Optimization</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13213v1" target="_blank" rel="noopener">MoEKD: Mixture-of-Experts Knowledge Distillation for Robust and High-Performing Compressed Code Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13212v1" target="_blank" rel="noopener">Robust symmetry breaking in gapless quantum magnets</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13199v1" target="_blank" rel="noopener">Anisotropic Inviscid Limit for the Navier-Stokes Equations with Transport Noise Between Two Plates</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13191v1" target="_blank" rel="noopener">From Experiments to Expertise: Scientific Knowledge Consolidation for AI-Driven Computational Research</a> (2026)</li>
+</ul></div></article>
+<article id="homomorphic_encryption"><div class="topic-header"><h2>Homomorphic Encryption<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Cryptography &nbsp;·&nbsp; ~3 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Homomorphic encryption (HE) is a cryptosystem that permits arbitrary computations on ciphertexts such that the result, when decrypted, matches the output of the same computation on the plaintext. Formally, for encryption $\mathcal{E}$ and operation $\circ$: $$\mathcal{D}\!\left(\mathcal{E}(a) \otimes \mathcal{E}(b)\right) = a \circ b$$ where $\otimes$ is the "homomorphic" counterpart of $\circ$ in ciphertext space.</div></div>
+
+<p>The scheme hierarchy runs from weakest to strongest:</p>
+<ul>
+<li><strong>Partially Homomorphic (PHE)</strong> — supports one operation (e.g., only addition <em>or</em> multiplication). RSA is multiplicatively homomorphic; Paillier additively.</li>
+<li><strong>Somewhat Homomorphic (SHE)</strong> — supports both operations, but up to bounded circuit depth.</li>
+<li><strong>Leveled FHE</strong> — both operations to pre-specified depth $L$.</li>
+<li><strong>Fully Homomorphic Encryption (FHE)</strong> — unbounded circuit depth; arbitrary polynomial-time computation. First constructed by Craig Gentry (2009) via lattice-based cryptography.</li>
+</ul>
+
+<p>Gentry's breakthrough used <strong>ideal lattices</strong> and a <em>bootstrapping</em> procedure to reset accumulated noise, converting SHE into FHE.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>HE decouples <em>data custody</em> from <em>computation</em>: a cloud provider processes sensitive data without ever seeing it in the clear. This resolves a fundamental trust boundary that TLS and access control cannot touch — those protect data <em>in transit</em> and <em>at rest</em>, but plaintext must be exposed during computation.</p>
+
+<p>Key application domains:</p>
+<ul>
+<li><strong>Privacy-preserving ML</strong>: run inference on encrypted patient records; model provider learns nothing about inputs.</li>
+<li><strong>Secure multi-party computation (MPC)</strong>: HE is one mechanism to achieve MPC without interaction-heavy protocols.</li>
+<li><strong>Regulatory compliance</strong>: HIPAA, GDPR constraints softened when the processor is cryptographically blind.</li>
+<li><strong>Verifiable outsourcing</strong>: combine with SNARKs for <em>verified</em> computation on encrypted data.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Privilege Escalation Angle</div><div>HE eliminates the attack surface where an adversary with OS-level or hypervisor-level access can intercept plaintext during processing. A compromised cloud host reads only ciphertext — an intrinsically different threat model from TEEs (Trusted Execution Environments), which rely on hardware trust.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Noise Growth &amp; Bootstrapping</strong> — LWE-based schemes (BFV, BGV, CKKS) embed noise $e$ into ciphertexts. Each homomorphic multiplication roughly <em>squares</em> the noise magnitude. Bootstrapping homomorphically evaluates the decryption circuit to refresh noise — expensive ($\sim$seconds per bootstrap on modern hardware).</li>
+</ol>
+
+<ol>
+<li><strong>CKKS for Approximate Arithmetic</strong> — The CKKS scheme sacrifices exact arithmetic for floating-point-friendly operations, ideal for ML inference. Errors are bounded but non-zero:</li>
+</ol>
+<p>$$\|\mathcal{D}(\mathcal{E}(m_1)\otimes\mathcal{E}(m_2)) - m_1 \cdot m_2\| \leq \epsilon$$</p>
+
+<ol>
+<li><strong>Security Foundations</strong> — Modern FHE rests on the hardness of <strong>Ring Learning With Errors (RLWE)</strong>: given $(a, a\cdot s + e)$ with $a \in \mathbb{Z}_q[x]/f(x)$, recover secret $s$. This is believed quantum-resistant, unlike RSA/ECC.</li>
+</ol>
+
+<ol>
+<li><strong>Parameter Selection Trade-offs</strong> — The polynomial degree $n$ and ciphertext modulus $q$ jointly govern security ($\lambda \approx n \log q / \text{bits}$) and performance. Larger $n$ → more noise headroom → deeper circuits, but $O(n \log n)$ NTT cost per operation.</li>
+</ol>
+
+<ol>
+<li><strong>Ciphertext Expansion</strong> — A 32-bit plaintext may expand to kilobytes or megabytes of ciphertext. Bandwidth and storage overhead remain a practical obstacle for real deployments.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>FHE performance is improving rapidly. Libraries like <strong>OpenFHE</strong>, <strong>Microsoft SEAL</strong>, <strong>HElib</strong>, and <strong>Concrete</strong> (Zama) are active. Hardware accelerators (FPGAs, ASICs) targeting NTT and modular arithmetic are an open research frontier. The NIST PQC standardization process has standardized CRYSTALS-Kyber/Dilithium (lattice-based), creating ecosystem pressure that indirectly validates RLWE-based FHE security assumptions.</div></div>
+
+<p>Active research threads include: reducing bootstrapping latency below 100ms, batching via SIMD slot packing (CRT-based), threshold FHE for distributed key management, and FHE-friendly neural network architectures (polynomial activations replacing ReLU).</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Lattice-Based Cryptography">Lattice-Based Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/Ring Learning With Errors (RLWE)">Ring Learning With Errors (RLWE)</a></li>
+<li><a href="/daily_knowledge/topic/Secure Multi-Party Computation">Secure Multi-Party Computation</a></li>
+<li><a href="/daily_knowledge/topic/Zero-Knowledge Proofs">Zero-Knowledge Proofs</a></li>
+<li><a href="/daily_knowledge/topic/Trusted Execution Environments">Trusted Execution Environments</a></li>
+<li><a href="/daily_knowledge/topic/Differential Privacy">Differential Privacy</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>CKKS introduces approximate errors into computations — how should cryptographic security proofs be reconciled with statistical ML guarantees that already tolerate bounded error?</li>
+<li>HE and TEEs (SGX, TrustZone) offer complementary threat models. Under what deployment constraints does each dominate, and can they be composed without redundancy?</li>
+<li>If bootstrapping cost falls below 10ms, which current MPC or trusted-hardware use cases become obsolete first, and what new ones emerge?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Homomorphic_encryption" target="_blank" rel="noopener"&gt;Homomorphic Encryption&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.13225v1" target="_blank" rel="noopener">Sizes of Pre-Images of the Minimal Euclidean Function on the Gaussian Integers</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13221v1" target="_blank" rel="noopener">Electromechanical Hysteresis in Phase Change Material Sb2S3</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13220v1" target="_blank" rel="noopener">A Generative Model of Conspicuous Consumption and Status Signaling</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13219v1" target="_blank" rel="noopener">First-principles predictions of band alignment in strained Si/Si1-xGex and Ge/Si1-xGex heterostructures</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13214v1" target="_blank" rel="noopener">Investigating mixed-integer programming approaches for the $p$-$α$-closest-center problem</a> (2026)</li>
+</ul></div></article>
+<article id="reinforcement_learning"><div class="topic-header"><h2>Reinforcement Learning<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Reinforcement Learning (RL) is the study of how an agent should select actions in a <strong>Markov Decision Process (MDP)</strong> to maximize cumulative reward, <em>without</em> prior knowledge of the environment's transition dynamics.</div></div>
+
+<p>Formally, an MDP is a tuple $(\mathcal{S}, \mathcal{A}, P, R, \gamma)$ where $\mathcal{S}$ is the state space, $\mathcal{A}$ the action space, $P(s' \mid s, a)$ the (unknown) transition kernel, $R(s, a)$ the reward function, and $\gamma \in [0,1)$ the discount factor. The agent's objective is to find a policy $\pi^*$ maximizing expected discounted return:</p>
+
+<p>$$\pi^* = \arg\max_\pi \; \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \right]$$</p>
+
+<p>Unlike supervised learning (labeled data) or unsupervised learning (structure discovery), RL learns through <strong>interaction</strong>: the agent acts, receives a scalar reward signal, and updates its behavior accordingly. The critical tension at every step is the <strong>exploration–exploitation dilemma</strong> — the agent must balance sampling novel actions to reduce uncertainty against committing to the currently best-known action.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>RL is the natural framework for any <strong>sequential decision problem</strong> where feedback is delayed and the environment is partially or fully unknown. Key application domains:</p>
+
+<ul>
+<li><strong>Robotics &amp; Control</strong>: locomotion, manipulation, sim-to-real transfer</li>
+<li><strong>Game AI</strong>: superhuman performance in Chess, Go (AlphaZero), Atari, StarCraft II</li>
+<li><strong>LLM Alignment</strong>: RLHF (Reinforcement Learning from Human Feedback) fine-tunes language models toward human preferences, making RL central to modern AI safety work</li>
+<li><strong>Operations Research</strong>: scheduling, logistics, resource allocation</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Connection to Dynamic Programming</div><div>RL can be seen as <em>sample-based approximate dynamic programming</em>. Classical DP methods (value iteration, policy iteration) require full knowledge of $P$; RL replaces exact Bellman updates with Monte Carlo or TD estimates drawn from experience — scaling to problems where the model is intractable or unavailable.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Temporal Difference Learning</strong> — TD methods like Q-learning and SARSA bootstrap value estimates from other estimates rather than waiting for full episode returns. Q-learning's update rule, $Q(s,a) \leftarrow Q(s,a) + \alpha\left[r + \gamma \max_{a'}Q(s',a') - Q(s,a)\right]$, is off-policy and converges to $Q^*$ under mild conditions.</li>
+</ol>
+
+<ol>
+<li><strong>Policy Gradient Methods</strong> — Rather than learning a value function, REINFORCE and actor-critic methods directly optimize $\pi_\theta$ via gradient ascent on $\nabla_\theta J(\theta) = \mathbb{E}_\pi[G_t \nabla_\theta \log \pi_\theta(a_t \mid s_t)]$. This handles continuous action spaces naturally but suffers high variance.</li>
+</ol>
+
+<ol>
+<li><strong>Function Approximation &amp; Deep RL</strong> — Neural networks (DQN, PPO, SAC) allow generalization across large state spaces. They also introduce instability: bootstrapping + off-policy sampling + nonlinear approximation form the <strong>deadly triad</strong> that can cause divergence.</li>
+</ol>
+
+<ol>
+<li><strong>Reward Hacking</strong> — Agents routinely find unexpected strategies that maximize the proxy reward while violating designer intent. This is a core challenge in alignment and motivates learned reward models (e.g., RLHF, DPO).</li>
+</ol>
+
+<ol>
+<li><strong>Sample Efficiency</strong> — Model-free RL typically requires millions of environment interactions. Model-based RL addresses this by learning $\hat{P}$ to generate synthetic rollouts, but introduces compounding model error.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active frontiers as of early 2026:</p>
+
+<ul>
+<li><strong>RL for generative models</strong>: Direct Preference Optimization (DPO) and its physics-aware variants (e.g., PhysMoDPO for humanoid motion) reframe reward-signal alignment without an explicit reward model, offering training stability over classical RLHF pipelines.</li>
+<li><strong>Fine-grained reward modeling</strong>: Work like Visual-ERM shows that coarse embedding-similarity rewards are insufficient for vision-to-code tasks; multimodal generative reward models providing interpretable, pixel-level feedback substantially outperform rule-based alternatives.</li>
+<li><strong>Offline RL &amp; conservative methods</strong>: Learning purely from logged datasets (no live interaction) via methods like IQL and TD3+BC addresses deployment safety in robotics and healthcare.</li>
+<li><strong>Hierarchical &amp; multi-agent RL</strong>: Decomposing long-horizon tasks and coordinating multiple agents remain open problems with deep connections to <a href="/daily_knowledge/topic/Game Theory">Game Theory</a> and <a href="/daily_knowledge/topic/Control Theory">Control Theory</a>.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Markov Decision Processes">Markov Decision Processes</a></li>
+<li><a href="/daily_knowledge/topic/Policy Gradient Methods">Policy Gradient Methods</a></li>
+<li><a href="/daily_knowledge/topic/RLHF and Alignment">RLHF and Alignment</a></li>
+<li><a href="/daily_knowledge/topic/Exploration-Exploitation Tradeoff">Exploration-Exploitation Tradeoff</a></li>
+<li><a href="/daily_knowledge/topic/Dynamic Programming">Dynamic Programming</a></li>
+<li><a href="/daily_knowledge/topic/Model-Based Reinforcement Learning">Model-Based Reinforcement Learning</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The Bellman equation assumes the Markov property — how does partial observability (POMDPs) break this, and what architectural choices in deep RL implicitly compensate for it?</li>
+<li>DPO sidesteps explicit reward modeling by reparameterizing the RLHF objective. What are the theoretical assumptions this requires, and where might they fail in practice?</li>
+<li>Sample efficiency in model-free RL scales poorly with state-space dimensionality. Is there a principled limit analogous to the PAC learning sample complexity, and what role does inductive bias play?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Reinforcement_learning" target="_blank" rel="noopener"&gt;Reinforcement Learning&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.13228v1" target="_blank" rel="noopener">PhysMoDPO: Physically-Plausible Humanoid Motion with Preference Optimization</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13227v1" target="_blank" rel="noopener">Representation Learning for Spatiotemporal Physical Systems</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13224v1" target="_blank" rel="noopener">Visual-ERM: Reward Modeling for Visual Equivalence</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13213v1" target="_blank" rel="noopener">MoEKD: Mixture-of-Experts Knowledge Distillation for Robust and High-Performing Compressed Code Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13211v1" target="_blank" rel="noopener">A Conceptual Shift In Our Understanding of Degenerate Radical Spin Systems: Spin-Rotation Coupling Turned On Its Head</a> (2026)</li>
+</ul></div></article>
+<article id="quantum_computing"><div class="topic-header"><h2>Quantum Computing<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Quantum Computing &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>A quantum computer exploits two phenomena absent in classical systems — <strong>superposition</strong> and <strong>entanglement</strong> — to process information in fundamentally different ways.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Qubit</div><div>The basic unit is the <strong>qubit</strong>, described by a state vector in a 2D complex Hilbert space: $$|\psi\rangle = \alpha|0\rangle + \beta|1\rangle, \quad |\alpha|^2 + |\beta|^2 = 1$$ Measurement collapses $|\psi\rangle$ to $|0\rangle$ with probability $|\alpha|^2$ or $|1\rangle$ with probability $|\beta|^2$ — the <strong>Born rule</strong>.</div></div>
+
+<p>An $n$-qubit register lives in a $2^n$-dimensional Hilbert space, enabling a single unitary operation to act on all $2^n$ basis states simultaneously. This isn't free parallelism — measurement still yields only $n$ classical bits — but cleverly designed algorithms use <strong>wave interference</strong> to amplify the amplitude of correct answers and suppress wrong ones.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The exponential Hilbert space scaling has concrete consequences:</p>
+
+<ul>
+<li><strong>Cryptography</strong>: Shor's algorithm factors integers in $O((\log N)^3)$ time, breaking RSA and ECC. Classical best-known algorithms run in $O(e^{(\log N)^{1/3}})$ — sub-exponentially slower.</li>
+<li><strong>Search</strong>: Grover's algorithm searches an unstructured database of $N$ items in $O(\sqrt{N})$ queries vs. classical $O(N)$.</li>
+<li><strong>Simulation</strong>: Feynman's original motivation — simulating quantum systems (chemistry, materials) — scales polynomially on a quantum computer but exponentially on classical hardware.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Not universally faster</div><div>Quantum speedup is <em>problem-specific</em>. For most everyday computation — sorting, databases, parsing — no known quantum advantage exists. The power lies in exploiting the structure of problems with algebraic or periodic symmetry.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Decoherence is the central engineering obstacle.</strong> Real qubits interact with their environment, collapsing superpositions prematurely. Coherence time $T_2$ must significantly exceed gate operation time. Current superconducting qubits achieve $T_2 \sim 100\,\mu s$; useful fault-tolerant computation likely requires $T_2 \sim$ seconds.</li>
+</ol>
+
+<ol>
+<li><strong>Fault-tolerant thresholds.</strong> The threshold theorem states that if physical error rate $p < p_{th}$ (roughly $10^{-2}$ for surface codes), arbitrarily long computation is possible via quantum error correction — at the cost of $\sim 1000\times$ physical-to-logical qubit overhead.</li>
+</ol>
+
+<ol>
+<li><strong>Gate model vs. other paradigms.</strong> The circuit/gate model (sequences of unitary gates) is the dominant abstraction, but alternatives include adiabatic quantum computing, measurement-based (cluster state) computing, and topological qubits (Majorana fermions), each with distinct noise profiles.</li>
+</ol>
+
+<ol>
+<li><strong>Physical implementations differ radically in trade-offs:</strong></li>
+</ol>
+<ul>
+<li><em>Superconducting qubits</em> (IBM, Google): fast gates ($\sim 10\text{–}100\,ns$), but requires dilution refrigeration at $\sim 15\,mK$.</li>
+<li><em>Ion traps</em>: very low error rates, slow gates ($\sim 1\,ms$), room-temperature isolation possible.</li>
+<li><em>Si/SiGe quantum dots</em>: CMOS-compatible, relevant recent first-principles band alignment work improving heterostructure design for spin qubits.</li>
+</ul>
+
+<ol>
+<li><strong>Quantum advantage ≠ quantum supremacy for useful tasks.</strong> Claims of supremacy (Google 2019, others) involve sampling tasks with no practical utility — important as proof of principle, but not yet economically relevant.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research fronts (as of early 2026):</p>
+
+<ul>
+<li><strong>Error correction at scale</strong>: Moving from NISQ (Noisy Intermediate-Scale Quantum) devices toward fault-tolerant logical qubits. Google's surface code experiments have demonstrated below-threshold error rates in small patches.</li>
+<li><strong>Qubit connectivity and compilation</strong>: Sparse qubit graphs require SWAP overhead; co-design of algorithms and hardware topology is an open problem.</li>
+<li><strong>Post-quantum cryptography (PQC)</strong>: NIST has standardized lattice-based schemes (CRYSTALS-Kyber, Dilithium) as classical defenses against Shor-capable hardware.</li>
+<li><strong>Si/SiGe heterostructure engineering</strong>: First-principles DFT band offset predictions across full alloy composition range are enabling better quantum dot design.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Quantum Error Correction">Quantum Error Correction</a></li>
+<li><a href="/daily_knowledge/topic/Shor's Algorithm">Shor's Algorithm</a></li>
+<li><a href="/daily_knowledge/topic/Grover's Algorithm">Grover's Algorithm</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Decoherence">Quantum Decoherence</a></li>
+<li><a href="/daily_knowledge/topic/Post-Quantum Cryptography">Post-Quantum Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Simulation">Quantum Simulation</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Fault tolerance overhead</strong>: The ~1000:1 physical-to-logical qubit ratio means a "1000 logical qubit" machine needs ~1M physical qubits. Does this fundamentally change your intuition about when quantum computers become practically relevant?</li>
+</ol>
+
+<ol>
+<li><strong>Computational complexity</strong>: Quantum computers are believed to solve BQP problems efficiently — but BQP is not believed to contain NP-complete problems. What does this say about the <em>limits</em> of quantum speedup, and why does the public discourse so often conflate the two?</li>
+</ol>
+
+<ol>
+<li><strong>Hybrid algorithms</strong>: Near-term algorithms like VQE (Variational Quantum Eigensolver) offload classical optimization onto quantum hardware iteratively. Is this a genuine path to useful advantage, or a workaround masking the absence of fault tolerance?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank" rel="noopener"&gt;Quantum Computing&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.13225v1" target="_blank" rel="noopener">Sizes of Pre-Images of the Minimal Euclidean Function on the Gaussian Integers</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13222v1" target="_blank" rel="noopener">Two-channel physics in a lightly doped antiferromagnetic Mott insulator revealed by two-hole spectroscopy</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13221v1" target="_blank" rel="noopener">Electromechanical Hysteresis in Phase Change Material Sb2S3</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13220v1" target="_blank" rel="noopener">A Generative Model of Conspicuous Consumption and Status Signaling</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13219v1" target="_blank" rel="noopener">First-principles predictions of band alignment in strained Si/Si1-xGex and Ge/Si1-xGex heterostructures</a> (2026)</li>
+</ul></div></article>
+</div>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homomorphic Encryption</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-16/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Homomorphic Encryption<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Cryptography &nbsp;·&nbsp; ~3 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Homomorphic encryption (HE) is a cryptosystem that permits arbitrary computations on ciphertexts such that the result, when decrypted, matches the output of the same computation on the plaintext. Formally, for encryption $\mathcal{E}$ and operation $\circ$: $$\mathcal{D}\!\left(\mathcal{E}(a) \otimes \mathcal{E}(b)\right) = a \circ b$$ where $\otimes$ is the "homomorphic" counterpart of $\circ$ in ciphertext space.</div></div>
+
+<p>The scheme hierarchy runs from weakest to strongest:</p>
+<ul>
+<li><strong>Partially Homomorphic (PHE)</strong> — supports one operation (e.g., only addition <em>or</em> multiplication). RSA is multiplicatively homomorphic; Paillier additively.</li>
+<li><strong>Somewhat Homomorphic (SHE)</strong> — supports both operations, but up to bounded circuit depth.</li>
+<li><strong>Leveled FHE</strong> — both operations to pre-specified depth $L$.</li>
+<li><strong>Fully Homomorphic Encryption (FHE)</strong> — unbounded circuit depth; arbitrary polynomial-time computation. First constructed by Craig Gentry (2009) via lattice-based cryptography.</li>
+</ul>
+
+<p>Gentry's breakthrough used <strong>ideal lattices</strong> and a <em>bootstrapping</em> procedure to reset accumulated noise, converting SHE into FHE.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>HE decouples <em>data custody</em> from <em>computation</em>: a cloud provider processes sensitive data without ever seeing it in the clear. This resolves a fundamental trust boundary that TLS and access control cannot touch — those protect data <em>in transit</em> and <em>at rest</em>, but plaintext must be exposed during computation.</p>
+
+<p>Key application domains:</p>
+<ul>
+<li><strong>Privacy-preserving ML</strong>: run inference on encrypted patient records; model provider learns nothing about inputs.</li>
+<li><strong>Secure multi-party computation (MPC)</strong>: HE is one mechanism to achieve MPC without interaction-heavy protocols.</li>
+<li><strong>Regulatory compliance</strong>: HIPAA, GDPR constraints softened when the processor is cryptographically blind.</li>
+<li><strong>Verifiable outsourcing</strong>: combine with SNARKs for <em>verified</em> computation on encrypted data.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Privilege Escalation Angle</div><div>HE eliminates the attack surface where an adversary with OS-level or hypervisor-level access can intercept plaintext during processing. A compromised cloud host reads only ciphertext — an intrinsically different threat model from TEEs (Trusted Execution Environments), which rely on hardware trust.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Noise Growth &amp; Bootstrapping</strong> — LWE-based schemes (BFV, BGV, CKKS) embed noise $e$ into ciphertexts. Each homomorphic multiplication roughly <em>squares</em> the noise magnitude. Bootstrapping homomorphically evaluates the decryption circuit to refresh noise — expensive ($\sim$seconds per bootstrap on modern hardware).</li>
+</ol>
+
+<ol>
+<li><strong>CKKS for Approximate Arithmetic</strong> — The CKKS scheme sacrifices exact arithmetic for floating-point-friendly operations, ideal for ML inference. Errors are bounded but non-zero:</li>
+</ol>
+<p>$$\|\mathcal{D}(\mathcal{E}(m_1)\otimes\mathcal{E}(m_2)) - m_1 \cdot m_2\| \leq \epsilon$$</p>
+
+<ol>
+<li><strong>Security Foundations</strong> — Modern FHE rests on the hardness of <strong>Ring Learning With Errors (RLWE)</strong>: given $(a, a\cdot s + e)$ with $a \in \mathbb{Z}_q[x]/f(x)$, recover secret $s$. This is believed quantum-resistant, unlike RSA/ECC.</li>
+</ol>
+
+<ol>
+<li><strong>Parameter Selection Trade-offs</strong> — The polynomial degree $n$ and ciphertext modulus $q$ jointly govern security ($\lambda \approx n \log q / \text{bits}$) and performance. Larger $n$ → more noise headroom → deeper circuits, but $O(n \log n)$ NTT cost per operation.</li>
+</ol>
+
+<ol>
+<li><strong>Ciphertext Expansion</strong> — A 32-bit plaintext may expand to kilobytes or megabytes of ciphertext. Bandwidth and storage overhead remain a practical obstacle for real deployments.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>FHE performance is improving rapidly. Libraries like <strong>OpenFHE</strong>, <strong>Microsoft SEAL</strong>, <strong>HElib</strong>, and <strong>Concrete</strong> (Zama) are active. Hardware accelerators (FPGAs, ASICs) targeting NTT and modular arithmetic are an open research frontier. The NIST PQC standardization process has standardized CRYSTALS-Kyber/Dilithium (lattice-based), creating ecosystem pressure that indirectly validates RLWE-based FHE security assumptions.</div></div>
+
+<p>Active research threads include: reducing bootstrapping latency below 100ms, batching via SIMD slot packing (CRT-based), threshold FHE for distributed key management, and FHE-friendly neural network architectures (polynomial activations replacing ReLU).</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Lattice-Based Cryptography">Lattice-Based Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/Ring Learning With Errors (RLWE)">Ring Learning With Errors (RLWE)</a></li>
+<li><a href="/daily_knowledge/topic/Secure Multi-Party Computation">Secure Multi-Party Computation</a></li>
+<li><a href="/daily_knowledge/topic/Zero-Knowledge Proofs">Zero-Knowledge Proofs</a></li>
+<li><a href="/daily_knowledge/topic/Trusted Execution Environments">Trusted Execution Environments</a></li>
+<li><a href="/daily_knowledge/topic/Differential Privacy">Differential Privacy</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>CKKS introduces approximate errors into computations — how should cryptographic security proofs be reconciled with statistical ML guarantees that already tolerate bounded error?</li>
+<li>HE and TEEs (SGX, TrustZone) offer complementary threat models. Under what deployment constraints does each dominate, and can they be composed without redundancy?</li>
+<li>If bootstrapping cost falls below 10ms, which current MPC or trusted-hardware use cases become obsolete first, and what new ones emerge?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Homomorphic_encryption" target="_blank" rel="noopener"&gt;Homomorphic Encryption&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.13225v1" target="_blank" rel="noopener">Sizes of Pre-Images of the Minimal Euclidean Function on the Gaussian Integers</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13221v1" target="_blank" rel="noopener">Electromechanical Hysteresis in Phase Change Material Sb2S3</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13220v1" target="_blank" rel="noopener">A Generative Model of Conspicuous Consumption and Status Signaling</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13219v1" target="_blank" rel="noopener">First-principles predictions of band alignment in strained Si/Si1-xGex and Ge/Si1-xGex heterostructures</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13214v1" target="_blank" rel="noopener">Investigating mixed-integer programming approaches for the $p$-$α$-closest-center problem</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Homomorphic+Encryption&labels=discussion&body=Topic:+[Homomorphic+Encryption](https://dhein.github.io/daily_knowledge/topic/homomorphic_encryption/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

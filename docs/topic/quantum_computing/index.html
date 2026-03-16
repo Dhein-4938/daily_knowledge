@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Computing</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-16/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Quantum Computing<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Quantum Computing &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<p>A quantum computer exploits two phenomena absent in classical systems — <strong>superposition</strong> and <strong>entanglement</strong> — to process information in fundamentally different ways.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Qubit</div><div>The basic unit is the <strong>qubit</strong>, described by a state vector in a 2D complex Hilbert space: $$|\psi\rangle = \alpha|0\rangle + \beta|1\rangle, \quad |\alpha|^2 + |\beta|^2 = 1$$ Measurement collapses $|\psi\rangle$ to $|0\rangle$ with probability $|\alpha|^2$ or $|1\rangle$ with probability $|\beta|^2$ — the <strong>Born rule</strong>.</div></div>
+
+<p>An $n$-qubit register lives in a $2^n$-dimensional Hilbert space, enabling a single unitary operation to act on all $2^n$ basis states simultaneously. This isn't free parallelism — measurement still yields only $n$ classical bits — but cleverly designed algorithms use <strong>wave interference</strong> to amplify the amplitude of correct answers and suppress wrong ones.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The exponential Hilbert space scaling has concrete consequences:</p>
+
+<ul>
+<li><strong>Cryptography</strong>: Shor's algorithm factors integers in $O((\log N)^3)$ time, breaking RSA and ECC. Classical best-known algorithms run in $O(e^{(\log N)^{1/3}})$ — sub-exponentially slower.</li>
+<li><strong>Search</strong>: Grover's algorithm searches an unstructured database of $N$ items in $O(\sqrt{N})$ queries vs. classical $O(N)$.</li>
+<li><strong>Simulation</strong>: Feynman's original motivation — simulating quantum systems (chemistry, materials) — scales polynomially on a quantum computer but exponentially on classical hardware.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Not universally faster</div><div>Quantum speedup is <em>problem-specific</em>. For most everyday computation — sorting, databases, parsing — no known quantum advantage exists. The power lies in exploiting the structure of problems with algebraic or periodic symmetry.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Decoherence is the central engineering obstacle.</strong> Real qubits interact with their environment, collapsing superpositions prematurely. Coherence time $T_2$ must significantly exceed gate operation time. Current superconducting qubits achieve $T_2 \sim 100\,\mu s$; useful fault-tolerant computation likely requires $T_2 \sim$ seconds.</li>
+</ol>
+
+<ol>
+<li><strong>Fault-tolerant thresholds.</strong> The threshold theorem states that if physical error rate $p < p_{th}$ (roughly $10^{-2}$ for surface codes), arbitrarily long computation is possible via quantum error correction — at the cost of $\sim 1000\times$ physical-to-logical qubit overhead.</li>
+</ol>
+
+<ol>
+<li><strong>Gate model vs. other paradigms.</strong> The circuit/gate model (sequences of unitary gates) is the dominant abstraction, but alternatives include adiabatic quantum computing, measurement-based (cluster state) computing, and topological qubits (Majorana fermions), each with distinct noise profiles.</li>
+</ol>
+
+<ol>
+<li><strong>Physical implementations differ radically in trade-offs:</strong></li>
+</ol>
+<ul>
+<li><em>Superconducting qubits</em> (IBM, Google): fast gates ($\sim 10\text{–}100\,ns$), but requires dilution refrigeration at $\sim 15\,mK$.</li>
+<li><em>Ion traps</em>: very low error rates, slow gates ($\sim 1\,ms$), room-temperature isolation possible.</li>
+<li><em>Si/SiGe quantum dots</em>: CMOS-compatible, relevant recent first-principles band alignment work improving heterostructure design for spin qubits.</li>
+</ul>
+
+<ol>
+<li><strong>Quantum advantage ≠ quantum supremacy for useful tasks.</strong> Claims of supremacy (Google 2019, others) involve sampling tasks with no practical utility — important as proof of principle, but not yet economically relevant.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research fronts (as of early 2026):</p>
+
+<ul>
+<li><strong>Error correction at scale</strong>: Moving from NISQ (Noisy Intermediate-Scale Quantum) devices toward fault-tolerant logical qubits. Google's surface code experiments have demonstrated below-threshold error rates in small patches.</li>
+<li><strong>Qubit connectivity and compilation</strong>: Sparse qubit graphs require SWAP overhead; co-design of algorithms and hardware topology is an open problem.</li>
+<li><strong>Post-quantum cryptography (PQC)</strong>: NIST has standardized lattice-based schemes (CRYSTALS-Kyber, Dilithium) as classical defenses against Shor-capable hardware.</li>
+<li><strong>Si/SiGe heterostructure engineering</strong>: First-principles DFT band offset predictions across full alloy composition range are enabling better quantum dot design.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Quantum Error Correction">Quantum Error Correction</a></li>
+<li><a href="/daily_knowledge/topic/Shor's Algorithm">Shor's Algorithm</a></li>
+<li><a href="/daily_knowledge/topic/Grover's Algorithm">Grover's Algorithm</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Decoherence">Quantum Decoherence</a></li>
+<li><a href="/daily_knowledge/topic/Post-Quantum Cryptography">Post-Quantum Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Simulation">Quantum Simulation</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Fault tolerance overhead</strong>: The ~1000:1 physical-to-logical qubit ratio means a "1000 logical qubit" machine needs ~1M physical qubits. Does this fundamentally change your intuition about when quantum computers become practically relevant?</li>
+</ol>
+
+<ol>
+<li><strong>Computational complexity</strong>: Quantum computers are believed to solve BQP problems efficiently — but BQP is not believed to contain NP-complete problems. What does this say about the <em>limits</em> of quantum speedup, and why does the public discourse so often conflate the two?</li>
+</ol>
+
+<ol>
+<li><strong>Hybrid algorithms</strong>: Near-term algorithms like VQE (Variational Quantum Eigensolver) offload classical optimization onto quantum hardware iteratively. Is this a genuine path to useful advantage, or a workaround masking the absence of fault tolerance?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank" rel="noopener"&gt;Quantum Computing&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.13225v1" target="_blank" rel="noopener">Sizes of Pre-Images of the Minimal Euclidean Function on the Gaussian Integers</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13222v1" target="_blank" rel="noopener">Two-channel physics in a lightly doped antiferromagnetic Mott insulator revealed by two-hole spectroscopy</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13221v1" target="_blank" rel="noopener">Electromechanical Hysteresis in Phase Change Material Sb2S3</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13220v1" target="_blank" rel="noopener">A Generative Model of Conspicuous Consumption and Status Signaling</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.13219v1" target="_blank" rel="noopener">First-principles predictions of band alignment in strained Si/Si1-xGex and Ge/Si1-xGex heterostructures</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Quantum+Computing&labels=discussion&body=Topic:+[Quantum+Computing](https://dhein.github.io/daily_knowledge/topic/quantum_computing/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
