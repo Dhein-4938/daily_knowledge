@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Entanglement</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-15/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Quantum Entanglement<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Quantum entanglement is a property of a composite quantum system where the joint state <strong>cannot</strong> be written as a tensor product of individual subsystem states. Formally, a bipartite state $|\psi\rangle \in \mathcal{H}_A \otimes \mathcal{H}_B$ is entangled if and only if there exist <strong>no</strong> $|\phi\rangle_A \in \mathcal{H}_A$, $|\chi\rangle_B \in \mathcal{H}_B$ such that $|\psi\rangle = |\phi\rangle_A \otimes |\chi\rangle_B$.</div></div>
+
+<p>The canonical example is the singlet Bell state:</p>
+
+<p>$$|\Psi^-\rangle = \frac{1}{\sqrt{2}}\left(|\uparrow\rangle_A|\downarrow\rangle_B - |\downarrow\rangle_A|\uparrow\rangle_B\right)$$</p>
+
+<p>Here the total spin is fixed at zero, yet neither particle has a definite spin prior to measurement. Measuring particle $A$ along any axis instantly determines the outcome for particle $B$ along that same axis — not because a signal propagated, but because the global wavefunction collapses as a whole.</p>
+
+<p>The reduced density matrix of subsystem $A$ is obtained by tracing out $B$: $\rho_A = \text{Tr}_B(|\psi\rangle\langle\psi|)$. For the singlet, $\rho_A = \frac{1}{2}\mathbf{I}$ — a maximally mixed state — which quantifies maximal entanglement via the <strong>von Neumann entropy</strong> $S(\rho_A) = -\text{Tr}(\rho_A \ln \rho_A) = \ln 2$.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Entanglement is not merely a curiosity — it is a <strong>resource</strong> that enables strictly super-classical information processing:</p>
+
+<ul>
+<li><strong>Quantum cryptography (QKD):</strong> Entanglement-based protocols (e.g., E91) guarantee eavesdropping detection via Bell inequality violations.</li>
+<li><strong>Quantum teleportation:</strong> Transmits an unknown qubit state using only an entangled pair and two classical bits.</li>
+<li><strong>Quantum computing:</strong> Entanglement underlies the exponential Hilbert-space structure that makes algorithms like Shor's and Grover's tractable.</li>
+<li><strong>Condensed matter:</strong> Entanglement entropy diagnoses topological order, criticality, and area-law vs. volume-law phases — deeply connected to tensor network methods (MPS, PEPS).</li>
+<li><strong>Holography / AdS-CFT:</strong> Spatial geometry in the bulk may <em>emerge</em> from entanglement structure in the boundary CFT (Ryu–Takayanagi formula: $S = \text{Area}/4G_N$).</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Real Weirdness</div><div>Entanglement doesn't allow FTL communication — correlations only become visible when results are <em>compared</em> via a classical channel. The genuine strangeness is ontological: quantum systems lack definite local properties before joint measurement. Bell's theorem rules out any local hidden-variable completion, making this irreducibly non-classical.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Bell's Theorem and CHSH Inequality.</strong> Local hidden-variable theories satisfy $|S_{\text{CHSH}}| \leq 2$, where $S = \langle AB\rangle - \langle AB'\rangle + \langle A'B\rangle + \langle A'B'\rangle$. Quantum mechanics achieves the Tsirelson bound $2\sqrt{2} \approx 2.83$, experimentally confirmed with loophole-free Bell tests (e.g., Delft 2015, NIST 2015).</li>
+</ol>
+
+<ol>
+<li><strong>Entanglement is basis-independent but measurement-basis-sensitive.</strong> The degree of correlations observed depends on the measurement axes chosen; only specific axis combinations violate Bell inequalities maximally.</li>
+</ol>
+
+<ol>
+<li><strong>Mixed-state entanglement is harder.</strong> For mixed states, the separability criterion is non-trivial. The <strong>PPT criterion</strong> (Peres–Horodecki) provides a necessary condition: if $\rho^{T_B} \not\geq 0$, the state is entangled. In higher dimensions, PPT-entangled (bound-entangled) states exist — entangled but not distillable.</li>
+</ol>
+
+<ol>
+<li><strong>Monogamy of entanglement.</strong> If $A$ is maximally entangled with $B$, it cannot be entangled with $C$ at all: $E(A:B) + E(A:C) \leq 1$ (in appropriate units). This underpins quantum cryptographic security.</li>
+</ol>
+
+<ol>
+<li><strong>Entanglement entropy and area laws.</strong> Ground states of gapped local Hamiltonians obey an <em>area law</em>: $S \propto |\partial V|$ rather than volume. This is what makes tensor networks (MPS, MERA) efficient representations — and connects to why topological phases can be characterized by short-range entanglement.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Experimental platforms (photons, ions, superconducting qubits, neutral atoms) are advancing rapidly; specific fidelity benchmarks and record entanglement distances shift frequently.</div></div>
+
+<p>Recent research directions of note:</p>
+
+<ul>
+<li><strong>Topological phases and entanglement structure:</strong> A March 2026 arXiv paper on <em>Critical Topological Flat Bands</em> (Li et al.) explicitly connects filled band states to <em>short-range entangled topological states</em> with power-law correlations, admitting exact tensor-network representations. This is a frontier where entanglement theory directly informs condensed matter.</li>
+<li><strong>Majorana zero modes:</strong> Probing non-Abelian anyons (relevant to topological quantum computing) relies on fermion-parity switches — themselves a form of protected entanglement between topological qubits.</li>
+<li><strong>Neutrino oscillations as quantum coherence:</strong> The factorization vs. non-factorization debate in neutrino S-matrix treatments touches on how quantum correlations between production and detection events (a cousin of entanglement) generate measurable non-factorizable corrections at the ~1% level.</li>
+<li><strong>Entanglement-based networks:</strong> Satellite QKD (Micius) and metropolitan fiber networks are moving toward entanglement distribution at scale, targeting quantum repeaters to overcome photon loss.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Bell's Theorem">Bell's Theorem</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Decoherence">Quantum Decoherence</a></li>
+<li><a href="/daily_knowledge/topic/Density Matrix and Mixed States">Density Matrix and Mixed States</a></li>
+<li><a href="/daily_knowledge/topic/Topological Order and Anyons">Topological Order and Anyons</a></li>
+<li><a href="/daily_knowledge/topic/Tensor Networks and Area Laws">Tensor Networks and Area Laws</a></li>
+<li><a href="/daily_knowledge/topic/EPR Paradox and Local Realism">EPR Paradox and Local Realism</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Bell's theorem closes the door on local hidden variables, but <strong>non-local</strong> hidden-variable theories (e.g., Bohmian mechanics) remain viable. What experimental or theoretical criterion could distinguish them from standard QM — or is the question empirically meaningless?</li>
+</ol>
+
+<ol>
+<li>Entanglement entropy obeys an area law in gapped phases but a logarithmic correction appears at criticality ($S \sim \frac{c}{3}\ln L$ for 1+1D CFTs). What does this tell us about the structure of information near a quantum phase transition, and how does it constrain which states tensor networks can efficiently represent?</li>
+</ol>
+
+<ol>
+<li>If entanglement cannot transmit information faster than light, yet quantum gravity proposals like ER=EPR suggest entangled black holes are geometrically connected by wormholes, what is the precise sense in which "non-locality" is or isn't present — and does the holographic picture dissolve the tension or merely relocate it?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_entanglement" target="_blank" rel="noopener"&gt;Quantum Entanglement&lt;/a&gt; · Retrieved 2026-03-15</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.12258v1" target="_blank" rel="noopener">Stable Topology in Exactly Flat Bands</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12256v1" target="_blank" rel="noopener">Quantum Inductance as a Phase-Sensitive Probe of Fermion Parity Switching in Majorana Nanowires</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12242v1" target="_blank" rel="noopener">Factorization vs. Non-Factorization: S-Matrix Corrections for Precision Neutrino Physics</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Quantum+Entanglement&labels=discussion&body=Topic:+[Quantum+Entanglement](https://dhein.github.io/daily_knowledge/topic/quantum_entanglement/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

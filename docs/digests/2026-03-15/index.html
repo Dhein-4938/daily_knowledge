@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Empty Digest</title>
+<title>Daily Digest — March 15, 2026</title>
 <script>
 MathJax = {
   tex: {
@@ -210,7 +210,444 @@ MathJax = {
 </head>
 <body>
 <div class="page">
-<p style="color:#ff6060">No topics could be loaded.</p>
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 15, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~16 min</div></div>
+<nav class="topic-nav"><a href="#general_relativity">General Relativity</a><a href="#quantum_entanglement">Quantum Entanglement</a><a href="#transformers">Transformer Architecture</a><a href="#diffusion_models">Diffusion Models</a></nav>
+<article id="general_relativity"><div class="topic-header"><h2>General Relativity<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>General Relativity (GR) is Einstein's geometric theory of gravitation (1916), recasting gravity not as a force but as the <strong>curvature of a pseudo-Riemannian 4-manifold</strong> — spacetime — induced by the presence of energy-momentum.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Einstein Field Equations (EFE)</div><div>The governing equations relate spacetime geometry to matter-energy content: $$G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$$ where $G_{\mu\nu} = R_{\mu\nu} - \frac{1}{2}Rg_{\mu\nu}$ is the <strong>Einstein tensor</strong> (encoding curvature), $T_{\mu\nu}$ is the <strong>stress-energy tensor</strong> (encoding matter/radiation), $\Lambda$ is the cosmological constant, and $g_{\mu\nu}$ is the metric tensor. Ten coupled, nonlinear PDEs in total.</div></div>
+
+<p>Wheeler's aphorism distills the bidirectional coupling: <em>"Space-time tells matter how to move; matter tells space-time how to curve."</em> Free-falling bodies follow <strong>geodesics</strong> — extremal paths in the curved manifold — rather than being "pushed" by a force.</p>
+
+<p>The metric $g_{\mu\nu}$ determines the invariant line element:</p>
+<p>$$ds^2 = g_{\mu\nu}\, dx^\mu dx^\nu$$</p>
+<p>From this, all geometric quantities — Christoffel symbols $\Gamma^\lambda_{\mu\nu}$, the Riemann tensor $R^\rho{}_{\sigma\mu\nu}$, and ultimately $G_{\mu\nu}$ — are derived.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>GR is not merely a refinement of Newtonian gravity; it is a <strong>conceptual restructuring</strong> of the nature of space, time, and causality.</p>
+
+<ul>
+<li><strong>Astrophysics</strong>: predicts black holes, neutron stars, gravitational waves — all confirmed observationally (LIGO 2015, Event Horizon Telescope 2019).</li>
+<li><strong>Cosmology</strong>: GR underpins the ΛCDM standard model, the Big Bang, cosmic expansion, and CMB predictions.</li>
+<li><strong>Technology</strong>: GPS satellites require both special- and general-relativistic corrections (~38 μs/day combined) to maintain meter-level accuracy.</li>
+<li><strong>Fundamental physics</strong>: sets the arena for understanding the large-scale structure of the universe; its incompatibility with quantum mechanics defines one of the deepest open problems in all of physics.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Newtonian gravity as a limit</div><div>GR recovers Newton's inverse-square law in the <strong>weak-field, slow-motion</strong> limit ($v \ll c$, $\Phi/c^2 \ll 1$). The Newtonian potential $\Phi$ emerges from the $g_{00}$ component: $g_{00} \approx -(1 + 2\Phi/c^2)$. This correspondence principle is what makes GR well-tested even in the solar system.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Equivalence Principle</strong>: The weak form states gravitational and inertial mass are identical. The strong form extends this: locally, a freely falling frame is indistinguishable from an inertial frame in the absence of gravity. This is the physical seed from which the geometric formulation grows.</li>
+</ol>
+
+<ol>
+<li><strong>Exact solutions are rare</strong>: The EFE are highly nonlinear. Tractable exact solutions require symmetry. Key ones:</li>
+</ol>
+<ul>
+<li><strong>Schwarzschild</strong> (1916) — spherically symmetric vacuum; predicts event horizons</li>
+<li><strong>Kerr</strong> (1963) — rotating black holes; astrophysically universal</li>
+<li><strong>FLRW</strong> — homogeneous, isotropic cosmology; backbone of modern cosmology</li>
+</ul>
+
+<ol>
+<li><strong>Gravitational waves</strong>: Perturbations of $g_{\mu\nu}$ propagate at $c$ as transverse, quadrupolar waves. To leading post-Newtonian order, the power radiated is given by the <strong>quadrupole formula</strong>:</li>
+</ol>
+<p>$$P = -\frac{G}{5c^5} \dddot{Q}_{ij}\dddot{Q}^{ij}$$</p>
+<p>where $Q_{ij}$ is the mass quadrupole moment.</p>
+
+<ol>
+<li><strong>Geodesic deviation and tidal forces</strong>: The <strong>Riemann curvature tensor</strong> directly governs how nearby geodesics accelerate relative to one another — the geometrization of tidal gravity. Spacetime curvature <em>is</em> the tidal field.</li>
+</ol>
+
+<ol>
+<li><strong>Singularity theorems</strong> (Penrose–Hawking): Under physically reasonable energy conditions, GR <em>predicts its own breakdown</em> — singularities are generic, not artifacts of symmetry. This signals the theory's incompleteness at extreme densities.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active frontiers as of early 2026:</p>
+
+<ul>
+<li><strong>Quantum gravity</strong>: Loop Quantum Gravity (LQG) and String Theory remain the leading frameworks, neither yet empirically confirmed. The black hole information paradox (unitarity vs. GR) remains unresolved despite significant progress via holography (<a href="/daily_knowledge/topic/AdS-CFT Correspondence">AdS-CFT Correspondence</a>).</li>
+<li><strong>Gravitational wave astronomy</strong>: LIGO/Virgo/KAGRA observations have moved from detection to <strong>population statistics</strong> of compact binary mergers, probing strong-field GR and nuclear matter equations of state.</li>
+<li><strong>Black hole imaging</strong>: EHT results on M87<em> and Sgr A</em> test the Kerr metric in the strong-field regime; next-generation arrays aim for horizon-scale movies.</li>
+<li><strong>Cosmological tensions</strong>: The $H_0$ tension (~5σ discrepancy between early- and late-universe measurements) may or may not require physics beyond ΛCDM/GR.</li>
+<li><strong>Post-Newtonian and numerical relativity</strong>: LIGO waveform templates rely on high-order PN expansions and full numerical relativity simulations — a major area of ongoing computational physics work.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Special Relativity">Special Relativity</a></li>
+<li><a href="/daily_knowledge/topic/Riemannian Geometry">Riemannian Geometry</a></li>
+<li><a href="/daily_knowledge/topic/Black Holes">Black Holes</a></li>
+<li><a href="/daily_knowledge/topic/Gravitational Waves">Gravitational Waves</a></li>
+<li><a href="/daily_knowledge/topic/Standard Model of Cosmology">Standard Model of Cosmology</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Gravity">Quantum Gravity</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The EFE admit the Minkowski flat-space solution even in the presence of matter if $T_{\mu\nu}$ is tuned appropriately — what does this reveal about the <em>non-uniqueness</em> of solutions and the role of boundary conditions in GR?</li>
+</ol>
+
+<ol>
+<li>The strong equivalence principle implies that gravity cannot be "screened" or shielded locally, unlike electromagnetism. What are the deep structural reasons for this, and how does it connect to the spin-2 nature of the graviton in linearized GR?</li>
+</ol>
+
+<ol>
+<li>Singularity theorems guarantee breakdown under classical assumptions, yet the Bekenstein–Hawking entropy $S = A/4l_P^2$ suggests black holes are thermodynamic objects with a quantum microstructure. What constraints does this place on any viable theory of quantum gravity?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/General_relativity" target="_blank" rel="noopener"&gt;General Relativity&lt;/a&gt; · Retrieved 2026-03-15</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.12267v1" target="_blank" rel="noopener">EVATok: Adaptive Length Video Tokenization for Efficient Visual Autoregressive Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12266v1" target="_blank" rel="noopener">MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12265v1" target="_blank" rel="noopener">OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams</a> (2026)</li>
+</ul></div></article>
+<article id="quantum_entanglement"><div class="topic-header"><h2>Quantum Entanglement<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Quantum entanglement is a property of a composite quantum system where the joint state <strong>cannot</strong> be written as a tensor product of individual subsystem states. Formally, a bipartite state $|\psi\rangle \in \mathcal{H}_A \otimes \mathcal{H}_B$ is entangled if and only if there exist <strong>no</strong> $|\phi\rangle_A \in \mathcal{H}_A$, $|\chi\rangle_B \in \mathcal{H}_B$ such that $|\psi\rangle = |\phi\rangle_A \otimes |\chi\rangle_B$.</div></div>
+
+<p>The canonical example is the singlet Bell state:</p>
+
+<p>$$|\Psi^-\rangle = \frac{1}{\sqrt{2}}\left(|\uparrow\rangle_A|\downarrow\rangle_B - |\downarrow\rangle_A|\uparrow\rangle_B\right)$$</p>
+
+<p>Here the total spin is fixed at zero, yet neither particle has a definite spin prior to measurement. Measuring particle $A$ along any axis instantly determines the outcome for particle $B$ along that same axis — not because a signal propagated, but because the global wavefunction collapses as a whole.</p>
+
+<p>The reduced density matrix of subsystem $A$ is obtained by tracing out $B$: $\rho_A = \text{Tr}_B(|\psi\rangle\langle\psi|)$. For the singlet, $\rho_A = \frac{1}{2}\mathbf{I}$ — a maximally mixed state — which quantifies maximal entanglement via the <strong>von Neumann entropy</strong> $S(\rho_A) = -\text{Tr}(\rho_A \ln \rho_A) = \ln 2$.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Entanglement is not merely a curiosity — it is a <strong>resource</strong> that enables strictly super-classical information processing:</p>
+
+<ul>
+<li><strong>Quantum cryptography (QKD):</strong> Entanglement-based protocols (e.g., E91) guarantee eavesdropping detection via Bell inequality violations.</li>
+<li><strong>Quantum teleportation:</strong> Transmits an unknown qubit state using only an entangled pair and two classical bits.</li>
+<li><strong>Quantum computing:</strong> Entanglement underlies the exponential Hilbert-space structure that makes algorithms like Shor's and Grover's tractable.</li>
+<li><strong>Condensed matter:</strong> Entanglement entropy diagnoses topological order, criticality, and area-law vs. volume-law phases — deeply connected to tensor network methods (MPS, PEPS).</li>
+<li><strong>Holography / AdS-CFT:</strong> Spatial geometry in the bulk may <em>emerge</em> from entanglement structure in the boundary CFT (Ryu–Takayanagi formula: $S = \text{Area}/4G_N$).</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Real Weirdness</div><div>Entanglement doesn't allow FTL communication — correlations only become visible when results are <em>compared</em> via a classical channel. The genuine strangeness is ontological: quantum systems lack definite local properties before joint measurement. Bell's theorem rules out any local hidden-variable completion, making this irreducibly non-classical.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Bell's Theorem and CHSH Inequality.</strong> Local hidden-variable theories satisfy $|S_{\text{CHSH}}| \leq 2$, where $S = \langle AB\rangle - \langle AB'\rangle + \langle A'B\rangle + \langle A'B'\rangle$. Quantum mechanics achieves the Tsirelson bound $2\sqrt{2} \approx 2.83$, experimentally confirmed with loophole-free Bell tests (e.g., Delft 2015, NIST 2015).</li>
+</ol>
+
+<ol>
+<li><strong>Entanglement is basis-independent but measurement-basis-sensitive.</strong> The degree of correlations observed depends on the measurement axes chosen; only specific axis combinations violate Bell inequalities maximally.</li>
+</ol>
+
+<ol>
+<li><strong>Mixed-state entanglement is harder.</strong> For mixed states, the separability criterion is non-trivial. The <strong>PPT criterion</strong> (Peres–Horodecki) provides a necessary condition: if $\rho^{T_B} \not\geq 0$, the state is entangled. In higher dimensions, PPT-entangled (bound-entangled) states exist — entangled but not distillable.</li>
+</ol>
+
+<ol>
+<li><strong>Monogamy of entanglement.</strong> If $A$ is maximally entangled with $B$, it cannot be entangled with $C$ at all: $E(A:B) + E(A:C) \leq 1$ (in appropriate units). This underpins quantum cryptographic security.</li>
+</ol>
+
+<ol>
+<li><strong>Entanglement entropy and area laws.</strong> Ground states of gapped local Hamiltonians obey an <em>area law</em>: $S \propto |\partial V|$ rather than volume. This is what makes tensor networks (MPS, MERA) efficient representations — and connects to why topological phases can be characterized by short-range entanglement.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Experimental platforms (photons, ions, superconducting qubits, neutral atoms) are advancing rapidly; specific fidelity benchmarks and record entanglement distances shift frequently.</div></div>
+
+<p>Recent research directions of note:</p>
+
+<ul>
+<li><strong>Topological phases and entanglement structure:</strong> A March 2026 arXiv paper on <em>Critical Topological Flat Bands</em> (Li et al.) explicitly connects filled band states to <em>short-range entangled topological states</em> with power-law correlations, admitting exact tensor-network representations. This is a frontier where entanglement theory directly informs condensed matter.</li>
+<li><strong>Majorana zero modes:</strong> Probing non-Abelian anyons (relevant to topological quantum computing) relies on fermion-parity switches — themselves a form of protected entanglement between topological qubits.</li>
+<li><strong>Neutrino oscillations as quantum coherence:</strong> The factorization vs. non-factorization debate in neutrino S-matrix treatments touches on how quantum correlations between production and detection events (a cousin of entanglement) generate measurable non-factorizable corrections at the ~1% level.</li>
+<li><strong>Entanglement-based networks:</strong> Satellite QKD (Micius) and metropolitan fiber networks are moving toward entanglement distribution at scale, targeting quantum repeaters to overcome photon loss.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Bell's Theorem">Bell's Theorem</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Decoherence">Quantum Decoherence</a></li>
+<li><a href="/daily_knowledge/topic/Density Matrix and Mixed States">Density Matrix and Mixed States</a></li>
+<li><a href="/daily_knowledge/topic/Topological Order and Anyons">Topological Order and Anyons</a></li>
+<li><a href="/daily_knowledge/topic/Tensor Networks and Area Laws">Tensor Networks and Area Laws</a></li>
+<li><a href="/daily_knowledge/topic/EPR Paradox and Local Realism">EPR Paradox and Local Realism</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Bell's theorem closes the door on local hidden variables, but <strong>non-local</strong> hidden-variable theories (e.g., Bohmian mechanics) remain viable. What experimental or theoretical criterion could distinguish them from standard QM — or is the question empirically meaningless?</li>
+</ol>
+
+<ol>
+<li>Entanglement entropy obeys an area law in gapped phases but a logarithmic correction appears at criticality ($S \sim \frac{c}{3}\ln L$ for 1+1D CFTs). What does this tell us about the structure of information near a quantum phase transition, and how does it constrain which states tensor networks can efficiently represent?</li>
+</ol>
+
+<ol>
+<li>If entanglement cannot transmit information faster than light, yet quantum gravity proposals like ER=EPR suggest entangled black holes are geometrically connected by wormholes, what is the precise sense in which "non-locality" is or isn't present — and does the holographic picture dissolve the tension or merely relocate it?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_entanglement" target="_blank" rel="noopener"&gt;Quantum Entanglement&lt;/a&gt; · Retrieved 2026-03-15</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.12258v1" target="_blank" rel="noopener">Stable Topology in Exactly Flat Bands</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12256v1" target="_blank" rel="noopener">Quantum Inductance as a Phase-Sensitive Probe of Fermion Parity Switching in Majorana Nanowires</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12242v1" target="_blank" rel="noopener">Factorization vs. Non-Factorization: S-Matrix Corrections for Precision Neutrino Physics</a> (2026)</li>
+</ul></div></article>
+<article id="transformers"><div class="topic-header"><h2>Transformer Architecture<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>The Transformer is a sequence-to-sequence architecture that replaces recurrence entirely with <strong>self-attention</strong>, enabling parallelisable training and long-range dependency capture without path-length degradation.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Scaled Dot-Product Attention</div><div>Given queries $Q$, keys $K$, and values $V$ (all $\in \mathbb{R}^{n \times d_k}$): $$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$$ The $\sqrt{d_k}$ scaling prevents softmax saturation in high-dimensional spaces.</div></div>
+
+<p><strong>Multi-Head Attention (MHA)</strong> projects into $h$ subspaces, runs attention in parallel, then concatenates:</p>
+
+<p>$$\text{MHA}(Q,K,V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)\,W^O, \quad \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$</p>
+
+<p>Each encoder/decoder block pairs MHA with a position-wise FFN, residual connections, and layer norm. Positional information is injected via sinusoidal (original) or learned embeddings, since attention itself is permutation-invariant.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The Transformer's architectural biases—global receptive field from token 1, hardware-friendly parallelism, and a clean inductive prior of <em>pairwise relevance</em>—made it the substrate for virtually every frontier model in language, vision, audio, and biology. Pre-trained at scale, Transformers exhibit emergent capabilities absent in smaller variants: in-context learning, chain-of-thought reasoning, and cross-modal transfer.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: The attention inductive bias is weaker than CNNs or RNNs</div><div>This means Transformers need more data to match specialised architectures in low-data regimes, but generalise <em>better</em> at scale. The weakness becomes a strength.</div></div>
+
+<p>Applications span: LLM pre-training (GPT, LLaMA), vision (ViT, DINO), protein folding (AlphaFold 2), code generation, robotic control, and multimodal agents.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>KV-Cache and Autoregressive Decoding</strong> — During inference, keys and values for all prior tokens are cached, reducing per-step complexity from $O(n^2)$ to $O(n)$ at the cost of memory proportional to sequence length. This is the primary bottleneck for long-context deployment.</li>
+</ol>
+
+<ol>
+<li><strong>Positional Encoding Variants</strong> — Absolute sinusoidal → learned absolute → relative (T5 bias) → RoPE (rotary position embedding). RoPE encodes position by rotating $Q$ and $K$ in complex space, enabling length generalisation and efficient dot-product computation. Modern models (LLaMA 3, Qwen) default to RoPE.</li>
+</ol>
+
+<ol>
+<li><strong>Layer Norm Placement</strong> — "Post-LN" (original paper) is harder to train deep; "Pre-LN" (before attention/FFN) stabilises gradients but can reduce representation rank. Most production models use Pre-LN or a hybrid (e.g. Gemma's RMSNorm pre-LN).</li>
+</ol>
+
+<ol>
+<li><strong>FFN as Key-Value Memory</strong> — The two-layer FFN with activation $\text{FFN}(x) = \sigma(xW_1)W_2$ is interpretable as a <em>soft key-value store</em>: rows of $W_1$ are keys, columns of $W_2$ are values. This frames factual recall as dense lookup rather than explicit retrieval.</li>
+</ol>
+
+<ol>
+<li><strong>Attention Complexity</strong> — Vanilla MHA is $O(n^2 d)$ in both compute and memory. Flash Attention (Dao et al.) achieves $O(n^2 d / M)$ in HBM reads via tiled SRAM computation, enabling practical 100K+ context windows without approximation.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research as of early 2026 is pushing Transformers into <strong>streaming and real-time</strong> regimes. Works like <em>OmniStream</em> incorporate <strong>causal spatiotemporal attention with 3D-RoPE</strong> and persistent KV-caches for frame-by-frame video processing—extending the architecture from offline batch inference to online perception-action loops. Similarly, <em>Video Streaming Thinking (VST)</em> amortises LLM reasoning latency over video playback by activating chain-of-thought during streaming rather than after, achieving 15.7× latency reduction over post-hoc reasoning approaches.</p>
+
+<p>A parallel thread is <strong>compositional visual reasoning</strong>: benchmarks like <em>MM-CondChain</em> reveal that even 2026-generation MLLMs peak at ~53 Path F1 on deeply chained conditional reasoning tasks, indicating that multi-hop grounded inference remains unsolved regardless of model scale.</p>
+
+<p><strong>Spatial intelligence</strong> for embodied agents (Spatial-TTT) explores test-time training (fast weights) as a complement to the fixed attention mechanism, enabling continual spatial map updates from unbounded streams without full-context KV growth.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Attention Mechanism">Attention Mechanism</a></li>
+<li><a href="/daily_knowledge/topic/Rotary Position Embedding (RoPE)">Rotary Position Embedding (RoPE)</a></li>
+<li><a href="/daily_knowledge/topic/Flash Attention">Flash Attention</a></li>
+<li><a href="/daily_knowledge/topic/Vision Transformer (ViT)">Vision Transformer (ViT)</a></li>
+<li><a href="/daily_knowledge/topic/Large Language Models">Large Language Models</a></li>
+<li><a href="/daily_knowledge/topic/Multimodal Foundation Models">Multimodal Foundation Models</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The FFN-as-memory interpretation suggests factual knowledge is stored in weights rather than context — what are the implications for knowledge editing and catastrophic forgetting at scale?</li>
+</ol>
+
+<ol>
+<li>Causal attention with persistent KV-caches enables streaming, but memory grows linearly with time. What architectural modifications (sliding window, retention mechanisms, SSMs) offer the best compute/memory/quality trade-offs for always-on agents?</li>
+</ol>
+
+<ol>
+<li>Transformers lack explicit relational structure; MM-CondChain shows they still fail at deep compositional conditionals. Is this a data problem, a capacity problem, or a fundamental limitation of the attention inductive bias?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture" target="_blank" rel="noopener"&gt;Transformer Architecture&lt;/a&gt;) · Retrieved 2026-03-15</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.12266v1" target="_blank" rel="noopener">MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12265v1" target="_blank" rel="noopener">OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12262v1" target="_blank" rel="noopener">Video Streaming Thinking: VideoLLMs Can Watch and Think Simultaneously</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12258v1" target="_blank" rel="noopener">Stable Topology in Exactly Flat Bands</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12255v1" target="_blank" rel="noopener">Spatial-TTT: Streaming Visual-based Spatial Intelligence with Test-Time Training</a> (2026)</li>
+</ul></div></article>
+<article id="diffusion_models"><div class="topic-header"><h2>Diffusion Models<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>diffusion model</strong> is a latent variable generative model that learns to reverse a stochastic noising process. Given a data distribution $q(\mathbf{x}_0)$, the forward process gradually destroys structure by adding Gaussian noise over $T$ steps; the model learns to invert this.</div></div>
+
+<p>The <strong>forward process</strong> is a fixed Markov chain:</p>
+
+<p>$$q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}\!\left(\mathbf{x}_t;\, \sqrt{1-\beta_t}\,\mathbf{x}_{t-1},\, \beta_t \mathbf{I}\right)$$</p>
+
+<p>where $\{\beta_t\}$ is a noise schedule. By the reparameterization trick, one can sample any $\mathbf{x}_t$ directly:</p>
+
+<p>$$\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1-\bar{\alpha}_t}\,\boldsymbol{\epsilon}, \quad \boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I}), \quad \bar{\alpha}_t = \prod_{s=1}^t (1-\beta_s)$$</p>
+
+<p>The <strong>reverse process</strong> is a learned Markov chain $p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$, parameterized by a neural network (backbone) trained to predict either the noise $\boldsymbol{\epsilon}$, the clean $\mathbf{x}_0$, or the <strong>score</strong> $\nabla_{\mathbf{x}} \log p(\mathbf{x})$. These are equivalent up to a scaling. Training minimizes a variational lower bound (ELBO), which in DDPM simplifies to:</p>
+
+<p>$$\mathcal{L}_\text{simple} = \mathbb{E}_{t,\mathbf{x}_0,\boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)\|^2\right]$$</p>
+
+<p>The forward and reverse processes can also be unified under a <strong>stochastic differential equation (SDE)</strong> framework (Song et al., 2021), enabling continuous-time formulations and deterministic sampling via probability flow ODEs.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Diffusion models displaced GANs as the dominant paradigm for high-fidelity image synthesis around 2022–2023. Their advantages are concrete:</p>
+
+<ul>
+<li><strong>Training stability</strong> — no adversarial minimax; just supervised noise-prediction.</li>
+<li><strong>Mode coverage</strong> — likelihood-based training avoids mode collapse endemic to GANs.</li>
+<li><strong>Compositionality</strong> — conditioning (text, class, image) integrates cleanly via classifier-free guidance.</li>
+</ul>
+
+<p>Commercial impact is significant: Stable Diffusion, DALL-E 3, Imagen, and Sora all build on diffusion foundations. Beyond pixels, diffusion has expanded into protein structure prediction, drug molecule design, audio synthesis, and robot trajectory planning — anywhere you need to sample from a complex, high-dimensional distribution.</p>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The connection to <strong>score matching</strong> (Hyvärinen, 2005) is deep: denoising score matching with multiple noise levels is mathematically equivalent to DDPM training. This bridges energy-based models and diffusion in a single framework.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Backbone architectures</strong> — Originally U-Net with attention; newer work increasingly uses <strong>Diffusion Transformers (DiT)</strong>, which treat image patches as token sequences and scale more predictably with compute.</li>
+</ol>
+
+<ol>
+<li><strong>Noise schedules matter</strong> — Cosine schedules (iDDPM) outperform linear schedules on lower-resolution images. Learned or adaptive schedules remain active research.</li>
+</ol>
+
+<ol>
+<li><strong>Sampling efficiency</strong> — Naive DDPM requires $T \approx 1000$ NFEs (network function evaluations). DDIM reformulates as a non-Markovian process enabling ~50-step deterministic sampling. Distillation methods (consistency models, progressive distillation) push this to 1–4 steps at quality parity.</li>
+</ol>
+
+<ol>
+<li><strong>Classifier-free guidance (CFG)</strong> — At inference, blend conditional and unconditional score estimates: $\tilde{\boldsymbol{\epsilon}} = \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing) + w\,[\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, c) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing)]$. Guidance scale $w$ trades diversity for fidelity.</li>
+</ol>
+
+<ol>
+<li><strong>Latent diffusion</strong> — Operating in the latent space of a pre-trained VAE (Stable Diffusion's core trick) reduces spatial resolution ~8×, cutting compute quadratically without significant perceptual loss.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active research frontiers as of early 2026:</p>
+
+<ul>
+<li><strong>Video generation</strong> — Extending spatial diffusion to temporal dimensions with causal attention (see OmniStream-style unified backbones); token efficiency for long sequences is a bottleneck.</li>
+<li><strong>Consistency and flow matching</strong> — Flow matching models (Rectified Flow, Stable Diffusion 3) reparameterize the trajectory as straight-line ODE paths, improving sample quality at low NFEs and simplifying training.</li>
+<li><strong>Autoregressive + diffusion hybrids</strong> — Systems like adaptive video tokenizers (e.g., EVATok) target AR generation efficiency, but diffusion remains competitive on quality metrics.</li>
+<li><strong>Controllability</strong> — ControlNet, IP-Adapter, and similar conditioning mechanisms allow fine-grained structural control; multimodal conditioning (layout, depth, pose) is mature but evaluation rigor (see GRADE benchmark) is still catching up.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Score-Based Generative Models">Score-Based Generative Models</a></li>
+<li><a href="/daily_knowledge/topic/Variational Autoencoders">Variational Autoencoders</a></li>
+<li><a href="/daily_knowledge/topic/Generative Adversarial Networks">Generative Adversarial Networks</a></li>
+<li><a href="/daily_knowledge/topic/Flow Matching">Flow Matching</a></li>
+<li><a href="/daily_knowledge/topic/Classifier-Free Guidance">Classifier-Free Guidance</a></li>
+<li><a href="/daily_knowledge/topic/Denoising Score Matching">Denoising Score Matching</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Sampling as inference</strong>: DDIM sampling is deterministic given the same noise seed — does this make diffusion models closer to implicit likelihood models than their variational training objective suggests? What are the implications for diversity-fidelity tradeoffs?</li>
+</ol>
+
+<ol>
+<li><strong>Scalability ceiling</strong>: DiT scales log-linearly with compute in image synthesis. Do you expect the same scaling law to hold for video, or does the combinatorial explosion of temporal consistency introduce a qualitatively harder problem?</li>
+</ol>
+
+<ol>
+<li><strong>Inductive bias vs. architecture</strong>: Diffusion models impose a specific inductive bias (iterative refinement from noise). For domains like protein design or molecular generation, is this bias genuinely well-matched to the data geometry, or is it incidental that it works well?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Diffusion_model" target="_blank" rel="noopener"&gt;Diffusion Models&lt;/a&gt; · Retrieved 2026-03-15</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.12267v1" target="_blank" rel="noopener">EVATok: Adaptive Length Video Tokenization for Efficient Visual Autoregressive Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12266v1" target="_blank" rel="noopener">MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12265v1" target="_blank" rel="noopener">OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12264v1" target="_blank" rel="noopener">GRADE: Benchmarking Discipline-Informed Reasoning in Image Editing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12263v1" target="_blank" rel="noopener">$Ψ_0$: An Open Foundation Model Towards Universal Humanoid Loco-Manipulation</a> (2026)</li>
+</ul></div></article>
 </div>
 </body>
 </html>

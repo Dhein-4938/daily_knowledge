@@ -54,7 +54,33 @@ MathJax = {{
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+<script>document.addEventListener('DOMContentLoaded', () => {{
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {{
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {{
+      entries.forEach(e => {{
+        if (e.isIntersecting) {{
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }}
+      }});
+    }}, {{threshold: 0.3}});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {{
+      if (localStorage.getItem('visited:' + a.id)) {{
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }}
+    }});
+  }}
+}});</script>
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{
@@ -86,6 +112,11 @@ MathJax = {{
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
   }}
   .topic-nav a {{
     background: #1e2a45;
@@ -98,6 +129,13 @@ MathJax = {{
     transition: background 0.15s;
   }}
   .topic-nav a:hover {{ background: #2a3d5e; }}
+  .topic-nav a.visited::before {{
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }}
   /* Topic article */
   article {{
     margin-bottom: 3.5rem;
@@ -191,6 +229,19 @@ MathJax = {{
   }}
   /* Single topic page */
   .single-topic article {{ margin-bottom: 0; }}
+  /* Reviewed badge */
+  .badge-reviewed {{
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }}
 </style>
 </head>
 <body>
@@ -421,10 +472,14 @@ def build_digest_page(run_date: date) -> tuple[str, int]:
 
     topics: list[tuple[str, dict, str]] = []  # (id, fm, body)
     total_min = 0
+    seen: set[str] = set()
     for tid in topic_ids:
+        if tid in seen:
+            continue
         path = find_topic_file(tid)
         if path is None:
             continue
+        seen.add(tid)
         raw = path.read_text(encoding='utf-8')
         fm, body = parse_frontmatter(raw)
         body = strip_h1(body)
@@ -468,11 +523,12 @@ def build_digest_page(run_date: date) -> tuple[str, int]:
         meta_parts = [html.escape(cat_str)] if cat_str else []
         meta_parts.append(html.escape(rt))
         meta_html = ' &nbsp;·&nbsp; '.join(meta_parts)
+        reviewed_badge = '<span class="badge-reviewed">✓ reviewed</span>' if fm.get("reviewed") else ""
 
         sections.append(
             f'<article id="{html.escape(tid)}">'
             f'<div class="topic-header">'
-            f'<h2>{html.escape(title)}</h2>'
+            f'<h2>{html.escape(title)}{reviewed_badge}</h2>'
             f'<div class="topic-meta">{meta_html}</div>'
             f'</div>'
             f'<div class="body">{render_body_html(body)}</div>'
@@ -506,18 +562,42 @@ def build_topic_page(topic_id: str, digest_date: date | None = None) -> tuple[st
     meta_parts = [html.escape(cat_str)] if cat_str else []
     meta_parts.append(html.escape(rt))
     meta_html = ' &nbsp;·&nbsp; '.join(meta_parts)
+    reviewed_badge = '<span class="badge-reviewed">✓ reviewed</span>' if fm.get("reviewed") else ""
 
     back_href = f'/digests/{digest_date.isoformat()}/' if digest_date else '/'
+
+    # GitHub Issue discussion form
+    repo = "dhein/knowledge"
+    issue_title_enc = html.escape(f"Discussion: {title}", quote=True).replace(' ', '+')
+    issue_body_enc = html.escape(
+        f"Topic: [{title}](https://dhein.github.io/daily_knowledge/topic/{topic_id}/)\n\n"
+        "<!-- Your thoughts, questions, or notes below -->",
+        quote=True,
+    ).replace(' ', '+')
+    issue_url = (
+        f"https://github.com/{repo}/issues/new"
+        f"?title={issue_title_enc}&labels=discussion&body={issue_body_enc}"
+    )
+    discussion_form = (
+        '<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px">'
+        '<p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p>'
+        f'<a href="{issue_url}" target="_blank" rel="noopener" '
+        'style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;'
+        'padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a>'
+        '</div>'
+    )
+
     sections = [
         '<div class="single-topic">',
         f'<a class="back-link" href="{back_href}">← Back to digest</a>',
         f'<article>',
         f'<div class="topic-header">',
-        f'<h2>{html.escape(title)}</h2>',
+        f'<h2>{html.escape(title)}{reviewed_badge}</h2>',
         f'<div class="topic-meta">{meta_html}</div>',
         f'</div>',
         f'<div class="body">{render_body_html(body)}</div>',
         f'</article>',
+        discussion_form,
         '</div>',
     ]
 

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transformer Architecture</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-15/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Transformer Architecture<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<p>The Transformer is a sequence-to-sequence architecture that replaces recurrence entirely with <strong>self-attention</strong>, enabling parallelisable training and long-range dependency capture without path-length degradation.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Scaled Dot-Product Attention</div><div>Given queries $Q$, keys $K$, and values $V$ (all $\in \mathbb{R}^{n \times d_k}$): $$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$$ The $\sqrt{d_k}$ scaling prevents softmax saturation in high-dimensional spaces.</div></div>
+
+<p><strong>Multi-Head Attention (MHA)</strong> projects into $h$ subspaces, runs attention in parallel, then concatenates:</p>
+
+<p>$$\text{MHA}(Q,K,V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)\,W^O, \quad \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$</p>
+
+<p>Each encoder/decoder block pairs MHA with a position-wise FFN, residual connections, and layer norm. Positional information is injected via sinusoidal (original) or learned embeddings, since attention itself is permutation-invariant.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The Transformer's architectural biases—global receptive field from token 1, hardware-friendly parallelism, and a clean inductive prior of <em>pairwise relevance</em>—made it the substrate for virtually every frontier model in language, vision, audio, and biology. Pre-trained at scale, Transformers exhibit emergent capabilities absent in smaller variants: in-context learning, chain-of-thought reasoning, and cross-modal transfer.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: The attention inductive bias is weaker than CNNs or RNNs</div><div>This means Transformers need more data to match specialised architectures in low-data regimes, but generalise <em>better</em> at scale. The weakness becomes a strength.</div></div>
+
+<p>Applications span: LLM pre-training (GPT, LLaMA), vision (ViT, DINO), protein folding (AlphaFold 2), code generation, robotic control, and multimodal agents.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>KV-Cache and Autoregressive Decoding</strong> — During inference, keys and values for all prior tokens are cached, reducing per-step complexity from $O(n^2)$ to $O(n)$ at the cost of memory proportional to sequence length. This is the primary bottleneck for long-context deployment.</li>
+</ol>
+
+<ol>
+<li><strong>Positional Encoding Variants</strong> — Absolute sinusoidal → learned absolute → relative (T5 bias) → RoPE (rotary position embedding). RoPE encodes position by rotating $Q$ and $K$ in complex space, enabling length generalisation and efficient dot-product computation. Modern models (LLaMA 3, Qwen) default to RoPE.</li>
+</ol>
+
+<ol>
+<li><strong>Layer Norm Placement</strong> — "Post-LN" (original paper) is harder to train deep; "Pre-LN" (before attention/FFN) stabilises gradients but can reduce representation rank. Most production models use Pre-LN or a hybrid (e.g. Gemma's RMSNorm pre-LN).</li>
+</ol>
+
+<ol>
+<li><strong>FFN as Key-Value Memory</strong> — The two-layer FFN with activation $\text{FFN}(x) = \sigma(xW_1)W_2$ is interpretable as a <em>soft key-value store</em>: rows of $W_1$ are keys, columns of $W_2$ are values. This frames factual recall as dense lookup rather than explicit retrieval.</li>
+</ol>
+
+<ol>
+<li><strong>Attention Complexity</strong> — Vanilla MHA is $O(n^2 d)$ in both compute and memory. Flash Attention (Dao et al.) achieves $O(n^2 d / M)$ in HBM reads via tiled SRAM computation, enabling practical 100K+ context windows without approximation.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research as of early 2026 is pushing Transformers into <strong>streaming and real-time</strong> regimes. Works like <em>OmniStream</em> incorporate <strong>causal spatiotemporal attention with 3D-RoPE</strong> and persistent KV-caches for frame-by-frame video processing—extending the architecture from offline batch inference to online perception-action loops. Similarly, <em>Video Streaming Thinking (VST)</em> amortises LLM reasoning latency over video playback by activating chain-of-thought during streaming rather than after, achieving 15.7× latency reduction over post-hoc reasoning approaches.</p>
+
+<p>A parallel thread is <strong>compositional visual reasoning</strong>: benchmarks like <em>MM-CondChain</em> reveal that even 2026-generation MLLMs peak at ~53 Path F1 on deeply chained conditional reasoning tasks, indicating that multi-hop grounded inference remains unsolved regardless of model scale.</p>
+
+<p><strong>Spatial intelligence</strong> for embodied agents (Spatial-TTT) explores test-time training (fast weights) as a complement to the fixed attention mechanism, enabling continual spatial map updates from unbounded streams without full-context KV growth.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Attention Mechanism">Attention Mechanism</a></li>
+<li><a href="/daily_knowledge/topic/Rotary Position Embedding (RoPE)">Rotary Position Embedding (RoPE)</a></li>
+<li><a href="/daily_knowledge/topic/Flash Attention">Flash Attention</a></li>
+<li><a href="/daily_knowledge/topic/Vision Transformer (ViT)">Vision Transformer (ViT)</a></li>
+<li><a href="/daily_knowledge/topic/Large Language Models">Large Language Models</a></li>
+<li><a href="/daily_knowledge/topic/Multimodal Foundation Models">Multimodal Foundation Models</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The FFN-as-memory interpretation suggests factual knowledge is stored in weights rather than context — what are the implications for knowledge editing and catastrophic forgetting at scale?</li>
+</ol>
+
+<ol>
+<li>Causal attention with persistent KV-caches enables streaming, but memory grows linearly with time. What architectural modifications (sliding window, retention mechanisms, SSMs) offer the best compute/memory/quality trade-offs for always-on agents?</li>
+</ol>
+
+<ol>
+<li>Transformers lack explicit relational structure; MM-CondChain shows they still fail at deep compositional conditionals. Is this a data problem, a capacity problem, or a fundamental limitation of the attention inductive bias?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture" target="_blank" rel="noopener"&gt;Transformer Architecture&lt;/a&gt;) · Retrieved 2026-03-15</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.12266v1" target="_blank" rel="noopener">MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12265v1" target="_blank" rel="noopener">OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12262v1" target="_blank" rel="noopener">Video Streaming Thinking: VideoLLMs Can Watch and Think Simultaneously</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12258v1" target="_blank" rel="noopener">Stable Topology in Exactly Flat Bands</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12255v1" target="_blank" rel="noopener">Spatial-TTT: Streaming Visual-based Spatial Intelligence with Test-Time Training</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Transformer+Architecture&labels=discussion&body=Topic:+[Transformer+Architecture](https://dhein.github.io/daily_knowledge/topic/transformers/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

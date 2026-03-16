@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diffusion Models</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-15/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Diffusion Models<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>diffusion model</strong> is a latent variable generative model that learns to reverse a stochastic noising process. Given a data distribution $q(\mathbf{x}_0)$, the forward process gradually destroys structure by adding Gaussian noise over $T$ steps; the model learns to invert this.</div></div>
+
+<p>The <strong>forward process</strong> is a fixed Markov chain:</p>
+
+<p>$$q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}\!\left(\mathbf{x}_t;\, \sqrt{1-\beta_t}\,\mathbf{x}_{t-1},\, \beta_t \mathbf{I}\right)$$</p>
+
+<p>where $\{\beta_t\}$ is a noise schedule. By the reparameterization trick, one can sample any $\mathbf{x}_t$ directly:</p>
+
+<p>$$\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1-\bar{\alpha}_t}\,\boldsymbol{\epsilon}, \quad \boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I}), \quad \bar{\alpha}_t = \prod_{s=1}^t (1-\beta_s)$$</p>
+
+<p>The <strong>reverse process</strong> is a learned Markov chain $p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$, parameterized by a neural network (backbone) trained to predict either the noise $\boldsymbol{\epsilon}$, the clean $\mathbf{x}_0$, or the <strong>score</strong> $\nabla_{\mathbf{x}} \log p(\mathbf{x})$. These are equivalent up to a scaling. Training minimizes a variational lower bound (ELBO), which in DDPM simplifies to:</p>
+
+<p>$$\mathcal{L}_\text{simple} = \mathbb{E}_{t,\mathbf{x}_0,\boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)\|^2\right]$$</p>
+
+<p>The forward and reverse processes can also be unified under a <strong>stochastic differential equation (SDE)</strong> framework (Song et al., 2021), enabling continuous-time formulations and deterministic sampling via probability flow ODEs.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Diffusion models displaced GANs as the dominant paradigm for high-fidelity image synthesis around 2022–2023. Their advantages are concrete:</p>
+
+<ul>
+<li><strong>Training stability</strong> — no adversarial minimax; just supervised noise-prediction.</li>
+<li><strong>Mode coverage</strong> — likelihood-based training avoids mode collapse endemic to GANs.</li>
+<li><strong>Compositionality</strong> — conditioning (text, class, image) integrates cleanly via classifier-free guidance.</li>
+</ul>
+
+<p>Commercial impact is significant: Stable Diffusion, DALL-E 3, Imagen, and Sora all build on diffusion foundations. Beyond pixels, diffusion has expanded into protein structure prediction, drug molecule design, audio synthesis, and robot trajectory planning — anywhere you need to sample from a complex, high-dimensional distribution.</p>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The connection to <strong>score matching</strong> (Hyvärinen, 2005) is deep: denoising score matching with multiple noise levels is mathematically equivalent to DDPM training. This bridges energy-based models and diffusion in a single framework.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Backbone architectures</strong> — Originally U-Net with attention; newer work increasingly uses <strong>Diffusion Transformers (DiT)</strong>, which treat image patches as token sequences and scale more predictably with compute.</li>
+</ol>
+
+<ol>
+<li><strong>Noise schedules matter</strong> — Cosine schedules (iDDPM) outperform linear schedules on lower-resolution images. Learned or adaptive schedules remain active research.</li>
+</ol>
+
+<ol>
+<li><strong>Sampling efficiency</strong> — Naive DDPM requires $T \approx 1000$ NFEs (network function evaluations). DDIM reformulates as a non-Markovian process enabling ~50-step deterministic sampling. Distillation methods (consistency models, progressive distillation) push this to 1–4 steps at quality parity.</li>
+</ol>
+
+<ol>
+<li><strong>Classifier-free guidance (CFG)</strong> — At inference, blend conditional and unconditional score estimates: $\tilde{\boldsymbol{\epsilon}} = \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing) + w\,[\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, c) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing)]$. Guidance scale $w$ trades diversity for fidelity.</li>
+</ol>
+
+<ol>
+<li><strong>Latent diffusion</strong> — Operating in the latent space of a pre-trained VAE (Stable Diffusion's core trick) reduces spatial resolution ~8×, cutting compute quadratically without significant perceptual loss.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active research frontiers as of early 2026:</p>
+
+<ul>
+<li><strong>Video generation</strong> — Extending spatial diffusion to temporal dimensions with causal attention (see OmniStream-style unified backbones); token efficiency for long sequences is a bottleneck.</li>
+<li><strong>Consistency and flow matching</strong> — Flow matching models (Rectified Flow, Stable Diffusion 3) reparameterize the trajectory as straight-line ODE paths, improving sample quality at low NFEs and simplifying training.</li>
+<li><strong>Autoregressive + diffusion hybrids</strong> — Systems like adaptive video tokenizers (e.g., EVATok) target AR generation efficiency, but diffusion remains competitive on quality metrics.</li>
+<li><strong>Controllability</strong> — ControlNet, IP-Adapter, and similar conditioning mechanisms allow fine-grained structural control; multimodal conditioning (layout, depth, pose) is mature but evaluation rigor (see GRADE benchmark) is still catching up.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Score-Based Generative Models">Score-Based Generative Models</a></li>
+<li><a href="/daily_knowledge/topic/Variational Autoencoders">Variational Autoencoders</a></li>
+<li><a href="/daily_knowledge/topic/Generative Adversarial Networks">Generative Adversarial Networks</a></li>
+<li><a href="/daily_knowledge/topic/Flow Matching">Flow Matching</a></li>
+<li><a href="/daily_knowledge/topic/Classifier-Free Guidance">Classifier-Free Guidance</a></li>
+<li><a href="/daily_knowledge/topic/Denoising Score Matching">Denoising Score Matching</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Sampling as inference</strong>: DDIM sampling is deterministic given the same noise seed — does this make diffusion models closer to implicit likelihood models than their variational training objective suggests? What are the implications for diversity-fidelity tradeoffs?</li>
+</ol>
+
+<ol>
+<li><strong>Scalability ceiling</strong>: DiT scales log-linearly with compute in image synthesis. Do you expect the same scaling law to hold for video, or does the combinatorial explosion of temporal consistency introduce a qualitatively harder problem?</li>
+</ol>
+
+<ol>
+<li><strong>Inductive bias vs. architecture</strong>: Diffusion models impose a specific inductive bias (iterative refinement from noise). For domains like protein design or molecular generation, is this bias genuinely well-matched to the data geometry, or is it incidental that it works well?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Diffusion_model" target="_blank" rel="noopener"&gt;Diffusion Models&lt;/a&gt; · Retrieved 2026-03-15</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.12267v1" target="_blank" rel="noopener">EVATok: Adaptive Length Video Tokenization for Efficient Visual Autoregressive Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12266v1" target="_blank" rel="noopener">MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12265v1" target="_blank" rel="noopener">OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12264v1" target="_blank" rel="noopener">GRADE: Benchmarking Discipline-Informed Reasoning in Image Editing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.12263v1" target="_blank" rel="noopener">$Ψ_0$: An Open Foundation Model Towards Universal Humanoid Loco-Manipulation</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Diffusion+Models&labels=discussion&body=Topic:+[Diffusion+Models](https://dhein.github.io/daily_knowledge/topic/diffusion_models/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
