@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayes&#x27; Theorem</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-19/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Bayes&#x27; Theorem<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Math · Probability &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Bayes' theorem gives a principled rule for <strong>inverting conditional probabilities</strong>: computing the probability of a hypothesis given observed evidence, from the probability of observing that evidence given the hypothesis.</div></div>
+
+<p>The canonical form:</p>
+
+<p>$$P(H \mid E) = \frac{P(E \mid H)\, P(H)}{P(E)}$$</p>
+
+<p>where each term carries a precise epistemic role:</p>
+
+<p>| Term | Name | Meaning |</p>
+<p>|---|---|---|</p>
+<p>| $P(H)$ | <strong>Prior</strong> | Degree of belief in $H$ before seeing $E$ |</p>
+<p>| $P(E \mid H)$ | <strong>Likelihood</strong> | How probable is $E$ if $H$ were true |</p>
+<p>| $P(E)$ | <strong>Marginal likelihood</strong> | Total probability of evidence (normalizing constant) |</p>
+<p>| $P(H \mid E)$ | <strong>Posterior</strong> | Updated belief in $H$ after observing $E$ |</p>
+
+<p>The denominator expands via the law of total probability over a partition $\{H_i\}$:</p>
+
+<p>$$P(E) = \sum_i P(E \mid H_i)\, P(H_i)$$</p>
+
+<p>For continuous hypothesis spaces, the sum becomes an integral and posterior inference is often intractable in closed form — motivating approximate methods.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Bayes' theorem is the <strong>normative foundation of rational belief update</strong>. It bridges two directions of probabilistic reasoning that are asymmetrically hard: the generative direction ($P(E \mid H)$, easy to model) and the inferential direction ($P(H \mid E)$, what we actually want).</p>
+
+<p>Key domains where this inversion is central:</p>
+
+<ul>
+<li><strong>Medical diagnostics</strong> — sensitivity/specificity → positive predictive value</li>
+<li><strong>Machine learning</strong> — posterior inference over model parameters; MAP estimation, variational inference, MCMC</li>
+<li><strong>Gravitational-wave astrophysics</strong> — constraining binary black hole formation channels from population-level observations</li>
+<li><strong>Signal detection / spam filtering</strong> — Naive Bayes classifiers</li>
+<li><strong>Scientific model selection</strong> — Bayesian evidence (marginal likelihood) as a complexity-penalizing model comparison metric</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Base-Rate Fallacy</div><div>Ignoring $P(H)$ — the prior — is one of the most common human reasoning failures. A highly sensitive test ($P(E \mid H) \approx 1$) for a rare disease ($P(H) \ll 1$) still yields a low positive predictive value $P(H \mid E)$. The theorem makes this arithmetically explicit and unavoidable.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Odds form</strong> is often more intuitive and numerically stable:</li>
+</ol>
+<p>$$\frac{P(H \mid E)}{P(\bar{H} \mid E)} = \frac{P(E \mid H)}{P(E \mid \bar{H})} \cdot \frac{P(H)}{P(\bar{H})}$$</p>
+<p>Posterior odds = Bayes factor × prior odds. The Bayes factor $K = P(E \mid H_1)/P(E \mid H_0)$ isolates the evidence's discriminative power.</p>
+
+<ol>
+<li><strong>Sequential updating</strong>: applying Bayes' theorem iteratively — where today's posterior becomes tomorrow's prior — is exact and order-independent (given exchangeability). This is the formal machinery behind online learning.</li>
+</ol>
+
+<ol>
+<li><strong>The prior is a feature, not a bug.</strong> Frequentist critics argue priors inject subjectivity; Bayesians counter that ignoring prior information is itself a choice, and often a worse one. Conjugate priors (Beta-Binomial, Dirichlet-Categorical, Normal-Normal) yield closed-form posteriors.</li>
+</ol>
+
+<ol>
+<li><strong>Computational bottleneck</strong>: The integral $P(E) = \int P(E \mid \theta)\,P(\theta)\,d\theta$ is rarely tractable in high dimensions. This drives the entire field of approximate Bayesian computation: MCMC (Metropolis-Hastings, HMC), variational inference, and normalizing flows.</li>
+</ol>
+
+<ol>
+<li><strong>Bayesian model comparison</strong> uses the marginal likelihood $P(E \mid \mathcal{M})$ directly, which automatically implements Occam's Razor — complex models are penalized because they spread probability mass over more possible datasets.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research fronts as of early 2026:</p>
+
+<ul>
+<li><strong>Scalable posterior inference</strong> for large neural networks (e.g., Laplace approximations, stochastic weight averaging with Gaussian approximation)</li>
+<li><strong>Gravitational-wave population inference</strong> uses hierarchical Bayesian models + MCMC to decompose BBH catalogs into formation-channel subpopulations — a striking astrophysical application of the theorem at scale</li>
+<li><strong>Simulation-based inference (SBI)</strong> / likelihood-free inference, where $P(E \mid H)$ is itself an intractable simulator, replaced by neural density estimators trained on simulated data</li>
+<li><strong>Bayesian deep learning</strong> remains an open problem: true posterior over network weights is computationally prohibitive; approximate methods trade fidelity for tractability</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Bayesian Inference">Bayesian Inference</a></li>
+<li><a href="/daily_knowledge/topic/Markov Chain Monte Carlo">Markov Chain Monte Carlo</a></li>
+<li><a href="/daily_knowledge/topic/Likelihood and Maximum Likelihood Estimation">Likelihood and Maximum Likelihood Estimation</a></li>
+<li><a href="/daily_knowledge/topic/Prior Distributions and Conjugacy">Prior Distributions and Conjugacy</a></li>
+<li><a href="/daily_knowledge/topic/Variational Inference">Variational Inference</a></li>
+<li><a href="/daily_knowledge/topic/Frequentist vs Bayesian Statistics">Frequentist vs Bayesian Statistics</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Prior sensitivity</strong>: In what regimes does the posterior become effectively prior-independent, and when does it remain dominated by the prior regardless of data volume? What does this imply about the asymptotic behavior of Bayesian vs. frequentist estimators?</li>
+</ol>
+
+<ol>
+<li><strong>Computational vs. conceptual</strong>: Bayes' theorem is a single equation, yet its application spawns vast computational machinery (MCMC, VI, SBI). Where exactly does the tractability break down, and what approximation guarantees — if any — can we offer for real-world posteriors?</li>
+</ol>
+
+<ol>
+<li><strong>Model misspecification</strong>: Bayes' theorem is exact given the model. How should one reason when the true data-generating process lies outside the support of the prior family? Does Bayesian updating remain coherent, or does it converge to the "least wrong" model in some well-defined sense?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Bayes'_theorem" target="_blank" rel="noopener"&gt;Bayes' Theorem&lt;/a&gt; · Retrieved 2026-03-19</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.18004v1" target="_blank" rel="noopener">Unified Spatio-Temporal Token Scoring for Efficient Video VLMs</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.17987v1" target="_blank" rel="noopener">On the Astrophysical Origin of Binary Black Hole Subpopulations: A Tale of Three Channels?</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.17986v1" target="_blank" rel="noopener">Observational Signatures of Exact Black Hole Solutions in a Dark Matter Halo</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Bayes&#x27;+Theorem&labels=discussion&body=Topic:+[Bayes&#x27;+Theorem](https://dhein.github.io/daily_knowledge/topic/bayes_theorem/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
