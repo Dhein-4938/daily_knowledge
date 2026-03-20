@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linear Algebra</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-20/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Linear Algebra<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Math · Algebra &nbsp;·&nbsp; ~5 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Linear algebra is the study of <strong>vector spaces</strong>, <strong>linear maps</strong> between them, and the algebraic structures (matrices, tensors) used to represent these objects concretely. The central objects are systems of linear equations $$A\mathbf{x} = \mathbf{b}, \quad A \in \mathbb{R}^{m \times n},\ \mathbf{x} \in \mathbb{R}^n,\ \mathbf{b} \in \mathbb{R}^m$$ and the abstract maps $T: V \to W$ satisfying $T(\alpha u + \beta v) = \alpha T(u) + \beta T(v)$ for all scalars $\alpha, \beta$ and vectors $u, v$.</div></div>
+
+<p>A <strong>vector space</strong> over a field $\mathbb{F}$ is a set equipped with addition and scalar multiplication satisfying eight axioms (closure, associativity, distributivity, etc.). Linear algebra is the full theory of what you can say about a space using only these two operations — no notion of distance or angle is required unless you add an inner product.</p>
+
+<p>The <strong>rank-nullity theorem</strong> is perhaps the cleanest encapsulation of structure:</p>
+<p>$$\dim(\ker T) + \dim(\operatorname{im} T) = \dim V$$</p>
+<p>Every linear map is completely characterized by what it collapses (kernel) and what it produces (image).</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Linear algebra is the computational skeleton of modern science and engineering. Its centrality comes from two complementary facts:</p>
+
+<ol>
+<li><strong>Universality of linearization.</strong> The derivative of a smooth map $f: \mathbb{R}^n \to \mathbb{R}^m$ at a point $p$ is the Jacobian matrix $Df(p)$ — the best linear approximation to $f$ near $p$. Almost all continuous optimization, physics simulation, and differential geometry reduces locally to linear algebra.</li>
+</ol>
+
+<ol>
+<li><strong>Computational tractability.</strong> Matrix operations admit efficient algorithms (Gaussian elimination runs in $O(n^3)$; sparse and structured matrices allow much faster routines). No other mathematical framework matches this combination of generality and computability.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP: The Spectral Lens</div><div>Eigendecomposition $A = Q\Lambda Q^{-1}$ transforms a linear map into a diagonal action on independent subspaces. This is the reason PCA, quantum mechanics (energy eigenstates), Google's PageRank, and stability analysis of ODEs all reduce to the same algebraic operation.</div></div>
+
+<p>Applications span: numerical PDE solvers (discretization → linear system), quantum mechanics (observables are Hermitian operators on Hilbert space), ML (neural network layers are affine maps; backprop is a chain rule over Jacobians), computer graphics (rotations/projections as matrix groups), and cryptography (lattice-based schemes).</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. The Four Fundamental Subspaces.</strong> Any $m \times n$ matrix $A$ defines four subspaces — column space $\operatorname{col}(A)$, null space $\operatorname{null}(A)$, row space $\operatorname{row}(A)$, left null space $\operatorname{null}(A^T)$ — satisfying orthogonality relations in $\mathbb{R}^n$ and $\mathbb{R}^m$ respectively. Understanding their geometry is the key to solving (or explaining the failure of) $A\mathbf{x} = \mathbf{b}$.</p>
+
+<p><strong>2. SVD as the Canonical Decomposition.</strong> The Singular Value Decomposition $A = U\Sigma V^T$ exists for <em>every</em> matrix (not just square or symmetric ones) and reveals the true geometric action: rotation $V^T$, axis-aligned scaling $\Sigma$, then rotation $U$. Pseudoinverse, low-rank approximation (Eckart–Young theorem), and condition number all derive from it.</p>
+
+<p><strong>3. Change of Basis is Conjugation.</strong> If $T$ has matrix $A$ in basis $\mathcal{B}$, then in basis $\mathcal{B}'$ it has matrix $P^{-1}AP$ where $P$ is the change-of-basis matrix. The intrinsic property is the eigenvalues (invariant under conjugation); the matrix form is an artifact of the chosen coordinates.</p>
+
+<p><strong>4. Over Arbitrary Fields.</strong> Linear algebra works over any field — $\mathbb{Q}$, $\mathbb{F}_p$, $\mathbb{C}$, even finite fields. Algebraically closed fields (like $\mathbb{C}$) guarantee that the characteristic polynomial splits completely, which is why complex eigenvalue theory is cleaner and why quantum mechanics lives in $\mathbb{C}$.</p>
+
+<p><strong>5. Infinite Dimensions Require Care.</strong> In infinite-dimensional spaces (function spaces, sequence spaces), bounded linear operators can behave wildly: the spectrum need not consist of eigenvalues; inverses may exist but be unbounded; self-adjoint operators can have continuous spectrum. This is the domain of <a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a>.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Randomized numerical linear algebra</strong> — sketching algorithms (e.g., random projections, leverage-score sampling) that solve least-squares and low-rank problems in sublinear passes over data, critical for large-scale ML and streaming settings.</li>
+<li><strong>Tensor decompositions</strong> — generalizations of SVD to higher-order arrays (CP, Tucker, tensor-train). Uniqueness properties differ sharply from matrices; identifiability is an open problem in general.</li>
+<li><strong>Linear algebra in ML interpretability</strong> — recent work (e.g., sparse autoencoders, linear probing in VLA models as of 2026-03) uses linear subspace analysis to decompose model representations, finding that features like motor programs and goal semantics occupy <em>separable activation subspaces</em> — a direct application of the four-subspace picture to learned representations.</li>
+<li><strong>Numerical stability and mixed precision</strong> — with FP8/FP4 hardware, maintaining backward stability of matrix factorizations under aggressive quantization is an open engineering-science problem.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Vector Spaces and Bases">Vector Spaces and Bases</a></li>
+<li><a href="/daily_knowledge/topic/Eigenvalues and Spectral Theory">Eigenvalues and Spectral Theory</a></li>
+<li><a href="/daily_knowledge/topic/Singular Value Decomposition">Singular Value Decomposition</a></li>
+<li><a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Matrix Calculus">Matrix Calculus</a></li>
+<li><a href="/daily_knowledge/topic/Numerical Linear Algebra">Numerical Linear Algebra</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The SVD decomposes <em>any</em> linear map into two rotations and a scaling — what does this say about the nature of linear transformations geometrically, and where does this intuition break down in infinite dimensions?</li>
+</ol>
+
+<ol>
+<li>Nearly every neural network layer is an affine map followed by a nonlinearity. To what extent is "deep learning" just iterated low-rank linear algebra, and what does the non-linearity actually add that cannot be captured by a single large linear map?</li>
+</ol>
+
+<ol>
+<li>Randomized algorithms can approximate the top-$k$ singular vectors of an $n \times n$ matrix in $O(nk)$ time rather than $O(n^2)$. What are the theoretical guarantees, and in what regimes do they fail — particularly for ill-conditioned or adversarially constructed matrices?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Linear_algebra" target="_blank" rel="noopener"&gt;Linear Algebra&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19216v1" target="_blank" rel="noopener">DreamPartGen: Semantically Grounded Part-Level 3D Generation via Collaborative Latent Denoising</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19214v1" target="_blank" rel="noopener">Outage Probability Analysis of NOMA Enabled Hierarchical UAV Networks with Non-Linear Energy Harvesting</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Linear+Algebra&labels=discussion&body=Topic:+[Linear+Algebra](https://dhein.github.io/daily_knowledge/topic/linear_algebra/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P vs NP Problem</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-20/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>P vs NP Problem<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Math · Complexity Theory &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div><strong>P</strong> is the class of decision problems solvable by a deterministic Turing machine in $O(n^k)$ time for some constant $k$. <strong>NP</strong> is the class solvable by a <em>nondeterministic</em> Turing machine in polynomial time — equivalently, problems whose solutions can be <em>verified</em> in polynomial time by a deterministic machine.</div></div>
+
+<p>The central question: does $\mathrm{P} = \mathrm{NP}$?</p>
+
+<p>Formally, let $L$ be a decision problem (a language over $\{0,1\}^*$). Then:</p>
+
+<p>$$L \in \mathrm{NP} \iff \exists \text{ poly-time verifier } V \text{ s.t. } x \in L \Leftrightarrow \exists w,\, |w| \leq \mathrm{poly}(|x|),\, V(x, w) = 1$$</p>
+
+<p>where $w$ is a <em>certificate</em> (witness). P $\subseteq$ NP trivially — any polynomial solver serves as its own verifier. The open question is whether the containment is strict.</p>
+
+<p>The widely-held belief is $\mathrm{P} \neq \mathrm{NP}$, though no proof exists. It is one of the seven <strong>Millennium Prize Problems</strong> ($1,000,000 prize from the Clay Mathematics Institute).</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The stakes extend far beyond theoretical computer science:</p>
+
+<ul>
+<li><strong>Cryptography</strong>: Nearly all modern cryptographic primitives (RSA, elliptic-curve, hash-based schemes) derive security from the <em>presumed</em> hardness of NP problems like integer factorization and discrete log. If $\mathrm{P} = \mathrm{NP}$, these collapse. This would break TLS, PGP, and essentially all public-key infrastructure overnight.</li>
+<li><strong>Optimization &amp; AI</strong>: SAT solvers, scheduling, protein folding (NP-hard), and combinatorial optimization underpin enormous practical and scientific domains. Polynomial-time solutions would be transformative.</li>
+<li><strong>Mathematics itself</strong>: Proof verification is in NP (given a proof, checking it is poly-time). A $\mathrm{P} = \mathrm{NP}$ result would imply that finding proofs is no harder than checking them — effectively automating mathematical discovery.</li>
+<li><strong>Economics &amp; Game Theory</strong>: Nash equilibrium computation, mechanism design, and auction theory all bump against NP-hardness barriers.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Asymmetry Insight</div><div>The problem captures a deep philosophical asymmetry: <em>recognizing</em> a solution versus <em>finding</em> one. This maps onto human experience — it is far easier to verify a crossword solution than to solve it from scratch. P vs NP asks whether this subjective difficulty gap is mathematically real.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>NP-completeness</strong>: A problem $Q$ is NP-complete if $Q \in \mathrm{NP}$ and every problem in NP poly-time reduces to $Q$. Cook (1971) and Levin (1973) independently showed SAT is NP-complete. Karp then identified 21 canonical NP-complete problems. NP-complete problems are the "hardest" in NP — solving any one in poly-time implies $\mathrm{P} = \mathrm{NP}$.</li>
+</ol>
+
+<ol>
+<li><strong>The complexity landscape</strong>: The picture is richer than just P and NP:</li>
+</ol>
+<p>$$\mathrm{P} \subseteq \mathrm{NP} \cap \mathrm{co\text{-}NP} \subseteq \mathrm{NP} \subseteq \mathrm{PSPACE} \subseteq \mathrm{EXP}$$</p>
+<p>   Integer factorization sits in $\mathrm{NP} \cap \mathrm{co\text{-}NP}$ but is not known to be NP-complete — suggesting it may occupy an intermediate zone even if $\mathrm{P} \neq \mathrm{NP}$.</p>
+
+<ol>
+<li><strong>Relativization barrier</strong>: Baker, Gill & Solovay (1975) showed there exist oracles $A$, $B$ such that $\mathrm{P}^A = \mathrm{NP}^A$ and $\mathrm{P}^B \neq \mathrm{NP}^B$. Any proof technique that relativizes (holds with any oracle) cannot resolve P vs NP — ruling out large swaths of classical proof strategies.</li>
+</ol>
+
+<ol>
+<li><strong>Natural proofs barrier</strong>: Razborov & Rudich (1994) showed that "natural" combinatorial circuit lower-bound arguments cannot separate P from NP unless strong pseudorandom generators don't exist. This blocks another major proof avenue.</li>
+</ol>
+
+<ol>
+<li><strong>Algebraization</strong>: Aaronson & Wigderson (2009) extended the oracle barrier to algebraic methods, further constraining viable proof strategies. The known barriers — relativization, natural proofs, algebraization — together suggest any resolution will require fundamentally new mathematics.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research directions include:</p>
+
+<ul>
+<li><strong>Circuit complexity</strong>: Proving super-polynomial lower bounds for explicit problems in restricted circuit classes (e.g., $\mathrm{ACC}^0$). Ryan Williams made progress in 2010 by separating $\mathrm{NEXP}$ from $\mathrm{ACC}^0$, the first major circuit lower bound in decades.</li>
+<li><strong>Geometric complexity theory (GCT)</strong>: Mulmuley & Sohoni's program uses algebraic geometry and representation theory to approach the problem via the permanent vs. determinant question — a closely related algebraic analogue.</li>
+<li><strong>Proof complexity</strong>: Connections between proof length in formal systems and circuit complexity may offer indirect handles on the problem.</li>
+<li><strong>Meta-complexity</strong>: Problems like MCSP (Minimum Circuit Size Problem) sit in a curious zone — likely not NP-complete under standard assumptions, yet hard — and studying them sheds light on the structure of NP itself.</li>
+</ul>
+
+<p>The consensus remains $\mathrm{P} \neq \mathrm{NP}$, but no serious candidate proof has survived peer scrutiny. Dozens of claimed proofs have been submitted and refuted.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/NP-Completeness and Reductions">NP-Completeness and Reductions</a></li>
+<li><a href="/daily_knowledge/topic/Computational Complexity Classes">Computational Complexity Classes</a></li>
+<li><a href="/daily_knowledge/topic/Boolean Satisfiability (SAT)">Boolean Satisfiability (SAT)</a></li>
+<li><a href="/daily_knowledge/topic/Cryptographic Hardness Assumptions">Cryptographic Hardness Assumptions</a></li>
+<li><a href="/daily_knowledge/topic/Circuit Complexity">Circuit Complexity</a></li>
+<li><a href="/daily_knowledge/topic/Millennium Prize Problems">Millennium Prize Problems</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The three known barriers (relativization, natural proofs, algebraization) each rule out entire families of proof techniques. What would a proof strategy look like that evades <em>all three</em> simultaneously — and does GCT plausibly do this?</li>
+</ol>
+
+<ol>
+<li>If $\mathrm{P} = \mathrm{NP}$ but the polynomial degree were $n^{10^6}$, the result would be theoretically explosive but practically irrelevant. How should complexity theory weight "practical" vs. "asymptotic" hardness, and does this tension undermine the problem's centrality?</li>
+</ol>
+
+<ol>
+<li>The fact that proof <em>verification</em> is in NP but proof <em>discovery</em> may not be in P suggests a deep link between P vs NP and the limits of formal mathematical reasoning. Does this imply any form of mathematical incompleteness beyond Gödel's?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/P_versus_NP_problem" target="_blank" rel="noopener"&gt;P vs NP Problem&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19235v1" target="_blank" rel="noopener">Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19225v1" target="_blank" rel="noopener">FinTradeBench: A Financial Reasoning Benchmark for LLMs</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+P+vs+NP+Problem&labels=discussion&body=Topic:+[P+vs+NP+Problem](https://dhein.github.io/daily_knowledge/topic/p_vs_np/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

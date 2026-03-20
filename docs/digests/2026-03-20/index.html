@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 20, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 20, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~17 min</div></div>
+<nav class="topic-nav"><a href="#godel_incompleteness">Gödel&#x27;s Incompleteness Theorems</a><a href="#p_vs_np">P vs NP Problem</a><a href="#information_theory">Information Theory</a><a href="#linear_algebra">Linear Algebra</a></nav>
+<article id="godel_incompleteness"><div class="topic-header"><h2>Gödel&#x27;s Incompleteness Theorems<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Logic &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: First Incompleteness Theorem</div><div>Any consistent formal system $\mathcal{F}$ capable of expressing elementary arithmetic contains a sentence $G_\mathcal{F}$ such that neither $G_\mathcal{F}$ nor $\neg G_\mathcal{F}$ is provable in $\mathcal{F}$.</div></div>
+
+<div class="callout info"><div class="callout-title">INFO: Second Incompleteness Theorem</div><div>No consistent system $\mathcal{F}$ (satisfying the above conditions) can prove its own consistency: $\mathcal{F} \nvdash \text{Con}(\mathcal{F})$.</div></div>
+
+<p>The theorems apply to any <em>effective</em>, <em>consistent</em>, <em>sufficiently expressive</em> formal system — concretely, any system that can encode Robinson arithmetic <strong>Q</strong> (a fragment weaker than Peano arithmetic). "Effective" means its axioms are recursively enumerable; you can write an algorithm to enumerate theorems.</p>
+
+<p>The proof method is <strong>Gödel numbering</strong>: encode every formula and proof as a natural number, then use the <strong>diagonal lemma</strong> to construct a self-referential sentence $G$ that asserts its own unprovability:</p>
+
+<p>$$G \equiv \neg \exists p \; \text{Proof}_\mathcal{F}(p, \ulcorner G \urcorner)$$</p>
+
+<p>where $\ulcorner G \urcorner$ is the Gödel number of $G$. If $G$ were provable, the system would be inconsistent; if $\neg G$ were provable, the system would be $\omega$-inconsistent (under the standard reading). In consistent systems, $G$ is therefore <strong>true but unprovable</strong>.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p><strong>For mathematics:</strong> Hilbert's program — find a finite, complete, consistent axiomatization of all mathematics — is provably impossible. Completeness and consistency cannot coexist for any system rich enough to do arithmetic.</p>
+
+<p><strong>For computer science:</strong> The theorems are deeply entangled with computability. The undecidability of the halting problem (Turing, 1936) and the unsolvability of the Entscheidungsproblem (Church, 1936) are essentially the same phenomenon viewed through a different lens. A non-halting program is the computational analogue of an unprovable statement.</p>
+
+<p><strong>For philosophy:</strong> The theorems constrain <em>mathematical Platonism</em>, <em>formalism</em>, and <em>logicism</em> in different ways. They don't say mathematics is broken — they say no single formal net can catch all mathematical truth.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: Incompleteness ≠ Inconsistency</div><div>A common misreading conflates "unprovable" with "false." $G_\mathcal{F}$ is <em>true</em> in the standard model $\mathbb{N}$ — it's only unprovable <em>within</em> $\mathcal{F}$. Moving to a stronger system $\mathcal{F}'$ proves $G_\mathcal{F}$, but then $G_{\mathcal{F}'}$ escapes that system. The hierarchy never closes.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Conditions are essential.</strong> The theorems require consistency <em>and</em> $\omega$-consistency (first theorem, original proof) or just consistency (Rosser's 1936 strengthening via the <strong>Rosser trick</strong>). Inconsistent systems prove everything — they're trivially "complete."</li>
+</ol>
+
+<ol>
+<li><strong>The arithmetical hierarchy.</strong> $G_\mathcal{F}$ sits at the $\Pi^0_1$ level: it has the form $\forall n \; P(n)$ where $P$ is decidable. This means its truth is verifiable "from outside" by checking each $n$, but no finite proof exists inside $\mathcal{F}$.</li>
+</ol>
+
+<ol>
+<li><strong>Löb's theorem</strong> refines the second: $\mathcal{F} \vdash \Box\varphi \to \varphi$ only if $\mathcal{F} \vdash \varphi$. A system can only "trust its own provability" for statements it already proves outright — there's no non-trivial bootstrapping of self-trust.</li>
+</ol>
+
+<ol>
+<li><strong>Non-standard models.</strong> Incomplete systems don't just have one model. There exist non-standard models of arithmetic where $G_\mathcal{F}$ is <em>false</em> — models containing "infinite integers" that encode fake proofs. Incompleteness is a statement about the interplay between syntax and the <em>intended</em> semantics.</li>
+</ol>
+
+<ol>
+<li><strong>Proof-theoretic ordinals.</strong> Each consistent extension of PA that proves its own totality of some fast-growing function can be calibrated by an ordinal. PA corresponds to $\varepsilon_0$; stronger systems reach further into the Cantor normal form hierarchy. Incompleteness manifests as an ordinal ceiling.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research areas rooted in these theorems include:</p>
+
+<ul>
+<li><strong>Reverse mathematics</strong>: classifying which axioms are <em>necessary</em> for specific theorems (Simpson's program). Many classical results turn out equivalent to $\text{WKL}_0$ or $\text{ACA}_0$ over a weak base theory.</li>
+<li><strong>Proof complexity</strong>: measuring the <em>length</em> of proofs. Even for provable statements, proofs in weak systems can be astronomically long — a quantitative shadow of incompleteness (see Cook–Reckhow framework).</li>
+<li><strong>Ordinal analysis</strong>: Gentzen proved Con(PA) using transfinite induction up to $\varepsilon_0$, a result that <em>transcends</em> PA. Extending this to stronger systems (e.g., $\Pi^1_2$-CA) remains an open frontier.</li>
+<li><strong>Mechanised proof assistants</strong> (Coq, Lean, Isabelle) have fully formalised Gödel's theorems, most notably via <strong>Paulson's 2015 Isabelle proof</strong> and the <strong>Fleuriot/Harrison</strong> lineage.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Turing Halting Problem">Turing Halting Problem</a></li>
+<li><a href="/daily_knowledge/topic/Tarski Undefinability Theorem">Tarski Undefinability Theorem</a></li>
+<li><a href="/daily_knowledge/topic/Peano Arithmetic">Peano Arithmetic</a></li>
+<li><a href="/daily_knowledge/topic/Hilbert's Program and Formalism">Hilbert's Program and Formalism</a></li>
+<li><a href="/daily_knowledge/topic/Computability and the Arithmetical Hierarchy">Computability and the Arithmetical Hierarchy</a></li>
+<li><a href="/daily_knowledge/topic/Proof Theory and Ordinal Analysis">Proof Theory and Ordinal Analysis</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Epistemic ceiling or navigational tool?</strong> Gödel sentences are pathological constructs, not naturally arising mathematical questions — yet the independence of the Continuum Hypothesis from ZFC feels genuinely mathematical. Where is the boundary between "Gödelian artifact" and "deep undecidability"?</li>
+</ol>
+
+<ol>
+<li><strong>Does incompleteness threaten the working mathematician?</strong> Almost all theorems of classical analysis, algebra, and combinatorics are provable in ZFC or weaker systems. Is incompleteness a foundational curiosity, or does it materially limit mathematical practice — especially in combinatorics where Paris–Harrington shows otherwise?</li>
+</ol>
+
+<ol>
+<li><strong>Self-reference and AI systems:</strong> Neural networks and large language models are formal computational systems. Can Gödelian arguments be meaningfully applied to bound what such systems can "know" or "verify" about themselves — or does the lack of a clean deductive architecture make the analogy break down?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Gödel's_incompleteness_theorems" target="_blank" rel="noopener"&gt;Gödel's Incompleteness Theorems&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19229v1" target="_blank" rel="noopener">NavTrust: Benchmarking Trustworthiness for Embodied Navigation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19228v1" target="_blank" rel="noopener">SAMA: Factorized Semantic Anchoring and Motion Alignment for Instruction-Guided Video Editing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19219v1" target="_blank" rel="noopener">DriveTok: 3D Driving Scene Tokenization for Unified Multi-View Reconstruction and Understanding</a> (2026)</li>
+</ul></div></article>
+<article id="p_vs_np"><div class="topic-header"><h2>P vs NP Problem<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Complexity Theory &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div><strong>P</strong> is the class of decision problems solvable by a deterministic Turing machine in $O(n^k)$ time for some constant $k$. <strong>NP</strong> is the class solvable by a <em>nondeterministic</em> Turing machine in polynomial time — equivalently, problems whose solutions can be <em>verified</em> in polynomial time by a deterministic machine.</div></div>
+
+<p>The central question: does $\mathrm{P} = \mathrm{NP}$?</p>
+
+<p>Formally, let $L$ be a decision problem (a language over $\{0,1\}^*$). Then:</p>
+
+<p>$$L \in \mathrm{NP} \iff \exists \text{ poly-time verifier } V \text{ s.t. } x \in L \Leftrightarrow \exists w,\, |w| \leq \mathrm{poly}(|x|),\, V(x, w) = 1$$</p>
+
+<p>where $w$ is a <em>certificate</em> (witness). P $\subseteq$ NP trivially — any polynomial solver serves as its own verifier. The open question is whether the containment is strict.</p>
+
+<p>The widely-held belief is $\mathrm{P} \neq \mathrm{NP}$, though no proof exists. It is one of the seven <strong>Millennium Prize Problems</strong> ($1,000,000 prize from the Clay Mathematics Institute).</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The stakes extend far beyond theoretical computer science:</p>
+
+<ul>
+<li><strong>Cryptography</strong>: Nearly all modern cryptographic primitives (RSA, elliptic-curve, hash-based schemes) derive security from the <em>presumed</em> hardness of NP problems like integer factorization and discrete log. If $\mathrm{P} = \mathrm{NP}$, these collapse. This would break TLS, PGP, and essentially all public-key infrastructure overnight.</li>
+<li><strong>Optimization &amp; AI</strong>: SAT solvers, scheduling, protein folding (NP-hard), and combinatorial optimization underpin enormous practical and scientific domains. Polynomial-time solutions would be transformative.</li>
+<li><strong>Mathematics itself</strong>: Proof verification is in NP (given a proof, checking it is poly-time). A $\mathrm{P} = \mathrm{NP}$ result would imply that finding proofs is no harder than checking them — effectively automating mathematical discovery.</li>
+<li><strong>Economics &amp; Game Theory</strong>: Nash equilibrium computation, mechanism design, and auction theory all bump against NP-hardness barriers.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Asymmetry Insight</div><div>The problem captures a deep philosophical asymmetry: <em>recognizing</em> a solution versus <em>finding</em> one. This maps onto human experience — it is far easier to verify a crossword solution than to solve it from scratch. P vs NP asks whether this subjective difficulty gap is mathematically real.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>NP-completeness</strong>: A problem $Q$ is NP-complete if $Q \in \mathrm{NP}$ and every problem in NP poly-time reduces to $Q$. Cook (1971) and Levin (1973) independently showed SAT is NP-complete. Karp then identified 21 canonical NP-complete problems. NP-complete problems are the "hardest" in NP — solving any one in poly-time implies $\mathrm{P} = \mathrm{NP}$.</li>
+</ol>
+
+<ol>
+<li><strong>The complexity landscape</strong>: The picture is richer than just P and NP:</li>
+</ol>
+<p>$$\mathrm{P} \subseteq \mathrm{NP} \cap \mathrm{co\text{-}NP} \subseteq \mathrm{NP} \subseteq \mathrm{PSPACE} \subseteq \mathrm{EXP}$$</p>
+<p>   Integer factorization sits in $\mathrm{NP} \cap \mathrm{co\text{-}NP}$ but is not known to be NP-complete — suggesting it may occupy an intermediate zone even if $\mathrm{P} \neq \mathrm{NP}$.</p>
+
+<ol>
+<li><strong>Relativization barrier</strong>: Baker, Gill & Solovay (1975) showed there exist oracles $A$, $B$ such that $\mathrm{P}^A = \mathrm{NP}^A$ and $\mathrm{P}^B \neq \mathrm{NP}^B$. Any proof technique that relativizes (holds with any oracle) cannot resolve P vs NP — ruling out large swaths of classical proof strategies.</li>
+</ol>
+
+<ol>
+<li><strong>Natural proofs barrier</strong>: Razborov & Rudich (1994) showed that "natural" combinatorial circuit lower-bound arguments cannot separate P from NP unless strong pseudorandom generators don't exist. This blocks another major proof avenue.</li>
+</ol>
+
+<ol>
+<li><strong>Algebraization</strong>: Aaronson & Wigderson (2009) extended the oracle barrier to algebraic methods, further constraining viable proof strategies. The known barriers — relativization, natural proofs, algebraization — together suggest any resolution will require fundamentally new mathematics.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research directions include:</p>
+
+<ul>
+<li><strong>Circuit complexity</strong>: Proving super-polynomial lower bounds for explicit problems in restricted circuit classes (e.g., $\mathrm{ACC}^0$). Ryan Williams made progress in 2010 by separating $\mathrm{NEXP}$ from $\mathrm{ACC}^0$, the first major circuit lower bound in decades.</li>
+<li><strong>Geometric complexity theory (GCT)</strong>: Mulmuley & Sohoni's program uses algebraic geometry and representation theory to approach the problem via the permanent vs. determinant question — a closely related algebraic analogue.</li>
+<li><strong>Proof complexity</strong>: Connections between proof length in formal systems and circuit complexity may offer indirect handles on the problem.</li>
+<li><strong>Meta-complexity</strong>: Problems like MCSP (Minimum Circuit Size Problem) sit in a curious zone — likely not NP-complete under standard assumptions, yet hard — and studying them sheds light on the structure of NP itself.</li>
+</ul>
+
+<p>The consensus remains $\mathrm{P} \neq \mathrm{NP}$, but no serious candidate proof has survived peer scrutiny. Dozens of claimed proofs have been submitted and refuted.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/NP-Completeness and Reductions">NP-Completeness and Reductions</a></li>
+<li><a href="/daily_knowledge/topic/Computational Complexity Classes">Computational Complexity Classes</a></li>
+<li><a href="/daily_knowledge/topic/Boolean Satisfiability (SAT)">Boolean Satisfiability (SAT)</a></li>
+<li><a href="/daily_knowledge/topic/Cryptographic Hardness Assumptions">Cryptographic Hardness Assumptions</a></li>
+<li><a href="/daily_knowledge/topic/Circuit Complexity">Circuit Complexity</a></li>
+<li><a href="/daily_knowledge/topic/Millennium Prize Problems">Millennium Prize Problems</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The three known barriers (relativization, natural proofs, algebraization) each rule out entire families of proof techniques. What would a proof strategy look like that evades <em>all three</em> simultaneously — and does GCT plausibly do this?</li>
+</ol>
+
+<ol>
+<li>If $\mathrm{P} = \mathrm{NP}$ but the polynomial degree were $n^{10^6}$, the result would be theoretically explosive but practically irrelevant. How should complexity theory weight "practical" vs. "asymptotic" hardness, and does this tension undermine the problem's centrality?</li>
+</ol>
+
+<ol>
+<li>The fact that proof <em>verification</em> is in NP but proof <em>discovery</em> may not be in P suggests a deep link between P vs NP and the limits of formal mathematical reasoning. Does this imply any form of mathematical incompleteness beyond Gödel's?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/P_versus_NP_problem" target="_blank" rel="noopener"&gt;P vs NP Problem&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19235v1" target="_blank" rel="noopener">Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19225v1" target="_blank" rel="noopener">FinTradeBench: A Financial Reasoning Benchmark for LLMs</a> (2026)</li>
+</ul></div></article>
+<article id="information_theory"><div class="topic-header"><h2>Information Theory<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Information Theory &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Information theory is the mathematical framework for quantifying, storing, and transmitting information. Founded by Claude Shannon in his landmark 1948 paper <em>A Mathematical Theory of Communication</em>, it provides rigorous answers to: <em>how much information does a message carry?</em> and <em>what is the fundamental limit of lossless compression or reliable transmission?</em></p>
+
+<div class="callout info"><div class="callout-title">INFO: Shannon Entropy</div><div>For a discrete random variable $X$ with probability mass function $p(x)$, the <strong>Shannon entropy</strong> is: $$H(X) = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x) \quad \text{(bits)}$$ Entropy measures the <em>average surprise</em> — or equivalently, the minimum average code length needed to represent outcomes of $X$.</div></div>
+
+<p>For a fair coin: $H(X) = -2 \cdot \frac{1}{2}\log_2\frac{1}{2} = 1$ bit. A biased coin with $p = 0.99$ yields $H \approx 0.081$ bits — nearly no surprise.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Information theory underlies virtually all of modern digital infrastructure:</p>
+
+<ul>
+<li><strong>Data compression</strong> (ZIP, JPEG, MP3) is bounded below by Shannon's <em>source coding theorem</em>: you cannot losslessly compress below $H(X)$ bits per symbol on average</li>
+<li><strong>Error correction</strong> (DSL, satellite comms, QR codes) is enabled by the <em>noisy-channel coding theorem</em>: reliable transmission is achievable at any rate below the <strong>channel capacity</strong> $C$</li>
+<li><strong>Machine learning</strong>: cross-entropy loss, KL divergence, mutual information — all are information-theoretic quantities used daily in training and evaluation</li>
+<li>Applications extend to cryptography, neuroscience, statistical mechanics, and black hole physics</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Deep Connection to Thermodynamics</div><div>Shannon entropy is formally identical to Boltzmann–Gibbs entropy $S = -k_B \sum_i p_i \ln p_i$ up to a constant. This is not coincidence — Landauer's principle shows that <em>erasing one bit of information</em> dissipates at least $k_B T \ln 2$ joules of energy. Information has thermodynamic weight.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Mutual Information</strong></p>
+<p>$$I(X; Y) = H(X) - H(X \mid Y) = \sum_{x,y} p(x,y) \log_2 \frac{p(x,y)}{p(x)p(y)}$$</p>
+<p>Measures how much knowing $Y$ reduces uncertainty about $X$. It is symmetric: $I(X;Y) = I(Y;X)$.</p>
+
+<p><strong>2. Channel Capacity</strong></p>
+<p>For a channel with input $X$, output $Y$, and transition probabilities $p(y|x)$:</p>
+<p>$$C = \max_{p(x)} I(X; Y)$$</p>
+<p>For a Gaussian channel with signal power $P$ and noise variance $N$:</p>
+<p>$$C = \frac{1}{2}\log_2\!\left(1 + \frac{P}{N}\right) \text{ bits/channel use}$$</p>
+<p>This is the <em>Shannon–Hartley theorem</em> — the theoretical ceiling no coding scheme can exceed.</p>
+
+<p><strong>3. KL Divergence (Relative Entropy)</strong></p>
+<p>$$D_{\mathrm{KL}}(P \| Q) = \sum_x p(x) \log_2 \frac{p(x)}{q(x)} \geq 0$$</p>
+<p>Asymmetric "distance" between distributions. Zero iff $P = Q$. Fundamental in Bayesian inference, variational methods, and hypothesis testing.</p>
+
+<p><strong>4. Data Processing Inequality</strong></p>
+<p>For a Markov chain $X \to Y \to Z$: $I(X;Z) \leq I(X;Y)$. Processing cannot increase information — a hard bound on what any downstream computation can recover.</p>
+
+<p><strong>5. Differential Entropy</strong></p>
+<p>For continuous distributions, entropy generalizes to $h(X) = -\int p(x)\log p(x)\,dx$, but loses some discrete-case properties (e.g., it can be negative). The Gaussian maximizes $h(X)$ for fixed variance.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research fronts include:</p>
+
+<ul>
+<li><strong>Quantum information theory</strong>: replacing bits with qubits introduces von Neumann entropy $S(\rho) = -\text{tr}(\rho \log \rho)$, quantum channel capacity, and entanglement as an information resource</li>
+<li><strong>Deep learning theory</strong>: the <em>information bottleneck</em> principle (Tishby et al.) proposes that DNNs learn by compressing inputs while preserving label-relevant information — still contested empirically</li>
+<li><strong>One-shot and finite-blocklength regimes</strong>: classical theory assumes infinite block lengths; real systems require tight finite-$n$ bounds (e.g., the <em>dispersion</em> framework)</li>
+<li><strong>Implicit information in generative models</strong>: recent work (e.g., VEGA-3D, 2026) suggests video diffusion models implicitly encode dense 3D structural priors — a reminder that information-theoretic capacity extends beyond explicit encodings</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Shannon Entropy">Shannon Entropy</a></li>
+<li><a href="/daily_knowledge/topic/Kolmogorov Complexity">Kolmogorov Complexity</a></li>
+<li><a href="/daily_knowledge/topic/Error-Correcting Codes">Error-Correcting Codes</a></li>
+<li><a href="/daily_knowledge/topic/Kullback-Leibler Divergence">Kullback-Leibler Divergence</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Information Theory">Quantum Information Theory</a></li>
+<li><a href="/daily_knowledge/topic/Information Bottleneck">Information Bottleneck</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>The entropy–compression duality</strong>: Huffman coding provably achieves $H(X) \leq L < H(X) + 1$ bits/symbol. What breaks this guarantee in practice, and how do arithmetic coding or ANS (Asymmetric Numeral Systems) close the gap?</li>
+</ol>
+
+<ol>
+<li><strong>Landauer's principle and reversible computing</strong>: If erasing a bit costs $k_B T \ln 2$ joules, can reversible (information-preserving) computation achieve zero thermodynamic cost in principle? What are the practical limits?</li>
+</ol>
+
+<ol>
+<li><strong>The information bottleneck in deep learning</strong>: Tishby's claim that SGD training passes through a compression phase (high $I(X;T)$ → low $I(X;T)$, stable $I(T;Y)$) was challenged by subsequent experiments. What does the replication controversy reveal about applying information theory to high-dimensional continuous representations?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Information_theory" target="_blank" rel="noopener"&gt;Information Theory&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19235v1" target="_blank" rel="noopener">Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19232v1" target="_blank" rel="noopener">Cubic Discrete Diffusion: Discrete Visual Generation on High-Dimensional Representation Tokens</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19230v1" target="_blank" rel="noopener">The structure and evolution of the Galactic high-$α$ disc I. Chemical and age orbital cartography</a> (2026)</li>
+</ul></div></article>
+<article id="linear_algebra"><div class="topic-header"><h2>Linear Algebra<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Algebra &nbsp;·&nbsp; ~5 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Linear algebra is the study of <strong>vector spaces</strong>, <strong>linear maps</strong> between them, and the algebraic structures (matrices, tensors) used to represent these objects concretely. The central objects are systems of linear equations $$A\mathbf{x} = \mathbf{b}, \quad A \in \mathbb{R}^{m \times n},\ \mathbf{x} \in \mathbb{R}^n,\ \mathbf{b} \in \mathbb{R}^m$$ and the abstract maps $T: V \to W$ satisfying $T(\alpha u + \beta v) = \alpha T(u) + \beta T(v)$ for all scalars $\alpha, \beta$ and vectors $u, v$.</div></div>
+
+<p>A <strong>vector space</strong> over a field $\mathbb{F}$ is a set equipped with addition and scalar multiplication satisfying eight axioms (closure, associativity, distributivity, etc.). Linear algebra is the full theory of what you can say about a space using only these two operations — no notion of distance or angle is required unless you add an inner product.</p>
+
+<p>The <strong>rank-nullity theorem</strong> is perhaps the cleanest encapsulation of structure:</p>
+<p>$$\dim(\ker T) + \dim(\operatorname{im} T) = \dim V$$</p>
+<p>Every linear map is completely characterized by what it collapses (kernel) and what it produces (image).</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Linear algebra is the computational skeleton of modern science and engineering. Its centrality comes from two complementary facts:</p>
+
+<ol>
+<li><strong>Universality of linearization.</strong> The derivative of a smooth map $f: \mathbb{R}^n \to \mathbb{R}^m$ at a point $p$ is the Jacobian matrix $Df(p)$ — the best linear approximation to $f$ near $p$. Almost all continuous optimization, physics simulation, and differential geometry reduces locally to linear algebra.</li>
+</ol>
+
+<ol>
+<li><strong>Computational tractability.</strong> Matrix operations admit efficient algorithms (Gaussian elimination runs in $O(n^3)$; sparse and structured matrices allow much faster routines). No other mathematical framework matches this combination of generality and computability.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP: The Spectral Lens</div><div>Eigendecomposition $A = Q\Lambda Q^{-1}$ transforms a linear map into a diagonal action on independent subspaces. This is the reason PCA, quantum mechanics (energy eigenstates), Google's PageRank, and stability analysis of ODEs all reduce to the same algebraic operation.</div></div>
+
+<p>Applications span: numerical PDE solvers (discretization → linear system), quantum mechanics (observables are Hermitian operators on Hilbert space), ML (neural network layers are affine maps; backprop is a chain rule over Jacobians), computer graphics (rotations/projections as matrix groups), and cryptography (lattice-based schemes).</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. The Four Fundamental Subspaces.</strong> Any $m \times n$ matrix $A$ defines four subspaces — column space $\operatorname{col}(A)$, null space $\operatorname{null}(A)$, row space $\operatorname{row}(A)$, left null space $\operatorname{null}(A^T)$ — satisfying orthogonality relations in $\mathbb{R}^n$ and $\mathbb{R}^m$ respectively. Understanding their geometry is the key to solving (or explaining the failure of) $A\mathbf{x} = \mathbf{b}$.</p>
+
+<p><strong>2. SVD as the Canonical Decomposition.</strong> The Singular Value Decomposition $A = U\Sigma V^T$ exists for <em>every</em> matrix (not just square or symmetric ones) and reveals the true geometric action: rotation $V^T$, axis-aligned scaling $\Sigma$, then rotation $U$. Pseudoinverse, low-rank approximation (Eckart–Young theorem), and condition number all derive from it.</p>
+
+<p><strong>3. Change of Basis is Conjugation.</strong> If $T$ has matrix $A$ in basis $\mathcal{B}$, then in basis $\mathcal{B}'$ it has matrix $P^{-1}AP$ where $P$ is the change-of-basis matrix. The intrinsic property is the eigenvalues (invariant under conjugation); the matrix form is an artifact of the chosen coordinates.</p>
+
+<p><strong>4. Over Arbitrary Fields.</strong> Linear algebra works over any field — $\mathbb{Q}$, $\mathbb{F}_p$, $\mathbb{C}$, even finite fields. Algebraically closed fields (like $\mathbb{C}$) guarantee that the characteristic polynomial splits completely, which is why complex eigenvalue theory is cleaner and why quantum mechanics lives in $\mathbb{C}$.</p>
+
+<p><strong>5. Infinite Dimensions Require Care.</strong> In infinite-dimensional spaces (function spaces, sequence spaces), bounded linear operators can behave wildly: the spectrum need not consist of eigenvalues; inverses may exist but be unbounded; self-adjoint operators can have continuous spectrum. This is the domain of <a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a>.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Randomized numerical linear algebra</strong> — sketching algorithms (e.g., random projections, leverage-score sampling) that solve least-squares and low-rank problems in sublinear passes over data, critical for large-scale ML and streaming settings.</li>
+<li><strong>Tensor decompositions</strong> — generalizations of SVD to higher-order arrays (CP, Tucker, tensor-train). Uniqueness properties differ sharply from matrices; identifiability is an open problem in general.</li>
+<li><strong>Linear algebra in ML interpretability</strong> — recent work (e.g., sparse autoencoders, linear probing in VLA models as of 2026-03) uses linear subspace analysis to decompose model representations, finding that features like motor programs and goal semantics occupy <em>separable activation subspaces</em> — a direct application of the four-subspace picture to learned representations.</li>
+<li><strong>Numerical stability and mixed precision</strong> — with FP8/FP4 hardware, maintaining backward stability of matrix factorizations under aggressive quantization is an open engineering-science problem.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Vector Spaces and Bases">Vector Spaces and Bases</a></li>
+<li><a href="/daily_knowledge/topic/Eigenvalues and Spectral Theory">Eigenvalues and Spectral Theory</a></li>
+<li><a href="/daily_knowledge/topic/Singular Value Decomposition">Singular Value Decomposition</a></li>
+<li><a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Matrix Calculus">Matrix Calculus</a></li>
+<li><a href="/daily_knowledge/topic/Numerical Linear Algebra">Numerical Linear Algebra</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The SVD decomposes <em>any</em> linear map into two rotations and a scaling — what does this say about the nature of linear transformations geometrically, and where does this intuition break down in infinite dimensions?</li>
+</ol>
+
+<ol>
+<li>Nearly every neural network layer is an affine map followed by a nonlinearity. To what extent is "deep learning" just iterated low-rank linear algebra, and what does the non-linearity actually add that cannot be captured by a single large linear map?</li>
+</ol>
+
+<ol>
+<li>Randomized algorithms can approximate the top-$k$ singular vectors of an $n \times n$ matrix in $O(nk)$ time rather than $O(n^2)$. What are the theoretical guarantees, and in what regimes do they fail — particularly for ill-conditioned or adversarially constructed matrices?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Linear_algebra" target="_blank" rel="noopener"&gt;Linear Algebra&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19216v1" target="_blank" rel="noopener">DreamPartGen: Semantically Grounded Part-Level 3D Generation via Collaborative Latent Denoising</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19214v1" target="_blank" rel="noopener">Outage Probability Analysis of NOMA Enabled Hierarchical UAV Networks with Non-Linear Energy Harvesting</a> (2026)</li>
+</ul></div></article>
+</div>
+</body>
+</html>
