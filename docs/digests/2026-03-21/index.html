@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 21, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 21, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~16 min</div></div>
+<nav class="topic-nav"><a href="#optimization">Mathematical Optimization</a><a href="#lambda_calculus">Lambda Calculus</a><a href="#type_theory">Type Theory</a><a href="#curry_howard">Curry-Howard Correspondence</a></nav>
+<article id="optimization"><div class="topic-header"><h2>Mathematical Optimization<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Optimization &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Mathematical optimization is the systematic selection of a <strong>best element</strong> from a feasible set according to some objective criterion. The canonical form is:</p>
+
+<p>$$
+\min_{\mathbf{x} \in \mathcal{X}} \; f(\mathbf{x}) \quad \text{subject to} \quad g_i(\mathbf{x}) \leq 0, \; h_j(\mathbf{x}) = 0
+$$</p>
+
+<p>where $f : \mathbb{R}^n \to \mathbb{R}$ is the <strong>objective function</strong>, $\mathcal{X}$ the feasible set, and $g_i, h_j$ define inequality and equality constraints respectively. Maximization is equivalent by negating $f$.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Two Primary Subfields</div><div>- <strong>Continuous optimization</strong> — $\mathcal{X} \subseteq \mathbb{R}^n$; leverages calculus, geometry, and analysis - <strong>Discrete optimization</strong> — $\mathcal{X}$ is countable (e.g., integer programs, combinatorial structures); often NP-hard</div></div>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Optimization is the <em>lingua franca</em> of quantitative reasoning. It underlies:</p>
+
+<ul>
+<li><strong>Machine learning</strong>: training a neural network is minimizing a loss $\mathcal{L}(\theta)$ over parameters $\theta$</li>
+<li><strong>Control theory</strong>: optimal control via <a href="/daily_knowledge/topic/Hamilton-Jacobi-Bellman Equation">Hamilton-Jacobi-Bellman Equation</a> or Pontryagin's minimum principle</li>
+<li><strong>Economics</strong>: utility maximization, equilibrium finding, mechanism design</li>
+<li><strong>Operations research</strong>: scheduling, routing, resource allocation</li>
+<li><strong>Physics</strong>: variational principles — mechanics, field theory, and thermodynamics all emerge from extremizing functionals</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Duality as a Unifying Lens</div><div>The <a href="/daily_knowledge/topic/Lagrangian Duality">Lagrangian Duality</a> framework transforms constrained problems into unconstrained ones via multipliers, and strong duality (zero gap) reveals deep geometric structure. Many apparently different algorithms — SVM training, interior-point methods, message passing — are Lagrangian dual ascent in disguise.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Convexity is the key structural divide.</strong></p>
+<p>A problem is <em>convex</em> when $f$ is convex and $\mathcal{X}$ is a convex set. Any local minimum is then global, and strong optimality conditions (KKT) are both necessary and sufficient. Convex problems are tractable in theory and practice; non-convex ones are generally hard.</p>
+
+<p>$$
+f(\lambda x + (1-\lambda)y) \leq \lambda f(x) + (1-\lambda) f(y), \quad \lambda \in [0,1]
+$$</p>
+
+<p><strong>2. First- and second-order conditions.</strong></p>
+<p>A smooth interior point $x^*$ satisfies the <strong>first-order necessary condition</strong> $\nabla f(x^*) = 0$. The second-order condition requires $\nabla^2 f(x^*) \succeq 0$ (positive semidefinite Hessian) for a local minimum. For constrained problems, these generalize via KKT multipliers.</p>
+
+<p><strong>3. Gradient descent and its variants.</strong></p>
+<p>The workhorse of large-scale optimization is the update $\mathbf{x}_{t+1} = \mathbf{x}_t - \eta_t \nabla f(\mathbf{x}_t)$. Convergence rates depend critically on the <strong>condition number</strong> $\kappa = L/\mu$ (ratio of Lipschitz smoothness to strong-convexity). Accelerated (Nesterov) methods achieve $O(1/t^2)$ vs. $O(1/t)$ for vanilla gradient descent.</p>
+
+<p><strong>4. Combinatorial hardness and approximation.</strong></p>
+<p>Discrete problems (TSP, max-cut, set cover) are often NP-hard. The theory of <a href="/daily_knowledge/topic/Approximation Algorithms">Approximation Algorithms</a> studies polynomially-computable solutions guaranteed to be within factor $\alpha$ of optimal; SDP relaxations and LP relaxations are the primary tools.</p>
+
+<p><strong>5. Stochastic and online variants.</strong></p>
+<p>When $f(\mathbf{x}) = \mathbb{E}_\xi[\ell(\mathbf{x}, \xi)]$, <strong>stochastic gradient descent</strong> (SGD) replaces the full gradient with noisy estimates. Convergence is noisier but per-iteration cost drops from $O(n)$ to $O(1)$, enabling modern deep learning at scale.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research fronts include:</p>
+
+<ul>
+<li><strong>Non-convex landscape theory</strong>: understanding why SGD finds good minima in overparameterized networks despite non-convexity — saddle-point avoidance, loss landscape geometry</li>
+<li><strong>Diffusion models as optimization</strong>: recent generative models (e.g., diffusion-based motion synthesis) frame sampling as iterative denoising, with explicit optimization steps enforcing kinematic or geometric constraints during the diffusion trajectory</li>
+<li><strong>Second-order methods at scale</strong>: Shampoo, K-FAC, and distributed quasi-Newton methods are making Hessian-aware optimization practical for LLMs</li>
+<li><strong>Bilevel optimization</strong>: problems where the objective depends on the solution of another optimization problem — prominent in meta-learning and hyperparameter tuning</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Convex Analysis">Convex Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Lagrangian Duality">Lagrangian Duality</a></li>
+<li><a href="/daily_knowledge/topic/Gradient Descent and Variants">Gradient Descent and Variants</a></li>
+<li><a href="/daily_knowledge/topic/Integer Programming">Integer Programming</a></li>
+<li><a href="/daily_knowledge/topic/Variational Calculus">Variational Calculus</a></li>
+<li><a href="/daily_knowledge/topic/Approximation Algorithms">Approximation Algorithms</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>When does convexity fail gracefully?</strong> Many non-convex problems in practice (neural network training, phase retrieval) yield to gradient methods. What structural properties — overparameterization, symmetry, implicit regularization — explain this empirically observed tractability?</li>
+</ol>
+
+<ol>
+<li><strong>The duality gap as information.</strong> In non-convex settings, the Lagrangian dual provides a lower bound but strong duality may fail. How should one interpret a large duality gap — as a hardness certificate, a modeling failure, or an algorithmic limitation?</li>
+</ol>
+
+<ol>
+<li><strong>Optimization versus sampling.</strong> Statistical inference often requires integration over a posterior, not maximization. When is MAP estimation (optimization) a sufficient proxy for full Bayesian inference, and where does this break down fundamentally?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Mathematical_optimization" target="_blank" rel="noopener"&gt;Mathematical Optimization&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19230v1" target="_blank" rel="noopener">The structure and evolution of the Galactic high-$α$ disc I. Chemical and age orbital cartography</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19227v1" target="_blank" rel="noopener">Bridging Semantic and Kinematic Conditions with Diffusion-based Discrete Motion Tokenizer</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19228v1" target="_blank" rel="noopener">SAMA: Factorized Semantic Anchoring and Motion Alignment for Instruction-Guided Video Editing</a> (2026)</li>
+</ul></div></article>
+<article id="lambda_calculus"><div class="topic-header"><h2>Lambda Calculus<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Computation Theory &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Lambda calculus (λ-calculus) is a formal system for expressing computation via <strong>function abstraction</strong> and <strong>application</strong>. Every program is either a variable, an abstraction, or an application — nothing else.</div></div>
+
+<p>The full grammar fits in three lines:</p>
+
+<p>$$
+e \;::=\; x \;\mid\; \lambda x.\, e \;\mid\; e_1\; e_2
+$$</p>
+
+<p>where $x$ ranges over variables, $\lambda x.\, e$ binds $x$ in body $e$, and $e_1\; e_2$ applies $e_1$ to argument $e_2$.</p>
+
+<p>Computation proceeds by <strong>β-reduction</strong>: substituting the argument for the bound variable.</p>
+
+<p>$$
+(\lambda x.\, e_1)\; e_2 \;\longrightarrow_\beta\; e_1[x \mapsto e_2]
+$$</p>
+
+<p>A term with no further β-redexes is in <strong>β-normal form</strong>. An additional rule, <strong>η-reduction</strong> ($\lambda x.\, f\, x \longrightarrow_\eta f$ when $x \notin \text{FV}(f)$), captures extensional function equality.</p>
+
+<p>Church introduced the untyped λ-calculus in the 1930s while investigating the foundations of mathematics; a logically consistent fragment was documented by 1940.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Lambda calculus is Turing-complete — any Turing machine computation can be encoded in it, and vice versa. This makes it <strong>the minimal universal model of computation</strong>, smaller and more mathematically tractable than Turing machines.</p>
+
+<p>Its influence is enormous:</p>
+
+<ul>
+<li><strong>Programming languages</strong> — Lisp, ML, Haskell, and most functional languages are essentially typed or untyped λ-calculi with syntactic sugar.</li>
+<li><strong>Type theory</strong> — the Curry-Howard correspondence maps λ-calculus terms to proofs and types to propositions, bridging logic and computation.</li>
+<li><strong>Denotational semantics</strong> — programs are modelled as mathematical functions, formalizing meaning independent of any machine.</li>
+<li><strong>Proof assistants</strong> — Coq, Agda, and Lean are all built on dependent type theories that extend λ-calculus.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Curry-Howard at a glance</div><div>A typed λ-term $t : A \to B$ <em>is</em> a proof that proposition $A$ implies $B$. Function application <em>is</em> modus ponens. This correspondence runs deep enough that proof checking and type checking are literally the same algorithm.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Capture-avoiding substitution is non-trivial.</strong>  </p>
+<p>Naïve substitution breaks under variable shadowing. $(\lambda y.\, \lambda x.\, y)\; x$ must rename the bound $x$ before substituting, yielding $\lambda z.\, x$, not the broken $\lambda x.\, x$.</p>
+
+<p><strong>2. Fixed-point combinators enable recursion.</strong>  </p>
+<p>The untyped calculus has no primitive recursion, yet the Y combinator</p>
+
+<p>$$Y \;=\; \lambda f.\,(\lambda x.\, f\,(x\,x))\,(\lambda x.\, f\,(x\,x))$$</p>
+
+<p>satisfies $Y\, f \longrightarrow_\beta f\,(Y\, f)$, encoding arbitrary recursion. Notably, $Y$ cannot be typed in the simply-typed λ-calculus, which rules out non-termination by design.</p>
+
+<p><strong>3. Church encodings represent data as functions.</strong>  </p>
+<p>Booleans: $\mathbf{true} = \lambda t.\, \lambda f.\, t$, $\mathbf{false} = \lambda t.\, \lambda f.\, f$. Church numerals: $\overline{n} = \lambda f.\, \lambda x.\, f^n\, x$. Every data structure is ultimately a higher-order function.</p>
+
+<p><strong>4. Confluence (Church-Rosser theorem).</strong>  </p>
+<p>If $e \twoheadrightarrow_\beta e_1$ and $e \twoheadrightarrow_\beta e_2$, there exists $e_3$ with $e_1 \twoheadrightarrow_\beta e_3$ and $e_2 \twoheadrightarrow_\beta e_3$. Normal forms are unique when they exist, but not all terms terminate.</p>
+
+<p><strong>5. Reduction strategy matters.</strong>  </p>
+<p>Normal-order (leftmost-outermost) reduction finds a normal form whenever one exists; applicative-order (innermost-first, as in most languages) can diverge on terms that do have normal forms. Lazy evaluation is essentially call-by-need, a memoized normal-order strategy.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research lives in the <strong>typed</strong> extensions:</p>
+<ul>
+<li><strong>Dependent types</strong> (Martin-Löf, CoC) unify types and terms, enabling proof-carrying code.</li>
+<li><strong>Linear and affine type systems</strong> (relevant to <a href="/daily_knowledge/topic/Rust Ownership Model">Rust Ownership Model</a>) track resource usage at the type level, deriving from linear logic.</li>
+<li><strong>Gradual typing</strong> mixes static and dynamic guarantees in a single λ-calculus framework.</li>
+<li><strong>Optimal reduction</strong> (Lévy, Lamping) minimises β-steps by sharing redexes via interaction nets — still an area of implementation research.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Turing Completeness">Turing Completeness</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Type Theory and Dependent Types">Type Theory and Dependent Types</a></li>
+<li><a href="/daily_knowledge/topic/Denotational Semantics">Denotational Semantics</a></li>
+<li><a href="/daily_knowledge/topic/Combinatory Logic">Combinatory Logic</a></li>
+<li><a href="/daily_knowledge/topic/Functional Programming Foundations">Functional Programming Foundations</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Church encodings prove data is "just functions" — but is this a philosophical statement about the nature of data, or merely a formal trick? Where does the distinction break down?</li>
+<li>The Y combinator is untypable in simply-typed λ-calculus. Does the loss of self-application mean typed systems are <em>less</em> expressive, or do dependent and recursive types recover everything that matters?</li>
+<li>Normal-order reduction is theoretically complete but operationally expensive due to repeated substitution. How do modern compilers (GHC's STG machine, for instance) reconcile lazy evaluation with efficient memory layout?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Lambda_calculus" target="_blank" rel="noopener"&gt;Lambda Calculus&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19224v1" target="_blank" rel="noopener">EffectErase: Joint Video Object Removal and Insertion for High-Quality Effect Erasing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19221v1" target="_blank" rel="noopener">Online Learning and Equilibrium Computation with Ranking Feedback</a> (2026)</li>
+</ul></div></article>
+<article id="type_theory"><div class="topic-header"><h2>Type Theory<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Foundations &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>type theory</strong> is a formal system in which every term carries a <strong>type</strong>, and well-formedness of expressions is governed by typing rules. At its core, it is an alternative to set theory as a foundation for mathematics — one where <em>membership</em> (∈) is replaced by <em>inhabitation</em> (∶).</div></div>
+
+<p>The central judgment is:</p>
+
+<p>$$\Gamma \vdash t : T$$</p>
+
+<p>read "in context $\Gamma$, term $t$ has type $T$." A <strong>context</strong> $\Gamma$ is an ordered list of variable-type bindings $(x_1 : T_1, \ldots, x_n : T_n)$. Type theories specify which such judgments are <em>derivable</em> via inference rules — the mechanical engine of the whole system.</p>
+
+<p>Two canonical pillars:</p>
+
+<ul>
+<li><strong>Church's Simply Typed λ-Calculus (STLC)</strong> — introduces function types $A \to B$; terms are λ-abstractions and applications. The type system prevents paradoxes like untyped self-application.</li>
+<li><strong>Martin-Löf Type Theory (MLTT / Intuitionistic TT)</strong> — adds <strong>dependent types</strong>, where types can depend on terms: $\prod_{x:A} B(x)$ (dependent function) and $\sum_{x:A} B(x)$ (dependent pair). This collapses the proposition/type distinction into the <strong>Curry–Howard correspondence</strong>: propositions <em>are</em> types, proofs <em>are</em> terms.</li>
+</ul>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Type theory is simultaneously a <strong>foundation for mathematics</strong>, a <strong>logic</strong>, and a <strong>programming language theory</strong>. This triple role is unique among foundational systems.</p>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The Curry–Howard–Lambek correspondence extends the duality further: types ↔ propositions ↔ objects in a category. A proof of $A \Rightarrow B$ is a λ-term of type $A \to B$ is a morphism $A \to B$ in a Cartesian closed category. This is not metaphor — it is a precise equivalence.</div></div>
+
+<p><strong>Proof assistants</strong> like Coq, Agda, Lean 4, and Rocq are all grounded in dependent type theories. The Curry–Howard lens means writing a program of a given type <em>is</em> constructing a mathematical proof. Correctness-by-construction becomes literal.</p>
+
+<p>In programming languages, type theory underpins:</p>
+<ul>
+<li><strong>Hindley–Milner type inference</strong> (ML, Haskell)</li>
+<li><strong>Subtyping</strong> and object-oriented systems</li>
+<li><strong>Linear/affine types</strong> for resource management (Rust's borrow checker)</li>
+<li><strong>Effect systems</strong> for tracking computational side-effects</li>
+</ul>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Dependent vs. Simple Types.</strong> In STLC, types and terms live in separate universes. In dependent type theory, types are first-class — $\text{Vec}(A, n)$ is a type parameterised by <em>value</em> $n : \mathbb{N}$. This expressivity is what enables formal verification.</li>
+</ol>
+
+<ol>
+<li><strong>Universes and the Universe Hierarchy.</strong> Naïve type-in-type ($\text{Type} : \text{Type}$) leads to Girard's paradox (analog of Russell's). The resolution is a <strong>universe hierarchy</strong> $\mathcal{U}_0 : \mathcal{U}_1 : \mathcal{U}_2 : \cdots$, with <em>universe polymorphism</em> to avoid duplication.</li>
+</ol>
+
+<ol>
+<li><strong>Intensional vs. Extensional Identity.</strong> Intensional type theories (MLTT) distinguish <em>definitional</em> equality (reduction) from <em>propositional</em> equality (inhabited identity type $\text{Id}_A(a,b)$). Extensional theories collapse these, gaining expressivity but losing decidable type-checking — a critical tradeoff.</li>
+</ol>
+
+<ol>
+<li><strong>Calculus of Inductive Constructions (CIC).</strong> Coquand and Huet's CIC underpins Coq/Rocq. It merges the Calculus of Constructions (impredicative $\text{Prop}$, universe polymorphism) with <strong>inductive types</strong> — the mechanism for defining $\mathbb{N}$, lists, trees, and the recursion/induction principles that come with them.</li>
+</ol>
+
+<ol>
+<li><strong>Proof Irrelevance and Squashing.</strong> Distinguishing <em>data</em> from <em>mere proofs</em> matters for extraction and computation. The $\|-\|$ truncation (or $\text{Prop}$ in CIC) collapses all proofs of a proposition to a single irrelevant witness, essential for separating logical content from computational content.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active frontiers include:</p>
+
+<ul>
+<li><strong>Homotopy Type Theory (HoTT)</strong> and <strong>Cubical Type Theory</strong> — Identity types are reinterpreted as paths in a space; the <strong>Univalence Axiom</strong> ($A \simeq B \Rightarrow A = B$) makes equivalent structures interchangeable. Cubical type theory (as in Agda's <code>--cubical</code> mode) gives a <em>computational</em> interpretation of univalence, avoiding the non-constructivity of the original HoTT book.</li>
+<li><strong>Directed / Modal Type Theory</strong> — Extending HoTT to directed homotopies (morphisms, not just paths) for ∞-category theory; modal operators ($\Box$, $\bigcirc$) for controlling access to resources or dimensions.</li>
+<li><strong>Two-Level Type Theory (2LTT)</strong> — Combining a strict metatheory with an inner homotopy layer, resolving some coherence nightmares in synthetic ∞-category theory.</li>
+<li><strong>Linear and Graded Type Theories</strong> — Tracking resource usage at the type level, with applications in quantum computing (no-cloning theorem enforced by linear types) and differential privacy.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Lambda Calculus">Lambda Calculus</a></li>
+<li><a href="/daily_knowledge/topic/Curry–Howard Correspondence">Curry–Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Dependent Types">Dependent Types</a></li>
+<li><a href="/daily_knowledge/topic/Proof Assistants">Proof Assistants</a></li>
+<li><a href="/daily_knowledge/topic/Category Theory">Category Theory</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Foundations:</strong> Set theory is extensional by default (sets are equal iff same members); type theory is intensional. Does univalence in HoTT genuinely recover extensionality, or does it merely shift the tension elsewhere — into coherence conditions for higher structures?</li>
+</ol>
+
+<ol>
+<li><strong>Computation vs. Logic:</strong> CIC's <code>Prop</code> impredicativity is justified logically but causes inconsistency if used carelessly with classical axioms. Where should a proof assistant draw the line between a <em>logical</em> system and a <em>programming language</em> foundation?</li>
+</ol>
+
+<ol>
+<li><strong>Practicality:</strong> Dependent types are maximally expressive but impose heavy proof obligations (e.g., carrying length proofs with every <code>Vec</code> operation). When does the overhead of dependent types outweigh the safety guarantees — and how do gradual or optional dependent type systems address this tradeoff?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Type_theory" target="_blank" rel="noopener"&gt;Type Theory&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19224v1" target="_blank" rel="noopener">EffectErase: Joint Video Object Removal and Insertion for High-Quality Effect Erasing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19222v1" target="_blank" rel="noopener">Spectrally-Guided Diffusion Noise Schedules</a> (2026)</li>
+</ul></div></article>
+<article id="curry_howard"><div class="topic-header"><h2>Curry-Howard Correspondence<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Foundations &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The <strong>Curry-Howard Correspondence</strong> is a deep structural isomorphism between systems of formal logic and typed computational calculi: <strong>propositions are types</strong>, <strong>proofs are programs</strong>, and <strong>proof normalization is computation</strong> (β-reduction).</div></div>
+
+<p>The correspondence maps logical constructs to type-theoretic ones with precise fidelity:</p>
+
+<p>| Logic | Type Theory |</p>
+<p>|---|---|</p>
+<p>| Proposition $A$ | Type $A$ |</p>
+<p>| Proof of $A$ | Term $t : A$ |</p>
+<p>| $A \Rightarrow B$ | Function type $A \to B$ |</p>
+<p>| $A \wedge B$ | Product type $A \times B$ |</p>
+<p>| $A \vee B$ | Sum type $A + B$ |</p>
+<p>| $\bot$ (false) | Empty type $\mathbf{0}$ |</p>
+<p>| $\top$ (true) | Unit type $\mathbf{1}$ |</p>
+<p>| $\forall x{:}A.\ P(x)$ | Dependent product $\Pi_{x:A}\ P(x)$ |</p>
+<p>| $\exists x{:}A.\ P(x)$ | Dependent sum $\Sigma_{x:A}\ P(x)$ |</p>
+
+<p>To <em>inhabit</em> a type is to <em>prove</em> the corresponding proposition. A program that typechecks is a proof; a proof that normalizes is a terminating computation. The logical cut-elimination rule and β-reduction are the same thing, viewed through different lenses.</p>
+
+<p>The isomorphism is grounded in <strong>intuitionistic (constructive) logic</strong> — classical logic with the Law of Excluded Middle ($A \vee \neg A$) corresponds to type systems with <em>call/cc</em> (continuations), a non-trivial and somewhat uncomfortable extension.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The correspondence isn't a curiosity — it collapses three previously separate disciplines:</p>
+
+<ul>
+<li><strong>Programming languages</strong>: type systems gain logical meaning; well-typed programs are correctness certificates.</li>
+<li><strong>Proof theory</strong>: proofs become executable objects; proof assistants (Coq, Agda, Lean) exploit this directly.</li>
+<li><strong>Mathematics foundations</strong>: mathematical theorems can be <em>run</em>; existence proofs yield algorithms.</li>
+</ul>
+
+<p>The three-way <strong>Curry-Howard-Lambek correspondence</strong> extends the picture: <em>categories</em> provide a third column, with objects as types/propositions and morphisms as programs/proofs. This unification is the backbone of categorical logic and topos theory.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: Practical Payoff</div><div>Every time a Haskell type signature encodes a contract, or Lean verifies a proof by constructing a term, the correspondence is doing real work. Dependent types (Idris, Agda) push this further: the <em>value</em> of a term can appear in the <em>type</em> of another, allowing full program specifications as types.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Normalization = computation.</strong></p>
+<p>Proof normalization (cutting out detours in a proof) corresponds exactly to β-reduction. Strong normalization of a type theory implies all programs terminate — which is why total languages like Agda reject general recursion.</p>
+
+<p><strong>2. Classical logic requires control operators.</strong></p>
+<p>Adding $\neg\neg A \Rightarrow A$ (double-negation elimination) to the type theory requires <em>delimited continuations</em> or <em>call/cc</em>. Parigot's λμ-calculus and Griffin's observation (1990) made this precise. Classical proofs correspond to programs that can inspect and manipulate the call stack.</p>
+
+<p><strong>3. Linear logic yields linear types.</strong></p>
+<p>Girard's linear logic ($A \multimap B$, resources used exactly once) corresponds to linear type systems — where a value cannot be duplicated or discarded. This is the logical foundation of Rust's ownership/borrow checker.</p>
+
+<p><strong>4. The correspondence is syntax-sensitive.</strong></p>
+<p>It lives at the level of <em>proof terms</em>, not just provability. Two different proofs of the same theorem are genuinely different programs with potentially different computational behavior. This is why proof <em>relevance vs. irrelevance</em> matters in dependent type theory.</p>
+
+<p><strong>5. Homotopy Type Theory (HoTT) extends it further.</strong></p>
+<p>In HoTT, <em>types are spaces</em>, <em>terms are points</em>, <em>proofs of equality are paths</em>, and higher-dimensional structure (homotopies) corresponds to proof transformations. The Univalence Axiom states that equivalent types are equal — a statement with no direct classical analogue.</p>
+
+<p>$$\text{Univalence:}\ (A \simeq B) \simeq (A =_{\mathcal{U}} B)$$</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research threads as of early 2026:</p>
+
+<ul>
+<li><strong>Cubical type theory</strong> (cubical Agda, Redtt): constructive models of HoTT that make Univalence <em>computable</em>, resolving the prior situation where the axiom blocked computation.</li>
+<li><strong>Quantitative type theory (QTT)</strong>: tracking resource usage in types, merging linear and dependent typing — foundation of Idris 2.</li>
+<li><strong>Proof mining</strong>: extracting computational content (algorithms, bounds) from classical mathematical proofs via the correspondence, used actively in numerical analysis.</li>
+<li><strong>Propositions-as-sessions</strong>: extending the correspondence to <em>session types</em> for concurrent processes, where propositions in linear logic correspond to communication protocols.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Dependent Type Theory">Dependent Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Intuitionistic Logic">Intuitionistic Logic</a></li>
+<li><a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Linear Types and Ownership">Linear Types and Ownership</a></li>
+<li><a href="/daily_knowledge/topic/Categorical Semantics of Type Theory">Categorical Semantics of Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Proof Assistants (Coq, Lean, Agda)">Proof Assistants (Coq, Lean, Agda)</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Classical vs. constructive</strong>: If adding $\neg\neg$-elimination forces continuations, what does this say about the <em>computational meaning</em> of classical existence proofs — do they actually compute anything useful?</li>
+</ol>
+
+<ol>
+<li><strong>Normalization and totality</strong>: Strong normalization prevents general recursion, making Agda/Coq not Turing-complete as programming languages. Is this an acceptable trade-off, and how do real proof assistants escape it (e.g., Coq's <code>Fixpoint</code> guardedness checker)?</li>
+</ol>
+
+<ol>
+<li><strong>HoTT and physics</strong>: The analogy between <em>types as spaces</em> and the role of homotopy in modern physics (topological field theory, cobordism) feels more than superficial. Is there a meaningful sense in which physical dualities (e.g., AdS/CFT) have a proof-theoretic shadow?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Curry–Howard_correspondence" target="_blank" rel="noopener"&gt;Curry-Howard Correspondence&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19224v1" target="_blank" rel="noopener">EffectErase: Joint Video Object Removal and Insertion for High-Quality Effect Erasing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19215v1" target="_blank" rel="noopener">$R$-equivalence on Cubic Surfaces I: Existing Cases with Non-Trivial Universal Equivalence</a> (2026)</li>
+</ul></div></article>
+</div>
+</body>
+</html>
