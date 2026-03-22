@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dark Matter</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-22/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Dark Matter<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Science · Cosmology &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<p>Dark matter is a gravitationally active, electromagnetically inert component of the universe — it neither emits, absorbs, nor scatters photons, yet exerts measurable gravitational influence on baryonic matter and spacetime curvature.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Operational Definition</div><div>Dark matter is inferred wherever the observed gravitational potential $\Phi(\mathbf{r})$ cannot be reconciled with the visible mass distribution $\rho_\text{bary}(\mathbf{r})$ under standard GR. It interacts via gravity and (possibly) the weak nuclear force, but not electromagnetism or the strong force.</div></div>
+
+<p>In the <a href="/daily_knowledge/topic/Lambda-CDM Model">Lambda-CDM Model</a>, the energy budget of the universe is:</p>
+
+<p>$$\Omega_\text{total} = \Omega_b + \Omega_\text{DM} + \Omega_\Lambda \approx 0.05 + 0.268 + 0.682 = 1$$</p>
+
+<p>Dark matter thus constitutes <strong>~85% of all matter</strong> by mass, yet its particle identity remains unknown.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Dark matter is not a peripheral anomaly — it is the <strong>dominant gravitational scaffolding</strong> of cosmic structure. Without it, galaxies could not form at the observed rate or scale; the cosmic web of filaments, voids, and superclusters would not exist. It matters across multiple scales:</p>
+
+<ul>
+<li><strong>Galactic dynamics</strong>: Flat rotation curves of spiral galaxies (Rubin et al., 1970s) require a diffuse halo $\rho_\text{DM}(r) \propto r^{-2}$ well beyond the luminous disk.</li>
+<li><strong>Gravitational lensing</strong>: The deflection angle $\hat{\alpha} = \frac{4GM}{c^2 b}$ (where $b$ is impact parameter) systematically exceeds predictions from visible mass — most dramatically in the <a href="/daily_knowledge/topic/Bullet Cluster">Bullet Cluster</a>, where the lensing centroid is spatially offset from the hot gas after collision.</li>
+<li><strong>CMB anisotropies</strong>: The acoustic peak structure in $C_\ell$ spectra is only reproducible with a cold, collisionless dark matter component seeding potential wells pre-recombination.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Bullet Cluster as a Smoking Gun</div><div>The 1E 0657-558 cluster collision provides near-decisive evidence <em>against</em> MOND-only explanations: the gravitational potential (traced by weak lensing) separates from the baryonic mass (traced by X-ray emission), exactly as expected if dark matter is a collisionless fluid passing through while gas ram-pressure decelerates.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Thermal classification</strong>: Cold dark matter (CDM) has negligible free-streaming length ($\lambda_\text{fs} \ll$ galactic scales), enabling small-scale structure. Warm DM ($\lambda_\text{fs} \sim$ dwarf-galaxy scales) is invoked to address the <a href="/daily_knowledge/topic/Missing Satellites Problem">Missing Satellites Problem</a> and <a href="/daily_knowledge/topic/Core-Cusp Problem">Core-Cusp Problem</a>.</li>
+</ol>
+
+<ol>
+<li><strong>WIMP miracle</strong>: WIMPs (Weakly Interacting Massive Particles) with $m \sim 10$–$10^3$ GeV and weak-scale cross-sections naturally produce $\Omega_\text{DM} \approx 0.27$ via freeze-out. This "WIMP miracle" motivated decades of direct detection searches, now severely constrained by LUX-ZEPLIN and XENONnT.</li>
+</ol>
+
+<ol>
+<li><strong>Axions</strong>: Originally proposed to solve the <a href="/daily_knowledge/topic/Strong CP Problem">Strong CP Problem</a>, the QCD axion ($m_a \sim 10^{-5}$–$10^{-3}$ eV) is a well-motivated dark matter candidate detectable via resonant cavity experiments (ADMX). Ultralight axion fields ($m \lesssim 10^{-22}$ eV) form "fuzzy" dark matter with quantum pressure suppressing structure below $\sim 1$ kpc.</li>
+</ol>
+
+<ol>
+<li><strong>Primordial black holes (PBHs)</strong>: Formed before nucleosynthesis, PBHs in the mass window $10^{17}$–$10^{22}$ kg remain viable dark matter candidates (not yet excluded by microlensing or gravitational wave constraints).</li>
+</ol>
+
+<ol>
+<li><strong>Local density</strong>: Despite its cosmic dominance, the local dark matter density near Earth is only $\rho_\odot^\text{DM} \approx 0.3$–$0.4 \text{ GeV/cm}^3$ — low enough that the entire dark matter mass within Neptune's orbit is $\sim 10^{17}$ kg, comparable to a large asteroid.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Direct detection experiments (LUX-ZEPLIN 2024, XENONnT) have pushed WIMP cross-section limits below $\sigma \lesssim 10^{-47}$ cm² at $\sim 40$ GeV, significantly constraining canonical WIMP models. Axion searches (ADMX, HAYSTAC) are active. Theoretical interest has shifted toward: <strong>ultralight/fuzzy DM</strong>, <strong>self-interacting DM (SIDM)</strong> to resolve small-scale tensions, and <strong>dark sector</strong> models with hidden gauge groups. The <a href="/daily_knowledge/topic/Hubble Tension">Hubble Tension</a> ($H_0$ discrepancy ~5σ) may implicate early dark energy or exotic DM physics, though no consensus exists.</div></div>
+
+<p>Modified gravity alternatives (MOND, TeVeS, entropic gravity) persist as minority explanations but fail to simultaneously fit rotation curves, lensing, and CMB data without invoking some dark matter component anyway.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Lambda-CDM Model">Lambda-CDM Model</a></li>
+<li><a href="/daily_knowledge/topic/Gravitational Lensing">Gravitational Lensing</a></li>
+<li><a href="/daily_knowledge/topic/Cosmic Microwave Background">Cosmic Microwave Background</a></li>
+<li><a href="/daily_knowledge/topic/WIMP Miracle and Freeze-Out">WIMP Miracle and Freeze-Out</a></li>
+<li><a href="/daily_knowledge/topic/Axion Physics">Axion Physics</a></li>
+<li><a href="/daily_knowledge/topic/Bullet Cluster">Bullet Cluster</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The WIMP miracle suggests a deep connection between electroweak symmetry breaking and the dark matter relic density — is this coincidence evidence of a unified framework, or a selection bias in our theoretical priors?</li>
+</ol>
+
+<ol>
+<li>Self-interacting dark matter (SIDM) resolves several small-scale structure tensions simultaneously. What observational signatures would distinguish SIDM with $\sigma/m \sim 1$ cm²/g from CDM in next-generation surveys?</li>
+</ol>
+
+<ol>
+<li>If dark matter is ultimately described by a hidden dark sector with its own gauge bosons and possibly dark chemistry, does the term "dark matter" remain a coherent single category, or does it fragment into a dark <em>Standard Model</em>?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Dark_matter" target="_blank" rel="noopener"&gt;Dark Matter&lt;/a&gt; · Retrieved 2026-03-22</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.19209v1" target="_blank" rel="noopener">Do VLMs Need Vision Transformers? Evaluating State Space Models as Vision Encoders</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19207v1" target="_blank" rel="noopener">Rotation-triggered Kelvin-Helmholtz and counter-superflow instabilities in a three-component Bose-Einstein condensate</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.19204v1" target="_blank" rel="noopener">Robustness, Cost, and Attack-Surface Concentration in Phishing Detection</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Dark+Matter&labels=discussion&body=Topic:+[Dark+Matter](https://dhein.github.io/daily_knowledge/topic/dark_matter/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
