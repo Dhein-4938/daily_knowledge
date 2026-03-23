@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 23, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 23, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~16 min</div></div>
+<nav class="topic-nav"><a href="#evolution">Theory of Evolution</a><a href="#thermodynamics">Laws of Thermodynamics</a><a href="#epigenetics">Epigenetics</a><a href="#neuroscience_plasticity">Neuroplasticity</a></nav>
+<article id="evolution"><div class="topic-header"><h2>Theory of Evolution<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Biology &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Evolution is the change in <strong>heritable characteristics</strong> of biological populations over successive generations, driven by processes acting on genetic variation: <strong>natural selection</strong>, <strong>genetic drift</strong>, <strong>mutation</strong>, and <strong>gene flow</strong>.</div></div>
+
+<p>The four postulates underpinning natural selection (Darwin/Wallace, ~1858):</p>
+
+<ol>
+<li><strong>Superfecundity</strong> — populations produce more offspring than can survive</li>
+<li><strong>Variation</strong> — individuals differ in heritable traits</li>
+<li><strong>Differential fitness</strong> — traits confer unequal survival/reproduction rates</li>
+<li><strong>Heritability</strong> — fit traits are passed to offspring</li>
+</ol>
+
+<p>This can be captured in the <strong>Price equation</strong>, which decomposes evolutionary change in a trait $z$ across one generation:</p>
+
+<p>$$\Delta \bar{z} = \underbrace{\text{Cov}(w_i, z_i)/\bar{w}}_{\text{selection}} + \underbrace{E(w_i \Delta z_i)/\bar{w}}_{\text{transmission bias}}$$</p>
+
+<p>where $w_i$ is individual fitness and $\bar{w}$ is mean population fitness. The first term is pure selection; the second captures developmental/mutational transmission effects.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Evolution is the <strong>unifying framework of all biology</strong> — without it, comparative anatomy, molecular phylogenetics, antibiotic resistance, and vaccine design are incoherent. Its practical reach extends far:</p>
+
+<ul>
+<li><strong>Medicine</strong>: understanding pathogen evolution (SARS-CoV-2 variant emergence), cancer as somatic evolution, personalized genomics</li>
+<li><strong>Agriculture</strong>: artificial selection, resistance management in crops and pests</li>
+<li><strong>Computer science</strong>: evolutionary algorithms, genetic programming, neural architecture search inspired by fitness landscapes</li>
+<li><strong>Astrobiology</strong>: LUCA (Last Universal Common Ancestor, ~3.5–3.8 Ga) anchors hypotheses about life's origin and its possible forms elsewhere</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Deep Connection — Fitness Landscapes</div><div>Sewall Wright's metaphor of a <strong>fitness landscape</strong> — where genotype space is mapped to fitness — bridges population genetics and complex systems theory. Epistasis creates rugged landscapes where gradient ascent (selection) gets stuck at local optima, a concept directly imported into machine learning as loss-surface analysis.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. The Modern Synthesis (~1930s–1950s)</strong></p>
+<p>Darwin lacked a mechanism of inheritance. The fusion of Mendelian genetics, population genetics (Fisher, Wright, Haldane), and paleontology into the Modern Synthesis resolved this: DNA is the physical substrate of heritable variation.</p>
+
+<p><strong>2. Neutral Theory (Kimura, 1968)</strong></p>
+<p>Most molecular evolution is <em>not</em> driven by selection but by <strong>random fixation of neutral mutations</strong> via genetic drift. The neutral substitution rate equals the mutation rate $\mu$, independent of population size — a non-obvious and initially controversial result.</p>
+
+<p>$$k = \mu$$</p>
+
+<p>This is foundational to molecular clocks used in phylogenetic dating.</p>
+
+<p><strong>3. Levels of Selection</strong></p>
+<p>Selection can operate at gene, individual, kin-group, or (controversially) species level. Hamilton's rule for kin selection: altruistic behavior evolves when</p>
+
+<p>$$rb > c$$</p>
+
+<p>where $r$ = relatedness, $b$ = benefit to recipient, $c$ = cost to actor.</p>
+
+<p><strong>4. Speciation Mechanisms</strong></p>
+<p>New species arise via reproductive isolation: allopatric (geographic separation), sympatric (ecological divergence without separation), and parapatric (along environmental gradients). The <strong>biological species concept</strong> (Mayr) defines species by reproductive isolation, but breaks down for asexual organisms and archaea.</p>
+
+<p><strong>5. Extended Evolutionary Synthesis</strong></p>
+<p>Post-2000 work incorporates phenomena the Modern Synthesis underemphasized: epigenetic inheritance, developmental plasticity, niche construction, and evolvability itself as a selectable trait.</p>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The "Extended Evolutionary Synthesis" remains actively contested — consensus on how much it revises (vs. supplements) the Modern Synthesis is not yet settled as of this note's writing.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>Active research frontiers include:</p>
+
+<ul>
+<li><strong>evo-devo</strong> (evolutionary developmental biology): how changes in gene regulatory networks produce morphological novelty with minimal mutational load</li>
+<li><strong>ancient DNA</strong> and paleogenomics: sequencing archaic hominins (Denisovans, Neanderthals) at population-genetic resolution, revealing introgression events</li>
+<li><strong>experimental evolution</strong>: evolving populations of <em>E. coli</em> (Lenski's LTEE, now >80,000 generations) directly observing mutation fixation dynamics</li>
+<li><strong>evolutionary medicine</strong>: co-evolutionary arms races between hosts and pathogens modeled as Red Queen dynamics</li>
+</ul>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Ancient DNA methods and LTEE milestone generation counts are advancing rapidly; specific claims here reflect the state of knowledge through early 2026.</div></div>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Natural Selection">Natural Selection</a></li>
+<li><a href="/daily_knowledge/topic/Population Genetics">Population Genetics</a></li>
+<li><a href="/daily_knowledge/topic/Phylogenetics and Cladistics">Phylogenetics and Cladistics</a></li>
+<li><a href="/daily_knowledge/topic/Molecular Clock">Molecular Clock</a></li>
+<li><a href="/daily_knowledge/topic/Fitness Landscapes">Fitness Landscapes</a></li>
+<li><a href="/daily_knowledge/topic/Last Universal Common Ancestor (LUCA)">Last Universal Common Ancestor (LUCA)</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The neutral theory and natural selection are often framed as competing explanations for molecular evolution — but are they genuinely in tension, or do they operate at different timescales and levels of resolution?</li>
+</ol>
+
+<ol>
+<li>The Price equation is mathematically general enough to describe cultural evolution and learning dynamics. Does this generality make it a deep insight or an empty tautology?</li>
+</ol>
+
+<ol>
+<li>If evolvability (the capacity to produce heritable variation) is itself heritable and selectable, does this imply evolution has "meta-evolved" its own search strategy — and what does that imply for how we design evolutionary algorithms?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Evolution" target="_blank" rel="noopener"&gt;Theory of Evolution&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.20195v1" target="_blank" rel="noopener">Improved constraint on the Hubble constant from dark sirens with LIGO/Virgo/KAGRA O4a</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20193v1" target="_blank" rel="noopener">From Masks to Pixels and Meaning: A New Taxonomy, Benchmark, and Metrics for VLM Image Tampering</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20189v1" target="_blank" rel="noopener">MeanFlow Meets Control: Scaling Sampled-Data Control for Swarms</a> (2026)</li>
+</ul></div></article>
+<article id="thermodynamics"><div class="topic-header"><h2>Laws of Thermodynamics<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~5 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>The laws of thermodynamics are empirical axioms governing the behavior of energy, entropy, and temperature in physical systems. They do not derive from more primitive principles — they are the foundation.</p>
+
+<p>[!info] The Four Laws (Zeroth through Third)</p>
+<ul>
+<li><strong>Zeroth Law</strong>: Thermal equilibrium is transitive. If $A \sim C$ and $B \sim C$, then $A \sim B$. This grounds the <em>definition</em> of temperature as an equivalence class.</li>
+<li><strong>First Law</strong>: $\Delta U = Q - W$. The internal energy of a system changes by the heat absorbed minus the work done by the system. Energy is conserved globally.</li>
+<li><strong>Second Law</strong>: For any real process, $\Delta S_\text{universe} \geq 0$. Equality holds only for reversible (quasi-static) processes.</li>
+<li><strong>Third Law</strong>: $\lim_{T \to 0} S = S_0$, where $S_0$ is a constant (typically zero for perfect crystals). This makes entropy an absolute quantity, not merely relative.</li>
+</ul>
+
+<p>The combined first and second laws are often written differentially as:</p>
+
+<p>$$dU = T\,dS - P\,dV + \sum_i \mu_i\,dN_i$$</p>
+
+<p>This is the fundamental relation of thermodynamics — from it, all thermodynamic potentials ($F$, $G$, $H$) derive via Legendre transforms.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>These laws are unusually general — they apply regardless of the microscopic details of the system. Statistical mechanics (Boltzmann, Gibbs) provides the <em>explanation</em> of why they hold; thermodynamics itself only asserts that they <em>do</em> hold.</p>
+
+<p><strong>Key applications:</strong></p>
+<ul>
+<li><strong>Engineering</strong>: Heat engines, refrigeration cycles, turbine efficiency. The Carnot efficiency $\eta = 1 - T_C/T_H$ is a hard upper bound from the second law.</li>
+<li><strong>Chemistry</strong>: Gibbs free energy $G = H - TS$ determines spontaneity of reactions (at constant $T$, $P$: $\Delta G < 0$ for spontaneous processes).</li>
+<li><strong>Cosmology</strong>: The arrow of time is thermodynamic — entropy increase gives time its direction.</li>
+<li><strong>Information theory</strong>: Shannon entropy $H = -\sum p_i \log p_i$ is formally identical to Boltzmann's $S = -k_B \sum p_i \ln p_i$. Landauer's principle connects bit erasure to heat dissipation: erasing one bit costs at least $k_B T \ln 2$ of energy.</li>
+</ul>
+
+<p>[!tip] The Zeroth Law is epistemically deep</p>
+<p>It doesn't just define temperature — it asserts that temperature <em>exists</em> as a well-defined scalar field. Without transitivity of equilibrium, thermometers would be meaningless. This is the hidden assumption behind all of classical thermometry.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Entropy is not disorder (precisely).</strong> The rigorous definition is $S = k_B \ln \Omega$ (Boltzmann) or $S = -k_B \sum_i p_i \ln p_i$ (Gibbs). "Disorder" is a useful heuristic but breaks down for systems like self-gravitating matter, where clumping <em>increases</em> entropy.</li>
+</ol>
+
+<ol>
+<li><strong>The second law is statistical, not absolute.</strong> Fluctuations can transiently decrease local entropy (Boltzmann's H-theorem, Loschmidt's paradox). The Fluctuation Theorem quantifies the probability of entropy-decreasing trajectories: $P(\Delta S = +A) / P(\Delta S = -A) = e^{A/k_B}$.</li>
+</ol>
+
+<ol>
+<li><strong>Third law has practical teeth.</strong> Absolute zero is unattainable in finite steps — cooling requires expelling entropy, but as $T \to 0$ the heat capacity vanishes, making each step exponentially less effective. This is sometimes stated as a separate corollary: <em>you cannot reach $T=0$ in finite operations.</em></li>
+</ol>
+
+<ol>
+<li><strong>Perpetual motion machines of each kind are prohibited:</strong></li>
+</ol>
+<ul>
+<li>PMM1 violates the first law (creates energy).</li>
+<li>PMM2 violates the second law (extracts work from a single reservoir at uniform temperature, e.g., Maxwell's Demon — defeated by Landauer's principle).</li>
+</ul>
+
+<ol>
+<li><strong>Non-equilibrium thermodynamics is a live frontier.</strong> The classical laws apply strictly to <em>equilibrium states</em> connected by quasi-static paths. Driven systems (biological cells, turbulence) require extensions: Onsager reciprocal relations, Prigogine's minimum entropy production, and more recently, stochastic thermodynamics.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>[!warning] Note: this information may be dated</p>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Stochastic thermodynamics</strong>: Extending the second law to single-molecule or nanoscale systems where fluctuations dominate. Jarzynski equality ($\langle e^{-W/k_BT} \rangle = e^{-\Delta F/k_BT}$) allows free energy measurements from non-equilibrium trajectories.</li>
+<li><strong>Thermodynamics of computation</strong>: Landauer's principle has been experimentally verified (Bérut et al., 2012). Ongoing work connects reversible computing to thermodynamic efficiency limits.</li>
+<li><strong>Quantum thermodynamics</strong>: How do the laws apply to quantum systems with coherence and entanglement? Work and heat become operator-valued; the notion of a "thermal machine" must be reconsidered.</li>
+<li><strong>Cosmological thermodynamics</strong>: The universe's entropy budget and ultimate fate (heat death) remain active. Black hole thermodynamics ($S_{BH} = A/4l_P^2$, Bekenstein-Hawking) suggests deep links between gravity, entropy, and quantum information.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Statistical Mechanics">Statistical Mechanics</a></li>
+<li><a href="/daily_knowledge/topic/Entropy and Information Theory">Entropy and Information Theory</a></li>
+<li><a href="/daily_knowledge/topic/Carnot Cycle and Heat Engines">Carnot Cycle and Heat Engines</a></li>
+<li><a href="/daily_knowledge/topic/Gibbs Free Energy">Gibbs Free Energy</a></li>
+<li><a href="/daily_knowledge/topic/Non-Equilibrium Thermodynamics">Non-Equilibrium Thermodynamics</a></li>
+<li><a href="/daily_knowledge/topic/Black Hole Thermodynamics">Black Hole Thermodynamics</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Arrow of time</strong>: The microscopic laws of physics are time-symmetric, yet the second law defines a preferred temporal direction. Is entropy increase a <em>fundamental</em> asymmetry, or an artifact of low-entropy initial conditions (the "Past Hypothesis")? Can the Big Bang's low entropy be explained, or must it be posited?</li>
+</ol>
+
+<ol>
+<li><strong>Maxwell's Demon and Landauer's principle</strong>: The demon appears to violate the second law by sorting molecules without doing work. Landauer's resolution ties information erasure to heat. Does this make the second law <em>fundamentally</em> informational? What are the implications for the limits of reversible computation?</li>
+</ol>
+
+<ol>
+<li><strong>Quantum thermodynamics edge cases</strong>: In a quantum system with coherence between energy eigenstates, the standard notion of "work" (energy exchange without entropy change) becomes ambiguous. How should the first and second laws be reformulated for coherent quantum processes, and does entanglement between system and bath fundamentally alter efficiency bounds?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Laws_of_thermodynamics" target="_blank" rel="noopener"&gt;Laws of Thermodynamics&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.20195v1" target="_blank" rel="noopener">Improved constraint on the Hubble constant from dark sirens with LIGO/Virgo/KAGRA O4a</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20194v1" target="_blank" rel="noopener">MME-CoF-Pro: Evaluating Reasoning Coherence in Video Generative Models with Text and Visual Hints</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20192v1" target="_blank" rel="noopener">LumosX: Relate Any Identities with Their Attributes for Personalized Video Generation</a> (2026)</li>
+</ul></div></article>
+<article id="epigenetics"><div class="topic-header"><h2>Epigenetics<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Genomics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Epigenetics is the study of heritable changes in gene expression that occur <strong>without mutation of the underlying nucleotide sequence</strong>. The prefix <em>epi-</em> (ἐπι, "over/above") signals a layer of regulatory information superimposed on the genome itself.</div></div>
+
+<p>Formally, epigenetic state can be conceived as a function mapping genomic loci to expression levels, parameterized by chemical marks rather than sequence:</p>
+
+<p>$$
+E: \mathcal{G} \times \mathcal{M} \rightarrow \mathbb{R}_{\geq 0}
+$$</p>
+
+<p>where $\mathcal{G}$ is the set of genomic loci and $\mathcal{M}$ is the space of epigenetic marks (methylation, histone tail modifications, chromatin accessibility, etc.). Two cells with identical $\mathcal{G}$ but different $\mathcal{M}$ can have radically different phenotypes — the core paradox that epigenetics resolves.</p>
+
+<p>The three canonical molecular mechanisms are:</p>
+
+<p>| Mechanism | Substrate | Effect |</p>
+<p>|---|---|---|</p>
+<p>| DNA methylation (5-mC) | CpG dinucleotides | Transcriptional silencing |</p>
+<p>| Histone modification | H3K4me3, H3K27me3, acetylation, etc. | Activation or repression |</p>
+<p>| Non-coding RNA | miRNA, lncRNA, piRNA | Post-transcriptional silencing / chromatin remodeling |</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Epigenetics bridges genotype and phenotype in a way static sequence cannot. It explains:</p>
+
+<ul>
+<li><strong>Cellular differentiation</strong>: A zygote's genome is fixed, yet it gives rise to ~200 functionally distinct cell types. Totipotent → pluripotent → terminally differentiated transitions are orchestrated by progressive epigenetic restriction of gene programs.</li>
+<li><strong>Environment–genome interface</strong>: Nutrition, stress, toxin exposure, and even social experience can remodel the epigenome, with measurable transcriptional consequences.</li>
+<li><strong>Transgenerational inheritance</strong>: Some marks survive gametogenesis and are transmitted to offspring — a form of non-Mendelian inheritance with implications for evolutionary theory.</li>
+<li><strong>Disease</strong>: Aberrant methylation patterns are hallmarks of cancer (e.g., hypermethylation of tumor suppressor promoters); epigenetic dysregulation underpins imprinting disorders (Prader-Willi, Angelman) and neurological conditions.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Connection to Information Theory</div><div>The epigenome can be viewed as a compressible secondary code: it encodes <em>context</em> (cell type, developmental stage, environmental history) using a finite alphabet of chemical marks over a fixed DNA "tape." This framing connects naturally to work on chromatin state segmentation and machine-learning models of regulatory grammar.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>CpG methylation asymmetry</strong>: Mammalian methylation is predominantly at CpG sites. Maintenance methyltransferase DNMT1 faithfully copies hemi-methylated daughter strands post-replication — the primary mechanism of mitotic inheritance of epigenetic state.</li>
+</ol>
+
+<ol>
+<li><strong>Histone code hypothesis</strong>: Combinations of post-translational modifications on histone tails create a combinatorial "code" read by effector proteins (chromodomain, bromodomain readers). H3K4me3 marks active promoters; H3K27me3 (deposited by Polycomb repressive complex 2, PRC2) marks silenced developmental genes.</li>
+</ol>
+
+<ol>
+<li><strong>Bivalent domains</strong>: Embryonic stem cells carry promoters co-occupied by both H3K4me3 and H3K27me3 — "poised" loci that can resolve to either active or silent states upon differentiation. A key regulatory plasticity mechanism.</li>
+</ol>
+
+<ol>
+<li><strong>Epigenetic reprogramming</strong>: Two major genome-wide demethylation waves occur in development — in primordial germ cells and post-fertilization — ensuring pluripotency. Incomplete erasure in germ cells is the molecular basis for transgenerational epigenetic inheritance.</li>
+</ol>
+
+<ol>
+<li><strong>Phase separation</strong>: Recent structural biology implicates liquid-liquid phase separation of transcriptional condensates (e.g., BRD4, MED1) in the spatial organization of active chromatin, linking epigenetic marks to 3D nuclear architecture.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research frontiers include:</p>
+<ul>
+<li><strong>Single-cell multi-omics</strong>: Simultaneous profiling of chromatin accessibility (scATAC-seq), methylation (scBS-seq), and transcription (scRNA-seq) in individual cells, enabling high-resolution maps of epigenetic heterogeneity.</li>
+<li><strong>Epigenetic clocks</strong>: Machine-learning models (Horvath, GrimAge) predict biological age from methylation arrays with sub-year precision — being actively refined toward causal interpretability rather than correlative biomarkers.</li>
+<li><strong>Agentic AI for gene ontology</strong>: Emerging frameworks use hierarchical feature selection and multi-agent LLM pipelines to extract aging-related biological knowledge from GO term annotations, promising to accelerate mechanistic interpretation of epigenomic datasets.</li>
+<li><strong>Epigenetic editing</strong>: dCas9 fused to DNMT3A, TET1, or histone-modifying enzymes enables locus-specific rewriting of the epigenome — a nascent therapeutic modality for reversing aberrant silencing.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/DNA Methylation">DNA Methylation</a></li>
+<li><a href="/daily_knowledge/topic/Histone Modification and the Chromatin Code">Histone Modification and the Chromatin Code</a></li>
+<li><a href="/daily_knowledge/topic/Non-coding RNA">Non-coding RNA</a></li>
+<li><a href="/daily_knowledge/topic/Cellular Differentiation">Cellular Differentiation</a></li>
+<li><a href="/daily_knowledge/topic/Transgenerational Inheritance">Transgenerational Inheritance</a></li>
+<li><a href="/daily_knowledge/topic/Epigenetic Clocks and Biological Aging">Epigenetic Clocks and Biological Aging</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Epigenetic marks are mitotically heritable but largely reset between generations — what evolutionary pressures might favor leaky vs. complete reprogramming at the germline, and what does this imply for Lamarckian interpretations?</li>
+</ol>
+
+<ol>
+<li>The "histone code" hypothesis assumes combinatorial specificity of reader proteins, but degeneracy in the mark space is substantial. How should we model epigenetic information capacity — is it better treated as a continuous landscape or a discrete state machine?</li>
+</ol>
+
+<ol>
+<li>Epigenetic editing with dCas9-effector fusions offers therapeutic promise, but off-target methylation drift is poorly characterized. What experimental and computational frameworks would be needed to establish safety criteria comparable to those for base editing?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Epigenetics" target="_blank" rel="noopener"&gt;Epigenetics&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.20192v1" target="_blank" rel="noopener">LumosX: Relate Any Identities with Their Attributes for Personalized Video Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20184v1" target="_blank" rel="noopener">Kolmogorov-Arnold causal generative models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20152v1" target="_blank" rel="noopener">Robust Linear Quadratic Optimal Control of Cementitious Material Extrusion</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20132v1" target="_blank" rel="noopener">Revisiting Gene Ontology Knowledge Discovery with Hierarchical Feature Selection and Virtual Study Group of AI Agents</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20102v1" target="_blank" rel="noopener">Koopman and transfer operator techniques from the perspective of quantum theory</a> (2026)</li>
+</ul></div></article>
+<article id="neuroscience_plasticity"><div class="topic-header"><h2>Neuroplasticity<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Neuroscience &nbsp;·&nbsp; ~3 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Neuroplasticity</strong> is the capacity of neural networks to structurally and functionally reorganize — forming new synaptic connections, pruning old ones, and remapping cortical representations — in response to experience, injury, or environmental demand.</div></div>
+
+<p>The phenomenon spans multiple scales of biological organization:</p>
+
+<ul>
+<li><strong>Synaptic level</strong>: Hebbian strengthening/weakening — "neurons that fire together, wire together"</li>
+<li><strong>Circuit level</strong>: Long-term potentiation (LTP) and long-term depression (LTD) alter transmission efficacy</li>
+<li><strong>Systems level</strong>: Cortical remapping, where representations shift across topographic maps</li>
+</ul>
+
+<p>Formally, synaptic weight updates in a Hebbian framework can be approximated as:</p>
+
+<p>$$\Delta w_{ij} = \eta \cdot x_i \cdot x_j$$</p>
+
+<p>where $w_{ij}$ is the synaptic weight between neurons $i$ and $j$, $\eta$ is the learning rate, and $x_i, x_j$ are activation levels. Modern neuroscience substantially complicates this with spike-timing-dependent plasticity (STDP), neuromodulatory gating, and homeostatic regulation.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Neuroplasticity is the mechanistic substrate of <strong>learning, memory, and recovery</strong>. Its significance radiates outward into:</p>
+
+<ul>
+<li><strong>Clinical neurology</strong>: Stroke and TBI rehabilitation exploit residual plasticity to reroute function through intact tissue</li>
+<li><strong>Cognitive science</strong>: Explains skill acquisition, habit formation, and the cognitive effects of chronic stress or meditation</li>
+<li><strong>AI/ML</strong>: Directly inspired Hebbian learning rules, self-organizing maps, and modern attention mechanisms — the brain as existence proof for adaptive representations</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The adult brain retains far more plasticity than classical neuroscience assumed. This isn't just a hopeful finding — it implies that degenerative changes (e.g., from chronic stress or addiction) are also ongoing, not fixed. Plasticity is bidirectional and never "safe by default."</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Critical periods vs. adult plasticity</strong>: The developing brain exhibits heightened plasticity during <strong>critical periods</strong>, when sensory experience is essential for normal circuit maturation (e.g., ocular dominance columns). Adult plasticity is real but more constrained — requiring stronger or more sustained input to drive lasting change.</li>
+</ol>
+
+<ol>
+<li><strong>Mechanisms of adult plasticity</strong>: Key processes include neurogenesis in the hippocampal dentate gyrus (activity-dependent), axonal sprouting, dendritic remodeling, and glial structural changes. Not all brain regions are equally plastic — the hippocampus and prefrontal cortex show pronounced adult plasticity; primary sensory cortices less so.</li>
+</ol>
+
+<ol>
+<li><strong>Cross-modal reassignment</strong>: In the congenitally blind, visual cortex is co-opted for tactile and auditory processing. This is among the strongest evidence that cortical identity is not strictly genetically predetermined — it is experience-sculpted.</li>
+</ol>
+
+<ol>
+<li><strong>Maladaptive plasticity</strong>: Phantom limb pain, tinnitus, and addiction cravings are well-characterized examples where plasticity reinforces pathological states. Cortical remapping after limb loss can produce pain referral patterns that outlast the original injury by years.</li>
+</ol>
+
+<ol>
+<li><strong>Modulatory dependencies</strong>: Plasticity is gated by neuromodulators — acetylcholine (attention/arousal), dopamine (reward prediction error), norepinephrine (novelty/stress). Without appropriate neuromodulatory context, even repeated activation may fail to consolidate lasting changes.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active research frontiers include:</p>
+
+<ul>
+<li><strong>Optogenetic circuit manipulation</strong> to test causal roles of specific cell types in plasticity induction</li>
+<li><strong>Engram cell biology</strong> — identifying the sparse populations that encode specific memories and understanding their reactivation</li>
+<li><strong>Glial contributions</strong>: Astrocytes and microglia are increasingly recognized as active participants in synaptic remodeling, not passive support cells</li>
+<li><strong>Non-invasive stimulation</strong> (TMS, tDCS) to induce or modulate plasticity therapeutically remains promising but mechanistically underspecified in human work</li>
+<li><strong>Computational models</strong> of homeostatic plasticity (Bienenstock-Cooper-Munro theory, synaptic scaling) are being refined against in vivo calcium imaging data</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Hebbian Learning">Hebbian Learning</a></li>
+<li><a href="/daily_knowledge/topic/Long-Term Potentiation">Long-Term Potentiation</a></li>
+<li><a href="/daily_knowledge/topic/Cortical Remapping">Cortical Remapping</a></li>
+<li><a href="/daily_knowledge/topic/Critical Periods in Development">Critical Periods in Development</a></li>
+<li><a href="/daily_knowledge/topic/Spike-Timing-Dependent Plasticity">Spike-Timing-Dependent Plasticity</a></li>
+<li><a href="/daily_knowledge/topic/Cognitive Reserve">Cognitive Reserve</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>If plasticity is always active in the adult brain, what mechanisms prevent runaway reorganization — and what happens when those brakes fail (e.g., in epilepsy or neuropathic pain)?</li>
+<li>The line between <em>adaptive</em> and <em>maladaptive</em> plasticity is drawn retrospectively by outcome. Is there a principled mechanistic distinction, or is the same machinery always at work?</li>
+<li>Computational models of STDP and Hebbian learning capture something real, but miss neuromodulatory gating, glial involvement, and metabolic constraints. What would a more faithful model need to include to be genuinely useful for predicting therapeutic intervention outcomes?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Neuroplasticity" target="_blank" rel="noopener"&gt;Neuroplasticity&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.20195v1" target="_blank" rel="noopener">Improved constraint on the Hubble constant from dark sirens with LIGO/Virgo/KAGRA O4a</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20193v1" target="_blank" rel="noopener">From Masks to Pixels and Meaning: A New Taxonomy, Benchmark, and Metrics for VLM Image Tampering</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20189v1" target="_blank" rel="noopener">MeanFlow Meets Control: Scaling Sampled-Data Control for Swarms</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20188v1" target="_blank" rel="noopener">Wildfire Spread Scenarios: Increasing Sample Diversity of Segmentation Diffusion Models with Training-Free Methods</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20187v1" target="_blank" rel="noopener">MuSteerNet: Human Reaction Generation from Videos via Observation-Reaction Mutual Steering</a> (2026)</li>
+</ul></div></article>
+</div>
+</body>
+</html>

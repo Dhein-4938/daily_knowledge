@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laws of Thermodynamics</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-23/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Laws of Thermodynamics<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~5 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<p>The laws of thermodynamics are empirical axioms governing the behavior of energy, entropy, and temperature in physical systems. They do not derive from more primitive principles — they are the foundation.</p>
+
+<p>[!info] The Four Laws (Zeroth through Third)</p>
+<ul>
+<li><strong>Zeroth Law</strong>: Thermal equilibrium is transitive. If $A \sim C$ and $B \sim C$, then $A \sim B$. This grounds the <em>definition</em> of temperature as an equivalence class.</li>
+<li><strong>First Law</strong>: $\Delta U = Q - W$. The internal energy of a system changes by the heat absorbed minus the work done by the system. Energy is conserved globally.</li>
+<li><strong>Second Law</strong>: For any real process, $\Delta S_\text{universe} \geq 0$. Equality holds only for reversible (quasi-static) processes.</li>
+<li><strong>Third Law</strong>: $\lim_{T \to 0} S = S_0$, where $S_0$ is a constant (typically zero for perfect crystals). This makes entropy an absolute quantity, not merely relative.</li>
+</ul>
+
+<p>The combined first and second laws are often written differentially as:</p>
+
+<p>$$dU = T\,dS - P\,dV + \sum_i \mu_i\,dN_i$$</p>
+
+<p>This is the fundamental relation of thermodynamics — from it, all thermodynamic potentials ($F$, $G$, $H$) derive via Legendre transforms.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>These laws are unusually general — they apply regardless of the microscopic details of the system. Statistical mechanics (Boltzmann, Gibbs) provides the <em>explanation</em> of why they hold; thermodynamics itself only asserts that they <em>do</em> hold.</p>
+
+<p><strong>Key applications:</strong></p>
+<ul>
+<li><strong>Engineering</strong>: Heat engines, refrigeration cycles, turbine efficiency. The Carnot efficiency $\eta = 1 - T_C/T_H$ is a hard upper bound from the second law.</li>
+<li><strong>Chemistry</strong>: Gibbs free energy $G = H - TS$ determines spontaneity of reactions (at constant $T$, $P$: $\Delta G < 0$ for spontaneous processes).</li>
+<li><strong>Cosmology</strong>: The arrow of time is thermodynamic — entropy increase gives time its direction.</li>
+<li><strong>Information theory</strong>: Shannon entropy $H = -\sum p_i \log p_i$ is formally identical to Boltzmann's $S = -k_B \sum p_i \ln p_i$. Landauer's principle connects bit erasure to heat dissipation: erasing one bit costs at least $k_B T \ln 2$ of energy.</li>
+</ul>
+
+<p>[!tip] The Zeroth Law is epistemically deep</p>
+<p>It doesn't just define temperature — it asserts that temperature <em>exists</em> as a well-defined scalar field. Without transitivity of equilibrium, thermometers would be meaningless. This is the hidden assumption behind all of classical thermometry.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Entropy is not disorder (precisely).</strong> The rigorous definition is $S = k_B \ln \Omega$ (Boltzmann) or $S = -k_B \sum_i p_i \ln p_i$ (Gibbs). "Disorder" is a useful heuristic but breaks down for systems like self-gravitating matter, where clumping <em>increases</em> entropy.</li>
+</ol>
+
+<ol>
+<li><strong>The second law is statistical, not absolute.</strong> Fluctuations can transiently decrease local entropy (Boltzmann's H-theorem, Loschmidt's paradox). The Fluctuation Theorem quantifies the probability of entropy-decreasing trajectories: $P(\Delta S = +A) / P(\Delta S = -A) = e^{A/k_B}$.</li>
+</ol>
+
+<ol>
+<li><strong>Third law has practical teeth.</strong> Absolute zero is unattainable in finite steps — cooling requires expelling entropy, but as $T \to 0$ the heat capacity vanishes, making each step exponentially less effective. This is sometimes stated as a separate corollary: <em>you cannot reach $T=0$ in finite operations.</em></li>
+</ol>
+
+<ol>
+<li><strong>Perpetual motion machines of each kind are prohibited:</strong></li>
+</ol>
+<ul>
+<li>PMM1 violates the first law (creates energy).</li>
+<li>PMM2 violates the second law (extracts work from a single reservoir at uniform temperature, e.g., Maxwell's Demon — defeated by Landauer's principle).</li>
+</ul>
+
+<ol>
+<li><strong>Non-equilibrium thermodynamics is a live frontier.</strong> The classical laws apply strictly to <em>equilibrium states</em> connected by quasi-static paths. Driven systems (biological cells, turbulence) require extensions: Onsager reciprocal relations, Prigogine's minimum entropy production, and more recently, stochastic thermodynamics.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>[!warning] Note: this information may be dated</p>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Stochastic thermodynamics</strong>: Extending the second law to single-molecule or nanoscale systems where fluctuations dominate. Jarzynski equality ($\langle e^{-W/k_BT} \rangle = e^{-\Delta F/k_BT}$) allows free energy measurements from non-equilibrium trajectories.</li>
+<li><strong>Thermodynamics of computation</strong>: Landauer's principle has been experimentally verified (Bérut et al., 2012). Ongoing work connects reversible computing to thermodynamic efficiency limits.</li>
+<li><strong>Quantum thermodynamics</strong>: How do the laws apply to quantum systems with coherence and entanglement? Work and heat become operator-valued; the notion of a "thermal machine" must be reconsidered.</li>
+<li><strong>Cosmological thermodynamics</strong>: The universe's entropy budget and ultimate fate (heat death) remain active. Black hole thermodynamics ($S_{BH} = A/4l_P^2$, Bekenstein-Hawking) suggests deep links between gravity, entropy, and quantum information.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Statistical Mechanics">Statistical Mechanics</a></li>
+<li><a href="/daily_knowledge/topic/Entropy and Information Theory">Entropy and Information Theory</a></li>
+<li><a href="/daily_knowledge/topic/Carnot Cycle and Heat Engines">Carnot Cycle and Heat Engines</a></li>
+<li><a href="/daily_knowledge/topic/Gibbs Free Energy">Gibbs Free Energy</a></li>
+<li><a href="/daily_knowledge/topic/Non-Equilibrium Thermodynamics">Non-Equilibrium Thermodynamics</a></li>
+<li><a href="/daily_knowledge/topic/Black Hole Thermodynamics">Black Hole Thermodynamics</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Arrow of time</strong>: The microscopic laws of physics are time-symmetric, yet the second law defines a preferred temporal direction. Is entropy increase a <em>fundamental</em> asymmetry, or an artifact of low-entropy initial conditions (the "Past Hypothesis")? Can the Big Bang's low entropy be explained, or must it be posited?</li>
+</ol>
+
+<ol>
+<li><strong>Maxwell's Demon and Landauer's principle</strong>: The demon appears to violate the second law by sorting molecules without doing work. Landauer's resolution ties information erasure to heat. Does this make the second law <em>fundamentally</em> informational? What are the implications for the limits of reversible computation?</li>
+</ol>
+
+<ol>
+<li><strong>Quantum thermodynamics edge cases</strong>: In a quantum system with coherence between energy eigenstates, the standard notion of "work" (energy exchange without entropy change) becomes ambiguous. How should the first and second laws be reformulated for coherent quantum processes, and does entanglement between system and bath fundamentally alter efficiency bounds?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Laws_of_thermodynamics" target="_blank" rel="noopener"&gt;Laws of Thermodynamics&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.20195v1" target="_blank" rel="noopener">Improved constraint on the Hubble constant from dark sirens with LIGO/Virgo/KAGRA O4a</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20194v1" target="_blank" rel="noopener">MME-CoF-Pro: Evaluating Reasoning Coherence in Video Generative Models with Text and Visual Hints</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20192v1" target="_blank" rel="noopener">LumosX: Relate Any Identities with Their Attributes for Personalized Video Generation</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Laws+of+Thermodynamics&labels=discussion&body=Topic:+[Laws+of+Thermodynamics](https://dhein.github.io/daily_knowledge/topic/thermodynamics/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

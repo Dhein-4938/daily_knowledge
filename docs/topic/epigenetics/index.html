@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Epigenetics</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-23/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Epigenetics<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Science · Genomics &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Epigenetics is the study of heritable changes in gene expression that occur <strong>without mutation of the underlying nucleotide sequence</strong>. The prefix <em>epi-</em> (ἐπι, "over/above") signals a layer of regulatory information superimposed on the genome itself.</div></div>
+
+<p>Formally, epigenetic state can be conceived as a function mapping genomic loci to expression levels, parameterized by chemical marks rather than sequence:</p>
+
+<p>$$
+E: \mathcal{G} \times \mathcal{M} \rightarrow \mathbb{R}_{\geq 0}
+$$</p>
+
+<p>where $\mathcal{G}$ is the set of genomic loci and $\mathcal{M}$ is the space of epigenetic marks (methylation, histone tail modifications, chromatin accessibility, etc.). Two cells with identical $\mathcal{G}$ but different $\mathcal{M}$ can have radically different phenotypes — the core paradox that epigenetics resolves.</p>
+
+<p>The three canonical molecular mechanisms are:</p>
+
+<p>| Mechanism | Substrate | Effect |</p>
+<p>|---|---|---|</p>
+<p>| DNA methylation (5-mC) | CpG dinucleotides | Transcriptional silencing |</p>
+<p>| Histone modification | H3K4me3, H3K27me3, acetylation, etc. | Activation or repression |</p>
+<p>| Non-coding RNA | miRNA, lncRNA, piRNA | Post-transcriptional silencing / chromatin remodeling |</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Epigenetics bridges genotype and phenotype in a way static sequence cannot. It explains:</p>
+
+<ul>
+<li><strong>Cellular differentiation</strong>: A zygote's genome is fixed, yet it gives rise to ~200 functionally distinct cell types. Totipotent → pluripotent → terminally differentiated transitions are orchestrated by progressive epigenetic restriction of gene programs.</li>
+<li><strong>Environment–genome interface</strong>: Nutrition, stress, toxin exposure, and even social experience can remodel the epigenome, with measurable transcriptional consequences.</li>
+<li><strong>Transgenerational inheritance</strong>: Some marks survive gametogenesis and are transmitted to offspring — a form of non-Mendelian inheritance with implications for evolutionary theory.</li>
+<li><strong>Disease</strong>: Aberrant methylation patterns are hallmarks of cancer (e.g., hypermethylation of tumor suppressor promoters); epigenetic dysregulation underpins imprinting disorders (Prader-Willi, Angelman) and neurological conditions.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Connection to Information Theory</div><div>The epigenome can be viewed as a compressible secondary code: it encodes <em>context</em> (cell type, developmental stage, environmental history) using a finite alphabet of chemical marks over a fixed DNA "tape." This framing connects naturally to work on chromatin state segmentation and machine-learning models of regulatory grammar.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>CpG methylation asymmetry</strong>: Mammalian methylation is predominantly at CpG sites. Maintenance methyltransferase DNMT1 faithfully copies hemi-methylated daughter strands post-replication — the primary mechanism of mitotic inheritance of epigenetic state.</li>
+</ol>
+
+<ol>
+<li><strong>Histone code hypothesis</strong>: Combinations of post-translational modifications on histone tails create a combinatorial "code" read by effector proteins (chromodomain, bromodomain readers). H3K4me3 marks active promoters; H3K27me3 (deposited by Polycomb repressive complex 2, PRC2) marks silenced developmental genes.</li>
+</ol>
+
+<ol>
+<li><strong>Bivalent domains</strong>: Embryonic stem cells carry promoters co-occupied by both H3K4me3 and H3K27me3 — "poised" loci that can resolve to either active or silent states upon differentiation. A key regulatory plasticity mechanism.</li>
+</ol>
+
+<ol>
+<li><strong>Epigenetic reprogramming</strong>: Two major genome-wide demethylation waves occur in development — in primordial germ cells and post-fertilization — ensuring pluripotency. Incomplete erasure in germ cells is the molecular basis for transgenerational epigenetic inheritance.</li>
+</ol>
+
+<ol>
+<li><strong>Phase separation</strong>: Recent structural biology implicates liquid-liquid phase separation of transcriptional condensates (e.g., BRD4, MED1) in the spatial organization of active chromatin, linking epigenetic marks to 3D nuclear architecture.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research frontiers include:</p>
+<ul>
+<li><strong>Single-cell multi-omics</strong>: Simultaneous profiling of chromatin accessibility (scATAC-seq), methylation (scBS-seq), and transcription (scRNA-seq) in individual cells, enabling high-resolution maps of epigenetic heterogeneity.</li>
+<li><strong>Epigenetic clocks</strong>: Machine-learning models (Horvath, GrimAge) predict biological age from methylation arrays with sub-year precision — being actively refined toward causal interpretability rather than correlative biomarkers.</li>
+<li><strong>Agentic AI for gene ontology</strong>: Emerging frameworks use hierarchical feature selection and multi-agent LLM pipelines to extract aging-related biological knowledge from GO term annotations, promising to accelerate mechanistic interpretation of epigenomic datasets.</li>
+<li><strong>Epigenetic editing</strong>: dCas9 fused to DNMT3A, TET1, or histone-modifying enzymes enables locus-specific rewriting of the epigenome — a nascent therapeutic modality for reversing aberrant silencing.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/DNA Methylation">DNA Methylation</a></li>
+<li><a href="/daily_knowledge/topic/Histone Modification and the Chromatin Code">Histone Modification and the Chromatin Code</a></li>
+<li><a href="/daily_knowledge/topic/Non-coding RNA">Non-coding RNA</a></li>
+<li><a href="/daily_knowledge/topic/Cellular Differentiation">Cellular Differentiation</a></li>
+<li><a href="/daily_knowledge/topic/Transgenerational Inheritance">Transgenerational Inheritance</a></li>
+<li><a href="/daily_knowledge/topic/Epigenetic Clocks and Biological Aging">Epigenetic Clocks and Biological Aging</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Epigenetic marks are mitotically heritable but largely reset between generations — what evolutionary pressures might favor leaky vs. complete reprogramming at the germline, and what does this imply for Lamarckian interpretations?</li>
+</ol>
+
+<ol>
+<li>The "histone code" hypothesis assumes combinatorial specificity of reader proteins, but degeneracy in the mark space is substantial. How should we model epigenetic information capacity — is it better treated as a continuous landscape or a discrete state machine?</li>
+</ol>
+
+<ol>
+<li>Epigenetic editing with dCas9-effector fusions offers therapeutic promise, but off-target methylation drift is poorly characterized. What experimental and computational frameworks would be needed to establish safety criteria comparable to those for base editing?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Epigenetics" target="_blank" rel="noopener"&gt;Epigenetics&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.20192v1" target="_blank" rel="noopener">LumosX: Relate Any Identities with Their Attributes for Personalized Video Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20184v1" target="_blank" rel="noopener">Kolmogorov-Arnold causal generative models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20152v1" target="_blank" rel="noopener">Robust Linear Quadratic Optimal Control of Cementitious Material Extrusion</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20132v1" target="_blank" rel="noopener">Revisiting Gene Ontology Knowledge Discovery with Hierarchical Feature Selection and Virtual Study Group of AI Agents</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20102v1" target="_blank" rel="noopener">Koopman and transfer operator techniques from the perspective of quantum theory</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Epigenetics&labels=discussion&body=Topic:+[Epigenetics](https://dhein.github.io/daily_knowledge/topic/epigenetics/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
