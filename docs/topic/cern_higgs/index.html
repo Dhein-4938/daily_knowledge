@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Higgs Boson</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-24/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Higgs Boson<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Science · Particle Physics &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The Higgs boson is the quantum excitation of the <strong>Higgs field</strong> — a scalar field permeating all of spacetime. It is the only fundamental scalar particle (spin-0) confirmed in the Standard Model, with quantum numbers $J^{PC} = 0^{++}$: zero spin, positive parity, no charge, no color.</div></div>
+
+<p>The Higgs field $\phi$ is a complex $SU(2)_L$ doublet with four real degrees of freedom:</p>
+
+<p>$$\phi = \begin{pmatrix} \phi^+ \\ \phi^0 \end{pmatrix}, \quad \phi^0 = \frac{1}{\sqrt{2}}(v + h + i\eta)$$</p>
+
+<p>where $v \approx 246\text{ GeV}$ is the vacuum expectation value (VEV), $h$ is the physical Higgs field, and $\eta$ is the would-be Goldstone boson absorbed by the $Z$. The Mexican-hat (sombrero) potential</p>
+
+<p>$$V(\phi) = -\mu^2 |\phi|^2 + \lambda |\phi|^4, \quad \mu^2, \lambda > 0$$</p>
+
+<p>forces spontaneous symmetry breaking: $\langle \phi \rangle = v/\sqrt{2} \neq 0$ everywhere in the vacuum. This is the <strong>Higgs mechanism</strong>, which generates gauge boson masses via $m_W = \frac{1}{2}gv$ and fermion masses via Yukawa couplings $\mathcal{L}_Y = -y_f \bar{\psi}_L \phi \psi_R + \text{h.c.}$, so $m_f = y_f v/\sqrt{2}$.</p>
+
+<p>The observed Higgs boson mass is $m_h \approx 125.25\text{ GeV}$, discovered in 2012 at CERN's LHC by ATLAS and CMS.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The Higgs completes the Standard Model's logical structure: without it, $W$ and $Z$ bosons would be massless, fermion mass terms would violate gauge invariance, and weak-force cross-sections would diverge at high energy, violating unitarity. It is the <em>only known mechanism</em> by which particles acquire rest mass in a gauge-invariant way.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: Deeper connection</div><div>The Higgs VEV doesn't give mass to photons or gluons because the $U(1)_{EM}$ and $SU(3)_C$ symmetries remain unbroken — only the $SU(2)_L \times U(1)_Y$ electroweak symmetry breaks. Gauge invariance is the organizing principle; the Higgs is the specific solution Nature chose.</div></div>
+
+<p>Beyond the Standard Model, the Higgs boson is a probe: its coupling strengths to each particle are fixed predictions ($g_{hff} \propto m_f/v$, $g_{hVV} \propto m_V^2/v$). Deviations signal new physics.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Yukawa coupling hierarchy</strong> — The top quark's coupling $y_t \approx 1$ (near unity) while the electron's $y_e \approx 3 \times 10^{-6}$. This span of $\sim 5$ orders of magnitude is unexplained — the <strong>flavor puzzle</strong>.</li>
+</ol>
+
+<ol>
+<li><strong>Decay channels</strong> — Being massive and unstable ($\Gamma \approx 4\text{ MeV}$), the Higgs decays primarily to $b\bar{b}$ (~58%), $WW^*$ (~21%), $gg$ (~9%), $\tau\tau$ (~6%). The $h \to \gamma\gamma$ channel (~0.2%) was key to discovery despite low rate due to clean experimental signature.</li>
+</ol>
+
+<ol>
+<li><strong>Hierarchy problem</strong> — Radiative corrections drive $m_h^2$ toward the Planck scale $M_{Pl}^2$. Keeping $m_h \sim 125\text{ GeV}$ requires fine-tuning of $\sim 1$ part in $10^{34}$. Supersymmetry, compositeness, and extra dimensions all address this.</li>
+</ol>
+
+<ol>
+<li><strong>Vacuum stability</strong> — The measured values of $m_h$ and $m_t$ place the electroweak vacuum in a <strong>metastable</strong> region: stable on cosmological timescales, but not absolutely stable. A true vacuum bubble could propagate at $c$.</li>
+</ol>
+
+<ol>
+<li><strong>CP properties</strong> — The Higgs is confirmed to be CP-even ($0^+$). Any CP-odd admixture would be evidence of BSM physics and is constrained to be small by LHC angular analyses.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Post-2012 LHC Run 2 and Run 3 data have pushed Higgs coupling measurements to ~5–10% precision. The HL-LHC (High-Luminosity LHC) targets sub-percent precision on key couplings. Future lepton colliders (FCC-ee, CEPC, ILC) are proposed as "Higgs factories" to measure the $hZZ$ coupling with $<0.1\%$ accuracy. Key open questions include: self-coupling $\lambda_{hhh}$ (tests the shape of the sombrero potential directly), rare decays ($h \to \mu\mu$, $h \to Z\gamma$), and any off-shell coupling deviations.</div></div>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Electroweak Symmetry Breaking">Electroweak Symmetry Breaking</a></li>
+<li><a href="/daily_knowledge/topic/Standard Model of Particle Physics">Standard Model of Particle Physics</a></li>
+<li><a href="/daily_knowledge/topic/Spontaneous Symmetry Breaking">Spontaneous Symmetry Breaking</a></li>
+<li><a href="/daily_knowledge/topic/Goldstone Boson">Goldstone Boson</a></li>
+<li><a href="/daily_knowledge/topic/Hierarchy Problem">Hierarchy Problem</a></li>
+<li><a href="/daily_knowledge/topic/Large Hadron Collider">Large Hadron Collider</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The Higgs couples to mass — but the proton's mass is ~99% QCD binding energy, not Higgs-generated quark masses. What does it mean to say "the Higgs gives mass" at the composite-particle level?</li>
+</ol>
+
+<ol>
+<li>The electroweak vacuum is metastable. What physical observables or cosmological constraints could sharpen the stability boundary, and what role does $m_t$ uncertainty play?</li>
+</ol>
+
+<ol>
+<li>Given that the Higgs self-coupling $\lambda_{hhh}$ is currently unconstrained to within ~50% of its SM value, what would a factor-of-two deviation imply for electroweak baryogenesis and the phase transition in the early universe?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Higgs_boson" target="_blank" rel="noopener"&gt;Higgs Boson&lt;/a&gt; · Retrieved 2026-03-24</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.22284v1" target="_blank" rel="noopener">Precision's arrow of time</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22274v1" target="_blank" rel="noopener">Development and large-scale benchmarks of a protein-ligand absolute binding free energy toolkit</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22268v1" target="_blank" rel="noopener">An Accurate Tensorial Model for Prediction of Full Zeolite NMR Spectra</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Higgs+Boson&labels=discussion&body=Topic:+[Higgs+Boson](https://dhein.github.io/daily_knowledge/topic/cern_higgs/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

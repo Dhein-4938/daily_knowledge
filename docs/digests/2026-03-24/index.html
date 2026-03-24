@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 24, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 24, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~18 min</div></div>
+<nav class="topic-nav"><a href="#cern_higgs">Higgs Boson</a><a href="#climate_science">Climate Science</a><a href="#stem_cells">Stem Cell Biology</a><a href="#risc_v">RISC-V Architecture</a></nav>
+<article id="cern_higgs"><div class="topic-header"><h2>Higgs Boson<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Particle Physics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The Higgs boson is the quantum excitation of the <strong>Higgs field</strong> — a scalar field permeating all of spacetime. It is the only fundamental scalar particle (spin-0) confirmed in the Standard Model, with quantum numbers $J^{PC} = 0^{++}$: zero spin, positive parity, no charge, no color.</div></div>
+
+<p>The Higgs field $\phi$ is a complex $SU(2)_L$ doublet with four real degrees of freedom:</p>
+
+<p>$$\phi = \begin{pmatrix} \phi^+ \\ \phi^0 \end{pmatrix}, \quad \phi^0 = \frac{1}{\sqrt{2}}(v + h + i\eta)$$</p>
+
+<p>where $v \approx 246\text{ GeV}$ is the vacuum expectation value (VEV), $h$ is the physical Higgs field, and $\eta$ is the would-be Goldstone boson absorbed by the $Z$. The Mexican-hat (sombrero) potential</p>
+
+<p>$$V(\phi) = -\mu^2 |\phi|^2 + \lambda |\phi|^4, \quad \mu^2, \lambda > 0$$</p>
+
+<p>forces spontaneous symmetry breaking: $\langle \phi \rangle = v/\sqrt{2} \neq 0$ everywhere in the vacuum. This is the <strong>Higgs mechanism</strong>, which generates gauge boson masses via $m_W = \frac{1}{2}gv$ and fermion masses via Yukawa couplings $\mathcal{L}_Y = -y_f \bar{\psi}_L \phi \psi_R + \text{h.c.}$, so $m_f = y_f v/\sqrt{2}$.</p>
+
+<p>The observed Higgs boson mass is $m_h \approx 125.25\text{ GeV}$, discovered in 2012 at CERN's LHC by ATLAS and CMS.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>The Higgs completes the Standard Model's logical structure: without it, $W$ and $Z$ bosons would be massless, fermion mass terms would violate gauge invariance, and weak-force cross-sections would diverge at high energy, violating unitarity. It is the <em>only known mechanism</em> by which particles acquire rest mass in a gauge-invariant way.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: Deeper connection</div><div>The Higgs VEV doesn't give mass to photons or gluons because the $U(1)_{EM}$ and $SU(3)_C$ symmetries remain unbroken — only the $SU(2)_L \times U(1)_Y$ electroweak symmetry breaks. Gauge invariance is the organizing principle; the Higgs is the specific solution Nature chose.</div></div>
+
+<p>Beyond the Standard Model, the Higgs boson is a probe: its coupling strengths to each particle are fixed predictions ($g_{hff} \propto m_f/v$, $g_{hVV} \propto m_V^2/v$). Deviations signal new physics.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Yukawa coupling hierarchy</strong> — The top quark's coupling $y_t \approx 1$ (near unity) while the electron's $y_e \approx 3 \times 10^{-6}$. This span of $\sim 5$ orders of magnitude is unexplained — the <strong>flavor puzzle</strong>.</li>
+</ol>
+
+<ol>
+<li><strong>Decay channels</strong> — Being massive and unstable ($\Gamma \approx 4\text{ MeV}$), the Higgs decays primarily to $b\bar{b}$ (~58%), $WW^*$ (~21%), $gg$ (~9%), $\tau\tau$ (~6%). The $h \to \gamma\gamma$ channel (~0.2%) was key to discovery despite low rate due to clean experimental signature.</li>
+</ol>
+
+<ol>
+<li><strong>Hierarchy problem</strong> — Radiative corrections drive $m_h^2$ toward the Planck scale $M_{Pl}^2$. Keeping $m_h \sim 125\text{ GeV}$ requires fine-tuning of $\sim 1$ part in $10^{34}$. Supersymmetry, compositeness, and extra dimensions all address this.</li>
+</ol>
+
+<ol>
+<li><strong>Vacuum stability</strong> — The measured values of $m_h$ and $m_t$ place the electroweak vacuum in a <strong>metastable</strong> region: stable on cosmological timescales, but not absolutely stable. A true vacuum bubble could propagate at $c$.</li>
+</ol>
+
+<ol>
+<li><strong>CP properties</strong> — The Higgs is confirmed to be CP-even ($0^+$). Any CP-odd admixture would be evidence of BSM physics and is constrained to be small by LHC angular analyses.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Post-2012 LHC Run 2 and Run 3 data have pushed Higgs coupling measurements to ~5–10% precision. The HL-LHC (High-Luminosity LHC) targets sub-percent precision on key couplings. Future lepton colliders (FCC-ee, CEPC, ILC) are proposed as "Higgs factories" to measure the $hZZ$ coupling with $<0.1\%$ accuracy. Key open questions include: self-coupling $\lambda_{hhh}$ (tests the shape of the sombrero potential directly), rare decays ($h \to \mu\mu$, $h \to Z\gamma$), and any off-shell coupling deviations.</div></div>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Electroweak Symmetry Breaking">Electroweak Symmetry Breaking</a></li>
+<li><a href="/daily_knowledge/topic/Standard Model of Particle Physics">Standard Model of Particle Physics</a></li>
+<li><a href="/daily_knowledge/topic/Spontaneous Symmetry Breaking">Spontaneous Symmetry Breaking</a></li>
+<li><a href="/daily_knowledge/topic/Goldstone Boson">Goldstone Boson</a></li>
+<li><a href="/daily_knowledge/topic/Hierarchy Problem">Hierarchy Problem</a></li>
+<li><a href="/daily_knowledge/topic/Large Hadron Collider">Large Hadron Collider</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The Higgs couples to mass — but the proton's mass is ~99% QCD binding energy, not Higgs-generated quark masses. What does it mean to say "the Higgs gives mass" at the composite-particle level?</li>
+</ol>
+
+<ol>
+<li>The electroweak vacuum is metastable. What physical observables or cosmological constraints could sharpen the stability boundary, and what role does $m_t$ uncertainty play?</li>
+</ol>
+
+<ol>
+<li>Given that the Higgs self-coupling $\lambda_{hhh}$ is currently unconstrained to within ~50% of its SM value, what would a factor-of-two deviation imply for electroweak baryogenesis and the phase transition in the early universe?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Higgs_boson" target="_blank" rel="noopener"&gt;Higgs Boson&lt;/a&gt; · Retrieved 2026-03-24</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.22284v1" target="_blank" rel="noopener">Precision's arrow of time</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22274v1" target="_blank" rel="noopener">Development and large-scale benchmarks of a protein-ligand absolute binding free energy toolkit</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22268v1" target="_blank" rel="noopener">An Accurate Tensorial Model for Prediction of Full Zeolite NMR Spectra</a> (2026)</li>
+</ul></div></article>
+<article id="climate_science"><div class="topic-header"><h2>Climate Science<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Earth Science &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Climate science studies the long-term statistical behavior of Earth's atmosphere, oceans, ice sheets, and biosphere — and crucially, their interactions. <em>Present-day climate change</em> refers specifically to the anthropogenic perturbation of this system since the Industrial Revolution (~1850), dominated by the radiative forcing of greenhouse gases (GHGs).</p>
+
+<div class="callout info"><div class="callout-title">INFO: Radiative Forcing</div><div>Radiative forcing $\Delta F$ quantifies the net change in energy flux at the tropopause (W m⁻²) due to a perturbation. For CO₂: $$\Delta F \approx 5.35 \ln\!\left(\frac{C}{C_0}\right) \text{ W m}^{-2}$$ where $C_0$ is the pre-industrial baseline (~280 ppm). At current ~420 ppm, $\Delta F \approx +3.8$ W m⁻².</div></div>
+
+<p>The <strong>equilibrium climate sensitivity (ECS)</strong> — warming per doubling of CO₂ at equilibrium — is estimated at 2.5–4 °C (IPCC AR6 likely range), a quantity that remains one of the field's most consequential and debated numbers.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Climate science sits at the intersection of physics, chemistry, ecology, economics, and policy. Its outputs directly inform:</p>
+
+<ul>
+<li><strong>Infrastructure design</strong> (flood return periods, heat load standards)</li>
+<li><strong>Food and water security</strong> modelling under shifting precipitation regimes</li>
+<li><strong>Ecosystem management</strong> — species range shifts, coral bleaching thresholds</li>
+<li><strong>Geopolitical stability</strong> — resource scarcity as a conflict multiplier</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Nonlinear Feedbacks Are the Core Challenge</div><div>The difficulty isn't the direct CO₂ warming (~1.1 °C per doubling); it's <em>amplifying feedbacks</em>: water vapour (largest), ice-albedo, cloud cover, and permafrost CH₄/CO₂ release. These feedbacks interact nonlinearly, making the system genuinely hard to bound with simple models.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Atmospheric CO₂ trajectory</strong> — Concentrations are ~50% above pre-industrial levels (~420 vs. 280 ppm), at levels not seen for millions of years. The Keeling Curve (Mauna Loa record since 1958) provides the canonical observational anchor.</li>
+</ol>
+
+<ol>
+<li><strong>Tipping points</strong> — Several subsystems exhibit threshold behavior: Greenland Ice Sheet, West Antarctic Ice Sheet, Amazon dieback, Atlantic Meridional Overturning Circulation (AMOC) weakening. Crossing one can cascade into others via teleconnections.</li>
+</ol>
+
+<ol>
+<li><strong>Arctic amplification</strong> — The Arctic warms 2–4× faster than the global mean due to ice-albedo feedback and changes in atmospheric heat transport. This reshapes mid-latitude jet stream dynamics, potentially linking to extreme weather persistence.</li>
+</ol>
+
+<ol>
+<li><strong>Ocean heat content</strong> — Over 90% of excess heat accumulates in the ocean. This introduces <em>committed warming</em>: even at net-zero emissions, thermal inertia guarantees decades of continued sea-level rise and marine ecosystem stress.</li>
+</ol>
+
+<ol>
+<li><strong>Equity asymmetry</strong> — GHG emissions are dominated by industrialized economies historically, yet climate impacts fall disproportionately on lower-income tropical nations least able to adapt. The per-capita emissions disparity is roughly an order of magnitude between high- and low-income groups.</li>
+</ol>
+
+<p>$$\text{Global mean SLR} \approx 3.7 \text{ mm yr}^{-1} \text{ (current rate, accelerating)}$$</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The Paris Agreement (2015) targets "well under 2 °C" above pre-industrial; current nationally determined contributions (NDCs) track ~2.8 °C by 2100. 2024 recorded +1.60 °C — the warmest year since systematic records began in 1850.</div></div>
+
+<p>Active research frontiers include:</p>
+
+<ul>
+<li><strong>Cloud feedback quantification</strong> — Low marine cloud cover remains the largest source of ECS uncertainty.</li>
+<li><strong>Permafrost carbon accounting</strong> — Siberian and Arctic permafrost stores ~1.5 trillion tonnes of carbon; decomposition rates under warming are poorly constrained.</li>
+<li><strong>Carbon dioxide removal (CDR)</strong> — Bioenergy with CCS (BECCS), direct air capture (DAC), and enhanced weathering are scaling; their net lifecycle emissions and land-use costs are under intense scrutiny.</li>
+<li><strong>Attribution science</strong> — Rapid event attribution now routinely quantifies how much anthropogenic forcing increased the probability of specific extreme weather events.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Radiative Transfer">Radiative Transfer</a></li>
+<li><a href="/daily_knowledge/topic/Earth System Models">Earth System Models</a></li>
+<li><a href="/daily_knowledge/topic/Carbon Cycle">Carbon Cycle</a></li>
+<li><a href="/daily_knowledge/topic/Paleoclimatology">Paleoclimatology</a></li>
+<li><a href="/daily_knowledge/topic/Tipping Points in Complex Systems">Tipping Points in Complex Systems</a></li>
+<li><a href="/daily_knowledge/topic/Energy Transition">Energy Transition</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>ECS uncertainty is largely cloud-driven</strong> — why are marine stratocumulus clouds so hard to represent in general circulation models, and what observational strategies might resolve this?</li>
+<li><strong>Committed warming</strong> means some future change is already locked in regardless of emissions cuts. How should infrastructure planners and ecologists operationalize this distinction between mitigation targets and adaptation floors?</li>
+<li>Given that tipping elements are coupled nonlinearly, is the 2 °C Paris threshold a physically motivated boundary or a negotiated heuristic — and does the distinction matter for policy?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Climate_change" target="_blank" rel="noopener"&gt;Climate Science&lt;/a&gt; · Retrieved 2026-03-24</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.22286v1" target="_blank" rel="noopener">WorldCache: Content-Aware Caching for Accelerated Video World Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22285v1" target="_blank" rel="noopener">VideoDetective: Clue Hunting via both Extrinsic Query and Intrinsic Relevance for Long Video Understanding</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22283v1" target="_blank" rel="noopener">End-to-End Training for Unified Tokenization and Latent Denoising</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22282v1" target="_blank" rel="noopener">UniMotion: A Unified Framework for Motion-Text-Vision Understanding and Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22281v1" target="_blank" rel="noopener">ThinkJEPA: Empowering Latent World Models with Large Vision-Language Reasoning Model</a> (2026)</li>
+</ul></div></article>
+<article id="stem_cells"><div class="topic-header"><h2>Stem Cell Biology<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Biology &nbsp;·&nbsp; ~5 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>stem cell</strong> is a cell capable of two defining operations: <strong>self-renewal</strong> (symmetric or asymmetric division producing daughter stem cells) and <strong>potency</strong> (differentiation into one or more specialized cell types). These properties together distinguish stem cells from progenitor cells, which divide but cannot self-renew indefinitely, and terminally differentiated cells, which do neither.</div></div>
+
+<p>The differentiation hierarchy is formalized by potency class:</p>
+
+<p>| Class | Scope | Example |</p>
+<p>|---|---|---|</p>
+<p>| <strong>Totipotent</strong> | All embryonic + extraembryonic lineages | Zygote, early blastomeres |</p>
+<p>| <strong>Pluripotent</strong> | All three germ layers; no extraembryonic | ESCs, iPSCs |</p>
+<p>| <strong>Multipotent</strong> | Restricted lineage | Hematopoietic stem cells |</p>
+<p>| <strong>Unipotent</strong> | Single cell type | Basal epidermal cells |</p>
+
+<p>Mathematically, asymmetric self-renewal can be modeled as a branching process. If $p$ is the probability a daughter cell self-renews, steady-state pool size requires $p = 0.5$ exactly; deviations drive either exhaustion ($p < 0.5$) or neoplastic expansion ($p > 0.5$).</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Stem cells are the <strong>developmental and homeostatic substrate</strong> of multicellular life. Their relevance spans:</p>
+
+<ul>
+<li><strong>Regenerative medicine</strong>: Hematopoietic stem cell transplantation (HSCT) remains the only fully established stem cell therapy, curing otherwise fatal hematological malignancies since Georges Mathé's first procedure in 1958.</li>
+<li><strong>Disease modeling</strong>: Patient-derived induced pluripotent stem cells (iPSCs) allow <em>in vitro</em> recapitulation of genetic diseases in previously inaccessible cell types (neurons, cardiomyocytes).</li>
+<li><strong>Cancer biology</strong>: The "cancer stem cell" hypothesis posits that tumor maintenance and relapse trace to a small self-renewing subpopulation — directly influencing how therapies are evaluated.</li>
+<li><strong>Developmental biology</strong>: ESC differentiation in culture recapitulates gastrulation, enabling mechanistic dissection of anterior–posterior patterning, Wnt/BMP gradients, and lineage commitment.</li>
+</ul>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. The Niche as a Control System</strong></p>
+<p>Adult stem cells don't self-regulate in isolation. The surrounding <em>niche</em> (stromal cells, extracellular matrix, paracrine signals) enforces quiescence and instructs symmetric vs. asymmetric division. Disrupting niche architecture — not just the stem cells themselves — can collapse tissue homeostasis.</p>
+
+<p><strong>2. Epigenetic rather than Genetic Identity</strong></p>
+<p>ESCs and somatic cells share identical genomes. Pluripotency is maintained by a transcription factor core — primarily <strong>OCT4</strong>, <strong>SOX2</strong>, and <strong>NANOG</strong> — whose combinatorial binding keeps developmental genes in a bivalent chromatin state (simultaneous H3K4me3 activation and H3K27me3 repression marks), poised for rapid lineage commitment.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: Bivalency as a developmental bet-hedge</div><div>Bivalent domains allow a pluripotent cell to rapidly activate <em>any</em> lineage program without needing <em>de novo</em> chromatin remodeling. This is mechanistic elegance: gene sets stay "armed but not fired" until signaling resolves the ambiguity.</div></div>
+
+<p><strong>3. Yamanaka Reprogramming and Its Limits</strong></p>
+<p>In 2006, Shinya Yamanaka demonstrated that forced expression of just four factors (OCT3/4, SOX2, KLF4, c-MYC) converts differentiated somatic cells into <strong>induced pluripotent stem cells (iPSCs)</strong> — overturning the assumption that differentiation is irreversible. iPSCs are functionally near-equivalent to ESCs but carry an epigenetic "memory" of their cell of origin that subtly biases downstream differentiation.</p>
+
+<p><strong>4. Asymmetric Division Mechanics</strong></p>
+<p>Asymmetric fate is enforced by polarized segregation of cell-fate determinants (e.g., Numb in Drosophila neuroblasts, which antagonizes Notch) and unequal partitioning of aged organelles — particularly mitochondria. Daughter cells inheriting older mitochondria tend toward differentiation; those with younger organelles toward self-renewal.</p>
+
+<p><strong>5. Plasticity vs. Commitment</strong></p>
+<p>The classical Waddington epigenetic landscape frames commitment as a ball rolling into progressively deeper valleys. Recent single-cell transcriptomics challenges the strict hierarchy: some adult progenitors can dedifferentiate under injury, and fate transitions are probabilistic rather than deterministic gate-crossings.</p>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated. The therapeutic pipeline for iPSC-derived cell products (beta cells, RPE cells, cardiomyocytes) is advancing rapidly; efficacy and safety data from ongoing phase I/II trials will substantially revise the clinical picture.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>Active research fronts as of early 2026:</p>
+
+<ul>
+<li><strong>Organoids and gastruloids</strong>: Self-organizing 3D structures from PSCs that model early embryogenesis, gut, brain, and kidney. These push the boundary of <em>in vitro</em> developmental biology but raise ethical questions about synthetic embryo-like entities.</li>
+<li><strong>Direct lineage reprogramming</strong>: Bypassing pluripotency entirely to convert one somatic type directly into another (fibroblast → neuron), potentially safer than iPSC-based routes.</li>
+<li><strong>Niche engineering</strong>: Bioengineered matrices and microfluidic "organ-on-chip" platforms designed to maintain adult stem cell identity <em>ex vivo</em> — a longstanding bottleneck for intestinal crypts and hair follicle stem cells.</li>
+<li><strong>Clonal dynamics in aging</strong>: Somatic evolution of stem cell clones (e.g., clonal hematopoiesis) is now recognized as a major risk factor for cardiovascular disease and hematological cancers independent of overt malignancy.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Induced Pluripotent Stem Cells">Induced Pluripotent Stem Cells</a></li>
+<li><a href="/daily_knowledge/topic/Epigenetic Landscape and Cell Fate">Epigenetic Landscape and Cell Fate</a></li>
+<li><a href="/daily_knowledge/topic/Hematopoiesis and Bone Marrow Niches">Hematopoiesis and Bone Marrow Niches</a></li>
+<li><a href="/daily_knowledge/topic/Wnt and BMP Signaling Pathways">Wnt and BMP Signaling Pathways</a></li>
+<li><a href="/daily_knowledge/topic/Cancer Stem Cell Hypothesis">Cancer Stem Cell Hypothesis</a></li>
+<li><a href="/daily_knowledge/topic/Organoids and Synthetic Embryology">Organoids and Synthetic Embryology</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Asymmetric division requires exquisite spatial control — what goes wrong in the stem cell compartment when tissue architecture is disrupted by fibrosis or inflammation, and how does this connect to cancer risk?</li>
+</ol>
+
+<ol>
+<li>iPSCs and ESCs are functionally similar but not identical; given that the epigenetic memory of origin persists, does this fundamentally limit iPSC utility for modeling diseases of specific tissues, or is it a tractable engineering problem?</li>
+</ol>
+
+<ol>
+<li>Clonal hematopoiesis reveals that stem cell somatic mutation accumulates silently for decades before becoming clinically visible — what does this imply for the Waddington model of irreversible commitment, and how should we rethink "healthy" aging at the cellular level?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Stem_cell" target="_blank" rel="noopener"&gt;Stem Cell Biology&lt;/a&gt; · Retrieved 2026-03-24</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.22269v1" target="_blank" rel="noopener">Computational modeling of RNA-protein binding interactions under an external force</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22221v1" target="_blank" rel="noopener">Dynamics of the Takagi function and the shadowing property</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22180v1" target="_blank" rel="noopener">On the influence of optical smoothing techniques on cross-beam energy transfer</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22134v1" target="_blank" rel="noopener">Pansu pullback and spectral complexes</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.22132v1" target="_blank" rel="noopener">The Complete Intersection property for binomial ideals of collections of cells</a> (2026)</li>
+</ul></div></article>
+<article id="risc_v"><div class="topic-header"><h2>RISC-V Architecture<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Computer Architecture &nbsp;·&nbsp; ~5 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>RISC-V is a free, open-standard <strong>Instruction Set Architecture (ISA)</strong> grounded in Reduced Instruction Set Computer (RISC) principles. It defines the boundary contract between hardware and software — the set of operations a processor must implement — without mandating <em>how</em> those operations are physically realized.</div></div>
+
+<p>Unlike x86 (Intel/AMD) or ARM (ARM Holdings), RISC-V carries no royalty burden and its specification is released under permissive open-source licenses. This separates the <em>architectural standard</em> from any particular <em>microarchitectural implementation</em>, enabling a Cambrian explosion of independent hardware designs all sharing a compatible software ecosystem.</p>
+
+<p>The ISA is <strong>modular</strong>: a mandatory base integer ISA (RV32I, RV64I, or RV128I for 32-, 64-, and 128-bit address widths respectively) is supplemented by standard optional extensions:</p>
+
+<p>| Extension | Adds |</p>
+<p>|-----------|------|</p>
+<p>| <code>M</code> | Integer multiply/divide |</p>
+<p>| <code>A</code> | Atomic operations |</p>
+<p>| <code>F</code> / <code>D</code> | Single / double-precision FP |</p>
+<p>| <code>C</code> | Compressed (16-bit) instructions |</p>
+<p>| <code>V</code> | Vector operations |</p>
+
+<p>A common embedded target is <strong>RV32IMAC</strong>; a typical Linux-capable core targets <strong>RV64GC</strong> (<code>G</code> = <code>IMAFD</code>).</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>RISC-V matters structurally, not just technically. Every prior ISA success story came bundled with either monopoly power (x86) or licensing friction (ARM). RISC-V decouples <em>standardization</em> from <em>commercialization</em>, which has three downstream effects:</p>
+
+<ol>
+<li><strong>Academic freedom</strong> — Universities can tape out real silicon without NDAs, accelerating computer architecture research.</li>
+<li><strong>Supply-chain sovereignty</strong> — Nations and companies can build processors without geopolitical licensing exposure.</li>
+<li><strong>Vertical integration at low cost</strong> — A startup can design a custom RISC-V core, add proprietary accelerator extensions, and ship a product without a per-unit royalty.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The real competitive moat in RISC-V isn't the ISA itself — it's the software ecosystem. The moment GCC, LLVM, Linux, and glibc support RV64GC, every language runtime and OS that compiles from source inherits that support for free. This is the flywheel ARM spent decades building; RISC-V inherited it almost immediately.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Load-store architecture.</strong> Like all RISC designs, RISC-V operates on registers only; memory is accessed exclusively via explicit load/store instructions. This simplifies pipeline design and enables aggressive out-of-order execution.</p>
+
+<p><strong>2. Fixed-width base encoding (with optional compression).</strong> Base instructions are 32 bits, 4-byte aligned. The <code>C</code> extension adds 16-bit instruction forms for common operations, reducing code density cost — a historical RISC weakness — to near-CISC levels.</p>
+
+<p><strong>3. No legacy baggage.</strong> x86 carries 45+ years of backward compatibility constraints. RISC-V was designed from scratch in 2010 with knowledge of what those constraints cost in silicon area, power, and verification complexity. There are no vestigial modes, no segmentation, no microcode for legacy decode.</p>
+
+<p><strong>4. Custom extension space is standardized.</strong> The spec reserves opcode space (<code>custom-0</code> through <code>custom-3</code>) explicitly for vendor extensions, with defined rules preventing conflicts with future standard extensions. This enables domain-specific acceleration (crypto, ML, DSP) without forking the ISA.</p>
+
+<p><strong>5. Privileged architecture is separate.</strong> The user-level ISA spec and the privileged spec (defining M/S/U privilege modes, CSRs, virtual memory via Sv39/Sv48/Sv57 schemes) are distinct documents. This means a minimal embedded core can implement M-mode only, while a full Linux-capable core adds S-mode and a page-table walker.</p>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>Sv39 uses a 3-level page table over 39-bit virtual addresses — exactly 512 GB of VA space, sufficient for current server workloads. The $$2^{39}$$ ceiling is a deliberate engineering trade-off, not a limitation of the ISA; Sv48 and Sv57 extend this to $$2^{48}$$ and $$2^{57}$$ bytes respectively by adding page-table levels.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>As of early 2026, RISC-V is transitioning from embedded/microcontroller dominance toward competitive general-purpose compute:</p>
+
+<ul>
+<li><strong>Embedded/IoT</strong> is mature: Espressif's ESP32-C series, SiFive's E-series cores, and Raspberry Pi's RP2350 (which includes RISC-V cores alongside ARM) demonstrate production-grade adoption.</li>
+<li><strong>High-performance implementations</strong> are emerging: SiFive's P870, SpacemiT's X60 cluster (used in the Banana Pi BPI-F3), and Alibaba's DAMO Academy XuanTie series push RISC-V into laptop and server territory.</li>
+<li><strong>Vector extension (RV V 1.0)</strong> ratification in 2021 unblocked ML/HPC workloads; toolchain support (GCC 14+, LLVM 17+) has since matured.</li>
+<li><strong>RISC-V International</strong> continues ratifying extensions: hypervisor (<code>H</code>), cryptography (<code>Zk*</code> family), and the forthcoming <strong>RVA23 profile</strong> standardizes a minimum capability baseline for application-class Linux systems — critical for OS and firmware portability.</li>
+</ul>
+
+<p>The unresolved challenge is <strong>single-thread performance</strong>. High-IPC, deeply out-of-order RISC-V cores exist (e.g., BOOM from Berkeley, CVA6), but no commercial RISC-V core yet matches Apple Silicon or AMD Zen in peak single-thread throughput.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/RISC vs CISC">RISC vs CISC</a></li>
+<li><a href="/daily_knowledge/topic/ARM Architecture">ARM Architecture</a></li>
+<li><a href="/daily_knowledge/topic/Computer Microarchitecture">Computer Microarchitecture</a></li>
+<li><a href="/daily_knowledge/topic/LLVM Compiler Infrastructure">LLVM Compiler Infrastructure</a></li>
+<li><a href="/daily_knowledge/topic/POSIX and ABI Compatibility">POSIX and ABI Compatibility</a></li>
+<li><a href="/daily_knowledge/topic/Custom Silicon and ASICs">Custom Silicon and ASICs</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Ecosystem vs. Architecture:</strong> ARM's success came largely from its software ecosystem, not the ISA itself. Given that RISC-V inherits most of that ecosystem through open-source toolchains, what is the remaining defensible advantage for ARM in the next decade?</li>
+</ol>
+
+<ol>
+<li><strong>Extension fragmentation risk:</strong> The custom extension mechanism prevents royalty conflicts but could fragment the ecosystem if vendors implement incompatible overlapping extensions. How does the RISC-V standardization process (profiles, ratification tracks) mitigate — or fail to mitigate — this risk in practice?</li>
+</ol>
+
+<ol>
+<li><strong>Security implications of openness:</strong> Proprietary ISAs can obscure microarchitectural details, making certain side-channel attacks harder to exploit publicly. Does full ISA openness change the threat model for attacks like Spectre/Meltdown, and how should RISC-V implementers reason about this?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/RISC-V" target="_blank" rel="noopener"&gt;RISC-V Architecture&lt;/a&gt; · Retrieved 2026-03-24</em></p></div></article>
+</div>
+</body>
+</html>

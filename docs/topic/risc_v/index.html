@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RISC-V Architecture</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-24/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>RISC-V Architecture<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Computer Architecture &nbsp;·&nbsp; ~5 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>RISC-V is a free, open-standard <strong>Instruction Set Architecture (ISA)</strong> grounded in Reduced Instruction Set Computer (RISC) principles. It defines the boundary contract between hardware and software — the set of operations a processor must implement — without mandating <em>how</em> those operations are physically realized.</div></div>
+
+<p>Unlike x86 (Intel/AMD) or ARM (ARM Holdings), RISC-V carries no royalty burden and its specification is released under permissive open-source licenses. This separates the <em>architectural standard</em> from any particular <em>microarchitectural implementation</em>, enabling a Cambrian explosion of independent hardware designs all sharing a compatible software ecosystem.</p>
+
+<p>The ISA is <strong>modular</strong>: a mandatory base integer ISA (RV32I, RV64I, or RV128I for 32-, 64-, and 128-bit address widths respectively) is supplemented by standard optional extensions:</p>
+
+<p>| Extension | Adds |</p>
+<p>|-----------|------|</p>
+<p>| <code>M</code> | Integer multiply/divide |</p>
+<p>| <code>A</code> | Atomic operations |</p>
+<p>| <code>F</code> / <code>D</code> | Single / double-precision FP |</p>
+<p>| <code>C</code> | Compressed (16-bit) instructions |</p>
+<p>| <code>V</code> | Vector operations |</p>
+
+<p>A common embedded target is <strong>RV32IMAC</strong>; a typical Linux-capable core targets <strong>RV64GC</strong> (<code>G</code> = <code>IMAFD</code>).</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>RISC-V matters structurally, not just technically. Every prior ISA success story came bundled with either monopoly power (x86) or licensing friction (ARM). RISC-V decouples <em>standardization</em> from <em>commercialization</em>, which has three downstream effects:</p>
+
+<ol>
+<li><strong>Academic freedom</strong> — Universities can tape out real silicon without NDAs, accelerating computer architecture research.</li>
+<li><strong>Supply-chain sovereignty</strong> — Nations and companies can build processors without geopolitical licensing exposure.</li>
+<li><strong>Vertical integration at low cost</strong> — A startup can design a custom RISC-V core, add proprietary accelerator extensions, and ship a product without a per-unit royalty.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The real competitive moat in RISC-V isn't the ISA itself — it's the software ecosystem. The moment GCC, LLVM, Linux, and glibc support RV64GC, every language runtime and OS that compiles from source inherits that support for free. This is the flywheel ARM spent decades building; RISC-V inherited it almost immediately.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Load-store architecture.</strong> Like all RISC designs, RISC-V operates on registers only; memory is accessed exclusively via explicit load/store instructions. This simplifies pipeline design and enables aggressive out-of-order execution.</p>
+
+<p><strong>2. Fixed-width base encoding (with optional compression).</strong> Base instructions are 32 bits, 4-byte aligned. The <code>C</code> extension adds 16-bit instruction forms for common operations, reducing code density cost — a historical RISC weakness — to near-CISC levels.</p>
+
+<p><strong>3. No legacy baggage.</strong> x86 carries 45+ years of backward compatibility constraints. RISC-V was designed from scratch in 2010 with knowledge of what those constraints cost in silicon area, power, and verification complexity. There are no vestigial modes, no segmentation, no microcode for legacy decode.</p>
+
+<p><strong>4. Custom extension space is standardized.</strong> The spec reserves opcode space (<code>custom-0</code> through <code>custom-3</code>) explicitly for vendor extensions, with defined rules preventing conflicts with future standard extensions. This enables domain-specific acceleration (crypto, ML, DSP) without forking the ISA.</p>
+
+<p><strong>5. Privileged architecture is separate.</strong> The user-level ISA spec and the privileged spec (defining M/S/U privilege modes, CSRs, virtual memory via Sv39/Sv48/Sv57 schemes) are distinct documents. This means a minimal embedded core can implement M-mode only, while a full Linux-capable core adds S-mode and a page-table walker.</p>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>Sv39 uses a 3-level page table over 39-bit virtual addresses — exactly 512 GB of VA space, sufficient for current server workloads. The $$2^{39}$$ ceiling is a deliberate engineering trade-off, not a limitation of the ISA; Sv48 and Sv57 extend this to $$2^{48}$$ and $$2^{57}$$ bytes respectively by adding page-table levels.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>As of early 2026, RISC-V is transitioning from embedded/microcontroller dominance toward competitive general-purpose compute:</p>
+
+<ul>
+<li><strong>Embedded/IoT</strong> is mature: Espressif's ESP32-C series, SiFive's E-series cores, and Raspberry Pi's RP2350 (which includes RISC-V cores alongside ARM) demonstrate production-grade adoption.</li>
+<li><strong>High-performance implementations</strong> are emerging: SiFive's P870, SpacemiT's X60 cluster (used in the Banana Pi BPI-F3), and Alibaba's DAMO Academy XuanTie series push RISC-V into laptop and server territory.</li>
+<li><strong>Vector extension (RV V 1.0)</strong> ratification in 2021 unblocked ML/HPC workloads; toolchain support (GCC 14+, LLVM 17+) has since matured.</li>
+<li><strong>RISC-V International</strong> continues ratifying extensions: hypervisor (<code>H</code>), cryptography (<code>Zk*</code> family), and the forthcoming <strong>RVA23 profile</strong> standardizes a minimum capability baseline for application-class Linux systems — critical for OS and firmware portability.</li>
+</ul>
+
+<p>The unresolved challenge is <strong>single-thread performance</strong>. High-IPC, deeply out-of-order RISC-V cores exist (e.g., BOOM from Berkeley, CVA6), but no commercial RISC-V core yet matches Apple Silicon or AMD Zen in peak single-thread throughput.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/RISC vs CISC">RISC vs CISC</a></li>
+<li><a href="/daily_knowledge/topic/ARM Architecture">ARM Architecture</a></li>
+<li><a href="/daily_knowledge/topic/Computer Microarchitecture">Computer Microarchitecture</a></li>
+<li><a href="/daily_knowledge/topic/LLVM Compiler Infrastructure">LLVM Compiler Infrastructure</a></li>
+<li><a href="/daily_knowledge/topic/POSIX and ABI Compatibility">POSIX and ABI Compatibility</a></li>
+<li><a href="/daily_knowledge/topic/Custom Silicon and ASICs">Custom Silicon and ASICs</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Ecosystem vs. Architecture:</strong> ARM's success came largely from its software ecosystem, not the ISA itself. Given that RISC-V inherits most of that ecosystem through open-source toolchains, what is the remaining defensible advantage for ARM in the next decade?</li>
+</ol>
+
+<ol>
+<li><strong>Extension fragmentation risk:</strong> The custom extension mechanism prevents royalty conflicts but could fragment the ecosystem if vendors implement incompatible overlapping extensions. How does the RISC-V standardization process (profiles, ratification tracks) mitigate — or fail to mitigate — this risk in practice?</li>
+</ol>
+
+<ol>
+<li><strong>Security implications of openness:</strong> Proprietary ISAs can obscure microarchitectural details, making certain side-channel attacks harder to exploit publicly. Does full ISA openness change the threat model for attacks like Spectre/Meltdown, and how should RISC-V implementers reason about this?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/RISC-V" target="_blank" rel="noopener"&gt;RISC-V Architecture&lt;/a&gt; · Retrieved 2026-03-24</em></p></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+RISC-V+Architecture&labels=discussion&body=Topic:+[RISC-V+Architecture](https://dhein.github.io/daily_knowledge/topic/risc_v/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
