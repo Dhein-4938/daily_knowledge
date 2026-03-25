@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WebAssembly</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-25/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>WebAssembly<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Web Technologies &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>WebAssembly (Wasm)</strong> is a stack-based virtual instruction set architecture (ISA) defined by a portable binary format (<code>.wasm</code>) and an isomorphic text format (<code>.wat</code>). It specifies a structured execution model with formal semantics: a program is a <em>module</em> containing typed functions, linear memory, tables, and imports/exports — all validated before execution.</div></div>
+
+<p>The type system is intentionally minimal: <code>i32</code>, <code>i64</code>, <code>f32</code>, <code>f64</code> (with <code>v128</code> for SIMD extensions). Instructions operate on a typed operand stack, and control flow is <em>structured</em> — no arbitrary jumps, only blocks, loops, and conditionals with explicit label targets. This design enables single-pass validation and makes formal proofs tractable.</p>
+
+<p>The formal soundness theorem for the type system guarantees:</p>
+
+<p>$$\text{If } \vdash m : \text{module} \text{ and } m \to^* c, \text{ then } c \text{ is not stuck}$$</p>
+
+<p>i.e., well-typed modules don't reach undefined states — a property that C/C++ natively lacks.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Wasm decouples <em>compilation target</em> from <em>execution environment</em>. A Rust crate, Go library, or C++ codec can compile once to <code>.wasm</code> and run in any compliant host — browser, server, edge node, embedded device — with near-native performance and memory-safety guarantees the host can enforce.</p>
+
+<p>Key impact zones:</p>
+<ul>
+<li><strong>Web performance</strong>: Heavy workloads (codecs, physics engines, ML inference) run at speeds unreachable with JavaScript.</li>
+<li><strong>Sandboxed plugins</strong>: Host embedders can expose a capability API; the module can't escape the sandbox without explicit imports. Used heavily in <a href="/daily_knowledge/topic/eBPF">eBPF</a>-adjacent edge computing.</li>
+<li><strong>Universal compute substrate</strong>: WASI (WebAssembly System Interface) extends Wasm into a POSIX-like capability-oriented OS interface, enabling server-side and CLI use cases.</li>
+<li><strong>Language portability</strong>: Any language with an LLVM backend gains a Wasm target essentially for free.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>Wasm's structured control flow is not a limitation — it's a feature. It allows JIT compilers to skip a full CFG reconstruction pass that native ISA decompilation requires, giving embedders faster compile-to-native pipelines (e.g., V8's Liftoff baseline compiler).</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Linear Memory Model</strong>: A Wasm module has a flat, byte-addressable memory region starting at address 0. The host controls growth (<code>memory.grow</code>). Crucially, the Wasm program cannot access host memory — isolation is structural, not policy-based.</li>
+</ol>
+
+<ol>
+<li><strong>The Validation Algorithm is O(n)</strong>: The type-checking pass is linear in module size due to the stack-polymorphic type system and the absence of backward type dependencies. This matters for JIT-heavy environments where startup latency is critical.</li>
+</ol>
+
+<ol>
+<li><strong>Component Model</strong>: The nascent <em>Wasm Component Model</em> (in active development) layers a rich IDL (<em>WIT — Wasm Interface Types</em>) atop core Wasm, enabling typed, language-agnostic inter-module calls. This is the foundation for Wasm-based microservices and plugin ecosystems.</li>
+</ol>
+
+<ol>
+<li><strong>WASI and Capability Security</strong>: Rather than ambient authority (like POSIX), WASI passes capabilities as module imports. A module that isn't given a file-descriptor handle literally cannot open files — the sandbox is enforced at the ABI level, not via runtime checks.</li>
+</ol>
+
+<ol>
+<li><strong>Threads and Atomics</strong>: The <code>threads</code> proposal adds shared linear memory and <code>i32.atomic.*</code> instructions, enabling parallel Wasm across Web Workers. The memory model aligns with <a href="/daily_knowledge/topic/C++ Memory Model">C++ Memory Model</a> (SC-DRF): data-race-free programs get sequentially consistent behavior.</li>
+</ol>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the Component Model and WASI Preview 2 specs were still stabilizing as of early 2026; implementation support across runtimes (Wasmtime, WasmEdge, V8) may have shifted significantly.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>Active development fronts as of early 2026:</p>
+
+<ul>
+<li><strong>GC Proposal</strong>: Adds heap-allocated, garbage-collected structs and arrays, enabling high-fidelity compilation of managed languages (Kotlin, Dart, OCaml) without bundling a full GC runtime.</li>
+<li><strong>WASI Preview 2 / Component Model</strong>: Defining a stable ABI for composable, cross-language Wasm components — essentially a new universal FFI.</li>
+<li><strong>WasmGPU / GPGPU</strong>: Experimental proposals for exposing GPU compute (tied to WebGPU) through Wasm modules.</li>
+<li><strong>Wasm in non-web runtimes</strong>: Wasmtime (Bytecode Alliance) and WasmEdge are seeing adoption in serverless platforms (Fastly Compute, Fermyon Spin) as a lighter-weight alternative to containers.</li>
+</ul>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the ecosystem is evolving rapidly and feature stabilization timelines shift frequently.</div></div>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/LLVM IR">LLVM IR</a> — Primary intermediate target before Wasm codegen; shares the typed SSA philosophy</li>
+<li><a href="/daily_knowledge/topic/eBPF">eBPF</a> — Comparable sandboxed bytecode model for kernel/network contexts</li>
+<li><a href="/daily_knowledge/topic/JIT Compilation">JIT Compilation</a> — How V8 (Liftoff → TurboFan) and Wasmtime (Cranelift) tier-compile Wasm</li>
+<li><a href="/daily_knowledge/topic/Capability-Based Security">Capability-Based Security</a> — Theoretical foundation for WASI's ambient-authority-free design</li>
+<li><a href="/daily_knowledge/topic/C++ Memory Model">C++ Memory Model</a> — Wasm threads proposal adopts the same SC-DRF formal model</li>
+<li><a href="/daily_knowledge/topic/Stack Machine">Stack Machine</a> — Wasm's execution model; compare with register machines like <a href="/daily_knowledge/topic/LLVM IR">LLVM IR</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Wasm's type system intentionally omits reference types to host objects (beyond opaque <code>externref</code>). What are the tradeoffs of this design for embedding high-level language runtimes, and how does the GC proposal change the calculus?</li>
+</ol>
+
+<ol>
+<li>WASI's capability model prevents ambient authority, but composing components that <em>delegate</em> capabilities reintroduces confused-deputy risks. How should the Component Model's type system encode attenuation and revocation?</li>
+</ol>
+
+<ol>
+<li>Wasm is increasingly used as a compilation target for formal verification tools (e.g., compiling Lean proofs to Wasm for web deployment). Does Wasm's own formal semantics make it a <em>better</em> target for verified software than native ISAs, or does the translation gap simply relocate the trust boundary?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/WebAssembly" target="_blank" rel="noopener"&gt;WebAssembly&lt;/a&gt; · Retrieved 2026-03-25</em></p></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+WebAssembly&labels=discussion&body=Topic:+[WebAssembly](https://dhein.github.io/daily_knowledge/topic/webassembly/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>

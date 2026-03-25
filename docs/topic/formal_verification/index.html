@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formal Verification</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-25/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Formal Verification<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Software Engineering &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Formal verification</strong> is the act of <em>proving or disproving</em> the correctness of a system with respect to a formal specification, using rigorous mathematical methods. It is distinct from testing: verification exhausts the entire state space (symbolically or deductively) rather than sampling it.</div></div>
+
+<p>The central object is a <strong>proof obligation</strong>: given a model $M$ of a system and a property $\phi$ (expressed in some logic), show:</p>
+
+<p>$$M \models \phi$$</p>
+
+<p>where $\models$ denotes the satisfaction relation. The model $M$ might be a finite-state machine, a labelled transition system, or a denotational semantics of source code; $\phi$ might be a temporal logic formula, a Hoare triple, or a type invariant.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Formal verification is the only technique that can provide <em>unconditional guarantees</em> (modulo the correctness of the specification and tool chain). This matters acutely in:</p>
+
+<ul>
+<li><strong>Safety-critical hardware</strong>: combinational and sequential circuits verified exhaustively before tape-out.</li>
+<li><strong>Cryptographic protocols</strong>: proving absence of authentication bypasses, replay attacks, etc.</li>
+<li><strong>OS kernels</strong>: seL4 is fully functionally correct and proved free of undefined C behavior.</li>
+<li><strong>Compilers</strong>: CompCert guarantees that compiled code preserves source semantics — no miscompilation.</li>
+<li><strong>Security certification</strong>: EAL7 (the highest Common Criteria assurance level) <em>requires</em> formal verification.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The verified compiler angle is underappreciated: most security arguments about code assume the compiler is trustworthy. CompCert collapses that assumption entirely, shifting the trusted computing base down to the proof assistant kernel (e.g., Coq's ~20 kLOC kernel).</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Model vs. Reality gap.</strong> A proof is only as strong as the fidelity of the model. Abstracting floating-point as real arithmetic, or ignoring interrupt timing, can yield a "verified" system with real bugs. This is called the <em>modeling gap</em> and is often where failures actually occur.</li>
+</ol>
+
+<ol>
+<li><strong>Decidability trade-offs.</strong> Full first-order arithmetic is undecidable (Gödel). Practical verification restricts to decidable fragments: propositional logic (SAT), linear arithmetic (SMT with LIA/LRA), or finite-state reachability (model checking). The expressiveness–decidability frontier shapes every tool's design.</li>
+</ol>
+
+<ol>
+<li><strong>Deductive vs. Algorithmic approaches.</strong></li>
+</ol>
+<ul>
+<li><em>Model checking</em>: exhaustive state-space exploration; automatic but suffers state explosion. Mitigated by BDDs, CEGAR, and bounded model checking (BMC) via SAT.</li>
+<li><em>Theorem proving</em> (Coq, Isabelle, Lean): arbitrary expressiveness but requires human proof engineering; proofs can run to hundreds of thousands of lines.</li>
+<li><em>Abstract interpretation</em>: computes sound over-approximations automatically; scales but may produce false positives.</li>
+</ul>
+
+<ol>
+<li><strong>Specification is the hard part.</strong> Writing a complete, correct formal specification is often harder than the implementation. Incomplete specs give false assurance; over-constraining specs rule out valid implementations. The discipline of <em>refinement</em> (stepwise strengthening from abstract to concrete) is a principled response.</li>
+</ol>
+
+<ol>
+<li><strong>Temporal logics for reactive systems.</strong> Properties of non-terminating systems (protocols, OS schedulers) are expressed in LTL or CTL:</li>
+</ol>
+<p>$$\text{LTL safety: } \square \neg \text{bad} \qquad \text{LTL liveness: } \square\Diamond \text{response}$$</p>
+<p>   CTL model checking runs in $O(|M| \cdot |\phi|)$; LTL model checking is PSPACE-complete.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active research fronts include:</p>
+
+<ul>
+<li><strong>Interactive theorem provers maturing</strong>: Lean 4's mathlib and its meta-programming infrastructure are attracting both mathematicians and systems verification engineers.</li>
+<li><strong>Neural + formal hybrids</strong>: using LLMs to suggest proof steps or lemmas (e.g., Copilot for Lean), dramatically reducing human proof burden.</li>
+<li><strong>Verified AI systems</strong>: proving properties of neural networks (robustness, fairness bounds) via abstract interpretation tools like AI² and ERAN.</li>
+<li><strong>Hardware at scale</strong>: formally verifying modern out-of-order processors (e.g., work on RISC-V cores) remains an open engineering challenge due to microarchitectural state complexity.</li>
+<li><strong>Continuous verification in CI</strong>: integrating lightweight SMT-based checkers (e.g., Dafny, F*) into standard software pipelines.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Model Checking">Model Checking</a></li>
+<li><a href="/daily_knowledge/topic/Hoare Logic">Hoare Logic</a></li>
+<li><a href="/daily_knowledge/topic/SAT and SMT Solvers">SAT and SMT Solvers</a></li>
+<li><a href="/daily_knowledge/topic/Type Theory and Proof Assistants">Type Theory and Proof Assistants</a></li>
+<li><a href="/daily_knowledge/topic/Abstract Interpretation">Abstract Interpretation</a></li>
+<li><a href="/daily_knowledge/topic/seL4 Microkernel">seL4 Microkernel</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Specification completeness</strong>: If the formal spec itself can contain errors, how do we reason about the <em>residual</em> risk after verification? Is there a meta-level of assurance, or does trust ultimately bottom out in informal judgment?</li>
+</ol>
+
+<ol>
+<li><strong>Scalability ceiling</strong>: Given that LTL model checking is PSPACE-complete and industrial systems have $10^{100+}$ states, where do you draw the line between "verified enough" (bounded model checking, k-induction) and full verification? What does "assurance" actually mean in practice?</li>
+</ol>
+
+<ol>
+<li><strong>Verification vs. validation</strong>: Formal verification proves $M \models \phi$, but real failures (Therac-25, Ariane 5) often stem from wrong requirements, not wrong implementations. Should engineering effort shift toward <em>formalizing requirements</em> rather than implementations, and how would that change the role of verification?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Formal_verification" target="_blank" rel="noopener"&gt;Formal Verification&lt;/a&gt; · Retrieved 2026-03-25</em></p></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Formal+Verification&labels=discussion&body=Topic:+[Formal+Verification](https://dhein.github.io/daily_knowledge/topic/formal_verification/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
