@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Differential Equations</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-27/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Differential Equations<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Math · Analysis &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>differential equation</strong> is an equation relating an unknown function $f$ and one or more of its derivatives. The <strong>order</strong> is the highest derivative that appears; the <strong>degree</strong> is the power of that derivative (when polynomial).</div></div>
+
+<p>The general form of an $n$-th order ODE:</p>
+
+<p>$$F\!\left(x,\, y,\, y',\, y'',\, \ldots,\, y^{(n)}\right) = 0$$</p>
+
+<p>For PDEs, the unknown depends on multiple variables: $u = u(x_1, \ldots, x_k)$, and the equation involves partial derivatives $\partial u / \partial x_i$.</p>
+
+<p><strong>Classification axes:</strong></p>
+<p>| Axis | Values |</p>
+<p>|---|---|</p>
+<p>| Variable count | ODE vs. PDE |</p>
+<p>| Linearity | Linear vs. nonlinear |</p>
+<p>| Homogeneity | Homogeneous vs. inhomogeneous |</p>
+<p>| Order | 1st, 2nd, … |</p>
+
+<p>A linear ODE has the form $\sum_{k=0}^n a_k(x)\, y^{(k)} = g(x)$. Nonlinearity — e.g., $y'' + \sin y = 0$ (pendulum) — destroys superposition and makes closed-form solutions rare.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>DEs are the native language of continuous dynamics. Nearly every law of physics is a differential equation: Newton's second law $F = m\ddot{x}$, Maxwell's equations, Schrödinger's equation, the Navier–Stokes equations. Beyond physics:</p>
+
+<ul>
+<li><strong>Economics</strong>: optimal control (Hamilton–Jacobi–Bellman PDE), Black–Scholes option pricing</li>
+<li><strong>Biology</strong>: epidemic models (SIR), neural firing (Hodgkin–Huxley)</li>
+<li><strong>Engineering</strong>: control systems, structural analysis, heat transfer</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Deeper connection</div><div>Every ODE system $\dot{\mathbf{x}} = F(\mathbf{x})$ defines a <strong>vector field</strong> on state space. Solutions are integral curves — geometry and analysis interlock here. This is why <a href="/daily_knowledge/topic/Differential Geometry">Differential Geometry</a> and <a href="/daily_knowledge/topic/Dynamical Systems Theory">Dynamical Systems Theory</a> are natural companions.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Existence and Uniqueness (Picard–Lindelöf)</strong></p>
+<p>For the IVP $y' = f(x,y)$, $y(x_0)=y_0$: if $f$ is continuous and Lipschitz in $y$ on a rectangle around $(x_0, y_0)$, a unique local solution exists. Lipschitz failure signals potential blow-up or branching.</p>
+
+<p><strong>2. Linear Systems and the Matrix Exponential</strong></p>
+<p>$\dot{\mathbf{x}} = A\mathbf{x}$ has the exact solution $\mathbf{x}(t) = e^{At}\mathbf{x}_0$. The eigenstructure of $A$ governs stability: all eigenvalues with $\text{Re}(\lambda) < 0$ → asymptotically stable equilibrium. This is the backbone of <a href="/daily_knowledge/topic/Linear Stability Analysis">Linear Stability Analysis</a>.</p>
+
+<p><strong>3. The Fundamental Solution / Green's Function</strong></p>
+<p>For a linear operator $\mathcal{L}u = f$, the Green's function $G(x, s)$ satisfies $\mathcal{L}_x G = \delta(x-s)$. The particular solution is then:</p>
+<p>$$u(x) = \int G(x,s)\, f(s)\, ds$$</p>
+<p>A powerful inversion framework linking PDEs to <a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a>.</p>
+
+<p><strong>4. Bifurcations in Nonlinear DEs</strong></p>
+<p>As a parameter $\mu$ varies, qualitative behavior can change abruptly — saddle-node, Hopf, pitchfork bifurcations. These are not perturbative phenomena; they require global geometric analysis (<a href="/daily_knowledge/topic/Phase Portraits">Phase Portraits</a>, center manifold reduction).</p>
+
+<p><strong>5. Numerical Methods</strong></p>
+<p>When closed forms fail, discretization takes over. Runge–Kutta schemes (RK4 is the workhorse), multistep Adams methods, and stiff-equation solvers (BDF, implicit Runge–Kutta) each trade stability, accuracy, and cost differently. Stiffness — widely separated timescales — is the dominant practical challenge.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active frontiers include:</p>
+
+<ul>
+<li><strong>Neural ODEs</strong>: parameterizing the vector field with a neural network and backpropagating through the ODE solver via the adjoint method — bridges DEs and deep learning.</li>
+<li><strong>Physics-Informed Neural Networks (PINNs)</strong>: embedding PDE residuals into the loss function; promising for inverse problems and high-dimensional PDEs where classical methods hit the curse of dimensionality.</li>
+<li><strong>Mean-field and kinetic PDEs</strong>: Vlasov–Fokker–Planck equations for large particle systems are seeing renewed rigor alongside applications in multi-agent learning and interacting diffusions.</li>
+<li><strong>Data-driven discovery of DEs</strong> (SINDy and variants): sparse regression over a library of candidate terms to recover governing equations from trajectory data.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Dynamical Systems Theory">Dynamical Systems Theory</a></li>
+<li><a href="/daily_knowledge/topic/Partial Differential Equations">Partial Differential Equations</a></li>
+<li><a href="/daily_knowledge/topic/Linear Algebra and Eigenvalue Problems">Linear Algebra and Eigenvalue Problems</a></li>
+<li><a href="/daily_knowledge/topic/Numerical Analysis">Numerical Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Fourier Analysis and Spectral Methods">Fourier Analysis and Spectral Methods</a></li>
+<li><a href="/daily_knowledge/topic/Calculus of Variations">Calculus of Variations</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The Picard–Lindelöf theorem guarantees only <em>local</em> existence. What geometric or analytical features of a DE cause solutions to blow up in finite time, and how can one detect this without solving explicitly?</li>
+</ol>
+
+<ol>
+<li>Neural ODEs treat network depth as a continuous variable. What are the genuine mathematical trade-offs vs. discrete residual networks — and does the adjoint method introduce approximation errors that accumulate differently than standard backprop?</li>
+</ol>
+
+<ol>
+<li>Stiffness is often described informally as "widely separated timescales," but can be made precise via the eigenvalues of the Jacobian. How should this inform the choice between explicit and implicit solvers in practice, and when does operator splitting offer a better decomposition?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Differential_equation" target="_blank" rel="noopener"&gt;Differential Equations&lt;/a&gt; · Retrieved 2026-03-27</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.25746v1" target="_blank" rel="noopener">ShotStream: Streaming Multi-Shot Video Generation for Interactive Storytelling</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.25742v1" target="_blank" rel="noopener">Pseudogap and Non-Fermi-liquid criticality in double Kondo model for bilayer nickelates</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.25741v1" target="_blank" rel="noopener">Vega: Learning to Drive with Natural Language Instructions</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Differential+Equations&labels=discussion&body=Topic:+[Differential+Equations](https://dhein.github.io/daily_knowledge/topic/differential_equations/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
