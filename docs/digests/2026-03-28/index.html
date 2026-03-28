@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 28, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 28, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~16 min</div></div>
+<nav class="topic-nav"><a href="#sat_solvers">SAT Solvers</a><a href="#category_theory_logic">Category Theory in Logic</a><a href="#modal_logic">Modal Logic</a><a href="#proof_theory">Proof Theory</a></nav>
+<article id="sat_solvers"><div class="topic-header"><h2>SAT Solvers<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Automated Reasoning &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Boolean Satisfiability (SAT)</div><div>Given a Boolean formula $\varphi$ over variables $x_1, \dots, x_n$, determine whether there exists an assignment $\sigma: \{x_i\} \to \{\top, \bot\}$ such that $\varphi(\sigma) = \top$. If so, $\varphi$ is <strong>satisfiable</strong>; otherwise <strong>unsatisfiable</strong>.</div></div>
+
+<p>In practice, formulas are presented in <strong>Conjunctive Normal Form (CNF)</strong>: a conjunction of <em>clauses</em>, each a disjunction of <em>literals</em> (a variable or its negation):</p>
+
+<p>$$\varphi = \bigwedge_{i=1}^{m} \left( \bigvee_{j=1}^{k_i} l_{ij} \right)$$</p>
+
+<p>The SAT problem is the canonical <strong>NP-complete</strong> problem — established by the <strong>Cook–Levin theorem</strong> (1971). Every problem in NP reduces to SAT in polynomial time, making it a universal target for combinatorial problem encoding.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>SAT occupies a peculiar position: theoretically intractable in the worst case, yet practically dominant in real-world verification tasks. Its importance spans several domains:</p>
+
+<ul>
+<li><strong>Hardware/software verification</strong>: Model checkers (e.g., CBMC, IC3/PDR) encode system reachability as SAT/SMT queries</li>
+<li><strong>AI planning</strong>: Classical planning (STRIPS) encodes plan-existence as SAT</li>
+<li><strong>Cryptanalysis</strong>: Algebraic attacks encode cipher inversion as SAT instances</li>
+<li><strong>Compiler optimization</strong>: Instruction scheduling, register allocation via pseudo-Boolean SAT</li>
+<li><strong>Theorem proving</strong>: SAT backends underpin tools like Lean's <code>decide</code> tactic for decidable propositions</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: SAT as a lingua franca</div><div>Because NP-completeness guarantees polynomial reductions <em>from</em> all NP problems <em>to</em> SAT, a fast SAT solver is implicitly a fast solver for hundreds of problems simultaneously. This universality explains the intense engineering investment in solver performance.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<h3>1. DPLL and CDCL</h3>
+<p>Modern solvers descend from the <strong>Davis–Putnam–Logemann–Loveland (DPLL)</strong> backtracking procedure (1962). The decisive leap came with <strong>Conflict-Driven Clause Learning (CDCL)</strong> in the 1990s (GRASP, Chaff): when a contradiction is reached, the solver analyzes the <em>implication graph</em> to derive a <em>learned clause</em> that prunes the search space globally. This transforms worst-case exponential search into something empirically tractable on structured instances.</p>
+
+<h3>2. Unit Propagation and BCP</h3>
+<p><strong>Boolean Constraint Propagation (BCP)</strong> — aka unit propagation — is the inner loop of every CDCL solver. When a clause has exactly one unassigned literal, that literal is <em>forced</em>. Speed of BCP (via the <strong>two-watched-literal</strong> scheme) dominates solver runtime.</p>
+
+<h3>3. VSIDS Heuristic</h3>
+<p><strong>Variable State Independent Decaying Sum (VSIDS)</strong> scores variables by recent conflict involvement, decaying older scores. This bias toward "hot" variables exploits locality in structured industrial instances and is why modern solvers scale where pure random backtracking fails.</p>
+
+<h3>4. Phase Saving</h3>
+<p>Rather than defaulting to $\bot$ on a variable, solvers remember the last assigned polarity. This <strong>phase saving</strong> heuristic dramatically reduces thrashing on problems with large satisfying regions.</p>
+
+<h3>5. #SAT and Beyond</h3>
+<p>The <em>counting</em> variant, <strong>#SAT</strong> (count satisfying assignments), is <strong>#P-complete</strong> — strictly harder than NP under standard assumptions. This matters for probabilistic inference in graphical models and is not amenable to the same CDCL tricks.</p>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Solver performance figures from the Wikipedia extract (2007-era, "tens of thousands of variables") are long obsolete. Competition-grade solvers (CaDiCaL, Kissat, Glucose) routinely handle millions of variables and billions of clauses in industrial instances as of the mid-2020s.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>The annual <strong>SAT Competition</strong> continues to drive solver engineering. Active research threads include:</p>
+
+<ul>
+<li><strong>Machine learning for solver configuration</strong>: GNN-based branching heuristics (NeuroSAT, G2SAT) learn structure from training distributions, outperforming VSIDS on some crafted instances</li>
+<li><strong>Parallel and distributed SAT</strong>: Portfolio solvers (e.g., Mallob) partition clause-sharing across cores; cube-and-conquer splits the search space combinatorially</li>
+<li><strong>MaxSAT and UNSAT cores</strong>: Optimization variants with strong ties to pseudo-Boolean optimization and weighted partial MaxSAT for industrial scheduling</li>
+<li><strong>SAT modulo theories (SMT)</strong>: Integrating SAT with theory solvers (linear arithmetic, arrays, bit-vectors) via DPLL(T) — the architecture underlying Z3, CVC5</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/NP-Completeness">NP-Completeness</a></li>
+<li><a href="/daily_knowledge/topic/Cook-Levin Theorem">Cook-Levin Theorem</a></li>
+<li><a href="/daily_knowledge/topic/CDCL Algorithms">CDCL Algorithms</a></li>
+<li><a href="/daily_knowledge/topic/SMT Solvers">SMT Solvers</a></li>
+<li><a href="/daily_knowledge/topic/Model Checking">Model Checking</a></li>
+<li><a href="/daily_knowledge/topic/Complexity Classes P and NP">Complexity Classes P and NP</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Practical tractability vs. theoretical hardness</strong>: CDCL solvers crush industrial instances that are structurally "easy" yet still NP-complete. What structural properties (community structure, backbone size, clause density near the phase transition) explain this gap — and can they be exploited <em>a priori</em>?</li>
+</ol>
+
+<ol>
+<li><strong>The P vs. NP interface</strong>: SAT is NP-complete, but learned clause databases can grow exponentially. In what sense does a CDCL solver implicitly "prove" unsatisfiability, and how does resolution proof complexity relate to solver runtime in practice?</li>
+</ol>
+
+<ol>
+<li><strong>Neural SAT solvers</strong>: Graph neural networks trained on random SAT instances generalize poorly to structured industrial instances. Is this a data distribution problem, an architectural limitation, or evidence that the two families genuinely require different algorithmic strategies?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Boolean_satisfiability_problem" target="_blank" rel="noopener"&gt;SAT Solvers&lt;/a&gt; · Retrieved 2026-03-28</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.25723v1" target="_blank" rel="noopener">Natural-Language Agent Harnesses</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.25710v1" target="_blank" rel="noopener">Stone Duality for Monads</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.25682v1" target="_blank" rel="noopener">On the Formalization of Network Topology Matrices in HOL</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.25655v1" target="_blank" rel="noopener">Worldwide Reactor Neutrino Propagation to Underground Labs: Matter Effects and Flux Predictions</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.25633v1" target="_blank" rel="noopener">Is Mathematical Problem-Solving Expertise in Large Language Models Associated with Assessment Performance?</a> (2026)</li>
+</ul></div></article>
+<article id="category_theory_logic"><div class="topic-header"><h2>Category Theory in Logic<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Category Theory &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Categorical logic (also called <em>categorical semantics</em> or <em>categorial logic</em>) is the systematic use of category-theoretic structures to represent and study logical systems. The central insight is a profound duality:</p>
+
+<blockquote><p><strong>Syntax</strong> is modeled by a category; <strong>semantics</strong> is modeled by a functor into another category.</p></blockquote>
+
+<p>[!info] <strong>Lawvere's Foundational Claim</strong></p>
+<p>William Lawvere's 1963 thesis established that a <em>theory</em> (in the logical sense) corresponds to a <strong>category with structure</strong>, and a <em>model</em> corresponds to a <strong>structure-preserving functor</strong> into <strong>Set</strong> (or another base category). This unifies model theory and algebra under one roof.</p>
+
+<p>The prototypical example: propositional logic corresponds to Boolean algebras (or Heyting algebras for intuitionistic logic), which are particular poset categories. A valuation is then a morphism of such structures.</p>
+
+<p>For first-order logic, the relevant structure is a <strong>hyperdoctrine</strong> — a functor</p>
+
+<p>$$P : \mathcal{C}^{op} \to \mathbf{Pos}$$</p>
+
+<p>where $\mathcal{C}$ has finite products (modeling contexts and substitution) and each fiber $P(A)$ is a poset closed under logical connectives, with quantifiers given by adjoints to substitution maps.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p><strong>Unified framework.</strong> Category theory dissolves artificial distinctions between proof theory, model theory, and type theory. The same categorical structure (e.g., a locally cartesian closed category) simultaneously interprets dependent type theory <em>and</em> provides a notion of model for dependent logic.</p>
+
+<p><strong>Computer science pipeline.</strong> The Curry–Howard–Lambek correspondence closes the triangle:</p>
+
+<p>$$\text{Propositions} \leftrightarrow \text{Types} \leftrightarrow \text{Objects}$$</p>
+<p>$$\text{Proofs} \leftrightarrow \text{Programs} \leftrightarrow \text{Morphisms}$$</p>
+
+<p>This is not a metaphor — it is a precise equivalence between simply-typed lambda calculus, intuitionistic propositional logic, and cartesian closed categories.</p>
+
+<p><strong>Geometric logic.</strong> Topos theory extends this to geometric/coherent logic. Every Grothendieck topos has an internal language (its <em>Mitchell–Bénabou language</em>) and is simultaneously a generalized universe of sets and a classifying topos for some geometric theory.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Adjunctions as quantifiers.</strong> Existential quantification $\exists_f \dashv f^* \dashv \forall_f$ emerges from the adjoint triple between fibers along a morphism $f$ in a hyperdoctrine. Quantifiers are <em>not</em> primitive — they are determined by functoriality and adjoints.</li>
+</ol>
+
+<ol>
+<li><strong>Classifying toposes.</strong> Every coherent theory $\mathbb{T}$ has a classifying topos $\mathcal{E}_\mathbb{T}$ such that models of $\mathbb{T}$ in any topos $\mathcal{F}$ correspond exactly to geometric morphisms $\mathcal{F} \to \mathcal{E}_\mathbb{T}$. This is the categorical analogue of the Lindenbaum–Tarski algebra.</li>
+</ol>
+
+<ol>
+<li><strong>Propositions as subobjects.</strong> In a category with a subobject classifier $\Omega$, propositions about an object $A$ correspond to subobjects of $A$, i.e., elements of $\text{Sub}(A)$. Truth becomes a morphism $\top : 1 \to \Omega$.</li>
+</ol>
+
+<ol>
+<li><strong>Internal vs. external logic.</strong> Every topos has an <em>internal</em> intuitionistic higher-order logic. Statements true in the internal logic may fail externally (e.g., the axiom of choice holds internally in the effective topos but is false for its global sections).</li>
+</ol>
+
+<ol>
+<li><strong>Linear logic and monoidal categories.</strong> Moving from cartesian to symmetric monoidal closed categories yields the categorical semantics of <em>linear logic</em>, where structural rules (weakening, contraction) correspond precisely to the diagonal and projection maps that monoidal categories need not have.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>[!warning] Note: this information may be dated</p>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Homotopy type theory (HoTT):</strong> $(∞,1)$-categorical semantics for dependent type theories, with univalence axiom modeled by Kan fibrations in simplicial sets. The search for a <em>strict</em> model continues.</li>
+<li><strong>Polynomial functors and dependent type theory:</strong> David Spivak's work on polynomial functors as a foundational framework for dynamical systems and database schemas with typed structure.</li>
+<li><strong>Condensed mathematics:</strong> Dustin Clausen and Peter Scholze's use of pyknotic/condensed objects recasts topology categorically in a way that interacts with logic and cohomology.</li>
+<li><strong>Realizability toposes:</strong> Connecting computability theory (PCA — partial combinatory algebras) to topos-theoretic logic, with ongoing work on relative realizability.</li>
+</ul>
+
+<p>[!tip] The most active frontier is arguably the intersection of <strong>$(\infty,1)$-categories</strong> and <strong>homotopy type theory</strong> — where the internal logic of $\infty$-toposes is being worked out, and where Voevodsky's univalence axiom lives.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Topos Theory">Topos Theory</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard-Lambek Correspondence">Curry-Howard-Lambek Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Intuitionistic Logic">Intuitionistic Logic</a></li>
+<li><a href="/daily_knowledge/topic/Hyperdoctrines and Fibered Categories">Hyperdoctrines and Fibered Categories</a></li>
+<li><a href="/daily_knowledge/topic/Linear Logic and Proof Nets">Linear Logic and Proof Nets</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Completeness vs. expressiveness trade-off:</strong> Classical first-order logic has the completeness theorem (Gödel), but categorical logic is naturally intuitionistic. What is <em>lost</em> and what is <em>gained</em> by moving to the constructive setting — and can classical logic be recovered categorically without collapsing the structure?</li>
+</ol>
+
+<ol>
+<li><strong>Classifying toposes as semantic universes:</strong> If every coherent theory has a classifying topos, does this mean topos theory subsumes model theory? Where does Shelah-style stability theory sit in the categorical picture — is there a categorical account of categoricity in power?</li>
+</ol>
+
+<ol>
+<li><strong>Internal vs. external truth and mathematical practice:</strong> The internal logic of the effective topos validates Church's thesis (every function $\mathbb{N} \to \mathbb{N}$ is computable). Does this make it a <em>better</em> or <em>worse</em> foundation for constructive mathematics, and what does it say about the relationship between logic and computational ontology?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Categorical_logic" target="_blank" rel="noopener"&gt;Category Theory in Logic&lt;/a&gt; · Retrieved 2026-03-28</em></p></div></article>
+<article id="modal_logic"><div class="topic-header"><h2>Modal Logic<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Logic &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Modal logic extends classical propositional and predicate logic with operators that qualify the <em>mode</em> of truth of a statement — principally <strong>necessity</strong> and <strong>possibility</strong>.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Primitive Operators</div><div>- $\Box P$ — "necessarily $P$" (true in <em>all</em> accessible worlds) - $\Diamond P$ — "possibly $P$" (true in <em>some</em> accessible world) The two are <strong>interdefinable</strong>: $\Diamond P \equiv \neg\Box\neg P$</div></div>
+
+<p>The standard semantics is Kripkean <strong>relational semantics</strong>: a model $\mathcal{M} = \langle W, R, V \rangle$ where $W$ is a set of possible worlds, $R \subseteq W \times W$ is an accessibility relation, and $V$ assigns truth values. The truth conditions are:</p>
+
+<p>$$\mathcal{M}, w \models \Box P \iff \forall v.\; wRv \Rightarrow \mathcal{M}, v \models P$$</p>
+<p>$$\mathcal{M}, w \models \Diamond P \iff \exists v.\; wRv \land \mathcal{M}, v \models P$$</p>
+
+<p>This single framework yields a <strong>family</strong> of logics by imposing different constraints on $R$.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Modal logic is not merely philosophical ornament — it is load-bearing infrastructure across multiple disciplines:</p>
+
+<ul>
+<li><strong>Epistemology / AI</strong>: Epistemic logic (Hintikka) models knowledge and belief; deployed in multi-agent systems and distributed computing (knowledge-based protocols, common knowledge).</li>
+<li><strong>Program verification</strong>: Temporal logics (LTL, CTL) are modal logics over time-ordered worlds; they underpin model checking tools like SPIN and NuSMV.</li>
+<li><strong>Provability logic (GL)</strong>: Gödel–Löb logic interprets $\Box P$ as "PA proves $P$", giving modal proofs of incompleteness results.</li>
+<li><strong>Deontic / legal reasoning</strong>: Formalizes obligation, permission, and prohibition in legal AI and normative systems.</li>
+<li><strong>Metaphysics</strong>: Kripke's modal arguments reshaped debates on identity, essentialism, and the a priori/necessary distinction.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Accessibility Relation IS the Logic</div><div>Every named modal logic corresponds to a class of frames defined by a first-order property of $R$. This frame correspondence is the deepest structural insight — changing one axiom changes the geometry of the space of worlds.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. The Cube of Modal Systems</strong></p>
+<p>Axioms added to the base system <strong>K</strong> yield a lattice of systems. Key ones:</p>
+
+<p>| System | Axiom added | Constraint on $R$ |</p>
+<p>|--------|-------------|-------------------|</p>
+<p>| <strong>T</strong> | $\Box P \to P$ | Reflexive |</p>
+<p>| <strong>S4</strong> | $\Box P \to \Box\Box P$ | Reflexive + transitive |</p>
+<p>| <strong>S5</strong> | $\Diamond P \to \Box\Diamond P$ | Equivalence relation |</p>
+<p>| <strong>D</strong> | $\Box P \to \Diamond P$ | Serial |</p>
+<p>| <strong>B</strong> | $P \to \Box\Diamond P$ | Symmetric |</p>
+
+<p>S5 is the canonical logic for absolute necessity and often for knowledge (though contested).</p>
+
+<p><strong>2. Frame Correspondence and Canonicity</strong></p>
+<p>Many axioms $\alpha$ correspond to a first-order sentence $\text{Fr}(\alpha)$ on frames via the <strong>Sahlqvist correspondence theorem</strong>. Sahlqvist formulas are guaranteed to be canonical — meaning the canonical model for their logic validates exactly the right frames. This gives a powerful, automated route from syntax to semantics.</p>
+
+<p><strong>3. Completeness vs. Incompleteness</strong></p>
+<p>Not all modal logics are Kripke-complete. Fine (1974) and Thomason (1974) produced logics valid on no class of Kripke frames — motivating <strong>neighborhood semantics</strong> (sets of propositions rather than worlds) and <strong>topological semantics</strong> as more general alternatives.</p>
+
+<p><strong>4. First-Order Modal Logic is Hard</strong></p>
+<p>Extending modal logic with quantifiers introduces serious complications: the Barcan formula $\forall x\,\Box Fx \to \Box\forall x\,Fx$ is valid on constant domains but not varying domains. Completeness fails for many natural quantified modal systems; decidability often collapses.</p>
+
+<p><strong>5. Bisimulation as Modal Equivalence</strong></p>
+<p>Two models are <strong>bisimilar</strong> iff they satisfy exactly the same modal formulas. Bisimulation is the right notion of structural equivalence for modal logic — connecting it deeply to process algebra and coalgebra.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Coalgebraic modal logic</strong>: A categorical generalization where modalities arise from functors; unifies many logics (PDL, graded modalities, probabilistic logic) under one framework.</li>
+<li><strong>Dynamic Epistemic Logic (DEL)</strong>: Models how knowledge changes after public/private announcements — active in formal epistemology and AI.</li>
+<li><strong>Hybrid logic</strong>: Adds nominals (names for worlds) and the $@_i$ operator, restoring some first-order expressiveness while preserving decidability.</li>
+<li><strong>Modal $\mu$-calculus</strong>: Adds least/greatest fixed-point operators; strictly more expressive than CTL or PDL, and a central tool in program verification theory.</li>
+<li><strong>Neighborhood / topological semantics</strong>: Growing interest as alternatives to Kripke frames for capturing non-normal modalities (e.g., where $\Box(P \land Q) \not\Rightarrow \Box P$).</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Possible Worlds Semantics">Possible Worlds Semantics</a></li>
+<li><a href="/daily_knowledge/topic/Temporal Logic and Model Checking">Temporal Logic and Model Checking</a></li>
+<li><a href="/daily_knowledge/topic/Kripke Structures">Kripke Structures</a></li>
+<li><a href="/daily_knowledge/topic/Epistemic Logic and Common Knowledge">Epistemic Logic and Common Knowledge</a></li>
+<li><a href="/daily_knowledge/topic/Provability Logic">Provability Logic</a></li>
+<li><a href="/daily_knowledge/topic/Bisimulation and Coalgebra">Bisimulation and Coalgebra</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Frame correspondence as geometry</strong>: The accessibility relation encodes structural assumptions about the space of possibilities. Is there a principled way to <em>choose</em> the right system for a given domain, or is it always a modeling judgment call?</li>
+</ol>
+
+<ol>
+<li><strong>The quantifier problem</strong>: First-order modal logic resists clean completeness theorems. Does this suggest that de re modality (necessity <em>of</em> an object) is philosophically incoherent, or merely technically inconvenient?</li>
+</ol>
+
+<ol>
+<li><strong>Modal logic in AI verification</strong>: LTL and CTL model temporal properties of programs as modal logics over execution paths. What are the expressiveness trade-offs between the two, and why does the model-checking complexity jump from P to PSPACE when moving from CTL to LTL?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Modal_logic" target="_blank" rel="noopener"&gt;Modal Logic&lt;/a&gt; · Retrieved 2026-03-28</em></p></div></article>
+<article id="proof_theory"><div class="topic-header"><h2>Proof Theory<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Foundations &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Proof theory</strong> treats proofs as first-class mathematical objects — inductively defined data structures (trees, sequences, boxed lists) built from axioms and inference rules of a formal system. Its analysis is purely <strong>syntactic</strong>, operating on symbol manipulation rather than semantic interpretation.</div></div>
+
+<p>The central objects of study are <strong>formal derivations</strong>. Given a logical system $\mathcal{L}$ with axiom schemas $\mathcal{A}$ and inference rules $\mathcal{R}$, a proof of $\phi$ is a finite tree where:</p>
+
+<p>$$\frac{\Gamma_1 \vdash \phi_1 \quad \cdots \quad \Gamma_n \vdash \phi_n}{\Gamma \vdash \phi} \in \mathcal{R}$$</p>
+
+<p>This structural view underpins all of proof theory — whether you're studying sequent calculi, natural deduction, or type-theoretic systems.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Proof theory sits at the intersection of foundations, computation, and philosophy of mathematics. Its significance spans several domains:</p>
+
+<ul>
+<li><strong>Foundations of mathematics</strong>: Hilbert's program sought to justify all of mathematics via finitary proofs. Gödel's incompleteness theorems were proof-theoretic bombshells — establishing that no consistent extension of PA can prove its own consistency (within the system).</li>
+<li><strong>The Curry-Howard correspondence</strong>: Proofs in intuitionistic logic correspond directly to programs in typed lambda calculi ($\Pi$-types ↔ universal quantifiers, $\Sigma$-types ↔ existential quantifiers). Proof theory <em>is</em> type theory.</li>
+<li><strong>Automated reasoning</strong>: Proof-search algorithms (resolution, tableaux, sequent calculus search) power SMT solvers, proof assistants (Coq, Lean, Isabelle), and formal verification.</li>
+<li><strong>Computational complexity</strong>: Proof complexity studies the minimum size of proofs in propositional systems — directly connected to the $\mathbf{P}$ vs $\mathbf{NP}$ question.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The <strong>Curry-Howard-Lambek</strong> correspondence extends the proofs-as-programs analogy to category theory: proofs ↔ programs ↔ morphisms. This triality makes proof theory a unifying language across logic, CS, and algebra.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Sequent Calculus vs. Natural Deduction</strong>: Gentzen's two formalisms. Sequents $\Gamma \vdash \Delta$ (multiple conclusions) make structural rules explicit — weakening, contraction, cut. The <strong>cut-elimination theorem</strong> (Gentzen's <em>Hauptsatz</em>) states that every proof with cuts has a cut-free equivalent; it's the syntactic analogue of interpolation and implies consistency.</li>
+</ol>
+
+<ol>
+<li><strong>Ordinal Analysis</strong>: Assigns a <strong>proof-theoretic ordinal</strong> $|T|$ to a theory $T$ — the supremum of ordinals provably well-founded in $T$. For PA, $|PA| = \varepsilon_0$. For stronger systems like $\Pi^1_1\text{-CA}_0$, ordinals reach into the Bachmann–Howard hierarchy. This measures "how much transfinite induction" a theory encodes.</li>
+</ol>
+
+<ol>
+<li><strong>Structural Proof Theory</strong>: Studies how the <em>shape</em> of proofs encodes logical structure. Substructural logics (linear, relevant, affine) arise by restricting structural rules. Linear logic, for instance, drops weakening and contraction — turning proofs into resource-sensitive computations.</li>
+</ol>
+
+<ol>
+<li><strong>Reverse Mathematics</strong>: Works in the opposite direction — given a theorem, what axioms are <em>necessary</em> to prove it? Most classical analysis falls into five subsystems ($\mathsf{RCA}_0$ through $\Pi^1_1\text{-CA}_0$), revealing a tight calibration between mathematical content and foundational strength.</li>
+</ol>
+
+<ol>
+<li><strong>Proof Mining (Unwinding)</strong>: Kohlenbach's program extracts quantitative information (bounds, rates of convergence) from non-constructive proofs. A proof of $\forall x\, \exists y\, P(x,y)$ can often be <em>mined</em> for a computable witness $f$ such that $P(x, f(x))$.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active research fronts include:</p>
+
+<ul>
+<li><strong>Homotopy Type Theory (HoTT)</strong> and the univalence axiom — extending proof-theoretic foundations into higher-dimensional type theory where proofs of equality are paths.</li>
+<li><strong>Proof complexity lower bounds</strong>: Proving that tautologies require super-polynomial proofs in Extended Frege or stronger systems remains open and deeply tied to circuit complexity.</li>
+<li><strong>Cyclic proof systems</strong>: Proofs with back-edges (cycles) for inductive/coinductive reasoning — soundness is enforced by global trace conditions rather than structural induction.</li>
+<li><strong>Probabilistic and quantum proof systems</strong>: Interactive proof complexity (IP = PSPACE, MIP* = RE) blurs the boundary between proof theory and computational complexity in striking ways.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Gödel's Incompleteness Theorems">Gödel's Incompleteness Theorems</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Type Theory">Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Model Theory">Model Theory</a></li>
+<li><a href="/daily_knowledge/topic/Reverse Mathematics">Reverse Mathematics</a></li>
+<li><a href="/daily_knowledge/topic/Linear Logic">Linear Logic</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Cut-elimination guarantees that any provable sequent has a <em>direct</em> proof — but cut-free proofs can be non-elementarily longer. What does this explosion in proof length say about the relationship between logical power and computational tractability?</li>
+</ol>
+
+<ol>
+<li>Ordinal analysis assigns $\varepsilon_0$ to PA and much larger ordinals to impredicative systems. Is there a sense in which these ordinals <em>explain</em> the consistency of the theory, or are they merely a calibration tool that relocates rather than resolves foundational questions?</li>
+</ol>
+
+<ol>
+<li>The Curry-Howard correspondence makes every proof a program. Does proof normalization (cut-elimination, $\beta$-reduction) constitute a form of <em>computation</em>, and if so, what is being computed — the proof's content, its meaning, or something else?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Proof_theory" target="_blank" rel="noopener"&gt;Proof Theory&lt;/a&gt; · Retrieved 2026-03-28</em></p></div></article>
+</div>
+</body>
+</html>

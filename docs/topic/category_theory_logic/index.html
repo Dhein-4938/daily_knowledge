@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Category Theory in Logic</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-28/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Category Theory in Logic<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Logic · Category Theory &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<p>Categorical logic (also called <em>categorical semantics</em> or <em>categorial logic</em>) is the systematic use of category-theoretic structures to represent and study logical systems. The central insight is a profound duality:</p>
+
+<blockquote><p><strong>Syntax</strong> is modeled by a category; <strong>semantics</strong> is modeled by a functor into another category.</p></blockquote>
+
+<p>[!info] <strong>Lawvere's Foundational Claim</strong></p>
+<p>William Lawvere's 1963 thesis established that a <em>theory</em> (in the logical sense) corresponds to a <strong>category with structure</strong>, and a <em>model</em> corresponds to a <strong>structure-preserving functor</strong> into <strong>Set</strong> (or another base category). This unifies model theory and algebra under one roof.</p>
+
+<p>The prototypical example: propositional logic corresponds to Boolean algebras (or Heyting algebras for intuitionistic logic), which are particular poset categories. A valuation is then a morphism of such structures.</p>
+
+<p>For first-order logic, the relevant structure is a <strong>hyperdoctrine</strong> — a functor</p>
+
+<p>$$P : \mathcal{C}^{op} \to \mathbf{Pos}$$</p>
+
+<p>where $\mathcal{C}$ has finite products (modeling contexts and substitution) and each fiber $P(A)$ is a poset closed under logical connectives, with quantifiers given by adjoints to substitution maps.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p><strong>Unified framework.</strong> Category theory dissolves artificial distinctions between proof theory, model theory, and type theory. The same categorical structure (e.g., a locally cartesian closed category) simultaneously interprets dependent type theory <em>and</em> provides a notion of model for dependent logic.</p>
+
+<p><strong>Computer science pipeline.</strong> The Curry–Howard–Lambek correspondence closes the triangle:</p>
+
+<p>$$\text{Propositions} \leftrightarrow \text{Types} \leftrightarrow \text{Objects}$$</p>
+<p>$$\text{Proofs} \leftrightarrow \text{Programs} \leftrightarrow \text{Morphisms}$$</p>
+
+<p>This is not a metaphor — it is a precise equivalence between simply-typed lambda calculus, intuitionistic propositional logic, and cartesian closed categories.</p>
+
+<p><strong>Geometric logic.</strong> Topos theory extends this to geometric/coherent logic. Every Grothendieck topos has an internal language (its <em>Mitchell–Bénabou language</em>) and is simultaneously a generalized universe of sets and a classifying topos for some geometric theory.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Adjunctions as quantifiers.</strong> Existential quantification $\exists_f \dashv f^* \dashv \forall_f$ emerges from the adjoint triple between fibers along a morphism $f$ in a hyperdoctrine. Quantifiers are <em>not</em> primitive — they are determined by functoriality and adjoints.</li>
+</ol>
+
+<ol>
+<li><strong>Classifying toposes.</strong> Every coherent theory $\mathbb{T}$ has a classifying topos $\mathcal{E}_\mathbb{T}$ such that models of $\mathbb{T}$ in any topos $\mathcal{F}$ correspond exactly to geometric morphisms $\mathcal{F} \to \mathcal{E}_\mathbb{T}$. This is the categorical analogue of the Lindenbaum–Tarski algebra.</li>
+</ol>
+
+<ol>
+<li><strong>Propositions as subobjects.</strong> In a category with a subobject classifier $\Omega$, propositions about an object $A$ correspond to subobjects of $A$, i.e., elements of $\text{Sub}(A)$. Truth becomes a morphism $\top : 1 \to \Omega$.</li>
+</ol>
+
+<ol>
+<li><strong>Internal vs. external logic.</strong> Every topos has an <em>internal</em> intuitionistic higher-order logic. Statements true in the internal logic may fail externally (e.g., the axiom of choice holds internally in the effective topos but is false for its global sections).</li>
+</ol>
+
+<ol>
+<li><strong>Linear logic and monoidal categories.</strong> Moving from cartesian to symmetric monoidal closed categories yields the categorical semantics of <em>linear logic</em>, where structural rules (weakening, contraction) correspond precisely to the diagonal and projection maps that monoidal categories need not have.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>[!warning] Note: this information may be dated</p>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Homotopy type theory (HoTT):</strong> $(∞,1)$-categorical semantics for dependent type theories, with univalence axiom modeled by Kan fibrations in simplicial sets. The search for a <em>strict</em> model continues.</li>
+<li><strong>Polynomial functors and dependent type theory:</strong> David Spivak's work on polynomial functors as a foundational framework for dynamical systems and database schemas with typed structure.</li>
+<li><strong>Condensed mathematics:</strong> Dustin Clausen and Peter Scholze's use of pyknotic/condensed objects recasts topology categorically in a way that interacts with logic and cohomology.</li>
+<li><strong>Realizability toposes:</strong> Connecting computability theory (PCA — partial combinatory algebras) to topos-theoretic logic, with ongoing work on relative realizability.</li>
+</ul>
+
+<p>[!tip] The most active frontier is arguably the intersection of <strong>$(\infty,1)$-categories</strong> and <strong>homotopy type theory</strong> — where the internal logic of $\infty$-toposes is being worked out, and where Voevodsky's univalence axiom lives.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Topos Theory">Topos Theory</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard-Lambek Correspondence">Curry-Howard-Lambek Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Intuitionistic Logic">Intuitionistic Logic</a></li>
+<li><a href="/daily_knowledge/topic/Hyperdoctrines and Fibered Categories">Hyperdoctrines and Fibered Categories</a></li>
+<li><a href="/daily_knowledge/topic/Linear Logic and Proof Nets">Linear Logic and Proof Nets</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Completeness vs. expressiveness trade-off:</strong> Classical first-order logic has the completeness theorem (Gödel), but categorical logic is naturally intuitionistic. What is <em>lost</em> and what is <em>gained</em> by moving to the constructive setting — and can classical logic be recovered categorically without collapsing the structure?</li>
+</ol>
+
+<ol>
+<li><strong>Classifying toposes as semantic universes:</strong> If every coherent theory has a classifying topos, does this mean topos theory subsumes model theory? Where does Shelah-style stability theory sit in the categorical picture — is there a categorical account of categoricity in power?</li>
+</ol>
+
+<ol>
+<li><strong>Internal vs. external truth and mathematical practice:</strong> The internal logic of the effective topos validates Church's thesis (every function $\mathbb{N} \to \mathbb{N}$ is computable). Does this make it a <em>better</em> or <em>worse</em> foundation for constructive mathematics, and what does it say about the relationship between logic and computational ontology?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Categorical_logic" target="_blank" rel="noopener"&gt;Category Theory in Logic&lt;/a&gt; · Retrieved 2026-03-28</em></p></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Category+Theory+in+Logic&labels=discussion&body=Topic:+[Category+Theory+in+Logic](https://dhein.github.io/daily_knowledge/topic/category_theory_logic/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
