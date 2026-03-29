@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synthetic Biology</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-29/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Synthetic Biology<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Science · Biotechnology &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Synthetic Biology (SynBio)</strong> is the application of engineering design principles — abstraction, modularity, standardization, and iteration — to biological systems, with the goal of constructing novel organisms or redesigning existing ones with predictable, programmable behavior.</div></div>
+
+<p>Where classical genetic engineering edits genes, SynBio treats the cell as a <em>programmable substrate</em>. The central design hierarchy mirrors software engineering:</p>
+
+<p>$$\text{Parts} \subset \text{Devices} \subset \text{Systems} \subset \text{Chassis}$$</p>
+
+<ul>
+<li><strong>Parts</strong>: minimal functional DNA elements (promoters, RBSs, coding sequences, terminators)</li>
+<li><strong>Devices</strong>: logic gates, oscillators, toggles assembled from parts</li>
+<li><strong>Systems</strong>: full genetic circuits performing computation or synthesis</li>
+<li><strong>Chassis</strong>: the host organism (e.g., <em>E. coli</em>, <em>S. cerevisiae</em>, cell-free extract)</li>
+</ul>
+
+<p>This abstraction stack is formalized by the <strong>BioBrick standard</strong> (RFC 10), which defines restriction-site flanking for composable DNA assembly.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>SynBio sits at the intersection of medicine, materials, computation, and ecology — a rare field where the design medium <em>evolves</em>. Key application domains:</p>
+
+<ul>
+<li><strong>Biomanufacturing</strong>: microbial cell factories producing artemisinin, spider silk proteins, or bio-based plastics at scale</li>
+<li><strong>Therapeutics</strong>: engineered CAR-T cells, living medicines that sense and respond to disease markers in situ</li>
+<li><strong>Biosensing</strong>: whole-cell biosensors detecting heavy metals, pathogens, or environmental toxins</li>
+<li><strong>Computation</strong>: DNA-based logic and storage (DNA can encode ~$10^{18}$ bytes/gram, vastly exceeding silicon density)</li>
+<li><strong>Agriculture</strong>: nitrogen-fixing crops, pest-resistant strains without pesticide dependence</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The deepest significance is epistemological: <em>building</em> a system is the most rigorous test of <em>understanding</em> it. SynBio turns hypothesis into hardware — if your model of a gene regulatory network is wrong, your circuit fails.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. The Noise Problem</strong></p>
+<p>Biological "circuits" are stochastic. Gene expression involves low-copy-number molecules; cell-to-cell variance is substantial. Deterministic ODE models of circuit dynamics break down; one must use stochastic simulation (Gillespie algorithm) or Fokker-Planck equations to accurately predict behavior.</p>
+
+<p><strong>2. Retroactivity and Context-Dependence</strong></p>
+<p>Composing parts is non-trivial because biological components are <em>not</em> impedance-matched. Loading a downstream device changes upstream dynamics — a phenomenon termed <strong>retroactivity</strong> (Del Vecchio & Murray). Insulation devices (e.g., phosphorylation-based buffers) are required for true modularity.</p>
+
+<p><strong>3. Metabolic Burden</strong></p>
+<p>Synthetic circuits consume cellular resources (ribosomes, ATP, amino acids). High expression of foreign genes creates <strong>metabolic burden</strong>, reducing host fitness and selecting for circuit-loss mutations. Evolutionary stability is a non-obvious engineering constraint absent in silicon.</p>
+
+<p><strong>4. Genetic Toggle and Oscillators as Canonical Benchmarks</strong></p>
+<p>The Gardner toggle switch (2000) and Elowitz repressilator (2000) are the field's "hello world" programs — bistable and periodic gene circuits demonstrating that rational design of dynamic behavior is achievable. They remain reference points for model validation.</p>
+
+<p><strong>5. Orthogonality as Design Goal</strong></p>
+<p>Robust circuits require <strong>orthogonal</strong> components — transcription factors, ribosomes, and signaling molecules that don't cross-react with native cell machinery. Engineered orthogonal ribosomes (e.g., ribo-Q) that read quadruplet codons enable expanded genetic codes with non-canonical amino acids.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active frontiers include:</p>
+<ul>
+<li><strong>Cell-free systems</strong>: TX-TL (transcription-translation) extracts allow rapid prototyping outside living cells, decoupling circuit testing from organism fitness</li>
+<li><strong>Minimal genomes</strong>: JCVI's <em>syn3.0</em> (~473 genes) probes the lower bound of life, providing a clean chassis</li>
+<li><strong>Whole-cell modeling</strong>: efforts to simulate an entire cell at molecular resolution (e.g., Karr <em>et al.</em> whole-cell <em>M. genitalium</em> model) as a design oracle</li>
+<li><strong>Spatial patterning</strong>: engineering Turing-like morphogen gradients in synthetic multicellular systems</li>
+<li><strong>Biosafety by design</strong>: genetic kill switches, auxotrophy-based containment, and semantic containment (recoding stop codons) to prevent environmental escape</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Gene Regulatory Networks">Gene Regulatory Networks</a></li>
+<li><a href="/daily_knowledge/topic/CRISPR-Cas9 and Genome Editing">CRISPR-Cas9 and Genome Editing</a></li>
+<li><a href="/daily_knowledge/topic/Systems Biology">Systems Biology</a></li>
+<li><a href="/daily_knowledge/topic/DNA Data Storage">DNA Data Storage</a></li>
+<li><a href="/daily_knowledge/topic/Metabolic Engineering">Metabolic Engineering</a></li>
+<li><a href="/daily_knowledge/topic/Stochastic Gene Expression">Stochastic Gene Expression</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Retroactivity implies that biological modularity is fundamentally harder than electronic modularity — is there a biological equivalent of the transistor's high input/output impedance that could solve this structurally?</li>
+</ol>
+
+<ol>
+<li>If directed evolution can outperform rational design for many protein engineering tasks, what is the precise epistemic role of the "design" in SynBio's design-build-test-learn cycle?</li>
+</ol>
+
+<ol>
+<li>Semantic containment (reassigning codons so engineered organisms require synthetic amino acids) offers stronger biosafety than kill switches — but raises the question of whether <em>any</em> containment strategy is robust against sufficient evolutionary time. How should risk frameworks account for evolutionary escape probability?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Synthetic_biology" target="_blank" rel="noopener"&gt;Synthetic Biology&lt;/a&gt; · Retrieved 2026-03-29</em></p></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Synthetic+Biology&labels=discussion&body=Topic:+[Synthetic+Biology](https://dhein.github.io/daily_knowledge/topic/synthetic_biology/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
