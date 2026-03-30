@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 30, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 30, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~17 min</div></div>
+<nav class="topic-nav"><a href="#neural_ode">Neural ODEs</a><a href="#measure_theory">Measure Theory</a><a href="#linear_logic">Linear Logic</a><a href="#descriptive_complexity">Descriptive Complexity</a></nav>
+<article id="neural_ode"><div class="topic-header"><h2>Neural ODEs<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>Neural ODE</strong> models the hidden state $\mathbf{h}(t)$ of a network as the solution to an initial-value problem driven by a learned vector field: $$\frac{d\mathbf{h}(t)}{dt} = f_\theta(\mathbf{h}(t),\, t)$$ where $f_\theta$ is any differentiable neural network and $\mathbf{h}(t_0) = \mathbf{h}_0$ is the input embedding. The output is $\mathbf{h}(t_1)$, obtained by calling a black-box ODE solver.</div></div>
+
+<p>Introduced by Chen et al. (NeurIPS 2018), the key observation is that a residual block $\mathbf{h}_{t+1} = \mathbf{h}_t + f(\mathbf{h}_t)$ is simply an <strong>Euler step</strong> of this ODE. Taking the step size to zero yields a continuous-depth network. The number of "layers" is replaced by a time horizon $[t_0, t_1]$, and depth becomes a continuous variable controlled by the solver's adaptive step size.</p>
+
+<p>Gradients flow via the <strong>adjoint method</strong>: rather than backpropagating through solver steps (memory-intensive), define the adjoint $\mathbf{a}(t) = -\partial \mathcal{L}/\partial \mathbf{h}(t)$ and solve a second, augmented ODE backwards in time:</p>
+
+<p>$$\frac{d\mathbf{a}}{dt} = -\mathbf{a}(t)^\top \frac{\partial f_\theta}{\partial \mathbf{h}}$$</p>
+
+<p>This gives $O(1)$ memory cost in depth—only the final state and the adjoint ODE need be stored.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p><strong>Continuous-time dynamics</strong> are the natural language for irregularly sampled data, physics simulations, and control. Neural ODEs bridge deep learning and classical dynamical systems, enabling:</p>
+
+<ul>
+<li><strong>Latent ODE models</strong> for time series with missing observations (fit an encoder → solve ODE → decode)</li>
+<li><strong>Normalizing flows via CNFs</strong> (Continuous Normalizing Flows): instead of composing discrete bijections, flow a density along a learned vector field. The log-likelihood change is the trace of the Jacobian, integrated over time:</li>
+</ul>
+<p>$$\log p(\mathbf{x}(t_1)) = \log p(\mathbf{x}(t_0)) - \int_{t_0}^{t_1} \operatorname{tr}\!\left(\frac{\partial f_\theta}{\partial \mathbf{x}}\right) dt$$</p>
+<ul>
+<li><strong>Physical inductive biases</strong>: Hamiltonian Neural ODEs and Lagrangian Neural ODEs encode energy conservation by construction.</li>
+<li><strong>Parameter efficiency</strong>: depth is decoupled from the number of parameters—the same $f_\theta$ is reused at every time step.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Connection to Numerical Analysis</div><div>The choice of ODE solver (Euler, RK4, Dormand-Prince, etc.) directly trades off accuracy vs. NFE (number of function evaluations). Adaptive solvers act as implicit regularizers: a smooth $f_\theta$ → fewer steps → faster inference. This creates a natural coupling between the loss landscape and the computational budget.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Adjoint sensitivity vs. direct backprop</strong>: The adjoint saves memory but can accumulate numerical error when integrating backwards through chaotic regions. Checkpointing strategies (store intermediate states) can mitigate this.</li>
+</ol>
+
+<ol>
+<li><strong>Stiffness</strong>: If $f_\theta$ has large Lipschitz constants, the ODE becomes stiff and solvers require tiny steps—training becomes prohibitively slow. Regularizing the Jacobian's spectral norm or adding a kinetic energy penalty $\int \|f_\theta\|^2\,dt$ helps.</li>
+</ol>
+
+<ol>
+<li><strong>FFJORD</strong> (Grathwohl et al., 2018) makes CNF training tractable by estimating $\operatorname{tr}(\partial f / \partial \mathbf{x})$ via Hutchinson's trace estimator, avoiding the $O(d^2)$ full Jacobian.</li>
+</ol>
+
+<ol>
+<li><strong>Augmented Neural ODEs</strong>: The base state space may be too low-dimensional for $f_\theta$ to form a valid flow (flows cannot cross). Augmenting with extra zero-initialized dimensions resolves topological obstructions.</li>
+</ol>
+
+<ol>
+<li><strong>Discrete vs. continuous spectrum</strong>: For sequence modeling, Neural ODEs can be discretized to match arbitrary time grids at test time—unlike RNNs with fixed Δt—making them robust to irregular sampling.</li>
+</ol>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The field of continuous-depth models is moving rapidly. Diffusion models and flow-matching methods (which generalize CNFs) have emerged as dominant generative frameworks; Neural ODEs in their original form are more common in scientific ML and time-series applications than in image generation as of mid-2020s.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>Active research directions include:</p>
+
+<ul>
+<li><strong>Neural SDEs</strong>: replace the deterministic vector field with $d\mathbf{h} = f_\theta\,dt + g_\theta\,dW_t$ for stochastic dynamics and uncertainty quantification.</li>
+<li><strong>Flow Matching</strong> (Lipman et al., 2022): train a CNF by regressing against a conditional vector field targeting the data distribution—avoids maximum likelihood training of the ODE entirely and is significantly more stable.</li>
+<li><strong>Physics-informed Neural ODEs</strong>: hybrid models that constrain $f_\theta$ to satisfy known partial differential equations, used in climate modeling and molecular dynamics.</li>
+<li><strong>Koopman operator methods</strong>: lifting nonlinear ODEs to linear dynamics in a high-dimensional feature space, where Neural ODEs serve as the finite-dimensional approximator.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Residual Networks">Residual Networks</a></li>
+<li><a href="/daily_knowledge/topic/Normalizing Flows">Normalizing Flows</a></li>
+<li><a href="/daily_knowledge/topic/Stochastic Differential Equations">Stochastic Differential Equations</a></li>
+<li><a href="/daily_knowledge/topic/Hamiltonian Mechanics in ML">Hamiltonian Mechanics in ML</a></li>
+<li><a href="/daily_knowledge/topic/Flow Matching">Flow Matching</a></li>
+<li><a href="/daily_knowledge/topic/Latent Variable Models">Latent Variable Models</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Expressivity vs. topology</strong>: A Neural ODE defines a homeomorphism (continuous bijection) on $\mathbb{R}^d$—it cannot change the topology of the input distribution. How does this constrain what CNFs can model compared to discrete normalizing flows or diffusion models, and when does it actually matter in practice?</li>
+</ol>
+
+<ol>
+<li><strong>Solver as a hyperparameter</strong>: Adaptive step-size solvers implicitly regularize smoothness of $f_\theta$ during training. Could one explicitly co-optimize the solver schedule alongside the network weights to achieve a better accuracy/compute Pareto frontier?</li>
+</ol>
+
+<ol>
+<li><strong>The stiffness problem at scale</strong>: Large-scale Neural ODEs in scientific ML (e.g., climate emulation) encounter stiff systems where standard solvers fail. What are the most promising approaches—implicit solvers, spectral normalization, operator splitting—and how do they interact with the adjoint training procedure?</li>
+</ol>
+
+
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.26665v1" target="_blank" rel="noopener">Detailed Geometry and Appearance from Opportunistic Motion</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26664v1" target="_blank" rel="noopener">Learning to Commit: Generating Organic Pull Requests via Online Repository Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26662v1" target="_blank" rel="noopener">Gaia Sees Blazars Move: Locating Optical Flares Using Astrometry</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26661v1" target="_blank" rel="noopener">GaussianGPT: Towards Autoregressive 3D Gaussian Scene Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26659v1" target="_blank" rel="noopener">Partial Motion Imitation for Learning Cart Pushing with Legged Manipulators</a> (2026)</li>
+</ul></div></article>
+<article id="measure_theory"><div class="topic-header"><h2>Measure Theory<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Analysis &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>measure</strong> on a set $X$ is a function $\mu: \mathcal{F} \to [0, \infty]$ defined on a <strong>σ-algebra</strong> $\mathcal{F} \subseteq 2^X$ satisfying: 1. <strong>Null empty set</strong>: $\mu(\emptyset) = 0$ 2. <strong>Countable additivity (σ-additivity)</strong>: For pairwise disjoint $\{A_i\}_{i=1}^\infty \subset \mathcal{F}$, $$\mu\!\left(\bigsqcup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty \mu(A_i)$$ The triple $(X, \mathcal{F}, \mu)$ is called a <strong>measure space</strong>.</div></div>
+
+<p>The σ-algebra requirement is the structural heart: it enforces closure under countable unions and complements, ensuring measurability is a self-consistent predicate. The step from <em>finite</em> to <em>countable</em> additivity distinguishes Lebesgue's framework from Jordan's earlier, more restricted content theory — the difference that makes the Lebesgue integral strictly more powerful than the Riemann integral.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Measure theory is the common substrate beneath three major branches:</p>
+
+<ul>
+<li><strong>Integration</strong>: The Lebesgue integral $\int_X f \, d\mu$ converges under far weaker conditions than Riemann's, enabling dominated convergence and Fubini's theorem in full generality.</li>
+<li><strong>Probability</strong>: Every rigorous probability space is a measure space $(\Omega, \mathcal{F}, P)$ with $P(\Omega) = 1$. Random variables are measurable functions; expectations are Lebesgue integrals.</li>
+<li><strong>Ergodic theory &amp; dynamics</strong>: Measure-preserving transformations formalize the notion of statistical equilibrium.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Unification across physics</div><div>Spectral measures and positive operator-valued measures (POVMs) extend the framework to operator algebras, making measure theory the language of quantum observables. A self-adjoint operator $H$ on a Hilbert space has a unique <strong>projection-valued measure</strong> $E$ such that $H = \int \lambda \, dE(\lambda)$ — the spectral theorem is fundamentally a measure-theoretic statement.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. σ-algebras and measurability as a constraint</strong></p>
+<p>Not every subset of $\mathbb{R}^n$ is Lebesgue-measurable (Vitali sets, assuming AC). The σ-algebra is the negotiated boundary of what the measure can "see."</p>
+
+<p><strong>2. Carathéodory's extension theorem</strong></p>
+<p>One constructs measures in practice by first defining a <strong>premeasure</strong> on a simpler algebra, then extending uniquely to the generated σ-algebra. This is how Lebesgue measure on $\mathbb{R}$ is built from interval lengths.</p>
+
+<p><strong>3. Absolute continuity and Radon–Nikodym</strong></p>
+<p>If $\nu \ll \mu$ (ν is absolutely continuous with respect to μ), then there exists a measurable $f \geq 0$ with</p>
+<p>$$\nu(A) = \int_A f \, d\mu \quad \forall A \in \mathcal{F}$$</p>
+<p>The function $f = \frac{d\nu}{d\mu}$ is the <strong>Radon–Nikodym derivative</strong>, the rigorous foundation for probability density functions.</p>
+
+<p><strong>4. Convergence theorems</strong></p>
+<p>Three pillars — Monotone Convergence, Fatou's Lemma, and Dominated Convergence — characterize when $\lim \int f_n = \int \lim f_n$. These fail in the Riemann setting and are essential to functional analysis.</p>
+
+<p><strong>5. Product measures and Fubini–Tonelli</strong></p>
+<p>Given $(X, \mathcal{F}, \mu)$ and $(Y, \mathcal{G}, \nu)$, there is a unique product measure $\mu \otimes \nu$ on $X \times Y$. Tonelli (nonneg.) and Fubini (integrable) justify iterated integration — the rigorous justification for swapping integral order.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Quantum measure theory</strong>: POVMs and instrument theory underpin modern quantum information. Recent work (e.g., Flammia et al., 2026) on Hamiltonian certification uses Frobenius-norm bounds $\|H - H_0\|_F$ — a Hilbert–Schmidt (trace-class measure-theoretic) notion — to distinguish Hamiltonians with sample complexity $O(nM^2 \ln(1/\delta)/\varepsilon^2)$.</li>
+<li><strong>Optimal transport</strong>: Measures on metric spaces and the Wasserstein distance $W_p(\mu, \nu)$ are central to machine learning theory, generative modeling, and PDE analysis.</li>
+<li><strong>Geometric measure theory</strong>: Currents, varifolds, and rectifiable sets generalize area/volume to singular geometric objects — active in minimal surface theory and image processing.</li>
+<li><strong>Noncommutative integration</strong>: von Neumann algebras support a full measure/integration theory replacing functions with operators.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Lebesgue Integration">Lebesgue Integration</a></li>
+<li><a href="/daily_knowledge/topic/Probability Theory — Foundations">Probability Theory — Foundations</a></li>
+<li><a href="/daily_knowledge/topic/Spectral Theorem">Spectral Theorem</a></li>
+<li><a href="/daily_knowledge/topic/Optimal Transport and Wasserstein Distance">Optimal Transport and Wasserstein Distance</a></li>
+<li><a href="/daily_knowledge/topic/Ergodic Theory">Ergodic Theory</a></li>
+<li><a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The axiom of choice is necessary to construct non-measurable sets — what does this say about the ontological status of the Lebesgue measure vs. the structure of $\mathbb{R}$ itself?</li>
+<li>The Radon–Nikodym theorem requires σ-finiteness. What breaks for non-σ-finite measures, and are there natural physical examples where this condition fails?</li>
+<li>POVMs in quantum mechanics generalize projection-valued measures by relaxing $E(A)^2 = E(A)$ — how does this weaker notion of "sharpness" connect to the uncertainty principle and joint measurability of observables?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Measure_(mathematics" target="_blank" rel="noopener"&gt;Measure Theory&lt;/a&gt;) · Retrieved 2026-03-30</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.26655v1" target="_blank" rel="noopener">Autonomous Hamiltonian certification and changepoint detection</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26654v1" target="_blank" rel="noopener">Silicon Photonic Beam Steerer Based on Metalens Focal Plane Array</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26647v1" target="_blank" rel="noopener">An LP-based Sampling Policy for Multi-Armed Bandits with Side-Observations and Stochastic Availability</a> (2026)</li>
+</ul></div></article>
+<article id="linear_logic"><div class="topic-header"><h2>Linear Logic<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Logic &nbsp;·&nbsp; ~5 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Linear logic</strong> (Girard, 1987) is a <em>substructural</em> logic that restricts the structural rules of <strong>contraction</strong> (reusing a hypothesis) and <strong>weakening</strong> (discarding a hypothesis). Every assumption must be used <strong>exactly once</strong> unless explicitly marked otherwise — making it a <em>logic of resources</em>.</div></div>
+
+<p>Classical sequent calculus permits free use of two structural rules:</p>
+
+<p>$$\frac{\Gamma, A, A \vdash B}{\Gamma, A \vdash B} \text{ (contraction)} \qquad \frac{\Gamma \vdash B}{\Gamma, A \vdash B} \text{ (weakening)}$$</p>
+
+<p>Linear logic removes both by default, introducing explicit <em>modalities</em> to recover them when needed. The <strong>exponential</strong> <code>!A</code> ("of course A") marks a formula as freely duplicable and discardable, restoring classical behaviour locally:</p>
+
+<p>$$!A \vdash A \quad !A \vdash !A \otimes !A \quad !A \vdash \mathbf{1}$$</p>
+
+<p>The connectives split into two dual families:</p>
+
+<p>| Multiplicative | Additive |</p>
+<p>|---|---|</p>
+<p>| $A \otimes B$ (tensor) | $A \mathbin{\&} B$ (with) |</p>
+<p>| $A \parr B$ (par) | $A \oplus B$ (plus) |</p>
+<p>| $A \multimap B$ (lollipop / linear implication) | |</p>
+
+<p>The multiplicative connectives combine resources; the additive connectives represent <em>choice</em> between resources.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Linear logic resolves a fundamental mismatch in classical and intuitionistic logic: truth is <em>stateless</em>, but computation and physics are not. By tracking resource usage, it provides:</p>
+
+<ul>
+<li><strong>Programming languages</strong> — the theoretical backbone of <em>linear types</em> and <em>affine types</em> (Rust's ownership system is a practical descendant). A linear function $A \multimap B$ consumes its argument, preventing use-after-free, double-free, and aliasing errors at the type level.</li>
+<li><strong>Proof-nets</strong> — a canonical, graph-based proof representation that eliminates bureaucratic sequentialisation, yielding a geometry of interaction.</li>
+<li><strong>Game semantics</strong> — proofs correspond to winning strategies in two-player games; the resource discipline maps to the rule that each move is played exactly once.</li>
+<li><strong>Quantum information</strong> — the <em>no-cloning</em> and <em>no-deleting</em> theorems of quantum mechanics are precisely the logical prohibition of contraction and weakening. Linear logic can be read as the internal logic of quantum processes.</li>
+<li><strong>Concurrency</strong> — session types (choreographic communication protocols with guaranteed absence of deadlock) are a direct application of the multiplicative/additive structure.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: The Curry-Howard angle</div><div>Under the Curry-Howard correspondence, linear logic proofs are programs, and the cut-elimination procedure is <em>computation</em>. Specifically, the multiplicative fragment corresponds to the <strong>linear lambda-calculus</strong>, and <code>!</code> corresponds to the comonad structure of a "reusable thunk" — essentially, a <a href="/daily_knowledge/topic/Comonad">comonadic</a> modality.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Multiplicative/Additive split is not cosmetic.</strong> Tensor $\otimes$ means "both resources are present simultaneously"; with $\mathbin{\&}$ means "you may <em>choose</em> one, but not both." This distinction has no classical analog and is the source of most of linear logic's expressiveness.</li>
+</ol>
+
+<ol>
+<li><strong>De Morgan duality is total.</strong> Unlike intuitionistic logic, linear logic is fully symmetric under negation $(-)^\perp$. Every connective has a dual: $(\!A \otimes B)^\perp = A^\perp \parr B^\perp$, recovering classical duality while remaining constructive.</li>
+</ol>
+
+<ol>
+<li><strong>Proof nets are the canonical proof objects.</strong> Sequent proofs suffer from "bureaucratic" rule-order choices. Proof nets identify these as equivalent, giving a geometric/graph-theoretic account. Correctness of a proof net is decidable via the <em>Danos–Regnier</em> criterion (acyclicity + connectedness of a "switching").</li>
+</ol>
+
+<ol>
+<li><strong>The exponential <code>!</code> is a comonad.</strong> The denotational semantics in symmetric monoidal closed categories identifies <code>!</code> with a comonad satisfying specific coherence conditions. This cleanly separates reusable ("classical") data from ephemeral ("linear") data.</li>
+</ol>
+
+<ol>
+<li><strong>Phase semantics provides completeness.</strong> Girard gave a simple algebraic completeness proof via <em>phase spaces</em> — commutative monoids with a distinguished set of "facts" closed under a biorthogonality operator. This is analogous to Boolean algebra semantics for classical logic, but significantly richer.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research threads include:</p>
+
+<ul>
+<li><strong>Differential linear logic</strong> (Ehrhard & Regnier) — extends linear logic with a <em>differentiation</em> operator on proofs, connecting to power series and the Taylor expansion of $\lambda$-terms. Links to <a href="/daily_knowledge/topic/Differential Categories">Differential Categories</a> and denotational models using analytic functions.</li>
+<li><strong>Graded/Quantitative type systems</strong> — generalise <code>!</code> to a semiring of <em>usage grades</em> (e.g., "used at most $n$ times"), directly influencing languages like Granule and extensions to Haskell's linear types (GHC 9.x+).</li>
+<li><strong>Linear logic and deep learning</strong> — connections between the geometry of interaction and <em>string diagrams</em> for neural networks are being actively explored, with potential for categorical foundations of differentiable programming.</li>
+<li><strong>Ludics</strong> — Girard's radical reconstruction of logic from <em>designs</em> (abstract interaction trees), aiming to derive both syntax and semantics from a single primitive notion of dialogue.</li>
+</ul>
+
+<p>The <a href="/daily_knowledge/topic/Session Types">session types</a> literature continues to expand, with multiparty session types and their connections to choreographic programming remaining particularly active.</p>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Substructural Logics">Substructural Logics</a> — the broader family (relevant logic, affine logic, ordered logic)</li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a> — proofs-as-programs; linear logic extends this to resource-aware computation</li>
+<li><a href="/daily_knowledge/topic/Session Types">Session Types</a> — direct application of linear logic to communication protocol typing</li>
+<li><a href="/daily_knowledge/topic/Monoidal Categories">Monoidal Categories</a> — the categorical semantics replacing cartesian closed categories</li>
+<li><a href="/daily_knowledge/topic/Quantum Computing">Quantum Computing</a> — no-cloning theorem as linear logic; categorical quantum mechanics</li>
+<li><a href="/daily_knowledge/topic/Rust Ownership System">Rust Ownership System</a> — industrial realisation of affine (near-linear) types</li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Expressiveness vs. ergonomics:</strong> Rust's ownership model uses <em>affine</em> types (use at most once) rather than strictly linear (exactly once). What does allowing weakening but not contraction buy you in practice, and what theorems break?</li>
+</ol>
+
+<ol>
+<li><strong>The exponential <code>!</code> is underspecified:</strong> Multiple non-isomorphic denotational models interpret <code>!</code> differently (e.g., the "free commutative comonoid" model vs. coherence spaces). Does this plurality indicate fundamental incompleteness in the logic, or richness in the semantics?</li>
+</ol>
+
+<ol>
+<li><strong>Linear logic and physics:</strong> If linear logic is genuinely the internal logic of quantum information, what would it mean to do <em>mathematics</em> inside a linear-logic framework? Could a linear-logic foundation replace or supplement constructive type theories like <a href="/daily_knowledge/topic/Homotopy Type Theory">HoTT</a> for quantum-native reasoning?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Linear_logic" target="_blank" rel="noopener"&gt;Linear Logic&lt;/a&gt; · Retrieved 2026-03-30</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.26653v1" target="_blank" rel="noopener">PerceptionComp: A Video Benchmark for Complex Perception-Centric Reasoning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26649v1" target="_blank" rel="noopener">Beyond the Quantum Picture: The Electrodynamic Origin of Chiral Nanoplasmonics</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26647v1" target="_blank" rel="noopener">An LP-based Sampling Policy for Multi-Armed Bandits with Side-Observations and Stochastic Availability</a> (2026)</li>
+</ul></div></article>
+<article id="descriptive_complexity"><div class="topic-header"><h2>Descriptive Complexity<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Complexity Theory &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Descriptive complexity characterizes computational complexity classes not by resource bounds on abstract machines, but by the <strong>expressive power of logical languages</strong> over finite structures. The central insight: a decision problem belongs to a complexity class if and only if it can be expressed as a query in a corresponding logical system.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Formal Setup</div><div>A <em>query</em> on finite structures is a mapping $Q : \text{STRUCT}[\sigma] \to \{0,1\}$ for some vocabulary $\sigma$. Descriptive complexity asks: for a given logic $\mathcal{L}$, which complexity class $\mathcal{C}$ satisfies $$\mathcal{C} = \{ L \subseteq \Sigma^* \mid L \text{ is expressible in } \mathcal{L} \}?$$ The encoding of strings as finite structures (e.g., via a successor relation on positions) is a crucial technical detail — results depend on the chosen encoding and whether an order relation is built in.</div></div>
+
+<p>The foundational result is <strong>Fagin's Theorem</strong> (1974): a property of finite structures is in NP iff it is definable in <strong>existential second-order logic</strong> (ESO / $\Sigma_1^1$). ESO allows first-order quantification over elements plus existential quantification over relations and functions — enough to "guess" a certificate and verify it.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Descriptive complexity offers three major payoffs:</p>
+
+<ol>
+<li><strong>Machine-independence</strong>: Complexity classes like NP and P are defined relative to Turing machines or circuits. Logical characterizations show these classes have an intrinsic, model-theoretic meaning — they aren't artifacts of the machine model chosen.</li>
+<li><strong>Transfer of proofs</strong>: Techniques from finite model theory (Ehrenfeucht–Fraïssé games, locality, 0-1 laws) become tools in complexity theory, and vice versa.</li>
+<li><strong>Evidence for naturality</strong>: If NP, P, PSPACE all admit clean logical descriptions, this strengthens the case that the polynomial hierarchy reflects something deep about definability, not just algorithmic convention.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP: The Holy Grail: P vs NP as a Logic Problem</div><div>Capturing P in pure logic (without a built-in order relation) remains <strong>open</strong>. On ordered structures, Immerman and Vardi independently showed P = FO(LFP) — first-order logic extended with a <em>least fixed-point</em> operator. Proving P ≠ NP would require showing no FO(LFP) sentence defines some NP-complete property, a potentially more tractable framing.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. The Immerman–Vardi Theorem</strong></p>
+<p>On ordered finite structures, $\text{P} = \text{FO(LFP)}$ — properties decidable in polynomial time are exactly those expressible using a least fixed-point closure. The order is essential: without it, fixed-point logic cannot even express parity.</p>
+
+<p><strong>2. The Full Polynomial Hierarchy</strong></p>
+<p>The entire polynomial hierarchy PH collapses logically:</p>
+<p>$$\text{PH} = \text{SO} \quad \text{(full second-order logic over finite structures)}$$</p>
+<p>$\Sigma_k^p$ corresponds to $\Sigma_k^1$ (SO with $k$ alternating blocks starting with existential), making the arithmetical hierarchy in logic mirror the computational hierarchy exactly.</p>
+
+<p><strong>3. PSPACE and Partial Fixed Points</strong></p>
+<p>$\text{PSPACE} = \text{FO(PFP)}$, where PFP is the <em>partial fixed-point</em> operator — an operator that returns the stable value of an iterated relation if convergence occurs, and $\emptyset$ otherwise. This is strictly more powerful than LFP.</p>
+
+<p><strong>4. Logspace and Symmetric Transitive Closure</strong></p>
+<p>$\text{L} = \text{FO(DTC)}$ (deterministic transitive closure) on ordered structures, and $\text{NL} = \text{FO(TC)}$ (non-deterministic/symmetric transitive closure). NL = co-NL is thus visible as a logical symmetry.</p>
+
+<p><strong>5. The Order Problem</strong></p>
+<p>Without a built-in linear order, even basic properties like EVEN (strings of even length) fall outside FO. Most characterizations implicitly assume an order — a philosophically awkward dependency that motivates research into <em>order-independent</em> or <em>generic</em> queries.</p>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research into capturing P without built-in order, connections to choiceless polynomial time (CPT), and circuit complexity characterizations is ongoing and results shift. Verify against current literature (post-2020) for the frontier.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<ul>
+<li><strong>Choiceless Polynomial Time (CPT)</strong>: A candidate logic for capturing P on unordered structures, based on hereditarily finite sets. Recent work probes its expressive limits via pebble games and rank logic, but capturing P remains unresolved.</li>
+<li><strong>Rank Logic</strong>: Extensions of FO with operators for computing matrix rank over finite fields; conjectured to be more expressive than CPT on certain graph families.</li>
+<li><strong>Finite Model Theory meets Proof Complexity</strong>: Connections between bounded arithmetic, propositional proof systems, and logical definability are being explored — descriptive complexity may illuminate why certain tautologies are hard to prove.</li>
+<li><strong>Parameterized Descriptive Complexity</strong>: Characterizing FPT and W[1]-hardness via logical fragments with bounded quantifier depth or width.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Finite Model Theory">Finite Model Theory</a></li>
+<li><a href="/daily_knowledge/topic/Polynomial Hierarchy">Polynomial Hierarchy</a></li>
+<li><a href="/daily_knowledge/topic/Fixed-Point Logics">Fixed-Point Logics</a></li>
+<li><a href="/daily_knowledge/topic/Fagin's Theorem">Fagin's Theorem</a></li>
+<li><a href="/daily_knowledge/topic/Circuit Complexity">Circuit Complexity</a></li>
+<li><a href="/daily_knowledge/topic/Ehrenfeucht-Fraïssé Games">Ehrenfeucht-Fraïssé Games</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The order problem reveals that logical characterizations of P are "fragile" — dependent on an encoding artifact. Does this undermine the machine-independence argument for descriptive complexity, or is it a feature that distinguishes <em>intrinsic</em> from <em>extrinsic</em> complexity?</li>
+</ol>
+
+<ol>
+<li>Fagin's Theorem gives a syntax for NP: an ESO sentence. Can this be leveraged constructively — e.g., to automatically reduce one NP problem to another, or to infer circuit lower bounds from logical inexpressibility results?</li>
+</ol>
+
+<ol>
+<li>If CPT (or rank logic) is eventually shown to capture P, what does that imply philosophically about the nature of polynomial-time computation — is it fundamentally about <em>symmetric, resource-bounded definability</em> over abstract structures?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Descriptive_complexity_theory" target="_blank" rel="noopener"&gt;Descriptive Complexity&lt;/a&gt; · Retrieved 2026-03-30</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.26666v1" target="_blank" rel="noopener">VLA-OPD: Bridging Offline SFT and Online RL for Vision-Language-Action Models via On-Policy Distillation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26665v1" target="_blank" rel="noopener">Detailed Geometry and Appearance from Opportunistic Motion</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26664v1" target="_blank" rel="noopener">Learning to Commit: Generating Organic Pull Requests via Online Repository Memory</a> (2026)</li>
+</ul></div></article>
+</div>
+</body>
+</html>

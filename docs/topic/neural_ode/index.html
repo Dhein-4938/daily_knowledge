@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neural ODEs</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-30/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Neural ODEs<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>Neural ODE</strong> models the hidden state $\mathbf{h}(t)$ of a network as the solution to an initial-value problem driven by a learned vector field: $$\frac{d\mathbf{h}(t)}{dt} = f_\theta(\mathbf{h}(t),\, t)$$ where $f_\theta$ is any differentiable neural network and $\mathbf{h}(t_0) = \mathbf{h}_0$ is the input embedding. The output is $\mathbf{h}(t_1)$, obtained by calling a black-box ODE solver.</div></div>
+
+<p>Introduced by Chen et al. (NeurIPS 2018), the key observation is that a residual block $\mathbf{h}_{t+1} = \mathbf{h}_t + f(\mathbf{h}_t)$ is simply an <strong>Euler step</strong> of this ODE. Taking the step size to zero yields a continuous-depth network. The number of "layers" is replaced by a time horizon $[t_0, t_1]$, and depth becomes a continuous variable controlled by the solver's adaptive step size.</p>
+
+<p>Gradients flow via the <strong>adjoint method</strong>: rather than backpropagating through solver steps (memory-intensive), define the adjoint $\mathbf{a}(t) = -\partial \mathcal{L}/\partial \mathbf{h}(t)$ and solve a second, augmented ODE backwards in time:</p>
+
+<p>$$\frac{d\mathbf{a}}{dt} = -\mathbf{a}(t)^\top \frac{\partial f_\theta}{\partial \mathbf{h}}$$</p>
+
+<p>This gives $O(1)$ memory cost in depth—only the final state and the adjoint ODE need be stored.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p><strong>Continuous-time dynamics</strong> are the natural language for irregularly sampled data, physics simulations, and control. Neural ODEs bridge deep learning and classical dynamical systems, enabling:</p>
+
+<ul>
+<li><strong>Latent ODE models</strong> for time series with missing observations (fit an encoder → solve ODE → decode)</li>
+<li><strong>Normalizing flows via CNFs</strong> (Continuous Normalizing Flows): instead of composing discrete bijections, flow a density along a learned vector field. The log-likelihood change is the trace of the Jacobian, integrated over time:</li>
+</ul>
+<p>$$\log p(\mathbf{x}(t_1)) = \log p(\mathbf{x}(t_0)) - \int_{t_0}^{t_1} \operatorname{tr}\!\left(\frac{\partial f_\theta}{\partial \mathbf{x}}\right) dt$$</p>
+<ul>
+<li><strong>Physical inductive biases</strong>: Hamiltonian Neural ODEs and Lagrangian Neural ODEs encode energy conservation by construction.</li>
+<li><strong>Parameter efficiency</strong>: depth is decoupled from the number of parameters—the same $f_\theta$ is reused at every time step.</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Connection to Numerical Analysis</div><div>The choice of ODE solver (Euler, RK4, Dormand-Prince, etc.) directly trades off accuracy vs. NFE (number of function evaluations). Adaptive solvers act as implicit regularizers: a smooth $f_\theta$ → fewer steps → faster inference. This creates a natural coupling between the loss landscape and the computational budget.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Adjoint sensitivity vs. direct backprop</strong>: The adjoint saves memory but can accumulate numerical error when integrating backwards through chaotic regions. Checkpointing strategies (store intermediate states) can mitigate this.</li>
+</ol>
+
+<ol>
+<li><strong>Stiffness</strong>: If $f_\theta$ has large Lipschitz constants, the ODE becomes stiff and solvers require tiny steps—training becomes prohibitively slow. Regularizing the Jacobian's spectral norm or adding a kinetic energy penalty $\int \|f_\theta\|^2\,dt$ helps.</li>
+</ol>
+
+<ol>
+<li><strong>FFJORD</strong> (Grathwohl et al., 2018) makes CNF training tractable by estimating $\operatorname{tr}(\partial f / \partial \mathbf{x})$ via Hutchinson's trace estimator, avoiding the $O(d^2)$ full Jacobian.</li>
+</ol>
+
+<ol>
+<li><strong>Augmented Neural ODEs</strong>: The base state space may be too low-dimensional for $f_\theta$ to form a valid flow (flows cannot cross). Augmenting with extra zero-initialized dimensions resolves topological obstructions.</li>
+</ol>
+
+<ol>
+<li><strong>Discrete vs. continuous spectrum</strong>: For sequence modeling, Neural ODEs can be discretized to match arbitrary time grids at test time—unlike RNNs with fixed Δt—making them robust to irregular sampling.</li>
+</ol>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The field of continuous-depth models is moving rapidly. Diffusion models and flow-matching methods (which generalize CNFs) have emerged as dominant generative frameworks; Neural ODEs in their original form are more common in scientific ML and time-series applications than in image generation as of mid-2020s.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>Active research directions include:</p>
+
+<ul>
+<li><strong>Neural SDEs</strong>: replace the deterministic vector field with $d\mathbf{h} = f_\theta\,dt + g_\theta\,dW_t$ for stochastic dynamics and uncertainty quantification.</li>
+<li><strong>Flow Matching</strong> (Lipman et al., 2022): train a CNF by regressing against a conditional vector field targeting the data distribution—avoids maximum likelihood training of the ODE entirely and is significantly more stable.</li>
+<li><strong>Physics-informed Neural ODEs</strong>: hybrid models that constrain $f_\theta$ to satisfy known partial differential equations, used in climate modeling and molecular dynamics.</li>
+<li><strong>Koopman operator methods</strong>: lifting nonlinear ODEs to linear dynamics in a high-dimensional feature space, where Neural ODEs serve as the finite-dimensional approximator.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Residual Networks">Residual Networks</a></li>
+<li><a href="/daily_knowledge/topic/Normalizing Flows">Normalizing Flows</a></li>
+<li><a href="/daily_knowledge/topic/Stochastic Differential Equations">Stochastic Differential Equations</a></li>
+<li><a href="/daily_knowledge/topic/Hamiltonian Mechanics in ML">Hamiltonian Mechanics in ML</a></li>
+<li><a href="/daily_knowledge/topic/Flow Matching">Flow Matching</a></li>
+<li><a href="/daily_knowledge/topic/Latent Variable Models">Latent Variable Models</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Expressivity vs. topology</strong>: A Neural ODE defines a homeomorphism (continuous bijection) on $\mathbb{R}^d$—it cannot change the topology of the input distribution. How does this constrain what CNFs can model compared to discrete normalizing flows or diffusion models, and when does it actually matter in practice?</li>
+</ol>
+
+<ol>
+<li><strong>Solver as a hyperparameter</strong>: Adaptive step-size solvers implicitly regularize smoothness of $f_\theta$ during training. Could one explicitly co-optimize the solver schedule alongside the network weights to achieve a better accuracy/compute Pareto frontier?</li>
+</ol>
+
+<ol>
+<li><strong>The stiffness problem at scale</strong>: Large-scale Neural ODEs in scientific ML (e.g., climate emulation) encounter stiff systems where standard solvers fail. What are the most promising approaches—implicit solvers, spectral normalization, operator splitting—and how do they interact with the adjoint training procedure?</li>
+</ol>
+
+
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.26665v1" target="_blank" rel="noopener">Detailed Geometry and Appearance from Opportunistic Motion</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26664v1" target="_blank" rel="noopener">Learning to Commit: Generating Organic Pull Requests via Online Repository Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26662v1" target="_blank" rel="noopener">Gaia Sees Blazars Move: Locating Optical Flares Using Astrometry</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26661v1" target="_blank" rel="noopener">GaussianGPT: Towards Autoregressive 3D Gaussian Scene Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.26659v1" target="_blank" rel="noopener">Partial Motion Imitation for Learning Cart Pushing with Legged Manipulators</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Neural+ODEs&labels=discussion&body=Topic:+[Neural+ODEs](https://dhein.github.io/daily_knowledge/topic/neural_ode/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
