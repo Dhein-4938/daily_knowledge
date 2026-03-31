@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Digest — March 31, 2026</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 31, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~16 min</div></div>
+<nav class="topic-nav"><a href="#game_semantics">Game Semantics</a><a href="#riemannian_geometry">Riemannian Geometry</a><a href="#spectral_theory">Spectral Theory</a><a href="#materials_science">Materials Science</a></nav>
+<article id="game_semantics"><div class="topic-header"><h2>Game Semantics<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Logic · Semantics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Game semantics reinterprets logical truth not as static set-theoretic satisfaction, but as the <strong>existence of a winning strategy</strong> in an adversarial dialogue game. A formula $\varphi$ is "true" or "valid" iff a designated player — the <em>Proponent</em> (P) or <em>Verifier</em> — has a winning strategy against the <em>Opponent</em> (O) or <em>Falsifier</em>, regardless of O's moves.</p>
+
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Formal kernel.</strong> Given formula $\varphi$, the game $\mathcal{G}(\varphi)$ is defined inductively on the structure of $\varphi$: - $\varphi \land \psi$: O chooses which conjunct to play next. - $\varphi \lor \psi$: P chooses. - $\neg \varphi$: roles swap; play continues in $\mathcal{G}(\varphi)$. - $\exists x.\, \varphi(x)$: P provides a witness $t$; play continues in $\mathcal{G}(\varphi(t))$. - $\forall x.\, \varphi(x)$: O chooses the witness.  P wins an atomic position iff the atom is true in the underlying model.</div></div>
+
+<p>A <strong>winning strategy</strong> for P is a function from game histories to P-moves such that every play consistent with the strategy ends in a P-win. $\varphi$ is valid iff such a strategy exists. This immediately connects semantic truth to <em>constructive</em> content: a proof of $\exists x.\,\varphi(x)$ must exhibit the witness.</p>
+
+<p>Two major traditions diverge here:</p>
+<ul>
+<li><strong>Dialogical Logic</strong> (Lorenzen & Lorenz, 1950s–60s): rules are purely syntactic; no background model. Validity = P has a formal winning strategy.</li>
+<li><strong>Game-Theoretical Semantics / GTS</strong> (Hintikka, 1960s–): a model $\mathcal{M}$ is fixed; games are evaluation games over $\mathcal{M}$.</li>
+</ul>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Game semantics is more than a curiosity — it fills genuine gaps left by Tarskian model theory.</p>
+
+<ol>
+<li><strong>Intuitionistic and substructural logics.</strong> The Curry-Howard correspondence tells us proofs are programs, but <em>what are proofs of?</em> Game semantics gives a direct answer: a proof is a P-strategy. This is especially clean for <strong>linear logic</strong> (Girard), where structural rules (contraction, weakening) correspond precisely to game resources.</li>
+</ol>
+
+<ol>
+<li><strong>Full abstraction for programming languages.</strong> Abramsky, Jagadeesan, Malacaria, and Hyland & Ong (mid-1990s) used game semantics to solve the long-open full abstraction problem for PCF (a typed $\lambda$-calculus with recursion). A denotational model is <em>fully abstract</em> iff contextual equivalence ⟺ semantic equality; game models achieve this where Scott domains famously failed.</li>
+</ol>
+
+<ol>
+<li><strong>Concurrency and interaction.</strong> Concurrent computation is inherently dialogic. Game models naturally handle the interleaving of moves between components, making them a natural fit for process calculi and session types.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>Game semantics makes the <strong>compositionality of interaction</strong> structurally explicit: composing two strategies (via "hiding" internal moves) corresponds directly to cut-elimination in proof theory and to linking components in a hardware or software system.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ul>
+<li><strong>Strategies as morphisms.</strong> In the Abramsky–Hyland categorical framework, arenas (game types) are objects and strategies (P's behavior) are morphisms. Composition is defined by parallel play plus hiding — a precise categorical structure (compact closed, or *-autonomous categories for linear logic).</li>
+</ul>
+
+<ul>
+<li><strong>Innocence and history-freeness.</strong> A strategy is <em>innocent</em> if P's move depends only on the current O-move and P's own prior moves, not O's full history. Innocence characterizes definability in higher-order functional languages.</li>
+</ul>
+
+<ul>
+<li><strong>Positionality vs. history-dependence.</strong> Classical logic admits <em>positional</em> (memoryless) winning strategies for certain games; intuitionistic logic typically requires history-sensitivity, reflecting the constructive content of proofs.</li>
+</ul>
+
+<ul>
+<li><strong>Independence-Friendly (IF) logic.</strong> Hintikka extended GTS to IF logic, where $\forall / \exists$ quantifiers can be <em>informationally independent</em> — P cannot see all of O's prior choices. This captures imperfect information and yields a logic strictly beyond first-order expressibility.</li>
+</ul>
+
+<ul>
+<li><strong>Complexity classes via games.</strong> Polynomial-time strategies in evaluation games characterize complexity classes: e.g., PTIME ↔ strategies computable in polynomial time. This gives a game-semantic account of descriptive complexity.</li>
+</ul>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — active research into game semantics for quantum computing, probabilistic languages, and higher-order model checking is moving quickly; specific claims about open problems may no longer hold.</div></div>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active threads as of the mid-2020s include:</p>
+
+<ul>
+<li><strong>Higher-order model checking</strong> using game semantics (Ong's HORS model-checking, decidability results).</li>
+<li><strong>Probabilistic game semantics</strong>: extending arenas and strategies to handle probabilistic branching, relevant to probabilistic programming languages.</li>
+<li><strong>Quantum game semantics</strong>: replacing deterministic strategies with quantum strategies (superposition of moves), connecting to categorical quantum mechanics.</li>
+<li><strong>Session types and deadlock freedom</strong>: game-theoretic proofs of type-safety properties in concurrent $\pi$-calculi.</li>
+<li><strong>Automated synthesis</strong>: game-solving algorithms applied directly to program synthesis and reactive system verification.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Model-Theoretic Semantics">Model-Theoretic Semantics</a></li>
+<li><a href="/daily_knowledge/topic/Linear Logic">Linear Logic</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Denotational Semantics">Denotational Semantics</a></li>
+<li><a href="/daily_knowledge/topic/Independence-Friendly Logic">Independence-Friendly Logic</a></li>
+<li><a href="/daily_knowledge/topic/Full Abstraction Problem">Full Abstraction Problem</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Dialogical logic derives validity without a background model, while GTS fixes one — does this difference matter for foundations, or is it merely a presentation choice? Can one be faithfully embedded in the other?</li>
+</ol>
+
+<ol>
+<li>Innocence restricts P-strategies to those that ignore O's history; what is the precise correspondence between innocence and <em>purely functional</em> (side-effect-free) computation, and how does it break down for stateful languages?</li>
+</ol>
+
+<ol>
+<li>IF logic escapes the Löwenheim-Skolem theorem and collapses the $\Sigma^1_1 / \Pi^1_1$ boundary in expressiveness — does this make it a <em>better</em> logic for mathematics, or do the costs (loss of compactness, non-axiomatizability) outweigh the gains?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Game_semantics" target="_blank" rel="noopener"&gt;Game Semantics&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.28766v1" target="_blank" rel="noopener">HandX: Scaling Bimanual Motion and Interaction Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28765v1" target="_blank" rel="noopener">Adaptive Block-Scaled Data Types</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28762v1" target="_blank" rel="noopener">On-the-fly Repulsion in the Contextual Space for Rich Diversity in Diffusion Transformers</a> (2026)</li>
+</ul></div></article>
+<article id="riemannian_geometry"><div class="topic-header"><h2>Riemannian Geometry<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Geometry &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Riemannian geometry is the study of smooth manifolds equipped with a <strong>Riemannian metric</strong> — a smoothly varying inner product on each tangent space.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>A <strong>Riemannian manifold</strong> is a pair $(M, g)$ where $M$ is a smooth manifold and $g$ is a smooth section of the symmetric tensor bundle $T^*M \otimes T^*M$ such that $g_p : T_pM \times T_pM \to \mathbb{R}$ is a positive-definite inner product for every $p \in M$.</div></div>
+
+<p>The metric $g$ induces local structure: the length of a curve $\gamma : [a,b] \to M$ is</p>
+
+<p>$$L(\gamma) = \int_a^b \sqrt{g_{\gamma(t)}\!\left(\dot\gamma(t),\, \dot\gamma(t)\right)}\; dt$$</p>
+
+<p>and geodesics — length-minimizing curves — satisfy the geodesic equation</p>
+
+<p>$$\ddot\gamma^k + \Gamma^k_{ij}\,\dot\gamma^i\,\dot\gamma^j = 0$$</p>
+
+<p>where $\Gamma^k_{ij}$ are the <strong>Christoffel symbols</strong> of the Levi-Civita connection, uniquely determined by compatibility with $g$ and torsion-freeness.</p>
+
+<p>Curvature is encoded in the <strong>Riemann curvature tensor</strong> $R^l{}_{kij}$, which measures the failure of parallel transport to commute. Its contractions give the Ricci tensor $R_{ij}$ and scalar curvature $R$.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Riemannian geometry is the mathematical backbone of <strong>general relativity</strong>: spacetime is a pseudo-Riemannian manifold (signature $(-,+,+,+)$), and Einstein's field equations</p>
+
+<p>$$G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$$</p>
+
+<p>are purely statements about its curvature. Beyond physics, the framework drives:</p>
+
+<ul>
+<li><strong>Global analysis</strong> (index theorems, spectral geometry on manifolds)</li>
+<li><strong>Geometric group theory</strong> (symmetric spaces, lattices)</li>
+<li><strong>Machine learning</strong> (optimisation on manifolds, information geometry)</li>
+<li><strong>Topology</strong> (soul theorem, Sphere theorem, Perelman's proof of the Poincaré conjecture via Ricci flow)</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Ricci Flow as a Canonical Smoothing</div><div>The Ricci flow $\partial_t g_{ij} = -2R_{ij}$ can be thought of as a nonlinear heat equation on the space of metrics — it diffuses curvature, driving a manifold toward constant curvature. This is why it could resolve the Geometrisation Conjecture.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Levi-Civita uniqueness.</strong> Among all affine connections on $(M,g)$, exactly one is torsion-free and metric-compatible. This uniqueness is what makes the Riemannian framework so rigid and powerful.</li>
+</ol>
+
+<ol>
+<li><strong>Sectional curvature controls topology.</strong> Comparison theorems (Bonnet–Myers, Cartan–Hadamard, Toponogov) relate the sign of sectional curvature $K$ to global topology: $K > 0$ forces finite $\pi_1$; $K \leq 0$ makes the universal cover diffeomorphic to $\mathbb{R}^n$.</li>
+</ol>
+
+<ol>
+<li><strong>Geodesic completeness vs. metric completeness.</strong> By the Hopf–Rinow theorem, for connected Riemannian manifolds these are equivalent, and further equivalent to any two points being joinable by a minimising geodesic.</li>
+</ol>
+
+<ol>
+<li><strong>Exponential map and normal coordinates.</strong> The map $\exp_p : T_pM \to M$ is a local diffeomorphism near the origin; in normal coordinates, $g_{ij}(p) = \delta_{ij}$ and $\Gamma^k_{ij}(p) = 0$, isolating curvature effects to second order.</li>
+</ol>
+
+<ol>
+<li><strong>Intrinsic vs. extrinsic.</strong> Gauss's <em>Theorema Egregium</em> showed that Gaussian curvature of a surface is intrinsic — determined by $g$ alone, not by how the surface sits in $\mathbb{R}^3$. Riemannian geometry fully abstracts away the ambient space.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research frontiers include:</p>
+
+<ul>
+<li><strong>Manifold optimisation</strong> — algorithms (gradient descent, interior-point methods) that respect group structure (SO$(n)$, SL$(n)$, Stiefel manifolds) without projecting back from an ambient Euclidean space. A 2026 paper (Santos et al.) proposes a Matrix Lie Group Interior-Point Method exploiting Lie algebra parametrisation to outperform classical Riemannian IPM approaches on SO$(n)$ and SL$(n)$.</li>
+<li><strong>Neural representation geometry</strong> — <em>metric similarity analysis</em> (MSA, Cayco Gajic & Pellegrino 2026) uses Riemannian tools to compare the <strong>intrinsic</strong> geometry of neural network representations under the manifold hypothesis, going beyond standard CKA or RSA which only capture extrinsic structure.</li>
+<li><strong>Ricci flow in higher dimensions</strong> and its role in geometric topology remains open beyond dimension 3.</li>
+<li><strong>Spectral geometry</strong>: Can you hear the shape of a drum? (Kac's question) — answered "no" in general, but refined inverse spectral problems continue.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Differential Geometry">Differential Geometry</a></li>
+<li><a href="/daily_knowledge/topic/Lie Groups and Lie Algebras">Lie Groups and Lie Algebras</a></li>
+<li><a href="/daily_knowledge/topic/General Relativity">General Relativity</a></li>
+<li><a href="/daily_knowledge/topic/Information Geometry">Information Geometry</a></li>
+<li><a href="/daily_knowledge/topic/Ricci Flow">Ricci Flow</a></li>
+<li><a href="/daily_knowledge/topic/Manifold Hypothesis in Machine Learning">Manifold Hypothesis in Machine Learning</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The Levi-Civita connection is "forced" by the metric — but in gauge theory, connections are independent dynamical fields. What breaks this rigidity, and what does it buy physically?</li>
+<li>MSA compares intrinsic geometries of neural representations. Could the Gromov–Hausdorff distance (a metric on the space of metric spaces) serve as a theoretically cleaner foundation than the Fisher–Rao metric used there?</li>
+<li>Ricci flow develops singularities in finite time that Perelman resolves by "surgery." Is there a canonical, singularity-free flow on the space of Riemannian metrics, and what would it converge to?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Riemannian_geometry" target="_blank" rel="noopener"&gt;Riemannian Geometry&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.28764v1" target="_blank" rel="noopener">Geometry-aware similarity metrics for neural representations on Riemannian and statistical manifolds</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28752v1" target="_blank" rel="noopener">Topological Optical Chirality Dichroism</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28747v1" target="_blank" rel="noopener">Constrained Optimization on Matrix Lie Groups via Interior-Point Method</a> (2026)</li>
+</ul></div></article>
+<article id="spectral_theory"><div class="topic-header"><h2>Spectral Theory<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Analysis &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Spectral theory</strong> generalizes the eigenvalue/eigenvector decomposition of finite-dimensional matrices to linear operators acting on infinite-dimensional spaces — chiefly Hilbert and Banach spaces. The <strong>spectrum</strong> of an operator $T$ on a Banach space $X$ is $$\sigma(T) = \{\lambda \in \mathbb{C} : (T - \lambda I) \text{ is not boundedly invertible}\}$$ Its complement $\rho(T) = \mathbb{C} \setminus \sigma(T)$ is the <strong>resolvent set</strong>, and the <strong>resolvent operator</strong> $R(\lambda, T) = (T - \lambda I)^{-1}$ is analytic on $\rho(T)$.</div></div>
+
+<p>Unlike the finite-dimensional case, the spectrum decomposes into three disjoint parts:</p>
+<ul>
+<li><strong>Point spectrum</strong> $\sigma_p(T)$: $\lambda$ is an eigenvalue (kernel of $T - \lambda I$ nontrivial)</li>
+<li><strong>Continuous spectrum</strong> $\sigma_c(T)$: $T - \lambda I$ injective with dense but non-closed range</li>
+<li><strong>Residual spectrum</strong> $\sigma_r(T)$: $T - \lambda I$ injective with range not dense</li>
+</ul>
+
+<p>For <strong>self-adjoint</strong> operators on Hilbert spaces, $\sigma(T) \subseteq \mathbb{R}$ and the residual spectrum vanishes entirely — the spectral theorem then provides a projection-valued measure $E$ such that:</p>
+<p>$$T = \int_{\sigma(T)} \lambda \, dE(\lambda)$$</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Spectral theory is the mathematical backbone of quantum mechanics — observables are self-adjoint operators, and their spectra are the possible measurement outcomes. Beyond physics, it underpins:</p>
+
+<ul>
+<li><strong>PDE analysis</strong>: Understanding the Laplacian's spectrum controls heat diffusion, wave propagation, and stability of equilibria</li>
+<li><strong>Numerical linear algebra</strong>: Iterative solvers, preconditioning, and convergence rates are all spectral phenomena</li>
+<li><strong>Data science / ML</strong>: PCA, graph Laplacians, and kernel methods are finite-rank approximations to infinite-dimensional spectral problems</li>
+<li><strong>Dynamical systems</strong>: Koopman operator theory lifts nonlinear dynamics into a linear (spectral) framework on function spaces</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Analytic functions are central, not peripheral</div><div>The resolvent $R(\lambda, T)$ is a Banach-space-valued analytic function on $\rho(T)$. Nearly all spectral theory can be recovered from complex analysis applied to this function — the spectrum is literally the set of singularities of the resolvent, making Cauchy's theorem, Laurent expansions, and contour integrals essential tools.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Spectral radius formula</strong>: For any bounded operator, $r(T) = \lim_{n\to\infty} \|T^n\|^{1/n} = \sup_{\lambda \in \sigma(T)} |\lambda|$. This links iteration behavior directly to spectral geometry.</li>
+</ol>
+
+<ol>
+<li><strong>Compact operators</strong>: If $T$ is compact on an infinite-dimensional Hilbert space, then $0 \in \sigma(T)$ always, and any nonzero spectral point is an isolated eigenvalue of finite multiplicity — a structure much closer to finite dimensions.</li>
+</ol>
+
+<ol>
+<li><strong>Functional calculus</strong>: For a normal operator $T$, one can define $f(T)$ for any bounded Borel function $f : \sigma(T) \to \mathbb{C}$, extending polynomial calculus in a spectrally consistent way. This is the rigorous foundation of expressions like $e^{itH}$ in quantum evolution.</li>
+</ol>
+
+<ol>
+<li><strong>Unbounded operators</strong>: Physically relevant operators (position, momentum, Hamiltonians) are typically unbounded and only densely defined. Self-adjointness must be carefully distinguished from mere symmetry; self-adjoint extensions (von Neumann theory) govern whether a spectral theorem applies.</li>
+</ol>
+
+<ol>
+<li><strong>Pseudospectrum</strong>: For non-normal operators, $\sigma(T)$ can be wildly sensitive to perturbations. The $\epsilon$-pseudospectrum $\sigma_\epsilon(T) = \{\lambda : \|R(\lambda,T)\| > \epsilon^{-1}\}$ gives a more physically honest picture of spectral sensitivity.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research frontiers include:</p>
+
+<ul>
+<li><strong>Spectral geometry on Riemannian manifolds</strong>: Understanding how the intrinsic geometry of a manifold encodes information in the eigenvalues of its Laplace–Beltrami operator (inverse problem: "can you hear the shape of a drum?"). Recent ML work (e.g., metric similarity analysis using Riemannian tools) repurposes these ideas to compare learned neural representations by their intrinsic spectral geometry — treating representation spaces as statistical manifolds.</li>
+<li><strong>Koopman spectral methods</strong>: Data-driven algorithms (DMD, EDMD) approximate infinite-dimensional Koopman spectra from trajectory data, connecting spectral theory to nonlinear dynamical systems and control.</li>
+<li><strong>Random matrix theory</strong>: Spectral statistics of large random matrices (GUE, Wigner semicircle) have deep connections to number theory, quantum chaos, and the universality phenomenon.</li>
+<li><strong>Non-self-adjoint and non-normal operators</strong>: Classical theory assumed self-adjointness. Modern PDE and control theory increasingly demands spectral tools for operators with no such symmetry, where pseudospectra and resolvent estimates are central.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Operator Theory">Operator Theory</a></li>
+<li><a href="/daily_knowledge/topic/Hilbert Space">Hilbert Space</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Mechanics — Mathematical Formalism">Quantum Mechanics — Mathematical Formalism</a></li>
+<li><a href="/daily_knowledge/topic/Koopman Operator Theory">Koopman Operator Theory</a></li>
+<li><a href="/daily_knowledge/topic/Riemannian Geometry">Riemannian Geometry</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Self-adjoint operators have purely real spectra, but many physically relevant operators (e.g., in open quantum systems or fluid stability) are decidedly non-self-adjoint. How does one recover useful spectral information when the classical spectral theorem breaks down?</li>
+</ol>
+
+<ol>
+<li>The resolvent operator $R(\lambda, T)$ is analytic on $\rho(T)$ — in what sense does complex analytic continuation give you <em>more</em> information about an operator than purely real-variable methods can? Are there concrete examples where this insight changes what's provable?</li>
+</ol>
+
+<ol>
+<li>Koopman theory linearizes nonlinear dynamics by lifting to an infinite-dimensional function space — but practical computation requires truncating to finite rank. What spectral properties of the infinite-dimensional operator are reliably preserved under such truncation, and which are catastrophically lost?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Spectral_theory" target="_blank" rel="noopener"&gt;Spectral Theory&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.28764v1" target="_blank" rel="noopener">Geometry-aware similarity metrics for neural representations on Riemannian and statistical manifolds</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28761v1" target="_blank" rel="noopener">Cosmic Shear in Effective Field Theory at Two-Loop Order: Revisiting $S_8$ in Dark Energy Survey Data</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28758v1" target="_blank" rel="noopener">$\mathcal{L}_1$-Certified Distributionally Robust Planning for Safety-Constrained Adaptive Control</a> (2026)</li>
+</ul></div></article>
+<article id="materials_science"><div class="topic-header"><h2>Materials Science<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>Materials science studies the relationships between <strong>structure</strong>, <strong>properties</strong>, <strong>processing</strong>, and <strong>performance</strong> of matter — the canonical four-corner paradigm that organizes the entire discipline:</p>
+
+<p>$$\text{Processing} \rightarrow \text{Structure} \rightarrow \text{Properties} \rightarrow \text{Performance}$$</p>
+
+<p>Structure is understood across multiple length scales: atomic bonding and crystal lattice (~Å), defects and grain boundaries (~nm–μm), and macroscopic microstructure (~mm). Each scale feeds into observable properties — mechanical, electrical, thermal, optical, magnetic.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Defining Insight</div><div>The same element or compound can exhibit radically different properties depending solely on processing history. Diamond and graphite are both pure carbon; their divergent properties arise from bonding geometry alone ($sp^3$ tetrahedral vs. $sp^2$ planar). Processing selects structure; structure dictates behavior.</div></div>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Materials science is the substrate on which most of engineering runs. It underpins:</p>
+
+<ul>
+<li><strong>Aerospace &amp; civil structures</strong> — fatigue life, fracture toughness, creep resistance</li>
+<li><strong>Semiconductors &amp; electronics</strong> — band-gap engineering, doping profiles, thin-film deposition</li>
+<li><strong>Biomaterials</strong> — implant osseointegration, biocompatibility, controlled drug release</li>
+<li><strong>Energy systems</strong> — electrode kinetics in batteries, thermal barrier coatings, photovoltaic absorbers</li>
+<li><strong>Forensic / failure analysis</strong> — determining root causes of catastrophic failures (e.g., stress-corrosion cracking in aviation components)</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Cross-disciplinary leverage</div><div>Because materials science borrows machinery from quantum mechanics, thermodynamics, and continuum mechanics simultaneously, advances here often propagate upstream into chemistry and physics. High-temperature superconductors, for instance, forced condensed-matter theorists to revisit BCS theory.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<h3>1. Crystal Defects Are Features, Not Bugs</h3>
+<p>Point defects (vacancies, interstitials), line defects (dislocations), and planar defects (grain boundaries, stacking faults) largely control yield strength, diffusivity, and conductivity. The Hall–Petch relation captures grain-boundary strengthening:</p>
+
+<p>$$\sigma_y = \sigma_0 + k_y \, d^{-1/2}$$</p>
+
+<p>where $d$ is mean grain diameter. Smaller grains → more boundaries → higher yield stress.</p>
+
+<h3>2. Phase Diagrams as Thermodynamic Maps</h3>
+<p>Phase diagrams encode equilibrium stable phases as a function of composition and temperature. The <strong>lever rule</strong> quantifies phase fractions in two-phase regions. Non-equilibrium processing (quenching, rapid solidification) traps metastable phases — the basis of martensite in steel and metallic glasses.</p>
+
+<h3>3. Diffusion Controls Kinetics</h3>
+<p>Most solid-state transformations are diffusion-limited. Fick's second law:</p>
+
+<p>$$\frac{\partial C}{\partial t} = D \nabla^2 C$$</p>
+
+<p>where $D = D_0 \exp(-Q/RT)$ is thermally activated. This governs carburization, sintering, and dopant drive-in in semiconductors.</p>
+
+<h3>4. Structure–Property Duality in Electronic Materials</h3>
+<p>Band theory extends periodic potential quantum mechanics to crystalline solids. Band gap $E_g$ determines optical absorption edge and intrinsic carrier concentration $n_i \propto \exp(-E_g / 2k_BT)$. Strain engineering (epitaxial mismatch) tunes $E_g$ in III–V heterostructures.</p>
+
+<h3>5. Fracture Mechanics as a Materials Property</h3>
+<p>Griffith's criterion links fracture stress to crack size:</p>
+
+<p>$$\sigma_f = \sqrt{\frac{2 E \gamma_s}{\pi a}}$$</p>
+
+<p>Critical stress intensity factor $K_{Ic}$ (fracture toughness) is an intrinsic material property used in damage-tolerant design.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active research fronts include:</p>
+<ul>
+<li><strong>High-entropy alloys (HEAs)</strong> — multi-principal-element systems that exploit configurational entropy to stabilize single-phase solid solutions with exceptional hardness and corrosion resistance</li>
+<li><strong>Computational materials science</strong> — density functional theory (DFT) + machine-learning interatomic potentials accelerating alloy and catalyst discovery (e.g., Materials Project, AFLOW databases)</li>
+<li><strong>2D materials beyond graphene</strong> — MoS₂, hBN, MXenes for applications in flexible electronics and catalysis</li>
+<li><strong>Additive manufacturing (AM)</strong> — laser powder-bed fusion creates non-equilibrium microstructures; understanding and controlling them is an open problem</li>
+<li><strong>Metamaterials</strong> — architected structures whose effective properties (negative index, extreme stiffness-to-weight) arise from geometry rather than chemistry</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Crystal Structure and Symmetry">Crystal Structure and Symmetry</a></li>
+<li><a href="/daily_knowledge/topic/Thermodynamics of Phase Transitions">Thermodynamics of Phase Transitions</a></li>
+<li><a href="/daily_knowledge/topic/Fracture Mechanics">Fracture Mechanics</a></li>
+<li><a href="/daily_knowledge/topic/Semiconductor Physics">Semiconductor Physics</a></li>
+<li><a href="/daily_knowledge/topic/Computational Materials Design">Computational Materials Design</a></li>
+<li><a href="/daily_knowledge/topic/Nanomaterials and Nanotechnology">Nanomaterials and Nanotechnology</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The processing–structure–properties chain implies determinism, yet real manufacturing introduces stochasticity (defect populations, thermal gradients). How does probabilistic fracture mechanics reconcile these two views, and what does it imply for safety factors in design?</li>
+</ol>
+
+<ol>
+<li>Machine-learning potentials can now simulate systems at near-DFT accuracy for millions of atoms. Does this dissolve the traditional boundary between computational and experimental materials science, or does it introduce new epistemic risks from training-data bias?</li>
+</ol>
+
+<ol>
+<li>High-entropy alloys challenge the classical metallurgical heuristic of using a dominant solvent element. What thermodynamic conditions actually favor single-phase HEA stability over intermetallic formation, and how do we predict them a priori?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Materials_science" target="_blank" rel="noopener"&gt;Materials Science&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.28767v1" target="_blank" rel="noopener">Gen-Searcher: Reinforcing Agentic Search for Image Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28766v1" target="_blank" rel="noopener">HandX: Scaling Bimanual Motion and Interaction Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28765v1" target="_blank" rel="noopener">Adaptive Block-Scaled Data Types</a> (2026)</li>
+</ul></div></article>
+</div>
+</body>
+</html>

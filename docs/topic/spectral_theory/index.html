@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spectral Theory</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-03-31/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Spectral Theory<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Math · Analysis &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Spectral theory</strong> generalizes the eigenvalue/eigenvector decomposition of finite-dimensional matrices to linear operators acting on infinite-dimensional spaces — chiefly Hilbert and Banach spaces. The <strong>spectrum</strong> of an operator $T$ on a Banach space $X$ is $$\sigma(T) = \{\lambda \in \mathbb{C} : (T - \lambda I) \text{ is not boundedly invertible}\}$$ Its complement $\rho(T) = \mathbb{C} \setminus \sigma(T)$ is the <strong>resolvent set</strong>, and the <strong>resolvent operator</strong> $R(\lambda, T) = (T - \lambda I)^{-1}$ is analytic on $\rho(T)$.</div></div>
+
+<p>Unlike the finite-dimensional case, the spectrum decomposes into three disjoint parts:</p>
+<ul>
+<li><strong>Point spectrum</strong> $\sigma_p(T)$: $\lambda$ is an eigenvalue (kernel of $T - \lambda I$ nontrivial)</li>
+<li><strong>Continuous spectrum</strong> $\sigma_c(T)$: $T - \lambda I$ injective with dense but non-closed range</li>
+<li><strong>Residual spectrum</strong> $\sigma_r(T)$: $T - \lambda I$ injective with range not dense</li>
+</ul>
+
+<p>For <strong>self-adjoint</strong> operators on Hilbert spaces, $\sigma(T) \subseteq \mathbb{R}$ and the residual spectrum vanishes entirely — the spectral theorem then provides a projection-valued measure $E$ such that:</p>
+<p>$$T = \int_{\sigma(T)} \lambda \, dE(\lambda)$$</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Spectral theory is the mathematical backbone of quantum mechanics — observables are self-adjoint operators, and their spectra are the possible measurement outcomes. Beyond physics, it underpins:</p>
+
+<ul>
+<li><strong>PDE analysis</strong>: Understanding the Laplacian's spectrum controls heat diffusion, wave propagation, and stability of equilibria</li>
+<li><strong>Numerical linear algebra</strong>: Iterative solvers, preconditioning, and convergence rates are all spectral phenomena</li>
+<li><strong>Data science / ML</strong>: PCA, graph Laplacians, and kernel methods are finite-rank approximations to infinite-dimensional spectral problems</li>
+<li><strong>Dynamical systems</strong>: Koopman operator theory lifts nonlinear dynamics into a linear (spectral) framework on function spaces</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Analytic functions are central, not peripheral</div><div>The resolvent $R(\lambda, T)$ is a Banach-space-valued analytic function on $\rho(T)$. Nearly all spectral theory can be recovered from complex analysis applied to this function — the spectrum is literally the set of singularities of the resolvent, making Cauchy's theorem, Laurent expansions, and contour integrals essential tools.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Spectral radius formula</strong>: For any bounded operator, $r(T) = \lim_{n\to\infty} \|T^n\|^{1/n} = \sup_{\lambda \in \sigma(T)} |\lambda|$. This links iteration behavior directly to spectral geometry.</li>
+</ol>
+
+<ol>
+<li><strong>Compact operators</strong>: If $T$ is compact on an infinite-dimensional Hilbert space, then $0 \in \sigma(T)$ always, and any nonzero spectral point is an isolated eigenvalue of finite multiplicity — a structure much closer to finite dimensions.</li>
+</ol>
+
+<ol>
+<li><strong>Functional calculus</strong>: For a normal operator $T$, one can define $f(T)$ for any bounded Borel function $f : \sigma(T) \to \mathbb{C}$, extending polynomial calculus in a spectrally consistent way. This is the rigorous foundation of expressions like $e^{itH}$ in quantum evolution.</li>
+</ol>
+
+<ol>
+<li><strong>Unbounded operators</strong>: Physically relevant operators (position, momentum, Hamiltonians) are typically unbounded and only densely defined. Self-adjointness must be carefully distinguished from mere symmetry; self-adjoint extensions (von Neumann theory) govern whether a spectral theorem applies.</li>
+</ol>
+
+<ol>
+<li><strong>Pseudospectrum</strong>: For non-normal operators, $\sigma(T)$ can be wildly sensitive to perturbations. The $\epsilon$-pseudospectrum $\sigma_\epsilon(T) = \{\lambda : \|R(\lambda,T)\| > \epsilon^{-1}\}$ gives a more physically honest picture of spectral sensitivity.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research frontiers include:</p>
+
+<ul>
+<li><strong>Spectral geometry on Riemannian manifolds</strong>: Understanding how the intrinsic geometry of a manifold encodes information in the eigenvalues of its Laplace–Beltrami operator (inverse problem: "can you hear the shape of a drum?"). Recent ML work (e.g., metric similarity analysis using Riemannian tools) repurposes these ideas to compare learned neural representations by their intrinsic spectral geometry — treating representation spaces as statistical manifolds.</li>
+<li><strong>Koopman spectral methods</strong>: Data-driven algorithms (DMD, EDMD) approximate infinite-dimensional Koopman spectra from trajectory data, connecting spectral theory to nonlinear dynamical systems and control.</li>
+<li><strong>Random matrix theory</strong>: Spectral statistics of large random matrices (GUE, Wigner semicircle) have deep connections to number theory, quantum chaos, and the universality phenomenon.</li>
+<li><strong>Non-self-adjoint and non-normal operators</strong>: Classical theory assumed self-adjointness. Modern PDE and control theory increasingly demands spectral tools for operators with no such symmetry, where pseudospectra and resolvent estimates are central.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Operator Theory">Operator Theory</a></li>
+<li><a href="/daily_knowledge/topic/Hilbert Space">Hilbert Space</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Mechanics — Mathematical Formalism">Quantum Mechanics — Mathematical Formalism</a></li>
+<li><a href="/daily_knowledge/topic/Koopman Operator Theory">Koopman Operator Theory</a></li>
+<li><a href="/daily_knowledge/topic/Riemannian Geometry">Riemannian Geometry</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>Self-adjoint operators have purely real spectra, but many physically relevant operators (e.g., in open quantum systems or fluid stability) are decidedly non-self-adjoint. How does one recover useful spectral information when the classical spectral theorem breaks down?</li>
+</ol>
+
+<ol>
+<li>The resolvent operator $R(\lambda, T)$ is analytic on $\rho(T)$ — in what sense does complex analytic continuation give you <em>more</em> information about an operator than purely real-variable methods can? Are there concrete examples where this insight changes what's provable?</li>
+</ol>
+
+<ol>
+<li>Koopman theory linearizes nonlinear dynamics by lifting to an infinite-dimensional function space — but practical computation requires truncating to finite rank. What spectral properties of the infinite-dimensional operator are reliably preserved under such truncation, and which are catastrophically lost?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Spectral_theory" target="_blank" rel="noopener"&gt;Spectral Theory&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.28764v1" target="_blank" rel="noopener">Geometry-aware similarity metrics for neural representations on Riemannian and statistical manifolds</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28761v1" target="_blank" rel="noopener">Cosmic Shear in Effective Field Theory at Two-Loop Order: Revisiting $S_8$ in Dark Energy Survey Data</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.28758v1" target="_blank" rel="noopener">$\mathcal{L}_1$-Certified Distributionally Robust Planning for Safety-Constrained Adaptive Control</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Spectral+Theory&labels=discussion&body=Topic:+[Spectral+Theory](https://dhein.github.io/daily_knowledge/topic/spectral_theory/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
