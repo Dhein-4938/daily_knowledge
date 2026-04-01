@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Persistent Homology</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  hljs.highlightAll();
+  // Mark visited topic nav pills using localStorage
+  const nav = document.querySelector('.topic-nav');
+  if (nav) {
+    // Mark current scroll position topics as visited on intersection
+    const articles = document.querySelectorAll('article[id]');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const key = 'visited:' + e.target.id;
+          localStorage.setItem(key, '1');
+          const pill = nav.querySelector('a[href="#' + e.target.id + '"]');
+          if (pill) pill.classList.add('visited');
+        }
+      });
+    }, {threshold: 0.3});
+    articles.forEach(a => obs.observe(a));
+    // Restore visited state on page load
+    articles.forEach(a => {
+      if (localStorage.getItem('visited:' + a.id)) {
+        const pill = nav.querySelector('a[href="#' + a.id + '"]');
+        if (pill) pill.classList.add('visited');
+      }
+    });
+  }
+});</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0f0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+  .page { max-width: 820px; margin: 0 auto; }
+  /* Header */
+  .digest-header {
+    border: 2px solid #4a9eff;
+    border-radius: 8px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 1.8rem;
+    background: #0d1b35;
+  }
+  .digest-header h1 {
+    font-size: 1.4rem;
+    color: #4a9eff;
+    margin-bottom: 0.3rem;
+  }
+  .digest-header .meta { color: #8898bb; font-size: 0.95rem; }
+  /* Topic nav */
+  .topic-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    background: #1a1a2e;
+    padding: 0.6rem 0;
+    z-index: 10;
+  }
+  .topic-nav a {
+    background: #1e2a45;
+    color: #7ec8ff;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    border: 1px solid #2e4a6e;
+    transition: background 0.15s;
+  }
+  .topic-nav a:hover { background: #2a3d5e; }
+  .topic-nav a.visited::before {
+    content: '●';
+    color: #5fca5f;
+    margin-right: 0.3em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+  /* Topic article */
+  article {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .topic-header {
+    border-left: 4px solid #4a9eff;
+    padding: 0.8rem 1rem;
+    background: #111828;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 1.4rem;
+  }
+  .topic-header h2 {
+    color: #7ec8ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .topic-header .topic-meta { color: #7a8db0; font-size: 0.88rem; }
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #7ec8ff;
+    text-decoration: none;
+    font-size: 0.92rem;
+  }
+  .back-link:hover { text-decoration: underline; }
+  /* Body typography */
+  .body h2 {
+    color: #4a9eff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 1.6rem 0 0.6rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #2a3d5e;
+  }
+  .body h3 {
+    color: #c5d8f5;
+    font-size: 1.05rem;
+    margin: 1.2rem 0 0.4rem;
+  }
+  .body p { margin: 0.7rem 0; }
+  .body strong { color: #fff; }
+  .body em { color: #c9d8f0; font-style: italic; }
+  .body a { color: #7ec8ff; text-decoration: none; }
+  .body a:hover { text-decoration: underline; }
+  .body hr { border: none; border-top: 1px solid #2a3d5e; margin: 1.4rem 0; }
+  .body ul, .body ol { margin: 0.6rem 0 0.6rem 1.6rem; }
+  .body li { margin: 0.25rem 0; }
+  .body blockquote {
+    border-left: 3px solid #3a5070;
+    padding: 0.4rem 1rem;
+    color: #8898bb;
+    margin: 0.8rem 0;
+    font-style: italic;
+  }
+  /* Callouts */
+  .callout {
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+  }
+  .callout .callout-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+  .callout.info  { background: #0a1f3a; border-left: 4px solid #4a9eff; }
+  .callout.info  .callout-title { color: #4a9eff; }
+  .callout.tip   { background: #1e1a00; border-left: 4px solid #f0d060; }
+  .callout.tip   .callout-title { color: #f0d060; }
+  .callout.warning { background: #2a0a0a; border-left: 4px solid #ff6060; }
+  .callout.warning .callout-title { color: #ff6060; }
+  /* Code */
+  .body pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .body code:not(pre code) {
+    background: #1e2a45;
+    color: #a8cfff;
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.88em;
+  }
+  /* Single topic page */
+  .single-topic article { margin-bottom: 0; }
+  /* Reviewed badge */
+  .badge-reviewed {
+    display: inline-block;
+    background: #1a3a1a;
+    color: #5fca5f;
+    border: 1px solid #3a6a3a;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="single-topic">
+<a class="back-link" href="/daily_knowledge/digests/2026-04-01/">← Back to digest</a>
+<article>
+<div class="topic-header">
+<h2>Persistent Homology<span class="badge-reviewed">✓ reviewed</span></h2>
+<div class="topic-meta">Math · Topology &nbsp;·&nbsp; ~4 min read</div>
+</div>
+<div class="body"><h2>Core Concept</h2>
+
+<p>Persistent homology is the central tool of <a href="/daily_knowledge/topic/Topological Data Analysis">Topological Data Analysis</a> (TDA): it tracks how topological features — connected components, loops, voids, and higher-dimensional holes — appear and disappear as you sweep a scale parameter across a filtered simplicial complex.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Formal Setup</div><div>Given a point cloud $X \subset \mathbb{R}^n$, construct a <strong>filtration</strong> — a nested sequence of simplicial complexes: $$\emptyset = K_0 \subseteq K_1 \subseteq K_2 \subseteq \cdots \subseteq K_m$$ parameterized by a radius $\epsilon$. Applying the $k$-th homology functor $H_k(-)$ over a field $\mathbb{F}$ turns inclusions into linear maps, yielding a <strong>persistence module</strong>: $$H_k(K_0) \to H_k(K_1) \to \cdots \to H_k(K_m)$$ By the <strong>structure theorem</strong> (Zomorodian–Carlsson 2005), this decomposes uniquely into interval summands $[b_i, d_i)$, each encoding a feature that <em>is born</em> at scale $b_i$ and <em>dies</em> at $d_i$.</div></div>
+
+<p>The collection of intervals is the <strong>persistence diagram</strong> (or barcode). Long bars correspond to robust topological signal; short bars are likely noise.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>Persistent homology bridges pure algebraic topology and practical data analysis. Its power lies in being <strong>metric-agnostic at the level of features</strong>: you don't need to choose a single scale, and the output summarizes multi-scale topology in a single diagram.</p>
+
+<p><strong>Applications span many domains:</strong></p>
+<ul>
+<li><strong>Computational biology</strong> — protein folding landscapes, cancer genomics via mapper graphs</li>
+<li><strong>Materials science</strong> — characterizing amorphous solids and porous media</li>
+<li><strong>Neuroscience</strong> — neural firing patterns modeled as simplicial complexes</li>
+<li><strong>Sensor networks</strong> — coverage verification without coordinates</li>
+<li><strong>Machine learning</strong> — topological regularizers, data augmentation, manifold detection</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Stability is the killer feature</div><div>The <strong>bottleneck stability theorem</strong> guarantees: $$d_B(\mathrm{dgm}(f), \mathrm{dgm}(g)) \leq \|f - g\|_\infty$$ where $d_B$ is the bottleneck distance between diagrams. This means small perturbations in input (noise, sampling) cause small perturbations in the persistence diagram — a non-trivial and deeply useful result absent from most topological constructions.</div></div>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<p><strong>1. Filtration constructions</strong></p>
+<p>Two workhorses: the <strong>Čech filtration</strong> (balls of radius $\epsilon$ around each point, nerve taken as the complex — theoretically clean via the Nerve Lemma, but computationally expensive) and the <strong>Vietoris–Rips filtration</strong> (connect points within distance $2\epsilon$ — cheaper, but approximates Čech only up to a factor of $\sqrt{2}$).</p>
+
+<p><strong>2. The persistence algorithm</strong></p>
+<p>Computed via reduction of the boundary matrix $\partial$ to a column-echelon form (elder rule). Runtime is $O(n^3)$ in the worst case, but near-linear in practice for sparse filtrations. Software libraries: <strong>Ripser</strong> (Bauer 2021, near-optimal), <strong>Gudhi</strong>, <strong>Dionysus 2</strong>.</p>
+
+<p><strong>3. Persistence diagrams as metric spaces</strong></p>
+<p>Diagrams are compared via the <strong>bottleneck distance</strong> $d_B$ (worst-case matching to the diagonal) or the <strong>Wasserstein-$p$ distance</strong> $W_p$ (optimal transport cost). This equips the space of diagrams with well-defined geometry, though it is <em>not</em> a Hilbert space, complicating statistical inference.</p>
+
+<p><strong>4. Vectorization for ML pipelines</strong></p>
+<p>Raw diagrams don't live in $\mathbb{R}^n$, so integration with standard ML requires vectorization: <strong>persistence images</strong> (Adams et al.), <strong>persistence landscapes</strong> (Bubenik, provably stable in $L^p$), or <strong>kernel methods</strong> (sliced Wasserstein, persistence Fisher kernel).</p>
+
+<p><strong>5. Relative and extended persistence</strong></p>
+<p>Sublevel-set persistence on a real-valued function $f: \mathcal{M} \to \mathbb{R}$ is a special case where barcodes read directly as Morse-theoretic information: bars correspond to pairs of critical points, connecting TDA to <a href="/daily_knowledge/topic/Morse Theory">Morse Theory</a> and <a href="/daily_knowledge/topic/Reeb Graphs">Reeb Graphs</a>.</p>
+
+<hr>
+
+<h2>Current State</h2>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+
+<p>Active research threads (as of early 2026):</p>
+
+<ul>
+<li><strong>Multiparameter persistence</strong> — extending from a single filtration parameter to two or more (e.g., scale + density). The structure theorem fails; the algebraic landscape is richer and harder. Approximation via <strong>fibered barcodes</strong> and <strong>signed barcodes</strong> is ongoing.</li>
+<li><strong>Statistical foundations</strong> — bootstrap confidence sets for barcodes, hypothesis testing via permutation on Wasserstein distances.</li>
+<li><strong>Deep learning integration</strong> — differentiable topology layers (e.g., <strong>Topological Loss</strong> via cubical persistence) enabling end-to-end gradient flow through topological features.</li>
+<li><strong>Sheaf-theoretic generalizations</strong> — replacing homology with sheaf cohomology to encode richer local data on the filtration, connecting to <a href="/daily_knowledge/topic/Cellular Sheaves">Cellular Sheaves</a> and network science.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Simplicial Homology">Simplicial Homology</a></li>
+<li><a href="/daily_knowledge/topic/Topological Data Analysis">Topological Data Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Vietoris-Rips Complex">Vietoris-Rips Complex</a></li>
+<li><a href="/daily_knowledge/topic/Morse Theory">Morse Theory</a></li>
+<li><a href="/daily_knowledge/topic/Mapper Algorithm">Mapper Algorithm</a></li>
+<li><a href="/daily_knowledge/topic/Optimal Transport">Optimal Transport</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li>The structure theorem for persistence modules relies on working over a field $\mathbb{F}$. What breaks — algebraically and computationally — when you use integer coefficients, and does it ever matter in practice?</li>
+</ol>
+
+<ol>
+<li>Persistence diagrams are stable under $\|\cdot\|_\infty$ perturbations of the filter function, but Wasserstein distances are sensitive to the <em>number</em> of points in the diagram. How should this inform your choice of distance when comparing datasets of different sizes or densities?</li>
+</ol>
+
+<ol>
+<li>Multiparameter persistence lacks a complete discrete invariant analogous to the barcode. Is this fundamentally a computational obstacle, an algebraic one, or both — and what would a "good enough" approximation theory look like?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Persistent_homology" target="_blank" rel="noopener"&gt;Persistent Homology&lt;/a&gt; · Retrieved 2026-04-01</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.30043v1" target="_blank" rel="noopener">Video Models Reason Early: Exploiting Plan Commitment for Maze Solving</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.30042v1" target="_blank" rel="noopener">HapCompass: A Rotational Haptic Device for Contact-Rich Robotic Teleoperation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.30040v1" target="_blank" rel="noopener">Automatic Identification of Parallelizable Loops Using Transformer-Based Source Code Representations</a> (2026)</li>
+</ul></div>
+</article>
+<div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Persistent+Homology&labels=discussion&body=Topic:+[Persistent+Homology](https://dhein.github.io/daily_knowledge/topic/persistent_homology/)
+
+&lt;!--+Your+thoughts,+questions,+or+notes+below+--&gt;" target="_blank" rel="noopener" style="background:#1e2a45;color:#7ec8ff;border:1px solid #2e4a6e;border-radius:4px;padding:0.4rem 0.9rem;font-size:0.9rem;text-decoration:none">Open a GitHub Discussion →</a></div>
+</div>
+</div>
+</body>
+</html>
