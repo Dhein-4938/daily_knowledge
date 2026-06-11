@@ -215,57 +215,62 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Quantum Mechanics<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~3 min read</div>
+<div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~4 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Quantum mechanics (QM) is the fundamental theory governing matter and radiation at atomic and subatomic scales. Its state space is a <strong>complex Hilbert space</strong> $\mathcal{H}$, and the state of a system is encoded in a normalized vector $|\psi\rangle \in \mathcal{H}$ — the <em>wave function</em>.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Quantum mechanics is the fundamental physical theory governing matter and radiation at atomic and subatomic scales. Its mathematical backbone is the <strong>wave function</strong> $\psi(\mathbf{r}, t)$, a complex-valued field whose squared modulus gives a probability density: $|\psi|^2 = \rho$.</div></div>
 
-<p>Time evolution is unitary and governed by the <strong>Schrödinger equation</strong>:</p>
+<p>The time evolution of a closed system is governed by the <strong>Schrödinger equation</strong>:</p>
 
-<p>$$i\hbar \frac{\partial}{\partial t}|\psi(t)\rangle = \hat{H}|\psi(t)\rangle$$</p>
+<p>$$i\hbar \frac{\partial}{\partial t}|\psi\rangle = \hat{H}|\psi\rangle$$</p>
 
-<p>where $\hat{H}$ is the Hamiltonian operator. Observable quantities correspond to self-adjoint operators $\hat{A}$; a measurement yields eigenvalue $a_n$ with probability $|\langle a_n | \psi \rangle|^2$ (Born rule), collapsing $|\psi\rangle$ to $|a_n\rangle$.</p>
+<p>where $\hat{H}$ is the Hamiltonian operator. Observables correspond to Hermitian operators; measurement collapses the state onto an eigenstate with probability given by the <strong>Born rule</strong>:</p>
 
-<p>Classical mechanics emerges as an approximation in the limit $\hbar \to 0$ (or equivalently, when action $S \gg \hbar$), formalized via the <a href="/daily_knowledge/topic/WKB Approximation">WKB Approximation</a> and <a href="/daily_knowledge/topic/Ehrenfest's Theorem">Ehrenfest's Theorem</a>.</p>
+<p>$$P(a_n) = |\langle a_n | \psi \rangle|^2$$</p>
+
+<p>Crucially, quantum systems occupy <strong>superpositions</strong> of eigenstates until measured — the machinery behind both quantum computing and deep interpretive controversy.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>QM is not merely a theory of the small — it is the bedrock of:</p>
+<p>Quantum mechanics isn't merely a correction to classical physics — it's the substrate. Every semiconductor, laser, MRI machine, and chemical bond depends on it. Its reach spans:</p>
 
 <ul>
-<li><strong>Chemistry</strong>: molecular bonding, spectroscopy, reaction rates (<a href="/daily_knowledge/topic/Quantum Chemistry">Quantum Chemistry</a>)</li>
-<li><strong>Materials science</strong>: band theory, superconductivity, topological phases</li>
-<li><strong>Technology</strong>: transistors, lasers, MRI, and increasingly <a href="/daily_knowledge/topic/Quantum Computing">Quantum Computing</a></li>
-<li><strong>Cosmology</strong>: quantum fluctuations seeding large-scale structure</li>
+<li><strong>Quantum chemistry</strong>: molecular orbital theory, DFT, reaction dynamics</li>
+<li><strong>Quantum information</strong>: qubits, entanglement as a resource, error correction</li>
+<li><strong>Quantum field theory</strong>: the Standard Model, Feynman path integrals, renormalization</li>
+<li><strong>Emergent phenomena</strong>: superconductivity, topological phases, fractional quantum Hall effect</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Non-obvious connection</div><div>The success of QM in thermodynamics is as striking as in mechanics. Planck's 1900 quantization of oscillator energies ($E = n\hbar\omega$) resolved the ultraviolet catastrophe of <a href="/daily_knowledge/topic/Blackbody Radiation">Blackbody Radiation</a> — the first crack in classical physics, born from statistical necessity rather than dynamical insight.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Classical mechanics as a limit</div><div>Classical mechanics is not simply "wrong" — it emerges from QM via the <strong>correspondence principle</strong> and <strong>decoherence</strong>. When $\hbar / S \to 0$ (action $S \gg \hbar$), quantum interference washes out and Newton's laws resurface. This is why macroscopic objects behave classically without contradiction.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Superposition &amp; Interference</strong></p>
-<p>States can be linearly combined: $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$. Interference between probability amplitudes — not probabilities themselves — is the source of distinctly quantum phenomena like the double-slit pattern.</p>
-
-<p><strong>2. Heisenberg Uncertainty Principle</strong></p>
-<p>For conjugate observables $\hat{x}$ and $\hat{p}$:</p>
-
+<ol>
+<li><strong>Heisenberg Uncertainty Principle</strong> — Not a measurement disturbance artifact but a fundamental property of non-commuting observables. For position and momentum:</li>
+</ol>
 <p>$$\sigma_x \sigma_p \geq \frac{\hbar}{2}$$</p>
+<p>   Formally, for any two observables $\hat{A}, \hat{B}$: $\sigma_A \sigma_B \geq \frac{1}{2}|\langle[\hat{A},\hat{B}]\rangle|$.</p>
 
-<p>This is not a measurement disturbance artifact but a fundamental property of non-commuting operators ($[\hat{x}, \hat{p}] = i\hbar$). Robertson's inequality generalizes it: $\sigma_A \sigma_B \geq \frac{1}{2}|\langle[\hat{A},\hat{B}]\rangle|$.</p>
+<ol>
+<li><strong>Wave–Particle Duality</strong> — Single particles (electrons, photons, even $C_{60}$ buckyballs) produce interference patterns in double-slit experiments, yet register as discrete impacts. The <em>which-path</em> information destroys the fringes — a manifestation of complementarity.</li>
+</ol>
 
-<p><strong>3. Entanglement</strong></p>
-<p>A two-particle state that cannot be factored as $|\psi_A\rangle \otimes |\psi_B\rangle$ is <em>entangled</em>. Bell's theorem (1964) proves no local hidden-variable theory can reproduce QM's predictions — confirmed experimentally (Aspect 1982, loophole-free tests 2015). Entanglement is the core resource in <a href="/daily_knowledge/topic/Quantum Information Theory">Quantum Information Theory</a>.</p>
+<ol>
+<li><strong>Entanglement</strong> — A multi-particle state $|\Psi\rangle \neq |\psi_A\rangle \otimes |\psi_B\rangle$ is entangled. Bell's theorem (1964) proved no local hidden-variable theory can reproduce QM's predictions — experimentally confirmed to high precision by Aspect (1982) and loophole-free tests (2015).</li>
+</ol>
 
-<p><strong>4. The Measurement Problem</strong></p>
-<p>The formalism is silent on <em>when</em> and <em>why</em> the wave function "collapses." This is genuinely unresolved. Interpretations — Copenhagen, Many-Worlds (<a href="/daily_knowledge/topic/Everett Interpretation">Everett Interpretation</a>), Bohmian mechanics, QBism — agree on predictions but differ radically on ontology.</p>
+<ol>
+<li><strong>Quantization of Energy</strong> — Bound systems (particle in a box, hydrogen atom) have discrete spectra. For the hydrogen atom: $E_n = -\frac{13.6\,\text{eV}}{n^2}$. This discreteness was the historical trigger for the entire theory.</li>
+</ol>
 
-<p><strong>5. Path Integral Formulation</strong></p>
-<p>Feynman's alternative: the amplitude for a transition is a sum over <em>all</em> paths weighted by $e^{iS/\hbar}$, where $S$ is the classical action. Equivalent to operator QM but geometrically illuminating and essential for <a href="/daily_knowledge/topic/Quantum Field Theory">Quantum Field Theory</a>.</p>
+<ol>
+<li><strong>Path Integral Formulation</strong> — Feynman's equivalent reformulation sums over <em>all</em> classical paths weighted by $e^{iS/\hbar}$. Interference between paths recovers quantum amplitudes; stationary phase recovers classical trajectories. Deeply connects QM to statistical mechanics via Wick rotation $t \to -i\tau$.</li>
+</ol>
 
 <hr>
 
@@ -273,14 +278,18 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research frontiers include:</p>
+<p>Active frontiers as of mid-2026:</p>
 
 <ul>
-<li><strong>Quantum error correction &amp; fault tolerance</strong>: stabilizer codes, surface codes — prerequisite for scalable quantum computation</li>
-<li><strong>Quantum gravity</strong>: reconciling QM with general relativity remains open; candidate frameworks include <a href="/daily_knowledge/topic/Loop Quantum Gravity">Loop Quantum Gravity</a> and string theory</li>
-<li><strong>Many-body quantum systems</strong>: tensor network methods (DMRG, MERA) for simulating strongly correlated matter</li>
-<li><strong>Quantum thermodynamics</strong>: formalizing work, heat, and entropy at quantum scales, where thermal and quantum fluctuations compete</li>
-<li><strong>Foundations</strong>: decoherence theory has largely displaced naïve Copenhagen collapse, but the measurement problem and the ontological status of $|\psi\rangle$ remain contested</li>
+<li><strong>Topological quantum matter</strong>: The bosonic <strong>Pfaffian quantum Hall state</strong> (Moore-Read state) has been realized in ultracold $^{87}$Rb atoms with Floquet-engineered synthetic magnetic fields. Non-Abelian anyons — whose braiding operations are topologically protected — are a major target for fault-tolerant quantum computing. Direct experimental access to pairing structure via multi-point density correlations is a new capability.</li>
+</ul>
+
+<ul>
+<li><strong>Quantum simulation of many-body physics</strong>: Collective neutrino oscillations in dense astrophysical environments (supernovae, neutron star mergers) are being mapped onto quantum circuits. Resource estimates show mid-range gate costs; efficient fermion-to-qubit encodings (Jordan-Wigner vs. Bravyi-Kitaev) are a live optimization problem.</li>
+</ul>
+
+<ul>
+<li><strong>Quantum light sources and nanoemitters</strong>: Colloidal quantum shells show near-Gaussian distributions of biexciton emission efficiencies ($\bar{\eta} \approx 0.55$, $\sigma \approx 0.12$), with Auger quenching scaling with particle volume. High-throughput SPAD-array photon correlation enables statistical characterization of nanoparticle ensembles — relevant to single-photon source engineering.</li>
 </ul>
 
 <hr>
@@ -288,12 +297,12 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Wave-Particle Duality">Wave-Particle Duality</a></li>
+<li><a href="/daily_knowledge/topic/Wave Function and Born Rule">Wave Function and Born Rule</a></li>
+<li><a href="/daily_knowledge/topic/Heisenberg Uncertainty Principle">Heisenberg Uncertainty Principle</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Entanglement and Bell Inequalities">Quantum Entanglement and Bell Inequalities</a></li>
+<li><a href="/daily_knowledge/topic/Topological Phases of Matter">Topological Phases of Matter</a></li>
 <li><a href="/daily_knowledge/topic/Quantum Field Theory">Quantum Field Theory</a></li>
-<li><a href="/daily_knowledge/topic/Quantum Computing">Quantum Computing</a></li>
-<li><a href="/daily_knowledge/topic/Bell's Theorem and Nonlocality">Bell's Theorem and Nonlocality</a></li>
-<li><a href="/daily_knowledge/topic/Density Matrix and Open Quantum Systems">Density Matrix and Open Quantum Systems</a></li>
-<li><a href="/daily_knowledge/topic/Path Integral Formulation">Path Integral Formulation</a></li>
+<li><a href="/daily_knowledge/topic/Decoherence and the Classical Limit">Decoherence and the Classical Limit</a></li>
 </ul>
 
 <hr>
@@ -301,26 +310,28 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Classicality from quantum</strong>: Decoherence explains the <em>appearance</em> of collapse via entanglement with the environment — but does it genuinely solve the measurement problem, or merely relocate it? What would a satisfying solution require?</li>
+<li><strong>Measurement problem</strong>: The Schrödinger equation is unitary and deterministic, yet measurement produces definite outcomes probabilistically. Does decoherence <em>solve</em> the measurement problem, or merely relocate it — and does the choice of interpretation (Copenhagen, Many-Worlds, relational QM) have any empirically testable consequence?</li>
 </ol>
 
 <ol>
-<li><strong>Entanglement vs. information</strong>: Bell violations rule out local realism, but quantum correlations cannot transmit information superluminally. Is nonlocality a feature of reality or an artifact of how we decompose composite systems?</li>
+<li><strong>Non-Abelian anyons</strong>: The Pfaffian state supports excitations with non-Abelian exchange statistics — braiding particle $A$ around $B$ enacts a unitary matrix, not just a phase. What are the concrete gate operations implementable via braiding, and why does topological protection not eliminate <em>all</em> sources of error?</li>
 </ol>
 
 <ol>
-<li><strong>Discreteness as fundamental</strong>: QM quantizes energy levels, angular momentum, and charge. Is discreteness a deep ontological fact, or does it emerge from an underlying continuous structure (e.g., continuous field configurations in QFT)?</li>
+<li><strong>Computational hardness</strong>: Simulating a generic $n$-qubit quantum system requires $2^n$ classical amplitudes. Yet quantum chemistry (a subset of QM) is already well-approximated by CCSD(T) for small molecules. Where exactly does the exponential hardness <em>kick in</em>, and is it always present or only in highly entangled regimes?</li>
 </ol>
-<pre><code>
 
 
----
-*Wikipedia source: [Quantum Mechanics](https://en.wikipedia.org/wiki/Quantum_mechanics) · Retrieved 2026-03-14*
 
-**Recent arXiv papers:**
-- [MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning](https://arxiv.org/abs/2603.12266v1) (2026)
-- [OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams](https://arxiv.org/abs/2603.12265v1) (2026)
-- [$Ψ_0$: An Open Foundation Model Towards Universal Humanoid Loco-Manipulation](https://arxiv.org/abs/2603.12263v1) (2026)</code></pre></div>
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_mechanics" target="_blank" rel="noopener"&gt;Quantum Mechanics&lt;/a&gt; · Retrieved 2026-06-11</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2606.12409v1" target="_blank" rel="noopener">A Pfaffian quantum Hall state of ultracold bosons</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12404v1" target="_blank" rel="noopener">Collective neutrino oscillations: Many-body non-forward effects and non-classicality</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12398v1" target="_blank" rel="noopener">Quantifying the Distribution of Biexciton Emission Efficiencies in Colloidal Quantum Shells</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Quantum+Mechanics&labels=discussion&body=Topic:+[Quantum+Mechanics](https://dhein.github.io/daily_knowledge/topic/quantum_mechanics/)
 

@@ -219,64 +219,70 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>black hole</strong> is a region of spacetime where gravity is so extreme that the escape velocity exceeds $c$, making it causally disconnected from the rest of the universe beyond a boundary called the <strong>event horizon</strong>.</div></div>
+<p>A black hole is a region of spacetime where gravitational curvature becomes so extreme that the escape velocity exceeds $c$. This is not merely a density threshold — it is a topological feature of the spacetime manifold itself.</p>
 
-<p>The existence of black holes follows directly from <a href="/daily_knowledge/topic/General Relativity">General Relativity</a>: Einstein's field equations,</p>
+<div class="callout info"><div class="callout-title">INFO: Event Horizon</div><div>The <strong>event horizon</strong> is a null hypersurface: a one-way causal boundary from which no future-directed timelike or null geodesic can escape to infinity. Crossing it is locally undetectable (no "wall"), but globally irreversible.</div></div>
 
-<p>$$G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$$</p>
+<p>The Schwarzschild radius for a non-rotating black hole encodes this threshold:</p>
 
-<p>admit exact solutions describing the curved geometry around a sufficiently compact mass. The simplest is the <strong>Schwarzschild solution</strong> (1916), giving the metric for a static, non-rotating black hole:</p>
+<p>$$r_s = \frac{2GM}{c^2}$$</p>
 
-<p>$$ds^2 = -\left(1 - \frac{r_s}{r}\right)c^2\,dt^2 + \left(1 - \frac{r_s}{r}\right)^{-1}dr^2 + r^2\,d\Omega^2$$</p>
+<p>For a solar-mass object, $r_s \approx 3\,\text{km}$. The full solution space is richer: the <strong>Kerr metric</strong> adds angular momentum $J$, the <strong>Reissner–Nordström</strong> adds charge $Q$. The <strong>no-hair theorem</strong> asserts that these three parameters $(M, J, Q)$ uniquely characterise any stationary black hole exterior — a profound compression of astrophysical complexity.</p>
 
-<p>where $r_s = 2GM/c^2$ is the <strong>Schwarzschild radius</strong> — the event horizon for this geometry. Crucially, crossing the event horizon is locally undetectable; no tidal spike, no flash. The singularity lies strictly <em>inside</em>.</p>
+<p>At the centre lies a <strong>singularity</strong> where spacetime curvature diverges ($R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma} \to \infty$), signalling the breakdown of classical GR rather than a physical infinity.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Black holes sit at the intersection of nearly every major branch of physics:</p>
+<p>Black holes sit at the intersection of GR, quantum field theory, thermodynamics, and information theory — making them the canonical stress-test for any theory of quantum gravity.</p>
 
 <ul>
-<li><strong>Gravity at its extreme</strong> — they are the cleanest laboratory for strong-field GR, where post-Newtonian approximations fail entirely.</li>
-<li><strong>Thermodynamics and information</strong> — Hawking's result that black holes radiate like a blackbody with temperature $T_H = \hbar c^3 / (8\pi G M k_B)$ fused quantum field theory with gravity, spawning the still-open <a href="/daily_knowledge/topic/Black Hole Information Paradox">Black Hole Information Paradox</a>.</li>
-<li><strong>Galaxy formation</strong> — supermassive black holes ($M \sim 10^6$–$10^{10}\,M_\odot$) sit at galactic cores and regulate star formation via AGN feedback. Sagittarius A* ($\approx 4.3 \times 10^6\,M_\odot$) anchors the Milky Way.</li>
-<li><strong>Multi-messenger astronomy</strong> — binary black hole mergers are the loudest sources of <a href="/daily_knowledge/topic/Gravitational Waves">Gravitational Waves</a>, providing tests of GR in the highly-dynamical regime.</li>
+<li><strong>Astrophysically</strong>: they are the engines of AGN, quasars, and relativistic jets; supermassive black holes ($10^6$–$10^{10}\,M_\odot$) are apparently co-evolutionary with their host galaxies (the $M$–$\sigma$ relation).</li>
+<li><strong>As observational anchors</strong>: Sagittarius A<em> ($4.3 \times 10^6\,M_\odot$) and M87</em> provided the first direct imaging via the Event Horizon Telescope, confirming shadow morphology predicted by GR.</li>
+<li><strong>Gravitational wave astronomy</strong>: merging compact objects are the primary LIGO/Virgo source class, enabling mass-function and spin measurements at cosmological distances.</li>
 </ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Thermodynamic Analogy</div><div>The four laws of black hole mechanics map exactly onto thermodynamic laws, with surface gravity $\kappa$ playing the role of temperature and horizon area $A$ as entropy. This is not mere analogy — Hawking's derivation grounds it in QFT on curved spacetime.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Singularity ≠ physical prediction.</strong> The central singularity (infinite curvature) is widely interpreted as a GR breakdown rather than a real feature — a cue that <a href="/daily_knowledge/topic/Quantum Gravity">Quantum Gravity</a> is needed, not a literal infinitely-dense point.</li>
+<li><strong>Hawking Radiation</strong> — A black hole emits thermal radiation at temperature $T_H = \hbar c^3 / (8\pi G M k_B)$. Evaporation timescale scales as $t_{\text{evap}} \propto M^3$, making stellar-mass black holes effectively immortal on cosmological timescales. Primordial black holes of mass $\lesssim 10^{12}\,\text{kg}$ would have evaporated by now.</li>
 </ol>
 
 <ol>
-<li><strong>Hawking radiation is cosmologically negligible today.</strong> Stellar-mass black holes ($M \gtrsim 3\,M_\odot$) absorb CMB photons <em>faster</em> than they emit Hawking radiation. Only sub-millimeter primordial black holes would be evaporating now.</li>
+<li><strong>Information Paradox</strong> — Hawking radiation is thermal, apparently destroying quantum information. Whether unitarity is preserved via subtle correlations in the radiation, firewalls at the horizon, or non-perturbative effects (Page curve via island formula) remains unresolved and is among the most active problems in theoretical physics.</li>
 </ol>
 
 <ol>
-<li><strong>Hair theorems constrain the phase space.</strong> The <strong>no-hair theorem</strong> states that stationary black holes are fully characterized by just three quantities: mass $M$, charge $Q$, and angular momentum $J$. Real astrophysical black holes are described by the <a href="/daily_knowledge/topic/Kerr Metric">Kerr Metric</a> ($Q \approx 0$, $J \neq 0$).</li>
+<li><strong>Penrose Process &amp; Ergosphere</strong> — For Kerr black holes, the ergosphere (outside the event horizon) permits energy extraction from the rotation itself. The Blandford–Znajek mechanism is thought to power astrophysical jets via magnetic coupling to the ergosphere.</li>
 </ol>
 
 <ol>
-<li><strong>Accretion, not the hole itself, is luminous.</strong> Infalling plasma forms a magnetized accretion disk; friction heats it to X-ray temperatures. This powers quasars — some of the highest-luminosity objects in the universe — and is detectable across cosmic distances.</li>
+<li><strong>Formation Channels</strong> — Stellar-mass: core collapse of $M \gtrsim 20\,M_\odot$ stars. Supermassive: pathways include direct collapse of massive gas clouds at high redshift, hierarchical mergers, and accretion — though the seeding mechanism remains observationally unconstrained.</li>
 </ol>
 
 <ol>
-<li><strong>Detection is always indirect.</strong> Event horizons cannot be imaged directly; what the <a href="/daily_knowledge/topic/Event Horizon Telescope">Event Horizon Telescope</a> captured is the <em>photon ring</em> — a bright ring formed by gravitationally lensed emission just outside $r = 3GM/c^2$ (the photon sphere).</li>
+<li><strong>Tidal Disruption Events (TDEs)</strong> — Stars passing within the tidal radius of a supermassive black hole are disrupted; roughly half the mass accretes on a characteristic $t^{-5/3}$ fallback curve, providing a clean probe of quiescent black hole demographics.</li>
 </ol>
-
-<div class="callout tip"><div class="callout-title">TIP: The Shadow Is Not the Horizon</div><div>The EHT "black hole image" shows a shadow roughly $2.6\times$ the Schwarzschild diameter, not the horizon itself. The photon sphere at $r = 3r_s/2$ is what sculpts the observable silhouette.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research frontiers include: resolving the <strong>information paradox</strong> (firewalls vs. fuzzball vs. island formula approaches in holography), constraining <strong>primordial black holes</strong> as dark matter candidates, gravitational-wave parameter estimation from LIGO/Virgo/KAGRA observations of compact binary mergers, and near-horizon tests with VLBI arrays.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>The island formula from <a href="/daily_knowledge/topic/Holography and AdS/CFT">Holography and AdS/CFT</a> has recently offered a semiclassical derivation of a unitary Page curve, suggesting information is <em>not</em> permanently lost — though the mechanism in asymptotically flat spacetime remains contested.</p>
+<p>Active research fronts include:</p>
+
+<ul>
+<li><strong>Black hole imaging</strong>: EHT has resolved Sgr A<em> and M87</em>; next-generation arrays (ngEHT) aim for time-resolved movies of the photon ring, testing GR in the strong-field regime.</li>
+<li><strong>Gravitational wave population statistics</strong>: LIGO-Virgo-KAGRA O4 and beyond are mapping the black hole mass function, probing the pair-instability gap (~50–130 $M_\odot$) and intermediate-mass black holes.</li>
+<li><strong>Page curve and island formula</strong>: recent work using replica wormholes and the Ryu-Takayanagi formula in JT gravity reproduces the unitary Page curve, suggesting information is ultimately preserved — but the mechanism in 4D gravity remains unclear.</li>
+<li><strong>Primordial black holes as dark matter</strong>: tightly constrained by microlensing and CMB, but mass windows near $10^{-12}\,M_\odot$ remain viable.</li>
+</ul>
 
 <hr>
 
@@ -285,10 +291,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/General Relativity">General Relativity</a></li>
 <li><a href="/daily_knowledge/topic/Hawking Radiation">Hawking Radiation</a></li>
-<li><a href="/daily_knowledge/topic/Black Hole Information Paradox">Black Hole Information Paradox</a></li>
 <li><a href="/daily_knowledge/topic/Gravitational Waves">Gravitational Waves</a></li>
-<li><a href="/daily_knowledge/topic/Kerr Metric">Kerr Metric</a></li>
-<li><a href="/daily_knowledge/topic/Event Horizon Telescope">Event Horizon Telescope</a></li>
+<li><a href="/daily_knowledge/topic/Neutron Stars">Neutron Stars</a></li>
+<li><a href="/daily_knowledge/topic/Information Paradox">Information Paradox</a></li>
+<li><a href="/daily_knowledge/topic/Active Galactic Nuclei">Active Galactic Nuclei</a></li>
 </ul>
 
 <hr>
@@ -296,20 +302,28 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>If the no-hair theorem holds exactly, what becomes of quantum information imprinted on infalling matter — and is the firewall argument a genuine paradox or a failure of semiclassical reasoning?</li>
-<li>Hawking temperature scales as $T_H \propto 1/M$: what are the observational or experimental strategies that could ever detect this radiation, even in principle?</li>
-<li>Supermassive black holes appear to co-evolve with their host galaxies ($M_\bullet$–$\sigma$ relation), yet their sphere of influence is tiny relative to galaxy scales — what physical mechanism couples them?</li>
+<li>The no-hair theorem holds classically — but do quantum corrections (hair from soft photons, gravitational memory) restore the information that Hawking radiation apparently destroys?</li>
 </ol>
-<pre><code>
+
+<ol>
+<li>Supermassive black hole seeds at $z > 6$ appear too massive for standard accretion timescales. What does this imply about the first structures in the universe, and can direct-collapse scenarios be distinguished observationally?</li>
+</ol>
+
+<ol>
+<li>If black hole entropy scales with <em>area</em> rather than volume ($S_{BH} = A/4\ell_P^2$), does this imply the relevant degrees of freedom are fundamentally two-dimensional — and what does that entail for the nature of spacetime itself?</li>
+</ol>
 
 
----
-*Wikipedia source: [Black Holes](https://en.wikipedia.org/wiki/Black_hole) · Retrieved 2026-03-14*
 
-**Recent arXiv papers:**
-- [OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams](https://arxiv.org/abs/2603.12265v1) (2026)
-- [HumDex:Humanoid Dexterous Manipulation Made Easy](https://arxiv.org/abs/2603.12260v1) (2026)
-- [Emergent Anomalous Hall Effect from Surface States in the Altermagnet MnTe Thin Films](https://arxiv.org/abs/2603.12259v1) (2026)</code></pre></div>
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Black_hole" target="_blank" rel="noopener"&gt;Black Holes&lt;/a&gt; · Retrieved 2026-06-11</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2606.12411v1" target="_blank" rel="noopener">Context-Driven Incremental Compression for Multi-Turn Dialogue Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12409v1" target="_blank" rel="noopener">A Pfaffian quantum Hall state of ultracold bosons</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12408v1" target="_blank" rel="noopener">When direct detection constrains reheating temperature: freeze-in with stronger couplings and inflaton-seeded freeze-in</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Black+Holes&labels=discussion&body=Topic:+[Black+Holes](https://dhein.github.io/daily_knowledge/topic/black_holes/)
 

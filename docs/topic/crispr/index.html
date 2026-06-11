@@ -215,80 +215,92 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>CRISPR-Cas9<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Science · Genomics &nbsp;·&nbsp; ~3 min read</div>
+<div class="topic-meta">Science · Genomics &nbsp;·&nbsp; ~4 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>CRISPR-Cas9 is a programmable RNA-guided endonuclease system repurposed from a prokaryotic adaptive immune mechanism. In bacteria and archaea, <strong>clustered regularly interspaced short palindromic repeats</strong> (CRISPRs) store short fragments of past phage DNA; the Cas9 protein uses transcribed spacer sequences to identify and cleave matching foreign DNA on re-infection.</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>CRISPR-Cas9</strong> is a two-component genome editing system: a <strong>guide RNA (gRNA)</strong> that provides sequence specificity, and <strong>Cas9</strong>, an endonuclease that executes a double-strand break (DSB) at the targeted locus.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO</div><div>The minimal two-component system for genome editing: a <strong>single guide RNA</strong> (sgRNA = crRNA + tracrRNA fusion) that provides ~20 nt of target specificity, and the <strong>Cas9 endonuclease</strong> (from <em>S. pyogenes</em>, SpCas9) that executes the double-strand break (DSB). Targeting requires a <strong>protospacer adjacent motif</strong> (PAM), canonically <code>5′-NGG-3′</code> for SpCas9, immediately 3′ of the target sequence.</div></div>
-
-<p>The cleavage mechanism involves two nuclease domains: <strong>HNH</strong> cleaves the strand complementary to the guide, <strong>RuvC</strong> cleaves the non-complementary strand. The resulting blunt-ended DSB ~3 bp upstream of the PAM is repaired by the cell via:</p>
+<p>The gRNA is a synthetic fusion of two originally distinct RNAs — the <em>crRNA</em> (CRISPR RNA, ~20 nt targeting sequence) and the <em>tracrRNA</em> (trans-activating crRNA, which scaffolds Cas9 binding). Cas9 scans DNA for a <strong>protospacer adjacent motif (PAM)</strong> — for <em>S. pyogenes</em> Cas9, the canonical sequence is 5′-NGG-3′ — then unwinds the duplex and interrogates the adjacent strand for Watson-Crick complementarity with the guide.</p>
 
 <p>$$
-\text{DSB} \xrightarrow{\text{NHEJ}} \text{indels (knockout)} \quad \text{or} \quad \xrightarrow{\text{HDR}} \text{precise edit (template required)}
+\text{Target specificity} \approx \underbrace{20\text{ nt gRNA}}_{\sim 4\times10^{12}\text{ possible sequences}} \cap \text{PAM context}
 $$</p>
 
-<p>NHEJ (non-homologous end joining) is error-prone and fast; HDR (homology-directed repair) is accurate but restricted to S/G2 phase and requires a donor template.</p>
+<p>Upon R-loop formation and full complementarity, Cas9's <strong>HNH domain</strong> cleaves the matched strand and the <strong>RuvC domain</strong> cleaves the non-matched strand, producing a blunt-ended DSB ~3 bp upstream of the PAM.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>CRISPR-Cas9 democratized genome editing by replacing the laborious protein-engineering required by ZFNs and TALENs with simple RNA design — a guide RNA can be synthesized in days for ~$10. This shift in accessibility has:</p>
+<p>The cell's DSB repair machinery drives the edit outcome:</p>
 
 <ul>
-<li><strong>Basic research</strong>: Loss-of-function screens at genome scale; precise knock-ins for reporter tagging.</li>
-<li><strong>Medicine</strong>: <em>In vivo</em> and <em>ex vivo</em> therapeutic editing — sickle cell disease (exa-cel, 2023 FDA approval) being the first approved CRISPR therapy.</li>
-<li><strong>Agriculture</strong>: Disease-resistant crops, yield improvement without transgene insertion.</li>
-<li><strong>Diagnostics</strong>: SHERLOCK and DETECTR leverage Cas13/Cas12 collateral cleavage for nucleic acid detection (conceptually adjacent to Cas9 biology).</li>
+<li><strong>NHEJ</strong> (non-homologous end joining) — error-prone, introduces indels → gene knockouts</li>
+<li><strong>HDR</strong> (homology-directed repair) — precise, requires a donor template → exact substitutions or insertions</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>The Nobel Prize in Chemistry 2020 (Charpentier & Doudna) was awarded unusually quickly for a technology still in active clinical translation — a signal of how transformative the field viewed the mechanistic insight, not just the applications.</div></div>
+<p>This means CRISPR-Cas9 is simultaneously a disruption tool <em>and</em> a precision rewriting tool, depending on context. Applications span:</p>
+
+<ul>
+<li><strong>Functional genomics</strong>: genome-scale knockout screens (Cas9 + sgRNA libraries)</li>
+<li><strong>Therapeutics</strong>: ex vivo editing of HSCs for sickle-cell disease; in vivo delivery for transthyretin amyloidosis</li>
+<li><strong>Agriculture</strong>: disease-resistant crops without transgenesis</li>
+<li><strong>Diagnostics</strong>: SHERLOCK/DETECTR leverage Cas13/Cas12 collateral cleavage activity</li>
+</ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Unexpected depth</div><div>The <em>natural</em> CRISPR system in bacteria is an adaptive immune memory — phage-derived spacers are heritable, acquired, and read out in real-time. Doudna and Charpentier's insight was that the crRNA:tracrRNA:Cas9 machinery could be reprogrammed with an entirely synthetic target, decoupling the <em>recognition logic</em> from the <em>cutting machinery</em> in a modular way that restriction enzymes never offered.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>PAM constraint</strong>: SpCas9's NGG PAM covers ~1 in 8 bp of a random genome, but targetable space is further limited by guide GC content requirements and secondary structure. Engineered variants (SpRY, SpCas9-NG) relax PAM requirements.</li>
+<li><strong>PAM constraint is the practical bottleneck.</strong> SpCas9 requires NGG every ~8 bp in the human genome on average, but targeting precision (especially for base editing) demands PAMs near the exact locus of interest. Engineered variants (SpRY, xCas9) relax PAM requirements at the cost of some specificity.</li>
 </ol>
 
 <ol>
-<li><strong>Off-target activity</strong>: Guide-target mismatches are tolerated, especially in the <strong>seed region</strong> distal to the PAM. Off-target DSBs can cause translocations. GUIDE-seq, CIRCLE-seq, and CHANGE-seq are unbiased detection methods; high-fidelity variants (eSpCas9, HiFi Cas9) reduce off-target rates by >100×.</li>
+<li><strong>Off-target cleavage is real but quantifiable.</strong> Mismatches in the seed region (PAM-proximal ~12 nt) are highly intolerant; distal mismatches are tolerated, especially with bulges. Assays like GUIDE-seq, CIRCLE-seq, and DISCOVER-Seq provide genome-wide off-target maps.</li>
 </ol>
 
 <ol>
-<li><strong>Delivery bottleneck</strong>: Efficient, tissue-specific delivery <em>in vivo</em> remains the primary translational hurdle. LNPs (lipid nanoparticles), AAV, and RNP electroporation are leading modalities, each with cargo-size and immunogenicity tradeoffs.</li>
+<li><strong>Delivery is often the rate-limiting step.</strong> Cas9 protein (~160 kDa) + gRNA must reach target tissue. RNP electroporation works ex vivo; AAV imposes a ~4.7 kb packaging limit, requiring split-intein Cas9 strategies for in vivo; LNPs are emerging as non-viral alternatives.</li>
 </ol>
 
 <ol>
-<li><strong>Base editors and prime editors</strong>: Fusing catalytically impaired Cas9 (nickase or dCas9) to deaminases (CBEs, ABEs) or reverse transcriptase (prime editors) enables single-nucleotide changes and small insertions <strong>without</strong> DSBs, dramatically expanding the precision toolkit.</li>
+<li><strong>Base editors and prime editors extend the vocabulary.</strong> CBEs (cytosine base editors) and ABEs (adenine base editors) fuse a deaminase to nCas9 (nickase), enabling C→T or A→G transitions without a DSB. Prime editing uses a reverse transcriptase + pegRNA for all 12 transition/transversion types plus small indels.</li>
 </ol>
 
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the base/prime editor landscape and clinical trial results evolve rapidly; verify current FDA/EMA status of specific therapies before citing.</div></div>
+
 <ol>
-<li><strong>Epigenome and transcriptome control</strong>: dCas9 fused to transcriptional activators (CRISPRa) or repressors (CRISPRi) allows reversible gene regulation without DNA modification — a powerful tool for dissecting gene networks.</li>
+<li><strong>Epigenome editing is an emerging frontier.</strong> Catalytically dead Cas9 (dCas9) fused to KRAB, p300, DNMT3A, or TET enzymes allows locus-specific methylation, acetylation, or demethylation without altering the underlying sequence.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — active clinical and regulatory developments move quickly in this field.</div></div>
 
-<p>Active research fronts include: (1) <strong>in vivo base/prime editing</strong> for monogenic liver and CNS disorders; (2) <strong>anti-CRISPR proteins</strong> (Acr) as tunable off-switches; (3) <strong>large-sequence integration</strong> via PASTE (prime editing + serine integrase); (4) immune evasion strategies against Cas9 pre-existing immunity; and (5) CRISPR-based <strong>epigenetic editing</strong> for durable silencing without sequence alteration.</p>
+<ul>
+<li>Vertex/CRISPR Therapeutics' <strong>Casgevy</strong> (exa-cel) received FDA approval in late 2023 for sickle-cell disease — the first approved CRISPR therapy.</li>
+<li>In vivo liver-targeting via LNPs has reached Phase I/II trials.</li>
+<li>Large-scale saturation genome editing screens (e.g., at the Wellcome Sanger Institute) are systematically mapping gene essentiality, increasingly paired with automated cell counting pipelines to handle throughput.</li>
+<li><strong>Multiplex editing</strong> (simultaneous multi-locus cuts) and <strong>base editing in vivo</strong> remain active research frontiers.</li>
+</ul>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Homologous Recombination and DSB Repair">Homologous Recombination and DSB Repair</a></li>
+<li><a href="/daily_knowledge/topic/Homology-Directed Repair">Homology-Directed Repair</a></li>
+<li><a href="/daily_knowledge/topic/Base Editing">Base Editing</a></li>
+<li><a href="/daily_knowledge/topic/Guide RNA Design">Guide RNA Design</a></li>
+<li><a href="/daily_knowledge/topic/Viral Vectors for Gene Therapy">Viral Vectors for Gene Therapy</a></li>
 <li><a href="/daily_knowledge/topic/Adaptive Immunity in Prokaryotes">Adaptive Immunity in Prokaryotes</a></li>
-<li><a href="/daily_knowledge/topic/Base Editing and Prime Editing">Base Editing and Prime Editing</a></li>
-<li><a href="/daily_knowledge/topic/RNA-Guided Nucleases — ZFN TALEN Comparison">RNA-Guided Nucleases — ZFN TALEN Comparison</a></li>
-<li><a href="/daily_knowledge/topic/Gene Therapy Delivery Vectors">Gene Therapy Delivery Vectors</a></li>
-<li><a href="/daily_knowledge/topic/Epigenome Editing and CRISPRi-CRISPRa">Epigenome Editing and CRISPRi-CRISPRa</a></li>
+<li><a href="/daily_knowledge/topic/Genome-Wide CRISPR Screens">Genome-Wide CRISPR Screens</a></li>
 </ul>
 
 <hr>
@@ -296,26 +308,24 @@ $$</p>
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>HDR efficiency is strongly cell-cycle-dependent — what engineering strategies could decouple precision editing from cell-cycle phase, and what are the tradeoffs of each?</li>
+<li>Given that NHEJ is dominant in post-mitotic cells (neurons, cardiomyocytes), what delivery and editing-mode strategies are most viable for CNS or cardiac gene therapy?</li>
+<li>How do current off-target detection assays (GUIDE-seq, CIRCLE-seq) differ in their sensitivity to low-frequency cleavage events, and what does that imply for clinical safety thresholds?</li>
+<li>dCas9 fusion proteins can write epigenetic marks without editing sequence — what are the durability limits of such marks across cell division, and does that constrain therapeutic utility?</li>
 </ol>
 
-<ol>
-<li>Off-target detection methods differ substantially in sensitivity and bias. How should a clinical program choose a detection assay, and what statistical threshold constitutes an acceptable off-target profile?</li>
-</ol>
-
-<ol>
-<li>If dCas9-based CRISPRi can silence genes without DNA cleavage, under what circumstances is a permanent DSB-based edit <em>preferable</em> to reversible transcriptional repression?</li>
-</ol>
-<pre><code>
 
 
----
-*Wikipedia source: [CRISPR-Cas9](https://en.wikipedia.org/wiki/CRISPR) · Retrieved 2026-03-14*
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/CRISPR" target="_blank" rel="noopener"&gt;CRISPR-Cas9&lt;/a&gt; · Retrieved 2026-06-11</em></p>
 
-**Recent arXiv papers:**
-- [GRADE: Benchmarking Discipline-Informed Reasoning in Image Editing](https://arxiv.org/abs/2603.12264v1) (2026)
-- [Trust Your Critic: Robust Reward Modeling and Reinforcement Learning for Faithful Image Editing and Generation](https://arxiv.org/abs/2603.12247v1) (2026)
-- [SceneAssistant: A Visual Feedback Agent for Open-Vocabulary 3D Scene Generation](https://arxiv.org/abs/2603.12238v1) (2026)</code></pre></div>
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2606.12329v1" target="_blank" rel="noopener">PROJECTMEM: A Local-First, Event-Sourced Memory and Judgment Layer for AI Coding Agents</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12303v1" target="_blank" rel="noopener">From 2D Grids to 1D Tokens: Reforming Shared Representations for Multimodal Image Fusion</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12286v1" target="_blank" rel="noopener">CellNet -- Localizing Cells using Sparse and Noisy Point Annotations</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12282v1" target="_blank" rel="noopener">PianoKontext: Expressive Performance Rendering from Deadpan Context</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12277v1" target="_blank" rel="noopener">Finding Multiple Interpretations in Datasets</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+CRISPR-Cas9&labels=discussion&body=Topic:+[CRISPR-Cas9](https://dhein.github.io/daily_knowledge/topic/crispr/)
 

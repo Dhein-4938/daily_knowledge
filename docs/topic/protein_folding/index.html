@@ -219,52 +219,51 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Protein folding is the process by which a newly synthesized, linear polypeptide chain — a random coil in sequence space — spontaneously collapses into a unique, thermodynamically stable three-dimensional conformation called the <strong>native state</strong>.</p>
+<p>Protein folding is the physical process by which a linear polypeptide chain — synthesized ribosome-side as a sequence of amino acids — spontaneously collapses into a precise, thermodynamically stable three-dimensional structure called the <strong>native state</strong>. This transition from disordered random coil to ordered globule is driven by a complex interplay of hydrophobic collapse, backbone hydrogen bonding, electrostatic interactions, and entropic forces.</p>
 
-<div class="callout info"><div class="callout-title">INFO: Anfinsen's Dogma</div><div>The native state is fully determined by the primary structure (amino acid sequence). This was experimentally established by Christian Anfinsen in 1972 using ribonuclease A, earning him the Nobel Prize. It implies: <strong>sequence → structure → function</strong>.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Anfinsen's Dogma</div><div>The native state is fully determined by the <strong>primary structure</strong> (amino acid sequence) alone, under physiological conditions. Formally: sequence → structure → function. This was demonstrated by Anfinsen's ribonuclease refolding experiments (Nobel Prize, 1972) and remains the foundational axiom of the field.</div></div>
 
-<p>The energy landscape framework is the dominant theoretical lens. Folding is viewed as a descent on a <strong>funnel-shaped free energy landscape</strong>:</p>
+<p>The thermodynamic driving force is minimization of free energy. The native state sits at the global minimum of the <strong>folding energy landscape</strong>:</p>
 
-<p>$$\Delta G_{\text{fold}} = \Delta H - T\Delta S$$</p>
+<p>$$\Delta G_\text{fold} = \Delta H_\text{fold} - T\Delta S_\text{fold} < 0$$</p>
 
-<p>where the enthalpic gain from favorable contacts (hydrophobic collapse, hydrogen bonds, van der Waals) must outweigh the enormous conformational entropy cost of fixing the chain. The native state sits at the global free-energy minimum — stable but not rigidly inert.</p>
+<p>where the enthalpic gain (hydrophobic burial, H-bonds) must overcome the conformational entropy cost of ordering the chain. Typical stability margins are surprisingly small — only ~5–60 kJ/mol, meaning proteins are <em>marginally stable</em> by design.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<ul>
-<li><strong>Function is structure</strong>: Enzymes, receptors, antibodies, and structural proteins are all useless or harmful if misfolded. The shape of an active site is non-negotiable.</li>
-<li><strong>Disease</strong>: Misfolding underlies Alzheimer's (Aβ amyloid), Parkinson's (α-synuclein), Type II diabetes (IAPP), prion diseases (PrP), and cystic fibrosis. In each case, aberrant aggregation into <strong>amyloid fibrils</strong> — β-sheet-rich, protease-resistant deposits — drives pathology.</li>
-<li><strong>Drug design</strong>: Targeting folding intermediates or chaperone interactions is a live therapeutic strategy.</li>
-<li><strong>Biotechnology</strong>: Recombinant protein production frequently battles inclusion body formation; understanding folding is essential for yield and activity.</li>
-</ul>
+<p>Protein function is inseparable from three-dimensional structure. Enzymes, receptors, ion channels, antibodies — all derive their specificity from precise geometric complementarity. Misfolding is therefore not merely a structural failure; it is a <em>functional catastrophe</em>.</p>
 
-<div class="callout tip"><div class="callout-title">TIP: Prions as Information Carriers</div><div>Prion propagation (e.g., scrapie, CJD) demonstrates that a misfolded conformation can act as a <em>structural template</em>, converting correctly folded copies without any nucleic acid. This is a striking exception to the central dogma's informational assumptions.</div></div>
+<p><strong>Disease relevance</strong> is substantial: Alzheimer's (Aβ amyloid), Parkinson's (α-synuclein), Huntington's (polyglutamine aggregates), and prion diseases all involve the accumulation of misfolded β-sheet-rich amyloid fibrils. Prions are a uniquely alarming case — a misfolded protein that <em>catalyzes</em> misfolding in native copies, propagating without nucleic acid involvement.</p>
+
+<p>Beyond pathology, protein folding underpins <strong>rational drug design</strong>, <strong>synthetic biology</strong>, and <strong>enzyme engineering</strong>. Predicting fold from sequence was called "the most important unsolved problem in biology" for decades — its resolution via AlphaFold2 (2021) represents one of the most significant advances in modern science.</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Levinthal's Paradox</strong>: Random search of all backbone dihedral angles would take longer than the age of the universe ($$\sim 10^{300}$$ conformations). Proteins fold in microseconds to seconds. Resolution: folding is not a random walk — the funnel landscape biases the search.</li>
+<li><strong>Levinthal's Paradox</strong>: A 100-residue protein has ~$3^{100}$ backbone conformations. Random search would take longer than the age of the universe. Yet folding occurs in milliseconds. Resolution: folding follows a <strong>funnel-shaped energy landscape</strong>, not random search — local contacts nucleate structure progressively.</li>
 </ol>
 
 <ol>
-<li><strong>Folding kinetics depend on size and topology</strong>: Small single-domain proteins (< ~100 residues) often fold in a two-state, cooperative transition. Larger proteins traverse <strong>intermediates</strong> — partially structured states that can be on- or off-pathway. Proline <em>cis/trans</em> isomerization is a common rate-limiting step in slow folders.</li>
+<li><strong>Folding timescales span ~10 orders of magnitude</strong>: ultrafast single-domain proteins fold in microseconds; proline isomerization-limited proteins take minutes. The Folding@home project mapped this kinetically using distributed computing.</li>
 </ol>
 
 <ol>
-<li><strong>Chaperones don't encode structure</strong>: Molecular chaperones (Hsp70, GroEL/GroES) prevent aggregation and provide a protected environment, but they do not template the final fold. They enforce Anfinsen's rule by suppressing kinetic traps.</li>
+<li><strong>Cotranslational folding</strong>: Folding often begins <em>during</em> ribosomal translation, before the chain is complete. This means the N-terminal domain folds in a different context (and sometimes to a different intermediate) than it would in isolation.</li>
 </ol>
 
 <ol>
-<li><strong>Intrinsically Disordered Proteins (IDPs)</strong>: A large fraction of the proteome — especially in eukaryotes — contains regions that remain unfolded under physiological conditions yet are functional. IDPs challenge the structure → function paradigm; they often fold only upon binding a partner (<strong>coupled folding and binding</strong>).</li>
+<li><strong>Chaperones don't encode structure</strong>: Molecular chaperones (e.g., HSP70, GroEL/GroES) prevent <em>aggregation</em> and provide a sequestered environment for folding but do not specify the native structure. They rescue kinetically trapped intermediates.</li>
 </ol>
 
 <ol>
-<li><strong>Contact order</strong>: Proteins where native contacts span distant sequence positions fold more slowly. This empirical rule ($$CO = \frac{1}{N \cdot L} \sum_{\text{contacts}} \Delta S_{ij}$$) links topology to kinetics.</li>
+<li><strong>Intrinsically disordered proteins (IDPs)</strong>: A significant fraction of the eukaryotic proteome lacks a well-defined native fold. IDPs are functional <em>because</em> of their disorder — enabling promiscuous binding, post-translational modification hubs, and entropic bristles. This partially invalidates Anfinsen's dogma as a universal rule.</li>
 </ol>
+
+<div class="callout tip"><div class="callout-title">TIP: Contact Order Predicts Folding Rate</div><div>Proteins with predominantly <em>local</em> contacts (low contact order) fold faster than those with many long-range contacts. This is because short-range interactions form more rapidly during the stochastic search, creating nucleation seeds.</div></div>
 
 <hr>
 
@@ -272,28 +271,21 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p><strong>AlphaFold2</strong> (DeepMind, 2021) and its successors effectively solved <em>single-chain structure prediction</em> from sequence to near-crystallographic accuracy, a 50-year grand challenge. The PDB has been supplemented with hundreds of millions of predicted structures via the AlphaFold Protein Structure Database.</p>
+<p><strong>AlphaFold2</strong> (DeepMind, 2021) essentially solved single-chain structure prediction from sequence, achieving experimental accuracy on the CASP14 benchmark. AlphaFold3 (2024) extended this to protein–nucleic acid and protein–small molecule complexes. The PDB now has hundreds of millions of predicted structures via the AlphaFold Protein Structure Database.</p>
 
-<p>Open research frontiers include:</p>
-<ul>
-<li><strong>Protein complex and multimer folding</strong> (AlphaFold-Multimer, RoseTTAFold)</li>
-<li><strong>Dynamic ensembles and IDP characterization</strong> — static structure prediction doesn't capture conformational heterogeneity</li>
-<li><strong>Co-translational folding</strong> — how ribosome exit tunnel geometry and translation speed shape folding outcomes</li>
-<li><strong>De novo protein design</strong> (RFdiffusion, ProteinMPNN) — inverting the folding problem to engineer sequences for target folds</li>
-<li><strong>Mechanistic simulation</strong> — all-atom MD and enhanced sampling methods to resolve folding pathways, not just end states</li>
-</ul>
+<p>Open challenges include: <em>de novo</em> design of novel folds (ProteinMPNN, RFdiffusion), predicting conformational <em>ensembles</em> rather than single structures, understanding folding <em>kinetics</em> computationally, and modeling the folding of intrinsically disordered regions under cellular crowding conditions.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Thermodynamic Free Energy Landscapes">Thermodynamic Free Energy Landscapes</a></li>
-<li><a href="/daily_knowledge/topic/Amyloid Fibrils and Prion Diseases">Amyloid Fibrils and Prion Diseases</a></li>
-<li><a href="/daily_knowledge/topic/Molecular Dynamics Simulation">Molecular Dynamics Simulation</a></li>
-<li><a href="/daily_knowledge/topic/AlphaFold and Structure Prediction">AlphaFold and Structure Prediction</a></li>
+<li><a href="/daily_knowledge/topic/Thermodynamics of Biomolecular Systems">Thermodynamics of Biomolecular Systems</a></li>
+<li><a href="/daily_knowledge/topic/Amyloid Aggregation and Prion Diseases">Amyloid Aggregation and Prion Diseases</a></li>
 <li><a href="/daily_knowledge/topic/Intrinsically Disordered Proteins">Intrinsically Disordered Proteins</a></li>
-<li><a href="/daily_knowledge/topic/Protein Structure Hierarchy">Protein Structure Hierarchy</a></li>
+<li><a href="/daily_knowledge/topic/AlphaFold and Structure Prediction">AlphaFold and Structure Prediction</a></li>
+<li><a href="/daily_knowledge/topic/Molecular Chaperones">Molecular Chaperones</a></li>
+<li><a href="/daily_knowledge/topic/Energy Landscape Theory">Energy Landscape Theory</a></li>
 </ul>
 
 <hr>
@@ -301,20 +293,24 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>AlphaFold solves the <em>prediction</em> problem but not the <em>mechanism</em> problem — can understanding folding pathways and intermediates reveal drug targets that static structure cannot?</li>
-<li>If IDPs violate sequence → structure → function, what is the minimal revised framework that still has predictive power?</li>
-<li>Levinthal's paradox was "solved" by the funnel model, but is the funnel itself an oversimplification? What does it obscure about multi-domain or co-translational folding?</li>
+<li>If the native state is the global free energy minimum, why do chaperones ever need to intervene — shouldn't the protein eventually find it regardless?</li>
+<li>AlphaFold predicts a single static structure, but protein function often involves conformational dynamics. What is the next frontier: predicting <em>ensembles</em>, <em>pathways</em>, or <em>binding-induced transitions</em>?</li>
+<li>Prions demonstrate that protein misfolding can be <em>infectious</em> without nucleic acids. What does this imply about the definition of a biological replicator, and could other amyloidogenic proteins theoretically become prion-like?</li>
 </ol>
-<pre><code>
 
 
----
-*Wikipedia source: [Protein Folding](https://en.wikipedia.org/wiki/Protein_folding) · Retrieved 2026-03-14*
 
-**Recent arXiv papers:**
-- [EVATok: Adaptive Length Video Tokenization for Efficient Visual Autoregressive Generation](https://arxiv.org/abs/2603.12267v1) (2026)
-- [OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams](https://arxiv.org/abs/2603.12265v1) (2026)
-- [GRADE: Benchmarking Discipline-Informed Reasoning in Image Editing](https://arxiv.org/abs/2603.12264v1) (2026)</code></pre></div>
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Protein_folding" target="_blank" rel="noopener"&gt;Protein Folding&lt;/a&gt; · Retrieved 2026-06-11</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2606.12409v1" target="_blank" rel="noopener">A Pfaffian quantum Hall state of ultracold bosons</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12408v1" target="_blank" rel="noopener">When direct detection constrains reheating temperature: freeze-in with stronger couplings and inflaton-seeded freeze-in</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12399v1" target="_blank" rel="noopener">Revealing Peri-Urban Dislocation through Percolation Analysis</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12395v1" target="_blank" rel="noopener">MARCIM-WG: A cyber wargame proposal based on math modeling applied in a naval scenario</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.12389v1" target="_blank" rel="noopener">KiDS-Legacy: Joint analysis of second- and third-order cosmic shear</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Protein+Folding&labels=discussion&body=Topic:+[Protein+Folding](https://dhein.github.io/daily_knowledge/topic/protein_folding/)
 
