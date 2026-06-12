@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Daily Digest — March 15, 2026</title>
+<title>Daily Digest — June 12, 2026</title>
 <script>
 MathJax = {
   tex: {
@@ -210,8 +210,8 @@ MathJax = {
 </head>
 <body>
 <div class="page">
-<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">March 15, 2026 &nbsp;·&nbsp; 4 topics &nbsp;·&nbsp; ~15 min</div></div>
-<nav class="topic-nav"><a href="#general_relativity">General Relativity</a><a href="#quantum_entanglement">Quantum Entanglement</a><a href="#transformers">Transformer Architecture</a><a href="#diffusion_models">Diffusion Models</a></nav>
+<div class="digest-header"><h1>Daily Knowledge Digest</h1><div class="meta">June 12, 2026 &nbsp;·&nbsp; 5 topics &nbsp;·&nbsp; ~20 min</div></div>
+<nav class="topic-nav"><a href="#general_relativity">General Relativity</a><a href="#quantum_entanglement">Quantum Entanglement</a><a href="#transformers">Transformer Architecture</a><a href="#diffusion_models">Diffusion Models</a><a href="#thermodynamics">Laws of Thermodynamics</a></nav>
 <article id="general_relativity"><div class="topic-header"><h2>General Relativity<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
 
 <p>General Relativity (GR) is Einstein's geometric theory of gravitation (1916), which reframes gravity not as a force but as the <strong>curvature of four-dimensional spacetime</strong> caused by mass-energy distributions.</p>
@@ -610,6 +610,124 @@ MathJax = {
 <li><a href="https://arxiv.org/abs/2606.13679v1" target="_blank" rel="noopener">InterleaveThinker: Reinforcing Agentic Interleaved Generation</a> (2026)</li>
 <li><a href="https://arxiv.org/abs/2606.13678v1" target="_blank" rel="noopener">A model of local and global reciprocity</a> (2026)</li>
 <li><a href="https://arxiv.org/abs/2606.13677v1" target="_blank" rel="noopener">Mana: Dexterous Manipulation of Articulated Tools</a> (2026)</li>
+</ul></div></article>
+<article id="thermodynamics"><div class="topic-header"><h2>Laws of Thermodynamics<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Science · Physics &nbsp;·&nbsp; ~5 min read</div></div><div class="body"><h2>Core Concept</h2>
+
+<p>The laws of thermodynamics are empirical axioms governing the behavior of energy, entropy, and temperature in physical systems. They do not derive from more primitive principles — they are the foundation.</p>
+
+<p>[!info] The Four Laws (Zeroth through Third)</p>
+<ul>
+<li><strong>Zeroth Law</strong>: Thermal equilibrium is transitive. If $A \sim C$ and $B \sim C$, then $A \sim B$. This grounds the <em>definition</em> of temperature as an equivalence class.</li>
+<li><strong>First Law</strong>: $\Delta U = Q - W$. The internal energy of a system changes by the heat absorbed minus the work done by the system. Energy is conserved globally.</li>
+<li><strong>Second Law</strong>: For any real process, $\Delta S_\text{universe} \geq 0$. Equality holds only for reversible (quasi-static) processes.</li>
+<li><strong>Third Law</strong>: $\lim_{T \to 0} S = S_0$, where $S_0$ is a constant (typically zero for perfect crystals). This makes entropy an absolute quantity, not merely relative.</li>
+</ul>
+
+<p>The combined first and second laws are often written differentially as:</p>
+
+<p>$$dU = T\,dS - P\,dV + \sum_i \mu_i\,dN_i$$</p>
+
+<p>This is the fundamental relation of thermodynamics — from it, all thermodynamic potentials ($F$, $G$, $H$) derive via Legendre transforms.</p>
+
+<hr>
+
+<h2>Why It Matters</h2>
+
+<p>These laws are unusually general — they apply regardless of the microscopic details of the system. Statistical mechanics (Boltzmann, Gibbs) provides the <em>explanation</em> of why they hold; thermodynamics itself only asserts that they <em>do</em> hold.</p>
+
+<p><strong>Key applications:</strong></p>
+<ul>
+<li><strong>Engineering</strong>: Heat engines, refrigeration cycles, turbine efficiency. The Carnot efficiency $\eta = 1 - T_C/T_H$ is a hard upper bound from the second law.</li>
+<li><strong>Chemistry</strong>: Gibbs free energy $G = H - TS$ determines spontaneity of reactions (at constant $T$, $P$: $\Delta G < 0$ for spontaneous processes).</li>
+<li><strong>Cosmology</strong>: The arrow of time is thermodynamic — entropy increase gives time its direction.</li>
+<li><strong>Information theory</strong>: Shannon entropy $H = -\sum p_i \log p_i$ is formally identical to Boltzmann's $S = -k_B \sum p_i \ln p_i$. Landauer's principle connects bit erasure to heat dissipation: erasing one bit costs at least $k_B T \ln 2$ of energy.</li>
+</ul>
+
+<p>[!tip] The Zeroth Law is epistemically deep</p>
+<p>It doesn't just define temperature — it asserts that temperature <em>exists</em> as a well-defined scalar field. Without transitivity of equilibrium, thermometers would be meaningless. This is the hidden assumption behind all of classical thermometry.</p>
+
+<hr>
+
+<h2>Key Details</h2>
+
+<ol>
+<li><strong>Entropy is not disorder (precisely).</strong> The rigorous definition is $S = k_B \ln \Omega$ (Boltzmann) or $S = -k_B \sum_i p_i \ln p_i$ (Gibbs). "Disorder" is a useful heuristic but breaks down for systems like self-gravitating matter, where clumping <em>increases</em> entropy.</li>
+</ol>
+
+<ol>
+<li><strong>The second law is statistical, not absolute.</strong> Fluctuations can transiently decrease local entropy (Boltzmann's H-theorem, Loschmidt's paradox). The Fluctuation Theorem quantifies the probability of entropy-decreasing trajectories: $P(\Delta S = +A) / P(\Delta S = -A) = e^{A/k_B}$.</li>
+</ol>
+
+<ol>
+<li><strong>Third law has practical teeth.</strong> Absolute zero is unattainable in finite steps — cooling requires expelling entropy, but as $T \to 0$ the heat capacity vanishes, making each step exponentially less effective. This is sometimes stated as a separate corollary: <em>you cannot reach $T=0$ in finite operations.</em></li>
+</ol>
+
+<ol>
+<li><strong>Perpetual motion machines of each kind are prohibited:</strong></li>
+</ol>
+<ul>
+<li>PMM1 violates the first law (creates energy).</li>
+<li>PMM2 violates the second law (extracts work from a single reservoir at uniform temperature, e.g., Maxwell's Demon — defeated by Landauer's principle).</li>
+</ul>
+
+<ol>
+<li><strong>Non-equilibrium thermodynamics is a live frontier.</strong> The classical laws apply strictly to <em>equilibrium states</em> connected by quasi-static paths. Driven systems (biological cells, turbulence) require extensions: Onsager reciprocal relations, Prigogine's minimum entropy production, and more recently, stochastic thermodynamics.</li>
+</ol>
+
+<hr>
+
+<h2>Current State</h2>
+
+<p>[!warning] Note: this information may be dated</p>
+
+<p>Active research areas include:</p>
+
+<ul>
+<li><strong>Stochastic thermodynamics</strong>: Extending the second law to single-molecule or nanoscale systems where fluctuations dominate. Jarzynski equality ($\langle e^{-W/k_BT} \rangle = e^{-\Delta F/k_BT}$) allows free energy measurements from non-equilibrium trajectories.</li>
+<li><strong>Thermodynamics of computation</strong>: Landauer's principle has been experimentally verified (Bérut et al., 2012). Ongoing work connects reversible computing to thermodynamic efficiency limits.</li>
+<li><strong>Quantum thermodynamics</strong>: How do the laws apply to quantum systems with coherence and entanglement? Work and heat become operator-valued; the notion of a "thermal machine" must be reconsidered.</li>
+<li><strong>Cosmological thermodynamics</strong>: The universe's entropy budget and ultimate fate (heat death) remain active. Black hole thermodynamics ($S_{BH} = A/4l_P^2$, Bekenstein-Hawking) suggests deep links between gravity, entropy, and quantum information.</li>
+</ul>
+
+<hr>
+
+<h2>See Also</h2>
+
+<ul>
+<li><a href="/daily_knowledge/topic/Statistical Mechanics">Statistical Mechanics</a></li>
+<li><a href="/daily_knowledge/topic/Entropy and Information Theory">Entropy and Information Theory</a></li>
+<li><a href="/daily_knowledge/topic/Carnot Cycle and Heat Engines">Carnot Cycle and Heat Engines</a></li>
+<li><a href="/daily_knowledge/topic/Gibbs Free Energy">Gibbs Free Energy</a></li>
+<li><a href="/daily_knowledge/topic/Non-Equilibrium Thermodynamics">Non-Equilibrium Thermodynamics</a></li>
+<li><a href="/daily_knowledge/topic/Black Hole Thermodynamics">Black Hole Thermodynamics</a></li>
+</ul>
+
+<hr>
+
+<h2>Discussion Prompts</h2>
+
+<ol>
+<li><strong>Arrow of time</strong>: The microscopic laws of physics are time-symmetric, yet the second law defines a preferred temporal direction. Is entropy increase a <em>fundamental</em> asymmetry, or an artifact of low-entropy initial conditions (the "Past Hypothesis")? Can the Big Bang's low entropy be explained, or must it be posited?</li>
+</ol>
+
+<ol>
+<li><strong>Maxwell's Demon and Landauer's principle</strong>: The demon appears to violate the second law by sorting molecules without doing work. Landauer's resolution ties information erasure to heat. Does this make the second law <em>fundamentally</em> informational? What are the implications for the limits of reversible computation?</li>
+</ol>
+
+<ol>
+<li><strong>Quantum thermodynamics edge cases</strong>: In a quantum system with coherence between energy eigenstates, the standard notion of "work" (energy exchange without entropy change) becomes ambiguous. How should the first and second laws be reformulated for coherent quantum processes, and does entanglement between system and bath fundamentally alter efficiency bounds?</li>
+</ol>
+
+
+
+<hr>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Laws_of_thermodynamics" target="_blank" rel="noopener"&gt;Laws of Thermodynamics&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.20195v1" target="_blank" rel="noopener">Improved constraint on the Hubble constant from dark sirens with LIGO/Virgo/KAGRA O4a</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20194v1" target="_blank" rel="noopener">MME-CoF-Pro: Evaluating Reasoning Coherence in Video Generative Models with Text and Visual Hints</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2603.20192v1" target="_blank" rel="noopener">LumosX: Relate Any Identities with Their Attributes for Personalized Video Generation</a> (2026)</li>
 </ul></div></article>
 </div>
 </body>

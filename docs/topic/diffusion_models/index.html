@@ -215,80 +215,59 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Diffusion Models<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~4 min read</div>
+<div class="topic-meta">Tech · Machine Learning &nbsp;·&nbsp; ~3 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>diffusion model</strong> is a latent variable generative model that learns to reverse a stochastic noising process. Given a data distribution $q(\mathbf{x}_0)$, the forward process gradually destroys structure by adding Gaussian noise over $T$ steps; the model learns to invert this.</div></div>
+<p>Diffusion models are a class of latent variable generative models that learn a data distribution by modeling a <strong>two-phase stochastic process</strong>: a fixed forward process that destroys structure, and a learned reverse process that reconstructs it.</p>
 
-<p>The <strong>forward process</strong> is a fixed Markov chain:</p>
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>Let $\mathbf{x}_0 \sim q(\mathbf{x})$ be a data sample. The <strong>forward process</strong> adds Gaussian noise over $T$ timesteps: $$q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}\!\left(\mathbf{x}_t;\, \sqrt{1-\beta_t}\,\mathbf{x}_{t-1},\, \beta_t \mathbf{I}\right)$$ where $\{\beta_t\}$ is a variance schedule. As $t \to T$, $\mathbf{x}_T \approx \mathcal{N}(\mathbf{0}, \mathbf{I})$. The <strong>reverse process</strong> is learned: $$p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t) = \mathcal{N}\!\left(\mathbf{x}_{t-1};\, \boldsymbol{\mu}_\theta(\mathbf{x}_t, t),\, \boldsymbol{\Sigma}_\theta(\mathbf{x}_t, t)\right)$$ Training minimizes a variational lower bound (ELBO) on the negative log-likelihood, which reduces in practice to a <strong>denoising objective</strong>: predict the noise $\boldsymbol{\epsilon}$ added at each step.</div></div>
 
-<p>$$q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}\!\left(\mathbf{x}_t;\, \sqrt{1-\beta_t}\,\mathbf{x}_{t-1},\, \beta_t \mathbf{I}\right)$$</p>
-
-<p>where $\{\beta_t\}$ is a noise schedule. By the reparameterization trick, one can sample any $\mathbf{x}_t$ directly:</p>
-
-<p>$$\mathbf{x}_t = \sqrt{\bar{\alpha}_t}\,\mathbf{x}_0 + \sqrt{1-\bar{\alpha}_t}\,\boldsymbol{\epsilon}, \quad \boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I}), \quad \bar{\alpha}_t = \prod_{s=1}^t (1-\beta_s)$$</p>
-
-<p>The <strong>reverse process</strong> is a learned Markov chain $p_\theta(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$, parameterized by a neural network (backbone) trained to predict either the noise $\boldsymbol{\epsilon}$, the clean $\mathbf{x}_0$, or the <strong>score</strong> $\nabla_{\mathbf{x}} \log p(\mathbf{x})$. These are equivalent up to a scaling. Training minimizes a variational lower bound (ELBO), which in DDPM simplifies to:</p>
-
-<p>$$\mathcal{L}_\text{simple} = \mathbb{E}_{t,\mathbf{x}_0,\boldsymbol{\epsilon}}\!\left[\|\boldsymbol{\epsilon} - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)\|^2\right]$$</p>
-
-<p>The forward and reverse processes can also be unified under a <strong>stochastic differential equation (SDE)</strong> framework (Song et al., 2021), enabling continuous-time formulations and deterministic sampling via probability flow ODEs.</p>
+<p>Multiple equivalent formalisms unify under this umbrella: <strong>DDPMs</strong> (Ho et al. 2020), <strong>score-based models</strong> via Langevin dynamics (Song & Ermon), and continuous-time <strong>stochastic differential equations</strong> (Song et al. 2021), where the forward process becomes an Itô SDE and the reverse is governed by the score function $\nabla_{\mathbf{x}} \log p_t(\mathbf{x})$.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Diffusion models displaced GANs as the dominant paradigm for high-fidelity image synthesis around 2022–2023. Their advantages are concrete:</p>
+<p>Diffusion models resolved a long-standing quality/diversity trade-off in generative modeling. GANs produce sharp samples but suffer mode collapse and training instability; VAEs are stable but blurry. Diffusion models achieve <strong>state-of-the-art sample fidelity</strong> with tractable likelihoods and stable training.</p>
 
-<ul>
-<li><strong>Training stability</strong> — no adversarial minimax; just supervised noise-prediction.</li>
-<li><strong>Mode coverage</strong> — likelihood-based training avoids mode collapse endemic to GANs.</li>
-<li><strong>Compositionality</strong> — conditioning (text, class, image) integrates cleanly via classifier-free guidance.</li>
-</ul>
+<p>Commercially, models like Stable Diffusion and DALL-E 3 combine a diffusion backbone with text encoders and cross-attention, enabling open-ended text-to-image synthesis. Beyond vision, the framework extends to audio (WaveGrad), molecular design (protein structure generation), and reinforcement learning (Diffuser for planning).</p>
 
-<p>Commercial impact is significant: Stable Diffusion, DALL-E 3, Imagen, and Sora all build on diffusion foundations. Beyond pixels, diffusion has expanded into protein structure prediction, drug molecule design, audio synthesis, and robot trajectory planning — anywhere you need to sample from a complex, high-dimensional distribution.</p>
-
-<div class="callout tip"><div class="callout-title">TIP</div><div>The connection to <strong>score matching</strong> (Hyvärinen, 2005) is deep: denoising score matching with multiple noise levels is mathematically equivalent to DDPM training. This bridges energy-based models and diffusion in a single framework.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Unifying Insight</div><div>The score-matching perspective reveals that a denoising network $\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)$ implicitly estimates the <strong>score</strong> $\nabla_{\mathbf{x}_t} \log p_t(\mathbf{x}_t)$. This connects diffusion models to classical energy-based models and Langevin MCMC — the generative process is gradient ascent on a learned log-density.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Backbone architectures</strong> — Originally U-Net with attention; newer work increasingly uses <strong>Diffusion Transformers (DiT)</strong>, which treat image patches as token sequences and scale more predictably with compute.</li>
+<li><strong>Noise Schedule</strong>: The choice of $\beta_t$ (linear, cosine, learned) dramatically affects sample quality and training dynamics. The cosine schedule (Nichol & Dhariwal 2021) improves low-frequency structure capture.</li>
 </ol>
 
 <ol>
-<li><strong>Noise schedules matter</strong> — Cosine schedules (iDDPM) outperform linear schedules on lower-resolution images. Learned or adaptive schedules remain active research.</li>
+<li><strong>Backbone Architecture</strong>: The denoising network is typically a <strong>U-Net</strong> with time-conditional normalization (GroupNorm + sinusoidal timestep embeddings) or a <strong>Diffusion Transformer (DiT)</strong>, which replaces convolutional blocks with self-attention and scales more favorably.</li>
 </ol>
 
 <ol>
-<li><strong>Sampling efficiency</strong> — Naive DDPM requires $T \approx 1000$ NFEs (network function evaluations). DDIM reformulates as a non-Markovian process enabling ~50-step deterministic sampling. Distillation methods (consistency models, progressive distillation) push this to 1–4 steps at quality parity.</li>
+<li><strong>Sampling Speed</strong>: Naive DDPM requires $T \approx 1000$ NFEs (network function evaluations). <strong>DDIM</strong> (Song et al.) reformulates sampling deterministically, reducing to ~50 steps. <strong>Consistency models</strong> and <strong>flow matching</strong> push this further, enabling single-step generation.</li>
 </ol>
 
 <ol>
-<li><strong>Classifier-free guidance (CFG)</strong> — At inference, blend conditional and unconditional score estimates: $\tilde{\boldsymbol{\epsilon}} = \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing) + w\,[\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, c) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing)]$. Guidance scale $w$ trades diversity for fidelity.</li>
+<li><strong>Latent Diffusion</strong>: Running diffusion in pixel space is expensive. Stable Diffusion operates in the latent space of a pretrained VAE, compressing $512{\times}512$ images to $64{\times}64{\times}4$ tensors — a ~48× compute reduction with minimal perceptual loss.</li>
 </ol>
 
 <ol>
-<li><strong>Latent diffusion</strong> — Operating in the latent space of a pre-trained VAE (Stable Diffusion's core trick) reduces spatial resolution ~8×, cutting compute quadratically without significant perceptual loss.</li>
+<li><strong>Classifier-Free Guidance (CFG)</strong>: Conditional generation without a separate classifier. The network is jointly trained with and without conditioning; at inference, outputs are extrapolated:</li>
 </ol>
+<p>$$\tilde{\boldsymbol{\epsilon}}_\theta = \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing) + w\bigl(\boldsymbol{\epsilon}_\theta(\mathbf{x}_t, c) - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, \varnothing)\bigr)$$</p>
+<p>where $w > 1$ trades diversity for adherence to condition $c$.</p>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The field moves extremely fast; architectural frontiers and benchmark records shift monthly.</div></div>
 
-<p>Active research frontiers as of early 2026:</p>
-
-<ul>
-<li><strong>Video generation</strong> — Extending spatial diffusion to temporal dimensions with causal attention (see OmniStream-style unified backbones); token efficiency for long sequences is a bottleneck.</li>
-<li><strong>Consistency and flow matching</strong> — Flow matching models (Rectified Flow, Stable Diffusion 3) reparameterize the trajectory as straight-line ODE paths, improving sample quality at low NFEs and simplifying training.</li>
-<li><strong>Autoregressive + diffusion hybrids</strong> — Systems like adaptive video tokenizers (e.g., EVATok) target AR generation efficiency, but diffusion remains competitive on quality metrics.</li>
-<li><strong>Controllability</strong> — ControlNet, IP-Adapter, and similar conditioning mechanisms allow fine-grained structural control; multimodal conditioning (layout, depth, pose) is mature but evaluation rigor (see GRADE benchmark) is still catching up.</li>
-</ul>
+<p>Active research lines as of mid-2026 include: <strong>flow matching</strong> (Lipman et al.) as a cleaner interpolation-based alternative to score matching; <strong>consistency distillation</strong> for near-real-time generation; <strong>video diffusion</strong> (Sora-class models) scaling temporal coherence; and integrating diffusion sampling into <strong>agentic pipelines</strong> (e.g., interleaved text-image generation, as in InterleaveThinker). Mechanistic interpretability of what timestep-specific representations encode is an open theoretical frontier.</p>
 
 <hr>
 
@@ -297,10 +276,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Score-Based Generative Models">Score-Based Generative Models</a></li>
 <li><a href="/daily_knowledge/topic/Variational Autoencoders">Variational Autoencoders</a></li>
-<li><a href="/daily_knowledge/topic/Generative Adversarial Networks">Generative Adversarial Networks</a></li>
 <li><a href="/daily_knowledge/topic/Flow Matching">Flow Matching</a></li>
+<li><a href="/daily_knowledge/topic/U-Net Architecture">U-Net Architecture</a></li>
 <li><a href="/daily_knowledge/topic/Classifier-Free Guidance">Classifier-Free Guidance</a></li>
-<li><a href="/daily_knowledge/topic/Denoising Score Matching">Denoising Score Matching</a></li>
+<li><a href="/daily_knowledge/topic/Stochastic Differential Equations in ML">Stochastic Differential Equations in ML</a></li>
 </ul>
 
 <hr>
@@ -308,29 +287,23 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Sampling as inference</strong>: DDIM sampling is deterministic given the same noise seed — does this make diffusion models closer to implicit likelihood models than their variational training objective suggests? What are the implications for diversity-fidelity tradeoffs?</li>
-</ol>
-
-<ol>
-<li><strong>Scalability ceiling</strong>: DiT scales log-linearly with compute in image synthesis. Do you expect the same scaling law to hold for video, or does the combinatorial explosion of temporal consistency introduce a qualitatively harder problem?</li>
-</ol>
-
-<ol>
-<li><strong>Inductive bias vs. architecture</strong>: Diffusion models impose a specific inductive bias (iterative refinement from noise). For domains like protein design or molecular generation, is this bias genuinely well-matched to the data geometry, or is it incidental that it works well?</li>
+<li>CFG boosts adherence but demonstrably reduces sample diversity — is there a principled way to navigate the fidelity/diversity Pareto frontier beyond tuning $w$?</li>
+<li>Diffusion in latent space relies on a separately trained VAE whose bottleneck is fixed — how does the expressiveness of the latent manifold constrain what the diffusion model can ultimately represent?</li>
+<li>The score function $\nabla_{\mathbf{x}} \log p_t(\mathbf{x})$ is learned implicitly through denoising; can this be exploited for density estimation or anomaly detection without sampling at all?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Diffusion_model" target="_blank" rel="noopener"&gt;Diffusion Models&lt;/a&gt; · Retrieved 2026-03-15</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Diffusion_model" target="_blank" rel="noopener"&gt;Diffusion Models&lt;/a&gt; · Retrieved 2026-06-12</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.12267v1" target="_blank" rel="noopener">EVATok: Adaptive Length Video Tokenization for Efficient Visual Autoregressive Generation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12266v1" target="_blank" rel="noopener">MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12265v1" target="_blank" rel="noopener">OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12264v1" target="_blank" rel="noopener">GRADE: Benchmarking Discipline-Informed Reasoning in Image Editing</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12263v1" target="_blank" rel="noopener">$Ψ_0$: An Open Foundation Model Towards Universal Humanoid Loco-Manipulation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13681v1" target="_blank" rel="noopener">EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13680v1" target="_blank" rel="noopener">Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13679v1" target="_blank" rel="noopener">InterleaveThinker: Reinforcing Agentic Interleaved Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13678v1" target="_blank" rel="noopener">A model of local and global reciprocity</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13677v1" target="_blank" rel="noopener">Mana: Dexterous Manipulation of Articulated Tools</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Diffusion+Models&labels=discussion&body=Topic:+[Diffusion+Models](https://dhein.github.io/daily_knowledge/topic/diffusion_models/)

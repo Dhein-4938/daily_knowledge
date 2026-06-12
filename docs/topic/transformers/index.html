@@ -219,61 +219,59 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>The Transformer is a sequence-to-sequence architecture that replaces recurrence entirely with <strong>self-attention</strong>, enabling parallelisable training and long-range dependency capture without path-length degradation.</p>
+<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>Transformer</strong> is a sequence-to-sequence neural architecture that dispenses entirely with recurrence and convolution, instead relying on <strong>scaled dot-product attention</strong> to model dependencies between all positions simultaneously.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Scaled Dot-Product Attention</div><div>Given queries $Q$, keys $K$, and values $V$ (all $\in \mathbb{R}^{n \times d_k}$): $$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$$ The $\sqrt{d_k}$ scaling prevents softmax saturation in high-dimensional spaces.</div></div>
+<p>The fundamental operation is <strong>Multi-Head Self-Attention</strong>. Given input matrix $X \in \mathbb{R}^{n \times d}$, each head computes:</p>
 
-<p><strong>Multi-Head Attention (MHA)</strong> projects into $h$ subspaces, runs attention in parallel, then concatenates:</p>
+<p>$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$$</p>
 
-<p>$$\text{MHA}(Q,K,V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)\,W^O, \quad \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$</p>
+<p>where $Q = XW^Q$, $K = XW^K$, $V = XW^V$ are learned projections. Multiple heads run in parallel, their outputs concatenated and re-projected:</p>
 
-<p>Each encoder/decoder block pairs MHA with a position-wise FFN, residual connections, and layer norm. Positional information is injected via sinusoidal (original) or learned embeddings, since attention itself is permutation-invariant.</p>
+<p>$$\text{MHA}(X) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O$$</p>
+
+<p>A Transformer block wraps MHA with residual connections, layer normalization, and a position-wise FFN (typically two linear layers with a GELU/ReLU nonlinearity). Since attention is permutation-invariant, <strong>positional encodings</strong> — sinusoidal, learned, or rotary (RoPE) — are injected to convey sequence order.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>The Transformer's architectural biases—global receptive field from token 1, hardware-friendly parallelism, and a clean inductive prior of <em>pairwise relevance</em>—made it the substrate for virtually every frontier model in language, vision, audio, and biology. Pre-trained at scale, Transformers exhibit emergent capabilities absent in smaller variants: in-context learning, chain-of-thought reasoning, and cross-modal transfer.</p>
+<p>Transformers unified NLP, vision, audio, and multimodal modeling under a single inductive-bias-light framework. Their $O(n^2)$ attention cost is the central scalability bottleneck, but their parallelism across positions (unlike RNNs) makes them GPU/TPU-friendly at training time. The architecture underlies GPT, BERT, T5, ViT, Whisper, AlphaFold 2, and virtually every frontier model as of 2026.</p>
 
-<div class="callout tip"><div class="callout-title">TIP: The attention inductive bias is weaker than CNNs or RNNs</div><div>This means Transformers need more data to match specialised architectures in low-data regimes, but generalise <em>better</em> at scale. The weakness becomes a strength.</div></div>
-
-<p>Applications span: LLM pre-training (GPT, LLaMA), vision (ViT, DINO), protein folding (AlphaFold 2), code generation, robotic control, and multimodal agents.</p>
+<div class="callout tip"><div class="callout-title">TIP</div><div>The FFN sublayer (often 4× wider than the residual stream) acts as a key-value memory — individual neurons store factual associations. This explains why scaling parameters in FFN layers improves knowledge retrieval more than scaling attention heads alone.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>KV-Cache and Autoregressive Decoding</strong> — During inference, keys and values for all prior tokens are cached, reducing per-step complexity from $O(n^2)$ to $O(n)$ at the cost of memory proportional to sequence length. This is the primary bottleneck for long-context deployment.</li>
+<li><strong>Residual stream as communication bus.</strong> Each layer reads from and writes to the same $d_\text{model}$-dimensional residual stream. Mechanistic interpretability frames this as parallel "circuits" adding their contributions, making superposition the dominant compression strategy.</li>
 </ol>
 
 <ol>
-<li><strong>Positional Encoding Variants</strong> — Absolute sinusoidal → learned absolute → relative (T5 bias) → RoPE (rotary position embedding). RoPE encodes position by rotating $Q$ and $K$ in complex space, enabling length generalisation and efficient dot-product computation. Modern models (LLaMA 3, Qwen) default to RoPE.</li>
+<li><strong>Positional encoding trade-offs.</strong> Sinusoidal (absolute) encodings generalize poorly beyond training length. Relative encodings (ALiBi, RoPE) enable better length extrapolation; RoPE encodes position as a rotation in complex space, achieving $\text{Re}[q e^{im\theta} \cdot (k e^{in\theta})^*] = \text{Re}[qk^* e^{i(m-n)\theta}]$, making attention scores depend only on relative offset $m-n$.</li>
 </ol>
 
 <ol>
-<li><strong>Layer Norm Placement</strong> — "Post-LN" (original paper) is harder to train deep; "Pre-LN" (before attention/FFN) stabilises gradients but can reduce representation rank. Most production models use Pre-LN or a hybrid (e.g. Gemma's RMSNorm pre-LN).</li>
+<li><strong>Attention sink phenomenon.</strong> Empirically, the first token (often <code>&lt;BOS&gt;</code>) accumulates disproportionate attention mass across many heads — a consequence of softmax needing to "dump" probability somewhere when all content is irrelevant. Streaming inference systems (e.g., StreamingLLM) exploit this by always retaining the sink token in the KV cache.</li>
 </ol>
 
 <ol>
-<li><strong>FFN as Key-Value Memory</strong> — The two-layer FFN with activation $\text{FFN}(x) = \sigma(xW_1)W_2$ is interpretable as a <em>soft key-value store</em>: rows of $W_1$ are keys, columns of $W_2$ are values. This frames factual recall as dense lookup rather than explicit retrieval.</li>
+<li><strong>KV cache and inference cost.</strong> Autoregressive decoding materializes a KV cache of size $O(n \cdot n_\text{layers} \cdot 2d)$ per sequence. This is frequently the binding memory constraint at inference, motivating grouped-query attention (GQA) and multi-query attention (MQA) which share key/value heads across query heads.</li>
 </ol>
 
 <ol>
-<li><strong>Attention Complexity</strong> — Vanilla MHA is $O(n^2 d)$ in both compute and memory. Flash Attention (Dao et al.) achieves $O(n^2 d / M)$ in HBM reads via tiled SRAM computation, enabling practical 100K+ context windows without approximation.</li>
+<li><strong>Training instability at scale.</strong> Pre-LayerNorm (applying norm before the sublayer) is more stable than post-LN for large models; gradient norms in post-LN grow with depth and require careful warmup. Most modern LLMs use pre-LN or RMSNorm variants.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active research as of early 2026 is pushing Transformers into <strong>streaming and real-time</strong> regimes. Works like <em>OmniStream</em> incorporate <strong>causal spatiotemporal attention with 3D-RoPE</strong> and persistent KV-caches for frame-by-frame video processing—extending the architecture from offline batch inference to online perception-action loops. Similarly, <em>Video Streaming Thinking (VST)</em> amortises LLM reasoning latency over video playback by activating chain-of-thought during streaming rather than after, achieving 15.7× latency reduction over post-hoc reasoning approaches.</p>
+<p>Active research fronts as of mid-2026 include <strong>reasoning-aware retrieval augmentation</strong>: rather than grounding a Transformer in semantically similar documents, frameworks like RA-RFT train retrievers to surface <em>analogous reasoning patterns</em>, improving mathematical reasoning benchmarks significantly over standard RLHF/GRPO fine-tuning. This signals a shift from treating retrieval as a knowledge lookup to treating it as a <em>cognitive scaffold</em>.</p>
 
-<p>A parallel thread is <strong>compositional visual reasoning</strong>: benchmarks like <em>MM-CondChain</em> reveal that even 2026-generation MLLMs peak at ~53 Path F1 on deeply chained conditional reasoning tasks, indicating that multi-hop grounded inference remains unsolved regardless of model scale.</p>
-
-<p><strong>Spatial intelligence</strong> for embodied agents (Spatial-TTT) explores test-time training (fast weights) as a complement to the fixed attention mechanism, enabling continual spatial map updates from unbounded streams without full-context KV growth.</p>
+<p>Separately, <strong>knowledge graph integration</strong> (e.g., Agents-K1) aims to give Transformers structured access to entity-relation graphs extracted from millions of papers, enabling multi-hop scientific reasoning that flat token context windows handle poorly. Positional encoding research has also expanded to graph domains, where truncated spectral and walk-based PEs for GNNs are now understood to have fundamentally different expressive power under truncation — a finding that likely informs PE design for structured-input Transformers.</p>
 
 <hr>
 
@@ -282,10 +280,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Attention Mechanism">Attention Mechanism</a></li>
 <li><a href="/daily_knowledge/topic/Rotary Position Embedding (RoPE)">Rotary Position Embedding (RoPE)</a></li>
-<li><a href="/daily_knowledge/topic/Flash Attention">Flash Attention</a></li>
-<li><a href="/daily_knowledge/topic/Vision Transformer (ViT)">Vision Transformer (ViT)</a></li>
 <li><a href="/daily_knowledge/topic/Large Language Models">Large Language Models</a></li>
-<li><a href="/daily_knowledge/topic/Multimodal Foundation Models">Multimodal Foundation Models</a></li>
+<li><a href="/daily_knowledge/topic/Mechanistic Interpretability">Mechanistic Interpretability</a></li>
+<li><a href="/daily_knowledge/topic/Retrieval-Augmented Generation">Retrieval-Augmented Generation</a></li>
+<li><a href="/daily_knowledge/topic/Mixture of Experts">Mixture of Experts</a></li>
 </ul>
 
 <hr>
@@ -293,29 +291,23 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The FFN-as-memory interpretation suggests factual knowledge is stored in weights rather than context — what are the implications for knowledge editing and catastrophic forgetting at scale?</li>
-</ol>
-
-<ol>
-<li>Causal attention with persistent KV-caches enables streaming, but memory grows linearly with time. What architectural modifications (sliding window, retention mechanisms, SSMs) offer the best compute/memory/quality trade-offs for always-on agents?</li>
-</ol>
-
-<ol>
-<li>Transformers lack explicit relational structure; MM-CondChain shows they still fail at deep compositional conditionals. Is this a data problem, a capacity problem, or a fundamental limitation of the attention inductive bias?</li>
+<li>The FFN layers store factual associations, but attention heads route information — does this suggest a clean functional decomposition, or do the roles blur at scale?</li>
+<li>RoPE's relative-offset property solves training-length generalization in theory; why do models still degrade on very long contexts in practice, and what does that reveal about context utilization?</li>
+<li>If reasoning-aware retrieval (RA-RFT) consistently outperforms semantic retrieval for multi-step problems, what does that imply about how Transformers internally represent "problem type" versus "problem content"?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture" target="_blank" rel="noopener"&gt;Transformer Architecture&lt;/a&gt;) · Retrieved 2026-03-15</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture" target="_blank" rel="noopener"&gt;Transformer Architecture&lt;/a&gt;) · Retrieved 2026-06-12</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.12266v1" target="_blank" rel="noopener">MM-CondChain: A Programmatically Verified Benchmark for Visually Grounded Deep Compositional Reasoning</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12265v1" target="_blank" rel="noopener">OmniStream: Mastering Perception, Reconstruction and Action in Continuous Streams</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12262v1" target="_blank" rel="noopener">Video Streaming Thinking: VideoLLMs Can Watch and Think Simultaneously</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12258v1" target="_blank" rel="noopener">Stable Topology in Exactly Flat Bands</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12255v1" target="_blank" rel="noopener">Spatial-TTT: Streaming Visual-based Spatial Intelligence with Test-Time Training</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13680v1" target="_blank" rel="noopener">Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13678v1" target="_blank" rel="noopener">A model of local and global reciprocity</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13677v1" target="_blank" rel="noopener">Mana: Dexterous Manipulation of Articulated Tools</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13671v1" target="_blank" rel="noopener">Understanding Truncated Positional Encodings for Graph Neural Networks</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13669v1" target="_blank" rel="noopener">Agents-K1: Towards Agent-native Knowledge Orchestration</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Transformer+Architecture&labels=discussion&body=Topic:+[Transformer+Architecture](https://dhein.github.io/daily_knowledge/topic/transformers/)

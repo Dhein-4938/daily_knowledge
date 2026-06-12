@@ -219,69 +219,75 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Quantum entanglement is a property of a composite quantum system where the joint state <strong>cannot</strong> be written as a tensor product of individual subsystem states. Formally, a bipartite state $|\psi\rangle \in \mathcal{H}_A \otimes \mathcal{H}_B$ is entangled if and only if there exist <strong>no</strong> $|\phi\rangle_A \in \mathcal{H}_A$, $|\chi\rangle_B \in \mathcal{H}_B$ such that $|\psi\rangle = |\phi\rangle_A \otimes |\chi\rangle_B$.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Quantum entanglement is a correlation between composite quantum systems such that the joint state <strong>cannot</strong> be written as a tensor product of individual states. For a bipartite system, a pure state $|\psi\rangle \in \mathcal{H}_A \otimes \mathcal{H}_B$ is entangled if and only if: $$|\psi\rangle \neq |\phi\rangle_A \otimes |\chi\rangle_B$$ for any $|\phi\rangle_A \in \mathcal{H}_A$, $|\chi\rangle_B \in \mathcal{H}_B$.</div></div>
 
-<p>The canonical example is the singlet Bell state:</p>
+<p>The canonical example is the Bell state (one of four maximally entangled two-qubit states):</p>
 
-<p>$$|\Psi^-\rangle = \frac{1}{\sqrt{2}}\left(|\uparrow\rangle_A|\downarrow\rangle_B - |\downarrow\rangle_A|\uparrow\rangle_B\right)$$</p>
+<p>$$|\Phi^+\rangle = \frac{1}{\sqrt{2}}\left(|00\rangle + |11\rangle\right)$$</p>
 
-<p>Here the total spin is fixed at zero, yet neither particle has a definite spin prior to measurement. Measuring particle $A$ along any axis instantly determines the outcome for particle $B$ along that same axis — not because a signal propagated, but because the global wavefunction collapses as a whole.</p>
+<p>Measuring qubit $A$ in the computational basis instantly fixes the outcome distribution for qubit $B$, regardless of spatial separation. Entanglement is quantified via <strong>entanglement entropy</strong>: for a bipartite pure state with reduced density matrix $\rho_A = \text{Tr}_B(|\psi\rangle\langle\psi|)$,</p>
 
-<p>The reduced density matrix of subsystem $A$ is obtained by tracing out $B$: $\rho_A = \text{Tr}_B(|\psi\rangle\langle\psi|)$. For the singlet, $\rho_A = \frac{1}{2}\mathbf{I}$ — a maximally mixed state — which quantifies maximal entanglement via the <strong>von Neumann entropy</strong> $S(\rho_A) = -\text{Tr}(\rho_A \ln \rho_A) = \ln 2$.</p>
+<p>$$S(\rho_A) = -\text{Tr}(\rho_A \log_2 \rho_A)$$</p>
+
+<p>$S = 0$ for product states; $S = 1$ ebit for maximally entangled qubit pairs.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Entanglement is not merely a curiosity — it is a <strong>resource</strong> that enables strictly super-classical information processing:</p>
+<p>Entanglement is the resource that makes quantum information genuinely distinct from classical information theory. It underpins:</p>
 
 <ul>
-<li><strong>Quantum cryptography (QKD):</strong> Entanglement-based protocols (e.g., E91) guarantee eavesdropping detection via Bell inequality violations.</li>
-<li><strong>Quantum teleportation:</strong> Transmits an unknown qubit state using only an entangled pair and two classical bits.</li>
-<li><strong>Quantum computing:</strong> Entanglement underlies the exponential Hilbert-space structure that makes algorithms like Shor's and Grover's tractable.</li>
-<li><strong>Condensed matter:</strong> Entanglement entropy diagnoses topological order, criticality, and area-law vs. volume-law phases — deeply connected to tensor network methods (MPS, PEPS).</li>
-<li><strong>Holography / AdS-CFT:</strong> Spatial geometry in the bulk may <em>emerge</em> from entanglement structure in the boundary CFT (Ryu–Takayanagi formula: $S = \text{Area}/4G_N$).</li>
+<li><strong>Quantum key distribution</strong> (e.g., Ekert E91 protocol) — eavesdropping disturbs correlations detectably</li>
+<li><strong>Quantum teleportation</strong> — transmitting an unknown qubit state using 2 classical bits + 1 shared ebit</li>
+<li><strong>Quantum computing</strong> — entanglement between qubits enables exponential parallelism in algorithms like Shor's</li>
+<li><strong>Condensed matter</strong> — area laws for entanglement entropy characterize topological phases and guide tensor-network simulations</li>
+<li><strong>Holography / AdS-CFT</strong> — Ryu–Takayanagi formula relates bulk geometry to boundary entanglement entropy, hinting that spacetime itself may be entanglement-structured</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: The Real Weirdness</div><div>Entanglement doesn't allow FTL communication — correlations only become visible when results are <em>compared</em> via a classical channel. The genuine strangeness is ontological: quantum systems lack definite local properties before joint measurement. Bell's theorem rules out any local hidden-variable completion, making this irreducibly non-classical.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Insight</div><div>Entanglement is not <em>transmitted</em> between particles post-creation — it is a property of the joint Hilbert space. The non-local correlations carry no causal signal, which is why faster-than-light communication remains impossible despite the spooky correlations.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<ol>
-<li><strong>Bell's Theorem and CHSH Inequality.</strong> Local hidden-variable theories satisfy $|S_{\text{CHSH}}| \leq 2$, where $S = \langle AB\rangle - \langle AB'\rangle + \langle A'B\rangle + \langle A'B'\rangle$. Quantum mechanics achieves the Tsirelson bound $2\sqrt{2} \approx 2.83$, experimentally confirmed with loophole-free Bell tests (e.g., Delft 2015, NIST 2015).</li>
-</ol>
+<p><strong>1. Bell's Theorem and the end of local hidden variables</strong></p>
+<p>Bell (1964) derived inequalities that any local realistic theory must satisfy. Experiments (Aspect 1982, loophole-free tests 2015) show Nature violates them. The CHSH inequality is:</p>
 
-<ol>
-<li><strong>Entanglement is basis-independent but measurement-basis-sensitive.</strong> The degree of correlations observed depends on the measurement axes chosen; only specific axis combinations violate Bell inequalities maximally.</li>
-</ol>
+<p>$$\left|\langle AB\rangle + \langle AB'\rangle + \langle A'B\rangle - \langle A'B'\rangle\right| \leq 2 \quad \text{(classical bound)}$$</p>
 
-<ol>
-<li><strong>Mixed-state entanglement is harder.</strong> For mixed states, the separability criterion is non-trivial. The <strong>PPT criterion</strong> (Peres–Horodecki) provides a necessary condition: if $\rho^{T_B} \not\geq 0$, the state is entangled. In higher dimensions, PPT-entangled (bound-entangled) states exist — entangled but not distillable.</li>
-</ol>
+<p>Quantum mechanics achieves the Tsirelson bound of $2\sqrt{2} \approx 2.83$.</p>
 
-<ol>
-<li><strong>Monogamy of entanglement.</strong> If $A$ is maximally entangled with $B$, it cannot be entangled with $C$ at all: $E(A:B) + E(A:C) \leq 1$ (in appropriate units). This underpins quantum cryptographic security.</li>
-</ol>
+<p><strong>2. Nonlocality without entanglement (NLWE)</strong></p>
+<p>Separable (unentangled) states can still exhibit nonlocality in the operational sense: Bennett et al. (1999) showed that certain orthogonal product-state bases cannot be perfectly distinguished by local operations and classical communication (LOCC). Recent work (Lee & Bae, 2026) extends this via <em>maximum-confidence discrimination</em>, showing global measurements outperform separable ones even without entanglement — and enabling semi-device-independent certification.</p>
 
-<ol>
-<li><strong>Entanglement entropy and area laws.</strong> Ground states of gapped local Hamiltonians obey an <em>area law</em>: $S \propto |\partial V|$ rather than volume. This is what makes tensor networks (MPS, MERA) efficient representations — and connects to why topological phases can be characterized by short-range entanglement.</li>
-</ol>
+<p><strong>3. Mixed-state entanglement and PPT criterion</strong></p>
+<p>For mixed states $\rho_{AB}$, separability means $\rho = \sum_i p_i \rho_A^i \otimes \rho_B^i$. The Peres–Horodecki (PPT) criterion: if $\rho_{AB}$ is separable, its partial transpose has non-negative eigenvalues. PPT is necessary and sufficient in $2\times 2$ and $2\times 3$ dimensions, but not beyond — <em>bound entangled</em> states exist that are PPT yet inseparable.</p>
+
+<p><strong>4. Monogamy of entanglement</strong></p>
+<p>Entanglement cannot be freely shared. For three qubits $A$, $B$, $C$, the Coffman–Kundu–Wootters (CKW) inequality constrains:</p>
+
+<p>$$C^2_{A|BC} \geq C^2_{AB} + C^2_{AC}$$</p>
+
+<p>where $C$ is the concurrence. This monogamy is crucial for quantum cryptography security proofs.</p>
+
+<p><strong>5. Decoherence as the practical barrier</strong></p>
+<p>Entanglement is fragile: interaction with the environment causes decoherence, rapidly collapsing superpositions. Preserving entanglement across macroscopic distances requires extreme isolation (optical fibers, vacuum links) or error-correcting codes.</p>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Experimental platforms (photons, ions, superconducting qubits, neutral atoms) are advancing rapidly; specific fidelity benchmarks and record entanglement distances shift frequently.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Recent research directions of note:</p>
+<p>Active research fronts as of mid-2026:</p>
 
 <ul>
-<li><strong>Topological phases and entanglement structure:</strong> A March 2026 arXiv paper on <em>Critical Topological Flat Bands</em> (Li et al.) explicitly connects filled band states to <em>short-range entangled topological states</em> with power-law correlations, admitting exact tensor-network representations. This is a frontier where entanglement theory directly informs condensed matter.</li>
-<li><strong>Majorana zero modes:</strong> Probing non-Abelian anyons (relevant to topological quantum computing) relies on fermion-parity switches — themselves a form of protected entanglement between topological qubits.</li>
-<li><strong>Neutrino oscillations as quantum coherence:</strong> The factorization vs. non-factorization debate in neutrino S-matrix treatments touches on how quantum correlations between production and detection events (a cousin of entanglement) generate measurable non-factorizable corrections at the ~1% level.</li>
-<li><strong>Entanglement-based networks:</strong> Satellite QKD (Micius) and metropolitan fiber networks are moving toward entanglement distribution at scale, targeting quantum repeaters to overcome photon loss.</li>
+<li><strong>Loophole-free Bell tests at scale</strong> — moving from proof-of-principle to certified randomness generation and device-independent cryptography in real networks</li>
+<li><strong>NLWE certification</strong> — semi-device-independent protocols (Lee & Bae 2026) enable experimental NLWE demonstration with realistic detection efficiencies, bypassing the need for perfect detectors</li>
+<li><strong>Entanglement in topological systems</strong> — proximity-induced spin-orbit coupling in moiré graphene (QAH systems) is revealing how topological edge states relate to magnetic entanglement structure</li>
+<li><strong>Satellite-based entanglement distribution</strong> — China's Micius satellite demonstrated entangled photon pairs over ~1,200 km; global quantum networks are a near-term target</li>
+<li><strong>Tensor networks and holography</strong> — entanglement entropy as a probe of quantum gravity remains an intense theoretical frontier (ER = EPR conjecture by Maldacena & Susskind)</li>
 </ul>
 
 <hr>
@@ -290,11 +296,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/Bell's Theorem">Bell's Theorem</a></li>
-<li><a href="/daily_knowledge/topic/Quantum Decoherence">Quantum Decoherence</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Teleportation">Quantum Teleportation</a></li>
 <li><a href="/daily_knowledge/topic/Density Matrix and Mixed States">Density Matrix and Mixed States</a></li>
-<li><a href="/daily_knowledge/topic/Topological Order and Anyons">Topological Order and Anyons</a></li>
-<li><a href="/daily_knowledge/topic/Tensor Networks and Area Laws">Tensor Networks and Area Laws</a></li>
-<li><a href="/daily_knowledge/topic/EPR Paradox and Local Realism">EPR Paradox and Local Realism</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Error Correction">Quantum Error Correction</a></li>
+<li><a href="/daily_knowledge/topic/AdS-CFT and Holographic Entanglement">AdS-CFT and Holographic Entanglement</a></li>
+<li><a href="/daily_knowledge/topic/Decoherence and the Measurement Problem">Decoherence and the Measurement Problem</a></li>
 </ul>
 
 <hr>
@@ -302,27 +308,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Bell's theorem closes the door on local hidden variables, but <strong>non-local</strong> hidden-variable theories (e.g., Bohmian mechanics) remain viable. What experimental or theoretical criterion could distinguish them from standard QM — or is the question empirically meaningless?</li>
+<li><strong>Operational vs. ontological</strong>: Bell's theorem rules out local hidden variables, but does it rule out <em>all</em> realist interpretations? How do many-worlds, relational QM, and pilot-wave theories handle entanglement differently — and do any preserve local causality?</li>
 </ol>
 
 <ol>
-<li>Entanglement entropy obeys an area law in gapped phases but a logarithmic correction appears at criticality ($S \sim \frac{c}{3}\ln L$ for 1+1D CFTs). What does this tell us about the structure of information near a quantum phase transition, and how does it constrain which states tensor networks can efficiently represent?</li>
+<li><strong>Resource theory</strong>: If entanglement is a resource (like energy), what are its "currency exchange rates" with other quantum resources — coherence, magic, asymmetry? Can you always convert between them reversibly in the thermodynamic limit?</li>
 </ol>
 
 <ol>
-<li>If entanglement cannot transmit information faster than light, yet quantum gravity proposals like ER=EPR suggest entangled black holes are geometrically connected by wormholes, what is the precise sense in which "non-locality" is or isn't present — and does the holographic picture dissolve the tension or merely relocate it?</li>
+<li><strong>Nonlocality without entanglement</strong>: NLWE shows that classical correlations among product states can still exhibit operationally nonlocal behavior under LOCC restrictions. Does this blur the distinction between entanglement and nonlocality as conceptual primitives, and what are the implications for quantum advantage?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_entanglement" target="_blank" rel="noopener"&gt;Quantum Entanglement&lt;/a&gt; · Retrieved 2026-03-15</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_entanglement" target="_blank" rel="noopener"&gt;Quantum Entanglement&lt;/a&gt; · Retrieved 2026-06-12</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.12258v1" target="_blank" rel="noopener">Stable Topology in Exactly Flat Bands</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12256v1" target="_blank" rel="noopener">Quantum Inductance as a Phase-Sensitive Probe of Fermion Parity Switching in Majorana Nanowires</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.12242v1" target="_blank" rel="noopener">Factorization vs. Non-Factorization: S-Matrix Corrections for Precision Neutrino Physics</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13667v1" target="_blank" rel="noopener">Semi-Device-Independent Certification for Nonlocality without Entanglement</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13653v1" target="_blank" rel="noopener">A local bijection between alternating sign matrices and descending plane partitions and a Striker--Fulmek-type $q$-statistic</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13651v1" target="_blank" rel="noopener">Engineering electrically-switchable quantum anomalous Hall states by spin-orbit coupling</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Quantum+Entanglement&labels=discussion&body=Topic:+[Quantum+Entanglement](https://dhein.github.io/daily_knowledge/topic/quantum_entanglement/)

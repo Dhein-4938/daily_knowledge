@@ -6,6 +6,13 @@
   <description>Automated daily notes: Science, Tech, Math, Logic</description>
   <language>en-us</language>
   <item>
+    <title>June 12, 2026</title>
+    <link>https://dhein.github.io/daily_knowledge/digests/2026-06-12/</link>
+    <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-12/</guid>
+    <pubDate>Fri, 12 Jun 2026 07:00:00 +0000</pubDate>
+    <description>~20 min · General Relativity, Quantum Entanglement, Transformer Architecture, Diffusion Models, Laws of Thermodynamics</description>
+  </item>
+  <item>
     <title>June 11, 2026</title>
     <link>https://dhein.github.io/daily_knowledge/digests/2026-06-11/</link>
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-11/</guid>
@@ -207,13 +214,6 @@
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-03/</guid>
     <pubDate>Fri, 03 Apr 2026 07:00:00 +0000</pubDate>
     <description>Daily Knowledge Digest for April 3, 2026</description>
-  </item>
-  <item>
-    <title>April 2, 2026</title>
-    <link>https://dhein.github.io/daily_knowledge/digests/2026-04-02/</link>
-    <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-02/</guid>
-    <pubDate>Thu, 02 Apr 2026 07:00:00 +0000</pubDate>
-    <description>Daily Knowledge Digest for April 2, 2026</description>
   </item>
 </channel>
 </rss>
