@@ -6,6 +6,13 @@
   <description>Automated daily notes: Science, Tech, Math, Logic</description>
   <language>en-us</language>
   <item>
+    <title>June 13, 2026</title>
+    <link>https://dhein.github.io/daily_knowledge/digests/2026-06-13/</link>
+    <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-13/</guid>
+    <pubDate>Sat, 13 Jun 2026 07:00:00 +0000</pubDate>
+    <description>~17 min · Zero-Knowledge Proofs, Homomorphic Encryption, Reinforcement Learning, Quantum Computing</description>
+  </item>
+  <item>
     <title>June 12, 2026</title>
     <link>https://dhein.github.io/daily_knowledge/digests/2026-06-12/</link>
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-12/</guid>
@@ -207,13 +214,6 @@
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-04/</guid>
     <pubDate>Sat, 04 Apr 2026 07:00:00 +0000</pubDate>
     <description>Daily Knowledge Digest for April 4, 2026</description>
-  </item>
-  <item>
-    <title>April 3, 2026</title>
-    <link>https://dhein.github.io/daily_knowledge/digests/2026-04-03/</link>
-    <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-03/</guid>
-    <pubDate>Fri, 03 Apr 2026 07:00:00 +0000</pubDate>
-    <description>Daily Knowledge Digest for April 3, 2026</description>
   </item>
 </channel>
 </rss>

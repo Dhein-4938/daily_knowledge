@@ -215,82 +215,91 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Homomorphic Encryption<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Tech · Cryptography &nbsp;·&nbsp; ~3 min read</div>
+<div class="topic-meta">Tech · Cryptography &nbsp;·&nbsp; ~4 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Homomorphic encryption (HE) is a cryptosystem that permits arbitrary computations on ciphertexts such that the result, when decrypted, matches the output of the same computation on the plaintext. Formally, for encryption $\mathcal{E}$ and operation $\circ$: $$\mathcal{D}\!\left(\mathcal{E}(a) \otimes \mathcal{E}(b)\right) = a \circ b$$ where $\otimes$ is the "homomorphic" counterpart of $\circ$ in ciphertext space.</div></div>
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Homomorphic Encryption (HE)</strong> is an encryption scheme that permits arbitrary computations on ciphertexts such that the result, when decrypted, equals the result of the same computation on the plaintexts — without ever exposing the underlying data.</div></div>
 
-<p>The scheme hierarchy runs from weakest to strongest:</p>
-<ul>
-<li><strong>Partially Homomorphic (PHE)</strong> — supports one operation (e.g., only addition <em>or</em> multiplication). RSA is multiplicatively homomorphic; Paillier additively.</li>
-<li><strong>Somewhat Homomorphic (SHE)</strong> — supports both operations, but up to bounded circuit depth.</li>
-<li><strong>Leveled FHE</strong> — both operations to pre-specified depth $L$.</li>
-<li><strong>Fully Homomorphic Encryption (FHE)</strong> — unbounded circuit depth; arbitrary polynomial-time computation. First constructed by Craig Gentry (2009) via lattice-based cryptography.</li>
-</ul>
+<p>Formally, given a homomorphic encryption scheme $\mathcal{E}$, for plaintexts $m_1, m_2$ and an operation $\circ$:</p>
 
-<p>Gentry's breakthrough used <strong>ideal lattices</strong> and a <em>bootstrapping</em> procedure to reset accumulated noise, converting SHE into FHE.</p>
+<p>$$\mathcal{D}\!\left(\mathcal{E}(m_1) \star \mathcal{E}(m_2)\right) = m_1 \circ m_2$$</p>
+
+<p>where $\star$ is the corresponding ciphertext-space operation. The key taxonomy:</p>
+
+<p>| Scheme | Supported Operations | Depth |</p>
+<p>|---|---|---|</p>
+<p>| <strong>Partially HE (PHE)</strong> | One operation (+ or ×) | Unlimited |</p>
+<p>| <strong>Somewhat HE (SHE)</strong> | Both + and × | Bounded |</p>
+<p>| <strong>Fully HE (FHE)</strong> | Any boolean/arithmetic circuit | Unlimited |</p>
+
+<p>FHE is the holy grail — it follows from SHE via Craig Gentry's <strong>bootstrapping</strong> construction (2009), which homomorphically evaluates the decryption circuit to "refresh" noisy ciphertexts.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>HE decouples <em>data custody</em> from <em>computation</em>: a cloud provider processes sensitive data without ever seeing it in the clear. This resolves a fundamental trust boundary that TLS and access control cannot touch — those protect data <em>in transit</em> and <em>at rest</em>, but plaintext must be exposed during computation.</p>
+<p>The core value proposition: data can remain encrypted <strong>even during computation</strong>. This dissolves the traditional tension between utility and privacy in third-party processing.</p>
 
-<p>Key application domains:</p>
+<p><strong>Key application domains:</strong></p>
 <ul>
-<li><strong>Privacy-preserving ML</strong>: run inference on encrypted patient records; model provider learns nothing about inputs.</li>
-<li><strong>Secure multi-party computation (MPC)</strong>: HE is one mechanism to achieve MPC without interaction-heavy protocols.</li>
-<li><strong>Regulatory compliance</strong>: HIPAA, GDPR constraints softened when the processor is cryptographically blind.</li>
-<li><strong>Verifiable outsourcing</strong>: combine with SNARKs for <em>verified</em> computation on encrypted data.</li>
+<li><strong>Privacy-preserving ML inference</strong> — run a neural network over an encrypted patient record; the server learns nothing about the patient, the patient learns nothing about the model weights.</li>
+<li><strong>Secure cloud outsourcing</strong> — store and process sensitive data in untrusted environments without decrypting it at rest or in transit.</li>
+<li><strong>Private information retrieval</strong> — query a database without revealing which record you're fetching.</li>
+<li><strong>Multi-party computation</strong> — complement to MPC protocols, often enabling simpler single-server designs.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: The Privilege Escalation Angle</div><div>HE eliminates the attack surface where an adversary with OS-level or hypervisor-level access can intercept plaintext during processing. A compromised cloud host reads only ciphertext — an intrinsically different threat model from TEEs (Trusted Execution Environments), which rely on hardware trust.</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>HE addresses a threat model that TLS and AES-at-rest do not: <strong>compromise of the processing environment itself</strong>. Even a fully privileged attacker on the compute node cannot extract plaintext. This is categorically different from "encryption in transit/at rest."</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Noise Growth &amp; Bootstrapping</strong> — LWE-based schemes (BFV, BGV, CKKS) embed noise $e$ into ciphertexts. Each homomorphic multiplication roughly <em>squares</em> the noise magnitude. Bootstrapping homomorphically evaluates the decryption circuit to refresh noise — expensive ($\sim$seconds per bootstrap on modern hardware).</li>
+<li><strong>Noise growth is fundamental.</strong> Modern FHE schemes (BGV, BFV, CKKS, TFHE) all work in the <strong>Learning With Errors (LWE)</strong> or Ring-LWE setting. Each operation adds noise; multiplication is particularly costly. Without bootstrapping, circuits are depth-limited.</li>
 </ol>
 
 <ol>
-<li><strong>CKKS for Approximate Arithmetic</strong> — The CKKS scheme sacrifices exact arithmetic for floating-point-friendly operations, ideal for ML inference. Errors are bounded but non-zero:</li>
-</ol>
-<p>$$\|\mathcal{D}(\mathcal{E}(m_1)\otimes\mathcal{E}(m_2)) - m_1 \cdot m_2\| \leq \epsilon$$</p>
-
-<ol>
-<li><strong>Security Foundations</strong> — Modern FHE rests on the hardness of <strong>Ring Learning With Errors (RLWE)</strong>: given $(a, a\cdot s + e)$ with $a \in \mathbb{Z}_q[x]/f(x)$, recover secret $s$. This is believed quantum-resistant, unlike RSA/ECC.</li>
+<li><strong>CKKS trades exactness for efficiency.</strong> The CKKS scheme (Cheon-Kim-Kim-Song, 2017) supports approximate arithmetic on real/complex numbers. It's the dominant choice for ML workloads where small rounding errors are tolerable — think encrypted dot products for transformer inference.</li>
 </ol>
 
 <ol>
-<li><strong>Parameter Selection Trade-offs</strong> — The polynomial degree $n$ and ciphertext modulus $q$ jointly govern security ($\lambda \approx n \log q / \text{bits}$) and performance. Larger $n$ → more noise headroom → deeper circuits, but $O(n \log n)$ NTT cost per operation.</li>
+<li><strong>Bootstrapping overhead is enormous.</strong> A single bootstrapping operation can take seconds on modern hardware and increase ciphertext size by orders of magnitude. Reducing this cost is the central engineering challenge for practical FHE.</li>
 </ol>
 
 <ol>
-<li><strong>Ciphertext Expansion</strong> — A 32-bit plaintext may expand to kilobytes or megabytes of ciphertext. Bandwidth and storage overhead remain a practical obstacle for real deployments.</li>
+<li><strong>Side-channels remain a real threat.</strong> HE protects plaintext from the processor, but <em>metadata</em> leaks persist — access patterns, timing, communication volume. As the Wikipedia source notes, even encrypted photo scanning reveals <em>that</em> photos were transmitted. HE is not a silver bullet against traffic analysis.</li>
+</ol>
+
+<ol>
+<li><strong>Parameter selection is security-critical.</strong> The security of LWE-based schemes depends on choosing ring dimension $n$ and modulus $q$ carefully. The <strong>Homomorphic Encryption Security Standard</strong> (HomEncStd) provides community-vetted parameter tables analogous to NIST key-size recommendations.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>FHE performance is improving rapidly. Libraries like <strong>OpenFHE</strong>, <strong>Microsoft SEAL</strong>, <strong>HElib</strong>, and <strong>Concrete</strong> (Zama) are active. Hardware accelerators (FPGAs, ASICs) targeting NTT and modular arithmetic are an open research frontier. The NIST PQC standardization process has standardized CRYSTALS-Kyber/Dilithium (lattice-based), creating ecosystem pressure that indirectly validates RLWE-based FHE security assumptions.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active research threads include: reducing bootstrapping latency below 100ms, batching via SIMD slot packing (CRT-based), threshold FHE for distributed key management, and FHE-friendly neural network architectures (polynomial activations replacing ReLU).</p>
+<p>Active research fronts as of mid-2026:</p>
+<ul>
+<li><strong>Hardware acceleration</strong> — dedicated FHE ASICs (e.g., Intel HERACLES, MIT F1) targeting sub-millisecond bootstrapping; GPU-accelerated NTT (Number Theoretic Transform) pipelines.</li>
+<li><strong>Compiler toolchains</strong> — projects like <strong>Concrete</strong> (Zama), <strong>HEIR</strong> (Google), and <strong>OpenFHE</strong> abstract scheme selection and parameter tuning away from the developer.</li>
+<li><strong>Transciphering / hybrid schemes</strong> — combining FHE with symmetric primitives (e.g., AES-in-FHE) to reduce client-side encryption cost.</li>
+<li><strong>FHE for LLM inference</strong> — proving that transformer forward passes can execute on encrypted tokens; latency is currently 100–1000× slower than plaintext.</li>
+</ul>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Lattice-Based Cryptography">Lattice-Based Cryptography</a></li>
-<li><a href="/daily_knowledge/topic/Ring Learning With Errors (RLWE)">Ring Learning With Errors (RLWE)</a></li>
+<li><a href="/daily_knowledge/topic/Learning With Errors (LWE)">Learning With Errors (LWE)</a></li>
 <li><a href="/daily_knowledge/topic/Secure Multi-Party Computation">Secure Multi-Party Computation</a></li>
 <li><a href="/daily_knowledge/topic/Zero-Knowledge Proofs">Zero-Knowledge Proofs</a></li>
-<li><a href="/daily_knowledge/topic/Trusted Execution Environments">Trusted Execution Environments</a></li>
 <li><a href="/daily_knowledge/topic/Differential Privacy">Differential Privacy</a></li>
+<li><a href="/daily_knowledge/topic/Private Information Retrieval">Private Information Retrieval</a></li>
+<li><a href="/daily_knowledge/topic/Lattice-Based Cryptography">Lattice-Based Cryptography</a></li>
 </ul>
 
 <hr>
@@ -298,23 +307,29 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>CKKS introduces approximate errors into computations — how should cryptographic security proofs be reconciled with statistical ML guarantees that already tolerate bounded error?</li>
-<li>HE and TEEs (SGX, TrustZone) offer complementary threat models. Under what deployment constraints does each dominate, and can they be composed without redundancy?</li>
-<li>If bootstrapping cost falls below 10ms, which current MPC or trusted-hardware use cases become obsolete first, and what new ones emerge?</li>
+<li><strong>Bootstrapping vs. SHE sufficiency</strong>: Most practical ML inference requires only bounded circuit depth. When does the overhead of full bootstrapping justify itself over a carefully depth-budgeted SHE scheme?</li>
+</ol>
+
+<ol>
+<li><strong>CKKS approximation errors in critical systems</strong>: CKKS's approximate decryption is fine for neural network logits, but how do you reason about accumulated rounding error in, say, an encrypted financial aggregation pipeline where exactness is contractually required?</li>
+</ol>
+
+<ol>
+<li><strong>Threat model completeness</strong>: HE secures computation but not access patterns. Under what real-world deployment architectures (e.g., ORAM + HE, PIR + HE) does the combined scheme actually close the side-channel gap, and what is the compounded performance cost?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Homomorphic_encryption" target="_blank" rel="noopener"&gt;Homomorphic Encryption&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Homomorphic_encryption" target="_blank" rel="noopener"&gt;Homomorphic Encryption&lt;/a&gt; · Retrieved 2026-06-13</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.13225v1" target="_blank" rel="noopener">Sizes of Pre-Images of the Minimal Euclidean Function on the Gaussian Integers</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13221v1" target="_blank" rel="noopener">Electromechanical Hysteresis in Phase Change Material Sb2S3</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13220v1" target="_blank" rel="noopener">A Generative Model of Conspicuous Consumption and Status Signaling</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13219v1" target="_blank" rel="noopener">First-principles predictions of band alignment in strained Si/Si1-xGex and Ge/Si1-xGex heterostructures</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13214v1" target="_blank" rel="noopener">Investigating mixed-integer programming approaches for the $p$-$α$-closest-center problem</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13677v1" target="_blank" rel="noopener">Mana: Dexterous Manipulation of Articulated Tools</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13654v1" target="_blank" rel="noopener">Orbital-optimized density functional calculations of excited electronic states: Recent advances and perspectives</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13639v1" target="_blank" rel="noopener">Tuning Agent-Based Predator-Prey Models Toward Lotka-Volterra Dynamics</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13627v1" target="_blank" rel="noopener">A Graphical Coaction for FRW Integrals from Partial/Relative Twisted (Co)homology</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13623v1" target="_blank" rel="noopener">Finding Conservation Laws of Large Dynamical Systems with Tasks and Futures: A Case Study in Utilizing Dynamic Data Dependencies</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Homomorphic+Encryption&labels=discussion&body=Topic:+[Homomorphic+Encryption](https://dhein.github.io/daily_knowledge/topic/homomorphic_encryption/)

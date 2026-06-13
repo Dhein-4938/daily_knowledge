@@ -215,68 +215,63 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Zero-Knowledge Proofs<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Tech · Cryptography &nbsp;·&nbsp; ~4 min read</div>
+<div class="topic-meta">Tech · Cryptography &nbsp;·&nbsp; ~5 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>zero-knowledge proof (ZKP)</strong> is a two-party protocol between a <strong>prover</strong> $\mathcal{P}$ and a <strong>verifier</strong> $\mathcal{V}$ where $\mathcal{P}$ convinces $\mathcal{V}$ that a statement $x \in L$ (for some language $L$) is true, without revealing <em>any</em> information beyond the truth of the statement itself.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>zero-knowledge proof (ZKP)</strong> is a cryptographic protocol between a <strong>prover</strong> $P$ and a <strong>verifier</strong> $V$ where $P$ convinces $V$ that a statement $x \in L$ (some language $L$) is true, without revealing <em>why</em> it is true — i.e., without leaking the witness $w$ such that $(x, w) \in R$ for the relation $R$ defining $L$.</div></div>
 
-<p>Formally, a ZKP for a language $L$ must satisfy three properties:</p>
+<p>Formally, a ZKP system for relation $R$ must satisfy three properties:</p>
 
-<ul>
-<li><strong>Completeness</strong>: If $x \in L$ and $\mathcal{P}$ is honest, $\mathcal{V}$ accepts with high probability.</li>
-<li><strong>Soundness</strong>: If $x \notin L$, no cheating prover $\mathcal{P}^*$ can convince $\mathcal{V}$ to accept except with negligible probability $\epsilon$.</li>
-<li><strong>Zero-knowledge</strong>: There exists a probabilistic polynomial-time <strong>simulator</strong> $\mathcal{S}$ such that for all $x \in L$, the simulated transcript $\mathcal{S}(x)$ is computationally (or statistically, or perfectly) indistinguishable from a real transcript $\langle \mathcal{P}, \mathcal{V} \rangle(x)$.</li>
-</ul>
+<p>$$
+\begin{aligned}
+&\textbf{Completeness:} && (x,w)\in R \Rightarrow \Pr[V \text{ accepts}] = 1 \\
+&\textbf{Soundness:} && x\notin L \Rightarrow \Pr[V \text{ accepts}] \leq \epsilon_s \text{ (negligible)} \\
+&\textbf{Zero-Knowledge:} && \exists \text{ PPT simulator } S : \{S(x)\} \approx_c \{\text{view}_V(x,w)\}
+\end{aligned}
+$$</p>
 
-<p>The simulator argument is the crux: if a transcript can be produced <em>without the secret</em>, it carries no information about it. The three flavors of zero-knowledge — <strong>perfect</strong>, <strong>statistical</strong>, and <strong>computational</strong> — reflect how strongly the transcripts must match.</p>
-
-<p>$$\{\mathcal{S}(x)\}_{x \in L} \approx_c \{\langle \mathcal{P}(w), \mathcal{V} \rangle(x)\}_{x \in L}$$</p>
-
-<p>where $w$ is the witness and $\approx_c$ denotes computational indistinguishability.</p>
+<p>The zero-knowledge property is operationalized via a <strong>simulator</strong>: the verifier's view of a real interaction is computationally indistinguishable from a simulated transcript $S(x)$ produced <em>without</em> the witness. If indistinguishability is perfect (not just computational), the proof is <strong>perfect zero-knowledge</strong>; statistical closeness yields <strong>statistical zero-knowledge</strong>.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>ZKPs untangle a fundamental tension: <em>proving knowledge requires demonstrating it, but demonstration risks disclosure.</em> Applications span a wide surface:</p>
+<p>ZKPs decouple <strong>knowledge</strong> from <strong>proof of knowledge</strong> — a conceptual inversion that propagates across many domains:</p>
 
 <ul>
-<li><strong>Blockchain &amp; privacy coins</strong> (Zcash, Tornado Cash): prove a transaction is valid without revealing sender, receiver, or amount.</li>
-<li><strong>Authentication</strong>: prove knowledge of a password without transmitting it (resists replay attacks structurally).</li>
-<li><strong>Regulatory compliance</strong>: prove a balance exceeds a threshold or that a computation was run correctly, without exposing underlying data.</li>
-<li><strong>Verifiable computation (zkEVM, zkRollups)</strong>: a prover executes a program off-chain and furnishes a succinct proof; the verifier checks the proof cheaply on-chain, enabling Layer-2 scaling.</li>
+<li><strong>Blockchain / Layer 2 scaling</strong>: zk-SNARKs (Succinct Non-interactive ARguments of Knowledge) allow a chain to verify compressed proofs of off-chain computation (e.g., zkEVM rollups), reducing on-chain cost by orders of magnitude.</li>
+<li><strong>Privacy-preserving authentication</strong>: prove you know a password hash preimage, or that your age $\geq 18$, without revealing the actual value.</li>
+<li><strong>Verifiable computation</strong>: outsource expensive computation; receive a proof that the result is correct without re-executing.</li>
+<li><strong>Regulatory compliance</strong>: a financial institution can prove solvency to a regulator without exposing individual account balances.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Non-transferability is a feature, not a bug</div><div>Because $\mathcal{V}$ could have simulated the transcript themselves, they cannot use it to convince a third party. This makes ZKPs qualitatively different from ordinary proofs — conviction is <em>personal</em>, not universal.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Proof of non-knowledge is impossible</div><div>A subtle point: ZKPs prove <em>possession</em> of a witness, not just truth of a statement. A statement that is "trivially true" (e.g., a BPP decision) can be proven without any witness — but the non-triviality of ZKPs lies precisely in proving <em>witness possession</em> while hiding it.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<ol>
-<li><strong>Interactive vs. Non-Interactive (NIZK)</strong>: Interactive proofs require multiple rounds of challenge-response. The <strong>Fiat–Shamir heuristic</strong> collapses this into a single message by replacing the verifier's random challenge with a cryptographic hash $H(x, \text{commitment})$, assuming a random oracle. In the <strong>Common Reference String (CRS)</strong> model, NIZKs exist unconditionally.</li>
-</ol>
+<p><strong>1. Interactive vs. Non-Interactive</strong></p>
+<p>Classic ZKPs (e.g., the Goldreich–Micali–Wigderson graph 3-coloring protocol) require multiple rounds of challenge–response. The <strong>Fiat–Shamir heuristic</strong> collapses interaction into a single message by replacing the verifier's random challenges with a hash of the prover's commitment — turning an interactive proof into a <strong>NIZK</strong> (non-interactive ZK) in the random oracle model.</p>
 
-<ol>
-<li><strong>Sigma Protocols</strong>: A canonical 3-move structure (commit → challenge → response) underlies most practical ZKPs. Composing Sigma protocols via AND/OR logic enables proofs of complex statements without redesigning from scratch.</li>
-</ol>
+<p><strong>2. The Simulator Paradox</strong></p>
+<p>The simulator $S$ produces convincing transcripts <em>without the witness</em>, which seems to contradict soundness. The resolution: $S$ is allowed to run in a different execution environment — typically by choosing the verifier's challenges <em>before</em> computing commitments (rewinding the tape). Soundness and simulation live in different worlds.</p>
 
-<ol>
-<li><strong>SNARKs and STARKs</strong>: </li>
-</ol>
-<ul>
-<li><strong>zk-SNARKs</strong> (Succinct Non-interactive ARguments of Knowledge): proof size $O(1)$, verification in milliseconds, but require a <strong>trusted setup</strong> (a toxic waste ceremony). Security rests on elliptic-curve pairings.</li>
-<li><strong>zk-STARKs</strong>: transparent setup (no trusted party), post-quantum secure (hash-based), but larger proof sizes ($O(\log^2 n)$).</li>
-</ul>
+<p><strong>3. SNARKs and the CRS</strong></p>
+<p>Modern ZKPs (Groth16, PLONK, STARKs) are <strong>succinct</strong>: proof size is $O(1)$ or $O(\log n)$ regardless of circuit depth. SNARKs require a <strong>Common Reference String (CRS)</strong> generated in a trusted setup ceremony — a toxic waste problem where the ceremony randomness must be destroyed. <strong>STARKs</strong> (Scalable Transparent ARguments of Knowledge) avoid trusted setup entirely, using hash functions, at the cost of larger proofs.</p>
 
-<ol>
-<li><strong>Arithmetization</strong>: Arbitrary computations are reduced to polynomial constraints over a finite field $\mathbb{F}_p$ — typically via <strong>R1CS</strong> (Rank-1 Constraint Systems) or <strong>AIR</strong> (Algebraic Intermediate Representation). The prover's job becomes convincing $\mathcal{V}$ that a polynomial vanishes on a prescribed domain.</li>
-</ol>
+<p><strong>4. Proof Systems Landscape</strong></p>
 
-<ol>
-<li><strong>Soundness amplification</strong>: A single-round protocol may have high soundness error $\epsilon$. Running $k$ independent rounds drives error to $\epsilon^k$, but interaction blows up. The Fiat–Shamir transformation achieves this non-interactively in the random oracle model.</li>
-</ol>
+<p>| System | Setup | Proof Size | Prover Cost |</p>
+<p>|--------|-------|------------|-------------|</p>
+<p>| Groth16 | Trusted | ~200 bytes | $O(n \log n)$ |</p>
+<p>| PLONK | Universal trusted | ~400 bytes | $O(n \log n)$ |</p>
+<p>| STARKs | Transparent | $O(\log^2 n)$ | $O(n \log n)$ |</p>
+<p>| Bulletproofs | Transparent | $O(\log n)$ | $O(n)$ |</p>
+
+<p><strong>5. Knowledge Soundness vs. Plain Soundness</strong></p>
+<p>A <strong>proof of knowledge</strong> requires an efficient <em>knowledge extractor</em> $E$: given black-box access to any prover $P^*$ that convinces $V$, $E$ can extract the witness $w$. This is strictly stronger than plain soundness and is required for applications like digital signatures and credential systems.</p>
 
 <hr>
 
@@ -284,14 +279,14 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research fronts include:</p>
+<p>Active research frontiers as of mid-2026:</p>
 
 <ul>
-<li><strong>Proof recursion / folding schemes</strong>: Nova, SuperNova, and HyperNova allow incremental verifiable computation (IVC), where a proof verifies a prior proof, enabling unbounded computation with bounded verifier cost.</li>
-<li><strong>zkEVM standardization</strong>: multiple competing implementations (Polygon zkEVM, zkSync Era, Scroll) differ in EVM-equivalence level and proof backend; benchmarking is ongoing.</li>
-<li><strong>Post-quantum ZKPs</strong>: lattice-based and hash-based approaches are maturing; STARK-based systems already offer post-quantum soundness, but efficiency gaps remain versus pairing-based SNARKs.</li>
-<li><strong>MPC-in-the-head</strong>: paradigm enabling ZKPs from symmetric-key primitives (e.g., Picnic signature scheme), with implications for post-quantum identification.</li>
-<li><strong>Hardware acceleration</strong>: ZKP proving is computationally intensive ($O(n \log n)$ FFTs, multi-scalar multiplications); dedicated ASICs and FPGAs are an active engineering frontier.</li>
+<li><strong>Recursive proof composition</strong>: proofs that verify other proofs (Nova, SuperNova), enabling incrementally verifiable computation (IVC) for arbitrary-length computations.</li>
+<li><strong>zkVM architectures</strong>: proving execution of a full virtual machine (RISC-V, EVM) inside a ZK circuit — e.g., SP1, RISC Zero — making ZK accessible without custom circuit design.</li>
+<li><strong>Hardware acceleration</strong>: ZK prover cost remains the bottleneck; FPGAs and ASICs targeting MSM (Multi-Scalar Multiplication) and NTT (Number Theoretic Transform) operations are an active industrial push.</li>
+<li><strong>Post-quantum ZK</strong>: PLONK and Groth16 rely on elliptic curve pairings, which are broken by Shor's algorithm. Lattice-based ZK (e.g., Ligero, Aurora) offer quantum resistance but with larger proofs.</li>
+<li><strong>Formal verification</strong>: proving the <em>provers themselves</em> are correct (e.g., using Lean or Coq) to close the gap between cryptographic security proofs and implementation bugs.</li>
 </ul>
 
 <hr>
@@ -299,12 +294,12 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Interactive Proof Systems">Interactive Proof Systems</a></li>
-<li><a href="/daily_knowledge/topic/Elliptic Curve Cryptography">Elliptic Curve Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/SNARKs and STARKs">SNARKs and STARKs</a></li>
 <li><a href="/daily_knowledge/topic/Commitment Schemes">Commitment Schemes</a></li>
-<li><a href="/daily_knowledge/topic/SNARKs and Proof Systems">SNARKs and Proof Systems</a></li>
-<li><a href="/daily_knowledge/topic/Blockchain Scalability and Layer-2">Blockchain Scalability and Layer-2</a></li>
-<li><a href="/daily_knowledge/topic/Computational Complexity — BPP and IP">Computational Complexity — BPP and IP</a></li>
+<li><a href="/daily_knowledge/topic/Fiat-Shamir Heuristic">Fiat-Shamir Heuristic</a></li>
+<li><a href="/daily_knowledge/topic/Elliptic Curve Cryptography">Elliptic Curve Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/Verifiable Computation">Verifiable Computation</a></li>
+<li><a href="/daily_knowledge/topic/Layer 2 Blockchain Scaling">Layer 2 Blockchain Scaling</a></li>
 </ul>
 
 <hr>
@@ -312,29 +307,29 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The simulator definition of zero-knowledge is <em>semantic</em> — it says nothing about how the proof <em>feels</em> to generate. Can a proof be zero-knowledge yet still leak side-channel information in practice? How does the model fail to capture this?</li>
+<li>The simulator in a ZKP transcript can rewind the verifier's randomness — does this mean ZKPs are "cheating" in some sense, and how does the formalism ensure real-world soundness holds even when simulation is possible?</li>
 </ol>
 
 <ol>
-<li>Trusted setup ceremonies (like those for Groth16) are "trust on first use" events — if any one participant is honest, the setup is secure. How does this compare to the trust assumptions in certificate authority hierarchies, and is it actually stronger in practice?</li>
+<li>Trusted setup ceremonies (like Zcash's "Powers of Tau") distribute trust across many participants so that <em>at least one</em> must be honest. How does this multi-party computation argument hold up when participants are publicly known, and what's the residual attack surface?</li>
 </ol>
 
 <ol>
-<li>ZKPs can prove correct execution of arbitrary programs. Does this dissolve the distinction between "proof of knowledge" and "proof of computation," and what are the philosophical implications for what it means to <em>know</em> something in a cryptographic sense?</li>
+<li>zkVMs promise "write a program, get a ZK proof for free" — but the overhead relative to native execution is currently 100–10,000×. What are the fundamental complexity-theoretic lower bounds on this overhead, and is there a regime where it becomes negligible?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof" target="_blank" rel="noopener"&gt;Zero-Knowledge Proofs&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Zero-knowledge_proof" target="_blank" rel="noopener"&gt;Zero-Knowledge Proofs&lt;/a&gt; · Retrieved 2026-06-13</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.13228v1" target="_blank" rel="noopener">PhysMoDPO: Physically-Plausible Humanoid Motion with Preference Optimization</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13213v1" target="_blank" rel="noopener">MoEKD: Mixture-of-Experts Knowledge Distillation for Robust and High-Performing Compressed Code Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13212v1" target="_blank" rel="noopener">Robust symmetry breaking in gapless quantum magnets</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13199v1" target="_blank" rel="noopener">Anisotropic Inviscid Limit for the Navier-Stokes Equations with Transport Noise Between Two Plates</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13191v1" target="_blank" rel="noopener">From Experiments to Expertise: Scientific Knowledge Consolidation for AI-Driven Computational Research</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13681v1" target="_blank" rel="noopener">EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13680v1" target="_blank" rel="noopener">Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13677v1" target="_blank" rel="noopener">Mana: Dexterous Manipulation of Articulated Tools</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13675v1" target="_blank" rel="noopener">Improving Robotic Generalist Policies via Flow Reversal Steering</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13669v1" target="_blank" rel="noopener">Agents-K1: Towards Agent-native Knowledge Orchestration</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Zero-Knowledge+Proofs&labels=discussion&body=Topic:+[Zero-Knowledge+Proofs](https://dhein.github.io/daily_knowledge/topic/zk_proofs/)

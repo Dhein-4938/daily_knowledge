@@ -219,68 +219,71 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>A quantum computer exploits two phenomena absent in classical systems — <strong>superposition</strong> and <strong>entanglement</strong> — to process information in fundamentally different ways.</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>quantum computer</strong> exploits quantum mechanical phenomena — principally <strong>superposition</strong>, <strong>entanglement</strong>, and <strong>wave interference</strong> — to perform computation. Its fundamental unit is the <strong>qubit</strong>, which generalises the classical bit by existing in a <em>linear combination</em> of basis states until measured.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Qubit</div><div>The basic unit is the <strong>qubit</strong>, described by a state vector in a 2D complex Hilbert space: $$|\psi\rangle = \alpha|0\rangle + \beta|1\rangle, \quad |\alpha|^2 + |\beta|^2 = 1$$ Measurement collapses $|\psi\rangle$ to $|0\rangle$ with probability $|\alpha|^2$ or $|1\rangle$ with probability $|\beta|^2$ — the <strong>Born rule</strong>.</div></div>
+<p>A qubit's state lives in a two-dimensional complex Hilbert space:</p>
 
-<p>An $n$-qubit register lives in a $2^n$-dimensional Hilbert space, enabling a single unitary operation to act on all $2^n$ basis states simultaneously. This isn't free parallelism — measurement still yields only $n$ classical bits — but cleverly designed algorithms use <strong>wave interference</strong> to amplify the amplitude of correct answers and suppress wrong ones.</p>
+<p>$$|\psi\rangle = \alpha|0\rangle + \beta|1\rangle, \quad |\alpha|^2 + |\beta|^2 = 1$$</p>
+
+<p>where $\alpha, \beta \in \mathbb{C}$. Measuring collapses $|\psi\rangle$ to $|0\rangle$ with probability $|\alpha|^2$ or $|1\rangle$ with probability $|\beta|^2$. An $n$-qubit register spans $2^n$ basis states simultaneously — exponential state space from linear physical resources.</p>
+
+<p>The computational leverage comes not from parallelism per se, but from <strong>amplitude amplification</strong>: quantum algorithms are designed so interference constructively reinforces paths leading to correct answers and destructively cancels wrong ones. This is the essence of Grover's and Shor's algorithms alike.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>The exponential Hilbert space scaling has concrete consequences:</p>
+<p><strong>Cryptographic threat.</strong> Shor's algorithm factors integers in polynomial time $O((\log N)^3)$, compared to the best classical sub-exponential algorithms. This would break RSA and elliptic-curve cryptography, driving the NIST post-quantum standardisation effort.</p>
 
-<ul>
-<li><strong>Cryptography</strong>: Shor's algorithm factors integers in $O((\log N)^3)$ time, breaking RSA and ECC. Classical best-known algorithms run in $O(e^{(\log N)^{1/3}})$ — sub-exponentially slower.</li>
-<li><strong>Search</strong>: Grover's algorithm searches an unstructured database of $N$ items in $O(\sqrt{N})$ queries vs. classical $O(N)$.</li>
-<li><strong>Simulation</strong>: Feynman's original motivation — simulating quantum systems (chemistry, materials) — scales polynomially on a quantum computer but exponentially on classical hardware.</li>
-</ul>
+<p><strong>Simulation.</strong> Feynman's original motivation: simulating quantum chemistry and materials exactly is classically intractable ($2^N$ Hilbert space dimension), but native to a quantum device. Applications range from drug discovery to catalyst design.</p>
 
-<div class="callout tip"><div class="callout-title">TIP: Not universally faster</div><div>Quantum speedup is <em>problem-specific</em>. For most everyday computation — sorting, databases, parsing — no known quantum advantage exists. The power lies in exploiting the structure of problems with algebraic or periodic symmetry.</div></div>
+<p><strong>Optimisation &amp; ML.</strong> Grover's algorithm yields a quadratic speedup for unstructured search; quantum approaches to linear algebra (HHL) promise potential speedups in machine learning pipelines, though practical overhead is debated.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: Connection to Information Theory</div><div>Quantum computing forces a rethink of Shannon's classical information theory. Holevo's theorem bounds how much classical information a qubit can carry (still only 1 bit per qubit on measurement), separating <em>quantum information capacity</em> from the <em>computational</em> advantage — a subtle distinction often glossed over in popular accounts.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Decoherence is the central engineering obstacle.</strong> Real qubits interact with their environment, collapsing superpositions prematurely. Coherence time $T_2$ must significantly exceed gate operation time. Current superconducting qubits achieve $T_2 \sim 100\,\mu s$; useful fault-tolerant computation likely requires $T_2 \sim$ seconds.</li>
+<li><strong>Decoherence is the core engineering problem.</strong> Qubits must remain isolated from their environment long enough to complete a computation. Environmental noise entangles the qubit with external degrees of freedom, corrupting the superposition. Coherence time $T_2$ is the critical figure of merit.</li>
 </ol>
 
 <ol>
-<li><strong>Fault-tolerant thresholds.</strong> The threshold theorem states that if physical error rate $p < p_{th}$ (roughly $10^{-2}$ for surface codes), arbitrarily long computation is possible via quantum error correction — at the cost of $\sim 1000\times$ physical-to-logical qubit overhead.</li>
+<li><strong>Error correction overhead is severe.</strong> Quantum error correction (e.g., the surface code) requires $O(1000)$ physical qubits per <em>logical</em> qubit to reach fault-tolerant thresholds — meaning a cryptographically relevant attack on RSA-2048 might require millions of physical qubits, far beyond current hardware.</li>
 </ol>
 
 <ol>
-<li><strong>Gate model vs. other paradigms.</strong> The circuit/gate model (sequences of unitary gates) is the dominant abstraction, but alternatives include adiabatic quantum computing, measurement-based (cluster state) computing, and topological qubits (Majorana fermions), each with distinct noise profiles.</li>
+<li><strong>Gate fidelity and threshold theorem.</strong> The fault-tolerance threshold theorem guarantees scalable computation <em>if</em> physical error rates fall below a hardware-dependent threshold (~$10^{-3}$ for surface codes). Google's Willow chip (Dec 2024) achieved <strong>below-threshold error correction</strong>, a landmark 30 years in the making.</li>
 </ol>
 
 <ol>
-<li><strong>Physical implementations differ radically in trade-offs:</strong></li>
+<li><strong>Competing hardware modalities</strong> have distinct trade-off profiles:</li>
 </ol>
 <ul>
-<li><em>Superconducting qubits</em> (IBM, Google): fast gates ($\sim 10\text{–}100\,ns$), but requires dilution refrigeration at $\sim 15\,mK$.</li>
-<li><em>Ion traps</em>: very low error rates, slow gates ($\sim 1\,ms$), room-temperature isolation possible.</li>
-<li><em>Si/SiGe quantum dots</em>: CMOS-compatible, relevant recent first-principles band alignment work improving heterostructure design for spin qubits.</li>
+<li><strong>Superconducting qubits</strong> — fast gates ($\sim$ns), but cryogenic cooling to $\sim$15 mK required.</li>
+<li><strong>Trapped ions</strong> — high fidelity, long coherence, but slower gate speeds ($\sim$ms) and limited connectivity.</li>
+<li><strong>Photonic, neutral atom, spin qubits</strong> — each sacrificing different axes of the speed/coherence/connectivity triangle.</li>
 </ul>
 
 <ol>
-<li><strong>Quantum advantage ≠ quantum supremacy for useful tasks.</strong> Claims of supremacy (Google 2019, others) involve sampling tasks with no practical utility — important as proof of principle, but not yet economically relevant.</li>
+<li><strong>Quantum advantage ≠ quantum utility.</strong> Current demonstrations of "quantum supremacy" involve sampling problems (e.g., random circuit sampling) with no known classical near-term application. Practical utility — solving <em>useful</em> problems faster — remains an open engineering and algorithmic challenge.</li>
 </ol>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Hardware capabilities are advancing rapidly. Qubit counts, coherence times, and error rates quoted in 2025–2026 literature may be superseded. Verify against current hardware roadmaps before drawing engineering conclusions.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
-
-<p>Active research fronts (as of early 2026):</p>
+<p>The field sits at a critical inflection post-Willow. Key active research threads:</p>
 
 <ul>
-<li><strong>Error correction at scale</strong>: Moving from NISQ (Noisy Intermediate-Scale Quantum) devices toward fault-tolerant logical qubits. Google's surface code experiments have demonstrated below-threshold error rates in small patches.</li>
-<li><strong>Qubit connectivity and compilation</strong>: Sparse qubit graphs require SWAP overhead; co-design of algorithms and hardware topology is an open problem.</li>
-<li><strong>Post-quantum cryptography (PQC)</strong>: NIST has standardized lattice-based schemes (CRYSTALS-Kyber, Dilithium) as classical defenses against Shor-capable hardware.</li>
-<li><strong>Si/SiGe heterostructure engineering</strong>: First-principles DFT band offset predictions across full alloy composition range are enabling better quantum dot design.</li>
+<li><strong>Logical qubit demonstrations</strong> at scale — moving from below-threshold physical error rates to actual logical qubit operations with $10^{-6}$–$10^{-8}$ error rates needed for Shor's.</li>
+<li><strong>Nonlocality without entanglement (NLWE)</strong>: recent work (Lee & Bae, 2026) shows semi-device-independent certification of global quantum measurements using <em>separable</em> states, relevant to quantum key distribution and measurement-device-independent protocols.</li>
+<li><strong>Topological qubits</strong> (e.g., via quantum anomalous Hall states, Majorana modes) offer potentially hardware-protected coherence — active in graphene moiré systems with engineered spin-orbit coupling.</li>
+<li><strong>Post-quantum cryptography</strong> standardisation is in parallel deployment; NIST finalised CRYSTALS-Kyber and Dilithium in 2024.</li>
+<li>Global government investment crossed <strong>$10 billion</strong> by April 2025, accelerating the race among the US, China, and EU.</li>
 </ul>
 
 <hr>
@@ -290,10 +293,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Quantum Error Correction">Quantum Error Correction</a></li>
 <li><a href="/daily_knowledge/topic/Shor's Algorithm">Shor's Algorithm</a></li>
-<li><a href="/daily_knowledge/topic/Grover's Algorithm">Grover's Algorithm</a></li>
-<li><a href="/daily_knowledge/topic/Quantum Decoherence">Quantum Decoherence</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Entanglement">Quantum Entanglement</a></li>
 <li><a href="/daily_knowledge/topic/Post-Quantum Cryptography">Post-Quantum Cryptography</a></li>
-<li><a href="/daily_knowledge/topic/Quantum Simulation">Quantum Simulation</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Supremacy vs Quantum Utility">Quantum Supremacy vs Quantum Utility</a></li>
+<li><a href="/daily_knowledge/topic/Topological Qubits">Topological Qubits</a></li>
 </ul>
 
 <hr>
@@ -301,29 +304,29 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Fault tolerance overhead</strong>: The ~1000:1 physical-to-logical qubit ratio means a "1000 logical qubit" machine needs ~1M physical qubits. Does this fundamentally change your intuition about when quantum computers become practically relevant?</li>
+<li><strong>The threshold question:</strong> If fault-tolerant quantum computing requires ~1,000 physical qubits per logical qubit, and cryptographically relevant attacks require ~4,000 logical qubits, what does the realistic timeline to break RSA-2048 actually look like — and should we have already migrated away from it?</li>
 </ol>
 
 <ol>
-<li><strong>Computational complexity</strong>: Quantum computers are believed to solve BQP problems efficiently — but BQP is not believed to contain NP-complete problems. What does this say about the <em>limits</em> of quantum speedup, and why does the public discourse so often conflate the two?</li>
+<li><strong>Simulation vs. cryptography:</strong> Feynman's original vision was quantum simulation for physics; the cryptographic threat is what drove government funding. Does this tension between <em>intended</em> scientific tools and <em>dual-use</em> capabilities tell us something general about how foundational physics research gets monetised?</li>
 </ol>
 
 <ol>
-<li><strong>Hybrid algorithms</strong>: Near-term algorithms like VQE (Variational Quantum Eigensolver) offload classical optimization onto quantum hardware iteratively. Is this a genuine path to useful advantage, or a workaround masking the absence of fault tolerance?</li>
+<li><strong>The noise-as-feature angle:</strong> Near-term noisy intermediate-scale quantum (NISQ) devices are error-prone. Are there problem classes — perhaps in statistical physics or stochastic optimisation — where <em>controlled</em> noise is a feature rather than a bug, and NISQ devices have genuine near-term advantage precisely because of it?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank" rel="noopener"&gt;Quantum Computing&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank" rel="noopener"&gt;Quantum Computing&lt;/a&gt; · Retrieved 2026-06-13</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.13225v1" target="_blank" rel="noopener">Sizes of Pre-Images of the Minimal Euclidean Function on the Gaussian Integers</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13222v1" target="_blank" rel="noopener">Two-channel physics in a lightly doped antiferromagnetic Mott insulator revealed by two-hole spectroscopy</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13221v1" target="_blank" rel="noopener">Electromechanical Hysteresis in Phase Change Material Sb2S3</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13220v1" target="_blank" rel="noopener">A Generative Model of Conspicuous Consumption and Status Signaling</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13219v1" target="_blank" rel="noopener">First-principles predictions of band alignment in strained Si/Si1-xGex and Ge/Si1-xGex heterostructures</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13677v1" target="_blank" rel="noopener">Mana: Dexterous Manipulation of Articulated Tools</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13667v1" target="_blank" rel="noopener">Semi-Device-Independent Certification for Nonlocality without Entanglement</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13661v1" target="_blank" rel="noopener">Robust Control of ECH Deposition Profiles on DIII-D</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13654v1" target="_blank" rel="noopener">Orbital-optimized density functional calculations of excited electronic states: Recent advances and perspectives</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13651v1" target="_blank" rel="noopener">Engineering electrically-switchable quantum anomalous Hall states by spin-orbit coupling</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Quantum+Computing&labels=discussion&body=Topic:+[Quantum+Computing](https://dhein.github.io/daily_knowledge/topic/quantum_computing/)

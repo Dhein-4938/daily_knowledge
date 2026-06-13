@@ -219,103 +219,101 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Reinforcement Learning (RL) is the study of how an agent should select actions in a <strong>Markov Decision Process (MDP)</strong> to maximize cumulative reward, <em>without</em> prior knowledge of the environment's transition dynamics.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Reinforcement Learning (RL) is the study of how an <strong>agent</strong> learns a <strong>policy</strong> $\pi: \mathcal{S} \to \mathcal{A}$ by interacting with an <strong>environment</strong> to maximize cumulative <strong>reward</strong>. Unlike supervised learning, no labeled input-output pairs are provided — feedback is scalar, delayed, and often sparse.</div></div>
 
-<p>Formally, an MDP is a tuple $(\mathcal{S}, \mathcal{A}, P, R, \gamma)$ where $\mathcal{S}$ is the state space, $\mathcal{A}$ the action space, $P(s' \mid s, a)$ the (unknown) transition kernel, $R(s, a)$ the reward function, and $\gamma \in [0,1)$ the discount factor. The agent's objective is to find a policy $\pi^*$ maximizing expected discounted return:</p>
+<p>The canonical formalism is the <strong>Markov Decision Process (MDP)</strong>, defined by the tuple $(\mathcal{S}, \mathcal{A}, P, R, \gamma)$:</p>
 
-<p>$$\pi^* = \arg\max_\pi \; \mathbb{E}_\pi \left[ \sum_{t=0}^{\infty} \gamma^t R(s_t, a_t) \right]$$</p>
+<p>$$G_t = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}, \quad \gamma \in [0, 1)$$</p>
 
-<p>Unlike supervised learning (labeled data) or unsupervised learning (structure discovery), RL learns through <strong>interaction</strong>: the agent acts, receives a scalar reward signal, and updates its behavior accordingly. The critical tension at every step is the <strong>exploration–exploitation dilemma</strong> — the agent must balance sampling novel actions to reduce uncertainty against committing to the currently best-known action.</p>
+<p>The agent seeks a policy $\pi^*$ that maximizes the expected return $\mathbb{E}_\pi[G_t]$. The Bellman optimality equation captures the recursive structure:</p>
 
-<hr>
+<p>$$Q^*(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_{a'} Q^*(s', a') \mid s, a\right]$$</p>
 
 <h2>Why It Matters</h2>
 
-<p>RL is the natural framework for any <strong>sequential decision problem</strong> where feedback is delayed and the environment is partially or fully unknown. Key application domains:</p>
+<p>RL is the closest computational analogue to how biological organisms learn from consequences. It underpins:</p>
 
 <ul>
-<li><strong>Robotics &amp; Control</strong>: locomotion, manipulation, sim-to-real transfer</li>
-<li><strong>Game AI</strong>: superhuman performance in Chess, Go (AlphaZero), Atari, StarCraft II</li>
-<li><strong>LLM Alignment</strong>: RLHF (Reinforcement Learning from Human Feedback) fine-tunes language models toward human preferences, making RL central to modern AI safety work</li>
-<li><strong>Operations Research</strong>: scheduling, logistics, resource allocation</li>
+<li><strong>Game-playing AI</strong> (AlphaGo, AlphaZero, OpenAI Five)</li>
+<li><strong>Robotics</strong> — sim-to-real transfer for dexterous manipulation</li>
+<li><strong>LLM alignment</strong> — RLHF and GRPO are RL at their core</li>
+<li><strong>Operations research</strong> — scheduling, inventory control, routing</li>
+<li><strong>Neuroscience</strong> — dopamine circuits mirror temporal difference (TD) learning</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Connection to Dynamic Programming</div><div>RL can be seen as <em>sample-based approximate dynamic programming</em>. Classical DP methods (value iteration, policy iteration) require full knowledge of $P$; RL replaces exact Bellman updates with Monte Carlo or TD estimates drawn from experience — scaling to problems where the model is intractable or unavailable.</div></div>
-
-<hr>
+<div class="callout tip"><div class="callout-title">TIP: The RL–Optimal Control Bridge</div><div>Classical optimal control (e.g., LQR, MPC) assumes a known dynamics model $P$. RL relaxes this: it learns from sampled transitions. This makes RL applicable wherever simulation or real interaction is cheaper than deriving an analytical model — which is most of the interesting world.</div></div>
 
 <h2>Key Details</h2>
 
-<ol>
-<li><strong>Temporal Difference Learning</strong> — TD methods like Q-learning and SARSA bootstrap value estimates from other estimates rather than waiting for full episode returns. Q-learning's update rule, $Q(s,a) \leftarrow Q(s,a) + \alpha\left[r + \gamma \max_{a'}Q(s',a') - Q(s,a)\right]$, is off-policy and converges to $Q^*$ under mild conditions.</li>
-</ol>
+<p><strong>1. Exploration–Exploitation Dilemma</strong></p>
+<p>The agent must balance <em>exploiting</em> known-good actions vs. <em>exploring</em> to reduce uncertainty. Formal treatments include UCB (Upper Confidence Bound), Thompson Sampling, and the $\epsilon$-greedy heuristic. In continuous/deep RL, this remains largely heuristic.</p>
 
-<ol>
-<li><strong>Policy Gradient Methods</strong> — Rather than learning a value function, REINFORCE and actor-critic methods directly optimize $\pi_\theta$ via gradient ascent on $\nabla_\theta J(\theta) = \mathbb{E}_\pi[G_t \nabla_\theta \log \pi_\theta(a_t \mid s_t)]$. This handles continuous action spaces naturally but suffers high variance.</li>
-</ol>
+<p><strong>2. Value-Based vs. Policy Gradient Methods</strong></p>
+<ul>
+<li><em>Value-based</em> (DQN, Q-learning): learn $Q^\pi$ implicitly, derive policy greedily. Sample-efficient but biased in continuous action spaces.</li>
+<li><em>Policy gradient</em> (REINFORCE, PPO, GRPO): directly optimize $\nabla_\theta \mathbb{E}[G_t]$. Unbiased but high-variance. Actor-critic methods blend both.</li>
+</ul>
 
-<ol>
-<li><strong>Function Approximation &amp; Deep RL</strong> — Neural networks (DQN, PPO, SAC) allow generalization across large state spaces. They also introduce instability: bootstrapping + off-policy sampling + nonlinear approximation form the <strong>deadly triad</strong> that can cause divergence.</li>
-</ol>
+<p><strong>3. Credit Assignment Problem</strong></p>
+<p>Rewards are often delayed by hundreds of steps. Attributing which earlier actions caused a later reward is non-trivial — temporal difference learning addresses this by bootstrapping from value estimates rather than waiting for episode termination.</p>
 
-<ol>
-<li><strong>Reward Hacking</strong> — Agents routinely find unexpected strategies that maximize the proxy reward while violating designer intent. This is a core challenge in alignment and motivates learned reward models (e.g., RLHF, DPO).</li>
-</ol>
+<p><strong>4. The Deadly Triad</strong></p>
+<p>Combining <strong>function approximation</strong> + <strong>bootstrapping</strong> + <strong>off-policy learning</strong> can cause instability or divergence. DQN circumvents this with experience replay and target networks; other approaches (e.g., distributional RL, constrained updates in PPO) add further stabilizers.</p>
 
-<ol>
-<li><strong>Sample Efficiency</strong> — Model-free RL typically requires millions of environment interactions. Model-based RL addresses this by learning $\hat{P}$ to generate synthetic rollouts, but introduces compounding model error.</li>
-</ol>
-
-<hr>
+<p><strong>5. Reward Hacking</strong></p>
+<p>An agent optimizing a proxy reward $\hat{R}$ can find unintended solutions that score well on $\hat{R}$ while violating the true objective. This is Goodhart's Law in action and is a central concern in AI alignment.</p>
 
 <h2>Current State</h2>
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active frontiers as of early 2026:</p>
+<p>Active frontiers as of mid-2026:</p>
 
 <ul>
-<li><strong>RL for generative models</strong>: Direct Preference Optimization (DPO) and its physics-aware variants (e.g., PhysMoDPO for humanoid motion) reframe reward-signal alignment without an explicit reward model, offering training stability over classical RLHF pipelines.</li>
-<li><strong>Fine-grained reward modeling</strong>: Work like Visual-ERM shows that coarse embedding-similarity rewards are insufficient for vision-to-code tasks; multimodal generative reward models providing interpretable, pixel-level feedback substantially outperform rule-based alternatives.</li>
-<li><strong>Offline RL &amp; conservative methods</strong>: Learning purely from logged datasets (no live interaction) via methods like IQL and TD3+BC addresses deployment safety in robotics and healthcare.</li>
-<li><strong>Hierarchical &amp; multi-agent RL</strong>: Decomposing long-horizon tasks and coordinating multiple agents remain open problems with deep connections to <a href="/daily_knowledge/topic/Game Theory">Game Theory</a> and <a href="/daily_knowledge/topic/Control Theory">Control Theory</a>.</li>
+<li><strong>RL Fine-Tuning of LLMs</strong>: GRPO (Group Relative Policy Optimization) has displaced PPO in many LLM post-training pipelines due to lower memory overhead. Papers like <em>RA-RFT</em> extend this with reasoning-aware retrieval, boosting AIME 2025 accuracy by 7+ points over vanilla GRPO.</li>
+<li><strong>Agentic / Multi-Step RL</strong>: <em>InterleaveThinker</em> applies step-wise GRPO rewards across 25+ generator calls in a trajectory — highlighting that RL signal need not be end-to-end to guide long-horizon tasks.</li>
+<li><strong>Sim-to-Real for Dexterous Robots</strong>: <em>Mana</em> demonstrates zero-shot transfer for articulated tool manipulation via coarse-to-fine RL pipelines, reducing human annotation to under a minute per tool.</li>
+<li><strong>Flow Matching + RL</strong>: <em>FRS</em> shows that flow-matching generalist policies can be steered via latent-space reversal, bootstrapping RL with semantic priors where standard RL fails entirely.</li>
+<li><strong>World Action Models</strong>: Representation-centric tokenization (RepWAM) is emerging as a way to jointly model future visual states and latent actions — potentially unifying prediction and control.</li>
 </ul>
-
-<hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Markov Decision Processes">Markov Decision Processes</a></li>
+<li><a href="/daily_knowledge/topic/Markov Decision Process">Markov Decision Process</a></li>
 <li><a href="/daily_knowledge/topic/Policy Gradient Methods">Policy Gradient Methods</a></li>
-<li><a href="/daily_knowledge/topic/RLHF and Alignment">RLHF and Alignment</a></li>
+<li><a href="/daily_knowledge/topic/Temporal Difference Learning">Temporal Difference Learning</a></li>
+<li><a href="/daily_knowledge/topic/RLHF and LLM Alignment">RLHF and LLM Alignment</a></li>
 <li><a href="/daily_knowledge/topic/Exploration-Exploitation Tradeoff">Exploration-Exploitation Tradeoff</a></li>
-<li><a href="/daily_knowledge/topic/Dynamic Programming">Dynamic Programming</a></li>
-<li><a href="/daily_knowledge/topic/Model-Based Reinforcement Learning">Model-Based Reinforcement Learning</a></li>
+<li><a href="/daily_knowledge/topic/Sim-to-Real Transfer in Robotics">Sim-to-Real Transfer in Robotics</a></li>
 </ul>
-
-<hr>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The Bellman equation assumes the Markov property — how does partial observability (POMDPs) break this, and what architectural choices in deep RL implicitly compensate for it?</li>
-<li>DPO sidesteps explicit reward modeling by reparameterizing the RLHF objective. What are the theoretical assumptions this requires, and where might they fail in practice?</li>
-<li>Sample efficiency in model-free RL scales poorly with state-space dimensionality. Is there a principled limit analogous to the PAC learning sample complexity, and what role does inductive bias play?</li>
+<li><strong>Reward specification vs. reward learning</strong>: Given that hand-crafted rewards reliably produce Goodhart pathologies, how far can inverse RL or preference-based methods take us before they introduce their own alignment failure modes?</li>
+</ol>
+
+<ol>
+<li><strong>Is the MDP assumption load-bearing?</strong> Many real problems violate the Markov property (partial observability, non-stationarity). How much does the POMDP generalization actually help in practice, and when is it just theoretical machinery?</li>
+</ol>
+
+<ol>
+<li><strong>RL for LLMs as a paradigm shift</strong>: GRPO treats token generation as a policy and outcome correctness as a verifiable reward — essentially collapsing the distinction between "reasoning" and "control." What does this imply for how we should think about intelligence architectures going forward?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Reinforcement_learning" target="_blank" rel="noopener"&gt;Reinforcement Learning&lt;/a&gt; · Retrieved 2026-03-16</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Reinforcement_learning" target="_blank" rel="noopener"&gt;Reinforcement Learning&lt;/a&gt; · Retrieved 2026-06-13</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.13228v1" target="_blank" rel="noopener">PhysMoDPO: Physically-Plausible Humanoid Motion with Preference Optimization</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13227v1" target="_blank" rel="noopener">Representation Learning for Spatiotemporal Physical Systems</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13224v1" target="_blank" rel="noopener">Visual-ERM: Reward Modeling for Visual Equivalence</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13213v1" target="_blank" rel="noopener">MoEKD: Mixture-of-Experts Knowledge Distillation for Robust and High-Performing Compressed Code Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.13211v1" target="_blank" rel="noopener">A Conceptual Shift In Our Understanding of Degenerate Radical Spin Systems: Spin-Rotation Coupling Turned On Its Head</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13680v1" target="_blank" rel="noopener">Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13679v1" target="_blank" rel="noopener">InterleaveThinker: Reinforcing Agentic Interleaved Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13677v1" target="_blank" rel="noopener">Mana: Dexterous Manipulation of Articulated Tools</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13675v1" target="_blank" rel="noopener">Improving Robotic Generalist Policies via Flow Reversal Steering</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.13674v1" target="_blank" rel="noopener">RepWAM: World Action Modeling with Representation Visual-Action Tokenizers</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Reinforcement+Learning&labels=discussion&body=Topic:+[Reinforcement+Learning](https://dhein.github.io/daily_knowledge/topic/reinforcement_learning/)
