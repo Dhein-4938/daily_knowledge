@@ -219,56 +219,63 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>A <strong>distributed system</strong> is a collection of autonomous computational components, located on distinct networked machines, that coordinate exclusively via message passing to present a unified service or solve a common problem. The key distinction from parallel computing is _autonomy under partial failure_: components may fail independently without bringing down the whole.</p>
+<p>A <strong>distributed system</strong> is a collection of independent computing nodes that appear to users as a single coherent system. Nodes communicate exclusively via <strong>message passing</strong> — there is no shared memory, no shared clock, and no assumption of reliable delivery.</p>
 
-<div class="callout info"><div class="callout-title">INFO: Formal Characterization</div><div>A distributed system satisfies three defining properties: 1. <strong>No shared memory</strong> — state is exchanged only through messages 2. <strong>No global clock</strong> — components have only local time; ordering requires protocols 3. <strong>Independent failure</strong> — any subset of nodes may crash or be partitioned at any time</div></div>
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>A system is distributed if the failure of a machine <em>you've never heard of</em> can render your own program incorrect. — Leslie Lamport. More formally: a set of processes $P = \{p_1, p_2, \ldots, p_n\}$ connected by a network, where each $p_i$ has a local state $s_i$ and transitions occur via send/receive events.</div></div>
 
-<p>The three canonical challenges follow directly from this definition:</p>
+<p>The three irreducible challenges:</p>
+<ol>
+<li><strong>Concurrency</strong> — events at different nodes interleave non-deterministically</li>
+<li><strong>No global clock</strong> — wall-clock synchronization is bounded by network jitter (NTP ~ms, PTP ~μs); logical time fills the gap</li>
+<li><strong>Partial failure</strong> — subsets of nodes can fail silently while others continue, making it impossible to distinguish a slow node from a dead one</li>
+</ol>
 
-<p>$$\text{Consistency} + \text{Availability} + \text{Partition tolerance} \Rightarrow \text{pick 2 (CAP theorem)}$$</p>
+<p>Logical time addresses the clock problem. Lamport timestamps assign scalar $T$ such that $e \to f \Rightarrow T(e) < T(f)$. Vector clocks extend this to capture <em>causality</em>:</p>
 
-<p>The CAP theorem (Brewer, 2000; formally proved by Gilbert & Lynch, 2002) is the central impossibility result: under a network partition, a system must choose between returning a consistent answer or returning <em>any</em> answer.</p>
+<p>$$
+VC(e)[i] = \max(VC(e)[i], VC(f)[i]) \;\forall i, \quad \text{on receive of } f
+$$</p>
+
+<p>Vector clocks enable causal delivery and are foundational to CRDTs and distributed databases.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Distributed systems are the foundational substrate of essentially all modern infrastructure: microservices, cloud platforms, CDNs, consensus ledgers, large-scale ML training, and massively multiplayer games all instantiate this model. The incentive is threefold:</p>
+<p>Distributed systems are the substrate of nearly all modern computing infrastructure: cloud platforms, microservices, CDNs, blockchain, multiplayer games, and scientific computing grids. The central value proposition is <strong>horizontal scalability</strong> — adding nodes increases capacity at near-constant marginal cost, which is qualitatively different from vertical scaling's diminishing returns.</p>
 
-<ul>
-<li><strong>Horizontal scalability</strong> — marginal cost of additional workload approaches constant as capacity is added in commodity units</li>
-<li><strong>Fault tolerance</strong> — replication and redundancy eliminate single points of failure</li>
-<li><strong>Geographic locality</strong> — data can be placed close to consumers</li>
-</ul>
+<div class="callout tip"><div class="callout-title">TIP: Scalability vs. Performance</div><div>Scalability is not the same as raw performance. A system is scalable where the marginal cost of additional workload is nearly constant (Brooker). A single fast machine may outperform a distributed one at low load — the crossover point is where distributed systems earn their complexity premium.</div></div>
 
-<div class="callout tip"><div class="callout-title">TIP: Scalability ≠ Performance</div><div>Marc Brooker's definition is precise: scalability is about <em>marginal cost</em>, not raw throughput. A system that doubles cost for each doubling of load is not scalable even if it's fast. Serverless architectures approximate ideal scalability but total cost of ownership (cold starts, egress, orchestration overhead) must be weighed separately.</div></div>
+<p>The field also disciplines thinking about <strong>fault models</strong>: crash-stop, crash-recovery, Byzantine. Most production systems assume crash-stop but design for crash-recovery; Byzantine tolerance (e.g., BFT consensus) is reserved for adversarial settings like blockchains.</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. The Lack of a Global Clock</strong></p>
-<p>Physical clocks drift; NTP provides only loose synchronization. Lamport clocks ($C(a) < C(b)$ if $a \to b$) capture <em>happens-before</em> ordering. Vector clocks extend this to full causal tracking across $n$ nodes: each node $i$ maintains $V_i[1..n]$, incrementing $V_i[i]$ on send and merging on receive.</p>
+<p><strong>1. CAP Theorem and its nuances</strong></p>
+<p>A system cannot simultaneously guarantee Consistency, Availability, and Partition tolerance when a network partition occurs. In practice, partitions are rare but inevitable, so systems choose CP (e.g., HBase, Zookeeper) or AP (e.g., Cassandra, DynamoDB). PACELC refines this: even without partitions, there's a latency/consistency tradeoff.</p>
 
-<p><strong>2. Consensus Is Hard</strong></p>
-<p>The FLP impossibility result (Fischer, Lynch, Paterson, 1985) proves that no deterministic protocol can guarantee consensus in an asynchronous system with even one crash failure. Practical systems work around this via timeouts (Paxos, Raft) or probabilistic termination.</p>
+<p><strong>2. Consensus is hard</strong></p>
+<p>The FLP impossibility result proves that in an asynchronous system with even one crash-faulty process, no deterministic algorithm can guarantee consensus. Real systems escape this via <em>partial synchrony</em> assumptions (Paxos, Raft) or randomization.</p>
 
 <p><strong>3. Fallacies of Distributed Computing</strong></p>
-<p>Peter Deutsch's eight fallacies (the network is reliable; latency is zero; bandwidth is infinite; the network is secure; topology doesn't change; there is one administrator; transport cost is zero; the network is homogeneous) remain the most productive checklist for auditing system designs.</p>
+<p>Peter Deutsch's eight fallacies — the network is reliable, latency is zero, bandwidth is infinite, topology doesn't change, etc. — enumerate the assumptions that cause distributed systems to fail in practice. Each is a design trap.</p>
 
-<p><strong>4. Consistency Models Form a Lattice</strong></p>
-<p>From strongest to weakest: linearizability → sequential consistency → causal consistency → eventual consistency. Weaker models permit higher availability and lower latency but shift correctness burden onto application logic.</p>
+<p><strong>4. Replication strategies</strong></p>
+<p>Single-leader, multi-leader, and leaderless replication each make different tradeoffs. Leaderless (Dynamo-style) uses quorum reads/writes: $R + W > N$ ensures overlap, but anti-entropy and read-repair are required to reconcile divergent replicas.</p>
 
-<p><strong>5. Message-Passing Mechanisms</strong></p>
-<p>Implementations span pure HTTP, RPC frameworks (gRPC, Thrift), and durable message queues (Kafka, RabbitMQ). Choice affects latency, ordering guarantees, backpressure semantics, and replay capability.</p>
+<p>$$R + W > N \implies \text{at least one node in quorum has latest write}$$</p>
+
+<p><strong>5. CRDTs enable coordination-free consistency</strong></p>
+<p>Conflict-free Replicated Data Types are data structures where all concurrent updates commute. State-based CRDTs require merge to be idempotent, commutative, and associative. They allow AP systems to offer useful guarantees without synchronization.</p>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The CRDT landscape and production tooling (e.g., Automerge, Yjs) evolve rapidly; specific library recommendations may not reflect the current state of the art.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research frontiers include: geo-distributed consensus with WAN-aware Paxos variants; disaggregated storage/compute architectures; and CRDTs (Conflict-free Replicated Data Types) as algebraic structures for coordination-free consistency. Serverless and "function mesh" paradigms are actively colliding the distributed-systems and PL communities.</div></div>
-
-<p>Recent work on LLM-based agent frameworks (e.g., AgentFactory, 2026) applies distributed-systems thinking to autonomous agents: subagents as independent, failure-isolated units that communicate via standardized interfaces and accumulate executable knowledge — a direct instantiation of the distributed programming model in the AI layer.</p>
+<p>Active research areas include: <strong>geo-distributed consensus</strong> (minimizing cross-region latency in Paxos variants like EPaxos, WPaxos); <strong>serverless and disaggregated storage</strong> (separating compute from state); <strong>verifiable distributed systems</strong> (using TLA+ and Coq to formally verify protocols); and <strong>FoundationDB-style deterministic simulation testing</strong> for finding bugs that escape unit tests.</p>
 
 <hr>
 
@@ -276,11 +283,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/CAP Theorem">CAP Theorem</a></li>
-<li><a href="/daily_knowledge/topic/Consensus Algorithms (Paxos, Raft)">Consensus Algorithms (Paxos, Raft)</a></li>
-<li><a href="/daily_knowledge/topic/Vector Clocks and Causal Ordering">Vector Clocks and Causal Ordering</a></li>
+<li><a href="/daily_knowledge/topic/Consensus Algorithms — Paxos and Raft">Consensus Algorithms — Paxos and Raft</a></li>
+<li><a href="/daily_knowledge/topic/Vector Clocks and Causal Consistency">Vector Clocks and Causal Consistency</a></li>
+<li><a href="/daily_knowledge/topic/CRDTs — Conflict-Free Replicated Data Types">CRDTs — Conflict-Free Replicated Data Types</a></li>
 <li><a href="/daily_knowledge/topic/Microservices Architecture">Microservices Architecture</a></li>
-<li><a href="/daily_knowledge/topic/CRDTs">CRDTs</a></li>
-<li><a href="/daily_knowledge/topic/Fallacies of Distributed Computing">Fallacies of Distributed Computing</a></li>
+<li><a href="/daily_knowledge/topic/Fault Tolerance and Byzantine Generals Problem">Fault Tolerance and Byzantine Generals Problem</a></li>
 </ul>
 
 <hr>
@@ -288,27 +295,21 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>CAP forces a binary choice, but PACELC extends this to latency tradeoffs even when no partition exists — does PACELC make CAP obsolete as a design tool, or do they address different questions?</li>
-</ol>
-
-<ol>
-<li>The FLP impossibility assumes a purely asynchronous model; Raft and Paxos rely on timeouts (effectively introducing partial synchrony). What does this mean for the correctness guarantees we actually get in production?</li>
-</ol>
-
-<ol>
-<li>As LLM-based multi-agent systems scale, they exhibit the same three challenges (concurrency, no global clock, independent failure). Which distributed-systems primitives map cleanly onto agent coordination, and which require new abstractions?</li>
+<li>The FLP result assumes a fully asynchronous model — how do real systems (Raft, Zookeeper) escape it, and what assumptions do they actually require?</li>
+<li>CRDTs trade expressiveness for coordination freedom. What classes of application semantics are fundamentally <em>incompatible</em> with CRDT-style eventual consistency?</li>
+<li>Serverless platforms abstract away node topology — does this actually simplify distributed reasoning for the developer, or does it merely obscure the same failure modes?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Distributed_computing" target="_blank" rel="noopener"&gt;Distributed Systems&lt;/a&gt; · Retrieved 2026-03-19</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Distributed_computing" target="_blank" rel="noopener"&gt;Distributed Systems&lt;/a&gt; · Retrieved 2026-06-15</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.18000v1" target="_blank" rel="noopener">AgentFactory: A Self-Evolving Framework Through Executable Subagent Accumulation and Reuse</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.17988v1" target="_blank" rel="noopener">Adaptive Loss-tolerant Syndrome Measurements</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.17987v1" target="_blank" rel="noopener">On the Astrophysical Origin of Binary Black Hole Subpopulations: A Tale of Three Channels?</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.14704v1" target="_blank" rel="noopener">The Edges of Planetary Systems: Falling Off the Kuiper Cliff in a Dissipating Gas Disk</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.14700v1" target="_blank" rel="noopener">RepFusion: Leveraging Multimodal Priors for Denoising in Representation Space</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.14696v1" target="_blank" rel="noopener">Scalar dissipation anomaly and scalar-gradient scaling in turbulence: A joint velocity-scalar multifractal view</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Distributed+Systems&labels=discussion&body=Topic:+[Distributed+Systems](https://dhein.github.io/daily_knowledge/topic/distributed_systems/)

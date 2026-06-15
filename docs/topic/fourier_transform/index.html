@@ -219,50 +219,59 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The <strong>Fourier transform</strong> maps a function $f: \mathbb{R} \to \mathbb{C}$ into its <em>frequency-domain</em> representation $\hat{f}: \mathbb{R} \to \mathbb{C}$, revealing the amplitude and phase of each constituent frequency: $$\hat{f}(\xi) = \int_{-\infty}^{\infty} f(t)\, e^{-2\pi i \xi t}\, dt$$ The inverse recovers the original: $$f(t) = \int_{-\infty}^{\infty} \hat{f}(\xi)\, e^{2\pi i \xi t}\, d\xi$$</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The <strong>Fourier Transform</strong> is an integral transform that decomposes a function into its constituent frequencies. Given a function $f(t)$, its Fourier transform $\hat{f}(\xi)$ is: $$\hat{f}(\xi) = \int_{-\infty}^{\infty} f(t)\, e^{-2\pi i \xi t}\, dt$$ The output is complex-valued: the magnitude encodes <em>amplitude</em> at each frequency $\xi$, the argument encodes <em>phase</em>.</div></div>
 
-<p>Intuitively, the FT decomposes a signal the way a prism splits white light—each frequency $\xi$ receives a complex coefficient whose modulus is the <em>amplitude</em> and argument is the <em>phase</em>. The operation is unitary on $L^2(\mathbb{R})$ (Parseval/Plancherel), meaning energy is conserved across domains:</p>
-<p>$$\int |f(t)|^2\, dt = \int |\hat{f}(\xi)|^2\, d\xi$$</p>
+<p>The inverse recovers $f$ from its spectrum:</p>
+<p>$$f(t) = \int_{-\infty}^{\infty} \hat{f}(\xi)\, e^{2\pi i \xi t}\, d\xi$$</p>
+
+<p>This bidirectionality is the transform's core power — time and frequency are dual representations of the same object. The analogy with musical chords is apt but undersells it: the FT works on any $L^1$ or $L^2$ function, not just periodic or auditory signals.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>The FT underpins virtually every domain that processes oscillatory or wave-like data:</p>
+<p>The FT is the lingua franca of analysis across physics, engineering, and mathematics:</p>
 
 <ul>
-<li><strong>Signal processing &amp; communications</strong> — spectral analysis, filtering, modulation/demodulation</li>
-<li><strong>Quantum mechanics</strong> — position and momentum wavefunctions are mutual FT pairs; $[\hat{x}, \hat{p}] = i\hbar$ is the operator-algebra face of the same coin</li>
-<li><strong>PDEs</strong> — converts constant-coefficient differential operators into multiplication: $\widehat{f'} = 2\pi i\xi\,\hat{f}$, turning the heat and wave equations into algebraic problems</li>
-<li><strong>Optics &amp; imaging</strong> — far-field diffraction <em>is</em> a spatial FT; the lens performs it optically (4f systems, aperture functions)</li>
-<li><strong>Number theory</strong> — Fourier analysis on finite abelian groups drives the quantum Fourier transform behind Shor's algorithm</li>
+<li><strong>Signal processing</strong>: filtering in frequency space is multiplication (via the convolution theorem), vastly cheaper than direct convolution.</li>
+<li><strong>Quantum mechanics</strong>: position and momentum wavefunctions are Fourier pairs — measuring one delocalizes the other (the uncertainty principle is a theorem about FT, not a physical postulate).</li>
+<li><strong>PDEs</strong>: heat, wave, and Schrödinger equations become algebraic in frequency space. Joseph Fourier discovered the transform precisely this way — solving the heat equation.</li>
+<li><strong>Probability</strong>: the characteristic function of a probability distribution is its FT; moment-generating functions and the central limit theorem live here.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Physicist's restatement</div><div>In QM, the FT is not merely a tool—it <em>is</em> the relationship between two conjugate observables. Any pair $(q, p)$ satisfying canonical commutation relations lives in dual Fourier spaces.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: The FT as a change of basis</div><div>Think of the FT as an inner product with basis functions $e^{-2\pi i \xi t}$. In $L^2(\mathbb{R})$, these form a continuous orthonormal basis (in the distributional sense). This generalises naturally: groups other than $\mathbb{R}$ have their own "harmonic analysis" and corresponding transforms.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <p><strong>1. Uncertainty Principle</strong></p>
-<p>Localisation in time and frequency are mutually exclusive. Rigorously:</p>
+<p>Time-frequency localisation is fundamentally limited:</p>
 <p>$$\sigma_t \cdot \sigma_\xi \geq \frac{1}{4\pi}$$</p>
-<p>The Gaussian $f(t) = e^{-\pi t^2}$ saturates this bound—it is its own FT, making it the unique minimum-uncertainty state.</p>
+<p>The Gaussian $e^{-\pi t^2}$ saturates this bound and is its own FT — the unique minimizer.</p>
 
-<p><strong>2. Distributional Extension</strong></p>
-<p>The naive Riemann integral fails for functions like $f(t) = 1$ or the Dirac delta. The correct setting is the <em>Schwartz space</em> $\mathcal{S}(\mathbb{R})$ and its dual (tempered distributions $\mathcal{S}'$). Here $\widehat{\delta} = 1$ and $\widehat{1} = \delta$ are rigorous, not just formal.</p>
+<p><strong>2. The Discrete Hierarchy</strong></p>
+<p>The FT generalises across groups:</p>
+<p>| Domain | Group | Transform |</p>
+<p>|---|---|---|</p>
+<p>| Continuous time | $\mathbb{R}$ | FT |</p>
+<p>| Discrete time | $\mathbb{Z}$ | DTFT |</p>
+<p>| Periodic discrete | $\mathbb{Z}/N\mathbb{Z}$ | DFT |</p>
+<p>| Periodic continuous | $S^1$ | Fourier Series |</p>
 
-<p><strong>3. Discrete and Fast Variants</strong></p>
-<p>The <strong>DFT</strong> operates on $N$-point sequences (group $\mathbb{Z}/N\mathbb{Z}$):</p>
-<p>$$X_k = \sum_{n=0}^{N-1} x_n\, e^{-2\pi i kn/N}$$</p>
-<p>Naïve computation is $O(N^2)$; the <strong>FFT</strong> (Cooley–Tukey) reduces this to $O(N \log N)$ via divide-and-conquer on roots of unity, making real-time spectral analysis tractable.</p>
+<p>The <strong>FFT</strong> (Fast Fourier Transform) computes the DFT in $O(N \log N)$ rather than $O(N^2)$, making digital signal processing computationally feasible.</p>
+
+<p><strong>3. Distributional Extension</strong></p>
+<p>The naïve Riemann integral definition breaks down for functions like the Dirac delta or constants. The rigorous home is the <strong>Schwartz space</strong> and its dual, the <strong>tempered distributions</strong> — this is what lets $\mathcal{F}[\delta] = 1$ make sense.</p>
 
 <p><strong>4. Convolution Theorem</strong></p>
-<p>$$\widehat{f * g} = \hat{f} \cdot \hat{g}$$</p>
-<p>This transforms convolution (expensive in time domain) into pointwise multiplication—the foundational identity behind fast polynomial multiplication, correlation, and linear filtering.</p>
+<p>$$\mathcal{F}[f * g] = \hat{f} \cdot \hat{g}$$</p>
+<p>Convolution in time $\leftrightarrow$ pointwise multiplication in frequency. This single identity underlies most practical use of the FT in filtering, correlation, and PDE solving.</p>
 
-<p><strong>5. Higher-Dimensional &amp; Group Generalizations</strong></p>
-<p>On $\mathbb{R}^n$, FT exchanges position space and momentum/wavenumber space, critical in crystallography (Brillouin zones) and 4D spacetime QFT. Further generalization to locally compact abelian groups (Pontryagin duality) unifies FT, DTFT, DFT, and Fourier series under one framework.</p>
+<p><strong>5. Parseval's / Plancherel's Theorem</strong></p>
+<p>Energy is conserved across domains:</p>
+<p>$$\int |f(t)|^2\, dt = \int |\hat{f}(\xi)|^2\, d\xi$$</p>
+<p>The FT extends to a <strong>unitary operator</strong> on $L^2(\mathbb{R})$.</p>
 
 <hr>
 
@@ -270,13 +279,13 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research frontiers as of early 2026:</p>
+<p>Active research directions include:</p>
 
 <ul>
-<li><strong>Sparse FFT</strong>: sub-linear algorithms exploiting sparsity in $\hat{f}$; relevant for compressed sensing and massive sensor arrays</li>
-<li><strong>Quantum FT</strong>: the QFT circuit achieves exponential speedup for structured problems (Shor, phase estimation) but readout collapses amplitudes—extraction bottlenecks remain an active theoretical problem</li>
-<li><strong>Fractional FT (FrFT)</strong>: the $\alpha$-th power of the FT operator, interpolating continuously between time and frequency domains; applications in radar, optics, and LFM chirp analysis</li>
-<li><strong>Fourier analysis on graphs/manifolds</strong>: spectral graph theory and geometric deep learning both rely on FT-like operations on non-Euclidean domains—an area seeing rapid development alongside GNNs</li>
+<li><strong>Sparse Fourier Transform (SFT)</strong>: algorithms recovering $k$-sparse frequency spectra in $O(k \log N)$ time, critical for massive-scale signals.</li>
+<li><strong>Non-uniform FFT (NUFFT)</strong>: extending efficient computation to irregularly sampled data (ubiquitous in MRI, astronomy).</li>
+<li><strong>Fourier features in ML</strong>: random Fourier features (Rahimi & Recht) approximate kernel functions; Fourier Neural Operators (FNO) learn PDE solution operators directly in frequency space.</li>
+<li><strong>Quantum FFT</strong>: the quantum Fourier transform underpins Shor's factoring algorithm and runs in $O(\log^2 N)$ quantum gate depth.</li>
 </ul>
 
 <hr>
@@ -285,11 +294,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/Laplace Transform">Laplace Transform</a></li>
-<li><a href="/daily_knowledge/topic/Wavelet Transform">Wavelet Transform</a></li>
-<li><a href="/daily_knowledge/topic/Discrete Fourier Transform">Discrete Fourier Transform</a></li>
-<li><a href="/daily_knowledge/topic/Heisenberg Uncertainty Principle">Heisenberg Uncertainty Principle</a></li>
+<li><a href="/daily_knowledge/topic/Uncertainty Principle">Uncertainty Principle</a></li>
 <li><a href="/daily_knowledge/topic/Convolution and Correlation">Convolution and Correlation</a></li>
-<li><a href="/daily_knowledge/topic/Spectral Methods in PDEs">Spectral Methods in PDEs</a></li>
+<li><a href="/daily_knowledge/topic/Fast Fourier Transform (FFT)">Fast Fourier Transform (FFT)</a></li>
+<li><a href="/daily_knowledge/topic/Wavelet Transform">Wavelet Transform</a></li>
+<li><a href="/daily_knowledge/topic/Schwartz Space and Tempered Distributions">Schwartz Space and Tempered Distributions</a></li>
 </ul>
 
 <hr>
@@ -297,27 +306,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Duality and physics</strong>: The position-momentum duality in QM is encoded by FT. Does this mean the uncertainty principle is fundamentally <em>mathematical</em> (a property of Fourier pairs) rather than <em>physical</em>—or does the physics constrain which mathematical structure is relevant?</li>
+<li>The Gaussian is the unique function that is its own Fourier transform <em>and</em> minimises the uncertainty product. What does this tell us about why Gaussians are so prevalent in physics and probability — is the FT the deeper reason, or a coincidence?</li>
 </ol>
 
 <ol>
-<li><strong>Sparsity vs. completeness</strong>: The FT is a global basis decomposition; wavelets offer localized alternatives. Under what conditions does a signal's structure make one representation strictly superior, and how do you decide before computing?</li>
+<li>The FFT's $O(N \log N)$ complexity enabled modern DSP, but the Sparse FFT pushes this further for compressible signals. Where is the practical frontier — what signal types still lack efficient transform algorithms?</li>
 </ol>
 
 <ol>
-<li><strong>Discrete vs. continuous pathology</strong>: The DFT assumes periodicity, introducing spectral leakage when signals are not integer-period within the window. What does this reveal about the relationship between mathematical idealizations and physical measurements?</li>
+<li>Fourier Neural Operators learn in frequency space and show striking generalisation across PDE resolutions. Does this suggest the FT is a "natural" inductive bias for physical systems, or is it a brittle shortcut that happens to work on smooth PDEs?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Fourier_transform" target="_blank" rel="noopener"&gt;Fourier Transform&lt;/a&gt; · Retrieved 2026-03-19</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Fourier_transform" target="_blank" rel="noopener"&gt;Fourier Transform&lt;/a&gt; · Retrieved 2026-06-15</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.18003v1" target="_blank" rel="noopener">Universal Skeleton Understanding via Differentiable Rendering and MLLMs</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.17986v1" target="_blank" rel="noopener">Observational Signatures of Exact Black Hole Solutions in a Dark Matter Halo</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.17985v1" target="_blank" rel="noopener">Asymptotics of superfluid Bjorken flow</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.14704v1" target="_blank" rel="noopener">The Edges of Planetary Systems: Falling Off the Kuiper Cliff in a Dissipating Gas Disk</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.14703v1" target="_blank" rel="noopener">Gaze Heads: How VLMs Look at What They Describe</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.14702v1" target="_blank" rel="noopener">OmniVideo-100K: A Dataset for Audio-Visual Reasoning through Structured Scripts and Evidence Chains</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Fourier+Transform&labels=discussion&body=Topic:+[Fourier+Transform](https://dhein.github.io/daily_knowledge/topic/fourier_transform/)
