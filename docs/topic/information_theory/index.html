@@ -219,51 +219,48 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Information theory is the mathematical framework for quantifying, storing, and transmitting information. Founded by Claude Shannon in his landmark 1948 paper <em>A Mathematical Theory of Communication</em>, it provides rigorous answers to: <em>how much information does a message carry?</em> and <em>what is the fundamental limit of lossless compression or reliable transmission?</em></p>
+<p>Information theory is the mathematical framework for quantifying, storing, and transmitting information. Founded by Claude Shannon in 1948 ("A Mathematical Theory of Communication"), it answers a deceptively simple question: <em>how much information is contained in a message?</em></p>
 
-<div class="callout info"><div class="callout-title">INFO: Shannon Entropy</div><div>For a discrete random variable $X$ with probability mass function $p(x)$, the <strong>Shannon entropy</strong> is: $$H(X) = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x) \quad \text{(bits)}$$ Entropy measures the <em>average surprise</em> — or equivalently, the minimum average code length needed to represent outcomes of $X$.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Shannon Entropy</div><div>For a discrete random variable $X$ with probability mass function $p(x)$, the <strong>Shannon entropy</strong> is: $$H(X) = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x) \quad \text{(bits)}$$ Entropy measures the <em>average uncertainty</em> before observing $X$ — equivalently, the minimum average bits needed to encode its outcomes.</div></div>
 
-<p>For a fair coin: $H(X) = -2 \cdot \frac{1}{2}\log_2\frac{1}{2} = 1$ bit. A biased coin with $p = 0.99$ yields $H \approx 0.081$ bits — nearly no surprise.</p>
+<p>For a fair coin, $H = -2 \cdot \frac{1}{2}\log_2\frac{1}{2} = 1$ bit. A biased coin with $P(\text{H})=0.99$ has $H \approx 0.08$ bits — you already know what's coming. Entropy is maximized by the uniform distribution.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Information theory underlies virtually all of modern digital infrastructure:</p>
+<p>Shannon's framework is foundational because it separates <em>logical structure</em> from physical substrate. A bit is a bit whether stored in magnetic domains, optical pits, or synaptic weights. This abstraction enables:</p>
 
 <ul>
-<li><strong>Data compression</strong> (ZIP, JPEG, MP3) is bounded below by Shannon's <em>source coding theorem</em>: you cannot losslessly compress below $H(X)$ bits per symbol on average</li>
-<li><strong>Error correction</strong> (DSL, satellite comms, QR codes) is enabled by the <em>noisy-channel coding theorem</em>: reliable transmission is achievable at any rate below the <strong>channel capacity</strong> $C$</li>
-<li><strong>Machine learning</strong>: cross-entropy loss, KL divergence, mutual information — all are information-theoretic quantities used daily in training and evaluation</li>
-<li>Applications extend to cryptography, neuroscience, statistical mechanics, and black hole physics</li>
+<li><strong>Data compression</strong>: ZIP, MP3, JPEG all exploit source coding theorems — you cannot compress below the entropy rate of the source</li>
+<li><strong>Error-correcting codes</strong>: Reed-Solomon codes (CDs, Voyager transmissions), LDPC codes (DSL, 5G) approach the <strong>channel capacity</strong> $C = \max_{p(x)} I(X;Y)$</li>
+<li><strong>Cryptography</strong>: Shannon's notion of perfect secrecy formalizes what one-time pads achieve</li>
+<li><strong>Machine learning</strong>: Cross-entropy loss, KL divergence, mutual information — all direct descendants</li>
+<li><strong>Neuroscience</strong>: Neural codes are analyzed as noisy channels; efficient coding hypotheses explain retinal ganglion cell behavior</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Deep Connection to Thermodynamics</div><div>Shannon entropy is formally identical to Boltzmann–Gibbs entropy $S = -k_B \sum_i p_i \ln p_i$ up to a constant. This is not coincidence — Landauer's principle shows that <em>erasing one bit of information</em> dissipates at least $k_B T \ln 2$ joules of energy. Information has thermodynamic weight.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: The Dual Role of Entropy</div><div>Shannon entropy is formally identical to Boltzmann's thermodynamic entropy $S = -k_B \sum p_i \ln p_i$. This isn't coincidence — both measure <em>missing information</em> about a system's microstate. Landauer's principle makes this concrete: erasing one bit dissipates at least $k_B T \ln 2$ joules of heat.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <p><strong>1. Mutual Information</strong></p>
-<p>$$I(X; Y) = H(X) - H(X \mid Y) = \sum_{x,y} p(x,y) \log_2 \frac{p(x,y)}{p(x)p(y)}$$</p>
-<p>Measures how much knowing $Y$ reduces uncertainty about $X$. It is symmetric: $I(X;Y) = I(Y;X)$.</p>
+<p>$$I(X;Y) = H(X) - H(X \mid Y) = \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)p(y)}$$</p>
+<p>This is the reduction in uncertainty about $X$ after observing $Y$. It's symmetric, non-negative, and equals zero iff $X \perp Y$.</p>
 
-<p><strong>2. Channel Capacity</strong></p>
-<p>For a channel with input $X$, output $Y$, and transition probabilities $p(y|x)$:</p>
-<p>$$C = \max_{p(x)} I(X; Y)$$</p>
-<p>For a Gaussian channel with signal power $P$ and noise variance $N$:</p>
-<p>$$C = \frac{1}{2}\log_2\!\left(1 + \frac{P}{N}\right) \text{ bits/channel use}$$</p>
-<p>This is the <em>Shannon–Hartley theorem</em> — the theoretical ceiling no coding scheme can exceed.</p>
+<p><strong>2. Channel Capacity (Noisy-Channel Coding Theorem)</strong></p>
+<p>For any channel with capacity $C$ and transmission rate $R < C$, there exist codes achieving arbitrarily low error probability. For $R > C$, reliable communication is <em>impossible</em>. This is Shannon's master theorem — existence without construction.</p>
 
-<p><strong>3. KL Divergence (Relative Entropy)</strong></p>
-<p>$$D_{\mathrm{KL}}(P \| Q) = \sum_x p(x) \log_2 \frac{p(x)}{q(x)} \geq 0$$</p>
-<p>Asymmetric "distance" between distributions. Zero iff $P = Q$. Fundamental in Bayesian inference, variational methods, and hypothesis testing.</p>
+<p><strong>3. Source Coding Theorem</strong></p>
+<p>A source with entropy $H$ bits/symbol can be compressed to $H$ bits/symbol on average but no further. Huffman coding achieves this optimally for symbol-by-symbol codes; arithmetic coding approaches it for sequences.</p>
 
-<p><strong>4. Data Processing Inequality</strong></p>
-<p>For a Markov chain $X \to Y \to Z$: $I(X;Z) \leq I(X;Y)$. Processing cannot increase information — a hard bound on what any downstream computation can recover.</p>
+<p><strong>4. KL Divergence (Relative Entropy)</strong></p>
+<p>$$D_{KL}(P \| Q) = \sum_x p(x) \log \frac{p(x)}{q(x)} \geq 0$$</p>
+<p>Measures the <em>information cost</em> of modeling distribution $P$ with $Q$. Not a metric (asymmetric). Central to variational inference, EM algorithm, and hypothesis testing.</p>
 
-<p><strong>5. Differential Entropy</strong></p>
-<p>For continuous distributions, entropy generalizes to $h(X) = -\int p(x)\log p(x)\,dx$, but loses some discrete-case properties (e.g., it can be negative). The Gaussian maximizes $h(X)$ for fixed variance.</p>
+<p><strong>5. Rate-Distortion Theory</strong></p>
+<p>Extends lossiness: given tolerance for distortion $D$, what is the minimum bitrate $R(D)$? JPEG operates implicitly on this tradeoff. Lossy compression is only well-posed through this lens.</p>
 
 <hr>
 
@@ -271,14 +268,16 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research fronts include:</p>
+<p>Active research fronts as of mid-2026:</p>
 
 <ul>
-<li><strong>Quantum information theory</strong>: replacing bits with qubits introduces von Neumann entropy $S(\rho) = -\text{tr}(\rho \log \rho)$, quantum channel capacity, and entanglement as an information resource</li>
-<li><strong>Deep learning theory</strong>: the <em>information bottleneck</em> principle (Tishby et al.) proposes that DNNs learn by compressing inputs while preserving label-relevant information — still contested empirically</li>
-<li><strong>One-shot and finite-blocklength regimes</strong>: classical theory assumes infinite block lengths; real systems require tight finite-$n$ bounds (e.g., the <em>dispersion</em> framework)</li>
-<li><strong>Implicit information in generative models</strong>: recent work (e.g., VEGA-3D, 2026) suggests video diffusion models implicitly encode dense 3D structural priors — a reminder that information-theoretic capacity extends beyond explicit encodings</li>
+<li><strong>Information theory for deep learning</strong>: explaining generalization via mutual information bounds, the information bottleneck principle (Tishby et al.), and debates about its empirical validity</li>
+<li><strong>Quantum information theory</strong>: von Neumann entropy $S(\rho) = -\text{tr}(\rho \log \rho)$, quantum channel capacity, entanglement as a resource — the field remains in rapid development</li>
+<li><strong>Neural representations</strong>: recent work (e.g., Jiang et al. 2026) shows that LLMs encode scalar "value" estimates linearly in activation space — an information-geometric question about how high-dimensional belief states compress into low-dimensional features</li>
+<li><strong>Causal information theory</strong>: integrating directed information and transfer entropy with causal inference frameworks (Pearl/Judea Pearl tradition)</li>
 </ul>
+
+<div class="callout tip"><div class="callout-title">TIP: LLM Connection</div><div>The cross-entropy loss used to train language models minimizes $H(p_{\text{true}}, p_{\theta})$, pushing model distribution $p_\theta$ toward the data distribution. Perplexity is literally $2^{H}$ — the effective branching factor of prediction. Information theory is not just an analogy for ML; it is the loss function.</div></div>
 
 <hr>
 
@@ -287,10 +286,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Shannon Entropy">Shannon Entropy</a></li>
 <li><a href="/daily_knowledge/topic/Kolmogorov Complexity">Kolmogorov Complexity</a></li>
-<li><a href="/daily_knowledge/topic/Error-Correcting Codes">Error-Correcting Codes</a></li>
-<li><a href="/daily_knowledge/topic/Kullback-Leibler Divergence">Kullback-Leibler Divergence</a></li>
+<li><a href="/daily_knowledge/topic/Channel Coding and Error Correction">Channel Coding and Error Correction</a></li>
+<li><a href="/daily_knowledge/topic/Variational Inference and KL Divergence">Variational Inference and KL Divergence</a></li>
+<li><a href="/daily_knowledge/topic/Thermodynamics and Statistical Mechanics">Thermodynamics and Statistical Mechanics</a></li>
 <li><a href="/daily_knowledge/topic/Quantum Information Theory">Quantum Information Theory</a></li>
-<li><a href="/daily_knowledge/topic/Information Bottleneck">Information Bottleneck</a></li>
 </ul>
 
 <hr>
@@ -298,27 +297,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>The entropy–compression duality</strong>: Huffman coding provably achieves $H(X) \leq L < H(X) + 1$ bits/symbol. What breaks this guarantee in practice, and how do arithmetic coding or ANS (Asymmetric Numeral Systems) close the gap?</li>
+<li><strong>Entropy vs. compression in practice</strong>: Real-world compressors (LZ77, Brotli) use adaptive models rather than fixed distributions. How does the distinction between <em>code</em> and <em>model</em> complicate the clean source-coding theorem picture? When does the model cost dominate?</li>
 </ol>
 
 <ol>
-<li><strong>Landauer's principle and reversible computing</strong>: If erasing a bit costs $k_B T \ln 2$ joules, can reversible (information-preserving) computation achieve zero thermodynamic cost in principle? What are the practical limits?</li>
+<li><strong>The information bottleneck in neural networks</strong>: Tishby's hypothesis claims DNNs compress mutual information $I(\text{input}; \text{layer})$ during training's second phase. Critics argue the result is sensitive to binning choices. What would a <em>clean</em> test of this hypothesis require, and what would falsify it?</li>
 </ol>
 
 <ol>
-<li><strong>The information bottleneck in deep learning</strong>: Tishby's claim that SGD training passes through a compression phase (high $I(X;T)$ → low $I(X;T)$, stable $I(T;Y)$) was challenged by subsequent experiments. What does the replication controversy reveal about applying information theory to high-dimensional continuous representations?</li>
+<li><strong>Operational vs. semantic information</strong>: Shannon explicitly set aside the <em>meaning</em> of messages ("the semantic aspects of communication are irrelevant to the engineering problem"). Is there a principled extension of information theory that captures semantic content — and does Kolmogorov complexity get us there, or does it just relocate the problem?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Information_theory" target="_blank" rel="noopener"&gt;Information Theory&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Information_theory" target="_blank" rel="noopener"&gt;Information Theory&lt;/a&gt; · Retrieved 2026-06-16</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19235v1" target="_blank" rel="noopener">Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19232v1" target="_blank" rel="noopener">Cubic Discrete Diffusion: Discrete Visual Generation on High-Dimensional Representation Tokens</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19230v1" target="_blank" rel="noopener">The structure and evolution of the Galactic high-$α$ disc I. Chemical and age orbital cartography</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17056v1" target="_blank" rel="noopener">The Value Axis: Language Models Encode Whether They're on the Right Track</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17054v1" target="_blank" rel="noopener">Human Universal Grasping</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17053v1" target="_blank" rel="noopener">Context-Aware RL for Agentic and Multimodal LLMs</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Information+Theory&labels=discussion&body=Topic:+[Information+Theory](https://dhein.github.io/daily_knowledge/topic/information_theory/)

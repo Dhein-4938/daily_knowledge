@@ -219,108 +219,104 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: First Incompleteness Theorem</div><div>Any consistent formal system $\mathcal{F}$ capable of expressing elementary arithmetic contains a sentence $G_\mathcal{F}$ such that neither $G_\mathcal{F}$ nor $\neg G_\mathcal{F}$ is provable in $\mathcal{F}$.</div></div>
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Gödel's First Incompleteness Theorem</strong>: Any consistent formal system $F$ capable of expressing basic arithmetic contains a sentence $G_F$ (the "Gödel sentence") such that neither $G_F$ nor $\neg G_F$ is provable in $F$.  <strong>Gödel's Second Incompleteness Theorem</strong>: No such system $F$ can prove its own consistency — formally, $F \nvdash \text{Con}(F)$.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Second Incompleteness Theorem</div><div>No consistent system $\mathcal{F}$ (satisfying the above conditions) can prove its own consistency: $\mathcal{F} \nvdash \text{Con}(\mathcal{F})$.</div></div>
+<p>The proof hinges on <strong>arithmetization of syntax</strong>: Gödel assigned a unique natural number (a <em>Gödel number</em>) to every symbol, formula, and proof sequence, enabling the system to reason about its own provability predicate $\text{Prov}_F(\ulcorner \phi \urcorner)$ using ordinary arithmetic. A <strong>diagonal argument</strong> then constructs $G_F$ — a sentence that, informally, asserts <em>"I am not provable in F"</em>. If $F$ proves $G_F$, it's inconsistent; if it proves $\neg G_F$, it's also inconsistent (since $G_F$ is actually true in the standard model). So a consistent $F$ can prove neither.</p>
 
-<p>The theorems apply to any <em>effective</em>, <em>consistent</em>, <em>sufficiently expressive</em> formal system — concretely, any system that can encode Robinson arithmetic <strong>Q</strong> (a fragment weaker than Peano arithmetic). "Effective" means its axioms are recursively enumerable; you can write an algorithm to enumerate theorems.</p>
+<p>The theorems apply to any system satisfying:</p>
+<ul>
+<li><strong>Expressiveness</strong>: encodes Peano Arithmetic (or any theory that interprets $\mathsf{PA}$)</li>
+<li><strong>Consistency</strong>: no proof of $\bot$</li>
+<li><strong>Recursive axiomatization</strong>: the set of axioms is decidable (enumerable by an algorithm)</li>
+</ul>
 
-<p>The proof method is <strong>Gödel numbering</strong>: encode every formula and proof as a natural number, then use the <strong>diagonal lemma</strong> to construct a self-referential sentence $G$ that asserts its own unprovability:</p>
-
-<p>$$G \equiv \neg \exists p \; \text{Proof}_\mathcal{F}(p, \ulcorner G \urcorner)$$</p>
-
-<p>where $\ulcorner G \urcorner$ is the Gödel number of $G$. If $G$ were provable, the system would be inconsistent; if $\neg G$ were provable, the system would be $\omega$-inconsistent (under the standard reading). In consistent systems, $G$ is therefore <strong>true but unprovable</strong>.</p>
-
-<hr>
+<p>$$F \text{ consistent} + F \supseteq \mathsf{PA} \implies \exists G_F : F \nvdash G_F \land F \nvdash \neg G_F$$</p>
 
 <h2>Why It Matters</h2>
 
-<p><strong>For mathematics:</strong> Hilbert's program — find a finite, complete, consistent axiomatization of all mathematics — is provably impossible. Completeness and consistency cannot coexist for any system rich enough to do arithmetic.</p>
+<p>Gödel's results demolished <strong>Hilbert's Program</strong> (1920s), which sought a finite, complete, and consistent axiomatization for all of mathematics. Completeness and consistency cannot coexist once arithmetic is in scope.</p>
 
-<p><strong>For computer science:</strong> The theorems are deeply entangled with computability. The undecidability of the halting problem (Turing, 1936) and the unsolvability of the Entscheidungsproblem (Church, 1936) are essentially the same phenomenon viewed through a different lens. A non-halting program is the computational analogue of an unprovable statement.</p>
+<p>The theorems thread into multiple disciplines:</p>
 
-<p><strong>For philosophy:</strong> The theorems constrain <em>mathematical Platonism</em>, <em>formalism</em>, and <em>logicism</em> in different ways. They don't say mathematics is broken — they say no single formal net can catch all mathematical truth.</p>
+<ul>
+<li><strong>Philosophy of Mathematics</strong>: Fuels debates between Platonists (true but unprovable statements exist "out there") and formalists (truth is internal to a system).</li>
+<li><strong>Computability Theory</strong>: Church's proof of the undecidability of the <em>Entscheidungsproblem</em> and Turing's halting problem are structurally parallel — each uses a self-referential diagonal. The incompleteness theorems and the halting problem are inter-reducible.</li>
+<li><strong>Computer Science</strong>: No sufficiently powerful proof assistant can be both sound and complete. Formal verification systems (Coq, Lean) must either accept unprovable truths or work in deliberately limited fragments.</li>
+<li><strong>Complexity Theory</strong>: Connections to independence results in set theory (e.g., $\mathsf{P} \neq \mathsf{NP}$ may be independent of $\mathsf{ZFC}$).</li>
+</ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Incompleteness ≠ Inconsistency</div><div>A common misreading conflates "unprovable" with "false." $G_\mathcal{F}$ is <em>true</em> in the standard model $\mathbb{N}$ — it's only unprovable <em>within</em> $\mathcal{F}$. Moving to a stronger system $\mathcal{F}'$ proves $G_\mathcal{F}$, but then $G_{\mathcal{F}'}$ escapes that system. The hierarchy never closes.</div></div>
-
-<hr>
+<div class="callout tip"><div class="callout-title">TIP</div><div>The second theorem is often more practically limiting: it means you cannot bootstrap trust in a system from within itself. This is why security proofs and type-system soundness proofs always live in a <em>meta</em>-theory stronger than the object theory.</div></div>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Conditions are essential.</strong> The theorems require consistency <em>and</em> $\omega$-consistency (first theorem, original proof) or just consistency (Rosser's 1936 strengthening via the <strong>Rosser trick</strong>). Inconsistent systems prove everything — they're trivially "complete."</li>
+<li><strong>ω-consistency vs. Consistency</strong>: Gödel's original first theorem required the stronger condition of <em>ω-consistency</em> (the system doesn't prove $\exists x\,\neg\phi(x)$ while also proving $\phi(0), \phi(1), \phi(2), \ldots$). Rosser (1936) strengthened the result to require only plain consistency, via the <strong>Rosser trick</strong>.</li>
 </ol>
 
 <ol>
-<li><strong>The arithmetical hierarchy.</strong> $G_\mathcal{F}$ sits at the $\Pi^0_1$ level: it has the form $\forall n \; P(n)$ where $P$ is decidable. This means its truth is verifiable "from outside" by checking each $n$, but no finite proof exists inside $\mathcal{F}$.</li>
+<li><strong>The Gödel Sentence Is True (in $\mathbb{N}$)</strong>: $G_F$ asserts its own unprovability, and since $F$ is consistent, it genuinely <em>is</em> unprovable — so $G_F$ is a true arithmetic statement. This is not circular: "truth" here means truth in the standard model $\mathbb{N}$, which is external to $F$.</li>
 </ol>
 
 <ol>
-<li><strong>Löb's theorem</strong> refines the second: $\mathcal{F} \vdash \Box\varphi \to \varphi$ only if $\mathcal{F} \vdash \varphi$. A system can only "trust its own provability" for statements it already proves outright — there's no non-trivial bootstrapping of self-trust.</li>
+<li><strong>Scope of Application</strong>: The theorems don't apply to <em>all</em> formal systems. Presburger arithmetic (addition only, no multiplication) is consistent, complete, and decidable — multiplication is what gives arithmetic enough expressive power for Gödel encoding.</li>
 </ol>
 
 <ol>
-<li><strong>Non-standard models.</strong> Incomplete systems don't just have one model. There exist non-standard models of arithmetic where $G_\mathcal{F}$ is <em>false</em> — models containing "infinite integers" that encode fake proofs. Incompleteness is a statement about the interplay between syntax and the <em>intended</em> semantics.</li>
+<li><strong>Con(F) is Provable in Stronger Systems</strong>: $\mathsf{PA}$ cannot prove $\text{Con}(\mathsf{PA})$, but $\mathsf{ZFC}$ can (assuming $\mathsf{ZFC}$ is itself consistent). This creates an infinite regress of meta-theories, each unable to vouch for itself.</li>
 </ol>
 
 <ol>
-<li><strong>Proof-theoretic ordinals.</strong> Each consistent extension of PA that proves its own totality of some fast-growing function can be calibrated by an ordinal. PA corresponds to $\varepsilon_0$; stronger systems reach further into the Cantor normal form hierarchy. Incompleteness manifests as an ordinal ceiling.</li>
+<li><strong>Independence vs. Unprovability</strong>: Incompleteness is not the same as falsity. The Gödel sentence and statements like the <strong>Continuum Hypothesis</strong> (independent of $\mathsf{ZFC}$) are neither provable nor disprovable — they can be added as new axioms in either direction without introducing contradiction.</li>
 </ol>
-
-<hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active research areas rooted in these theorems include:</p>
+<p>Active research extends incompleteness into several directions:</p>
 
 <ul>
-<li><strong>Reverse mathematics</strong>: classifying which axioms are <em>necessary</em> for specific theorems (Simpson's program). Many classical results turn out equivalent to $\text{WKL}_0$ or $\text{ACA}_0$ over a weak base theory.</li>
-<li><strong>Proof complexity</strong>: measuring the <em>length</em> of proofs. Even for provable statements, proofs in weak systems can be astronomically long — a quantitative shadow of incompleteness (see Cook–Reckhow framework).</li>
-<li><strong>Ordinal analysis</strong>: Gentzen proved Con(PA) using transfinite induction up to $\varepsilon_0$, a result that <em>transcends</em> PA. Extending this to stronger systems (e.g., $\Pi^1_2$-CA) remains an open frontier.</li>
-<li><strong>Mechanised proof assistants</strong> (Coq, Lean, Isabelle) have fully formalised Gödel's theorems, most notably via <strong>Paulson's 2015 Isabelle proof</strong> and the <strong>Fleuriot/Harrison</strong> lineage.</li>
+<li><strong>Proof-theoretic ordinals</strong>: Measuring the strength of theories via ordinal analysis (e.g., $\varepsilon_0$ for $\mathsf{PA}$) provides a fine-grained hierarchy beyond what Gödel sentences capture.</li>
+<li><strong>Reverse mathematics</strong>: Calibrates <em>which</em> axioms are needed for specific theorems, revealing that many classical results sit precisely at the boundary of $\mathsf{PA}$ or subsystems of second-order arithmetic.</li>
+<li><strong>Incompleteness in set theory</strong>: The independence of large cardinal axioms, the Continuum Hypothesis, and determinacy axioms from $\mathsf{ZFC}$ is an ongoing area — with Hugh Woodin's $\Omega$-logic and ultimate-$L$ program attempting to resolve set-theoretic indeterminacy.</li>
+<li><strong>Algorithmic randomness</strong>: Chaitin's incompleteness theorem reframes the first theorem in terms of Kolmogorov complexity: for any consistent theory $F$, there is a constant $L$ such that $F$ cannot prove that any specific string has complexity $> L$.</li>
 </ul>
-
-<hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Turing Halting Problem">Turing Halting Problem</a></li>
-<li><a href="/daily_knowledge/topic/Tarski Undefinability Theorem">Tarski Undefinability Theorem</a></li>
+<li><a href="/daily_knowledge/topic/Halting Problem">Halting Problem</a></li>
 <li><a href="/daily_knowledge/topic/Peano Arithmetic">Peano Arithmetic</a></li>
+<li><a href="/daily_knowledge/topic/Tarski's Undefinability Theorem">Tarski's Undefinability Theorem</a></li>
 <li><a href="/daily_knowledge/topic/Hilbert's Program and Formalism">Hilbert's Program and Formalism</a></li>
-<li><a href="/daily_knowledge/topic/Computability and the Arithmetical Hierarchy">Computability and the Arithmetical Hierarchy</a></li>
-<li><a href="/daily_knowledge/topic/Proof Theory and Ordinal Analysis">Proof Theory and Ordinal Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Kolmogorov Complexity">Kolmogorov Complexity</a></li>
+<li><a href="/daily_knowledge/topic/ZFC Set Theory">ZFC Set Theory</a></li>
 </ul>
-
-<hr>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Epistemic ceiling or navigational tool?</strong> Gödel sentences are pathological constructs, not naturally arising mathematical questions — yet the independence of the Continuum Hypothesis from ZFC feels genuinely mathematical. Where is the boundary between "Gödelian artifact" and "deep undecidability"?</li>
+<li>The Gödel sentence $G_F$ is "true but unprovable" only relative to the <em>standard</em> model $\mathbb{N}$. In non-standard models of arithmetic, $G_F$ can be false. Does this undermine Platonist readings, or does it reinforce the primacy of $\mathbb{N}$?</li>
 </ol>
 
 <ol>
-<li><strong>Does incompleteness threaten the working mathematician?</strong> Almost all theorems of classical analysis, algebra, and combinatorics are provable in ZFC or weaker systems. Is incompleteness a foundational curiosity, or does it materially limit mathematical practice — especially in combinatorics where Paris–Harrington shows otherwise?</li>
+<li>The second incompleteness theorem implies that any system strong enough to be useful cannot prove its own consistency. How do working mathematicians and formal verification engineers <em>actually</em> cope with this — and is the regress of meta-theories a practical problem or merely a philosophical one?</li>
 </ol>
 
 <ol>
-<li><strong>Self-reference and AI systems:</strong> Neural networks and large language models are formal computational systems. Can Gödelian arguments be meaningfully applied to bound what such systems can "know" or "verify" about themselves — or does the lack of a clean deductive architecture make the analogy break down?</li>
+<li>Gödel, Turing, Church, and Tarski all produced "limitation" results in the 1930s via diagonal arguments. Is the diagonal method a deep structural feature of self-reference in formal systems, or a notational trick that happens to apply broadly?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Gödel's_incompleteness_theorems" target="_blank" rel="noopener"&gt;Gödel's Incompleteness Theorems&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Gödel's_incompleteness_theorems" target="_blank" rel="noopener"&gt;Gödel's Incompleteness Theorems&lt;/a&gt; · Retrieved 2026-06-16</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19229v1" target="_blank" rel="noopener">NavTrust: Benchmarking Trustworthiness for Embodied Navigation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19228v1" target="_blank" rel="noopener">SAMA: Factorized Semantic Anchoring and Motion Alignment for Instruction-Guided Video Editing</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19219v1" target="_blank" rel="noopener">DriveTok: 3D Driving Scene Tokenization for Unified Multi-View Reconstruction and Understanding</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17050v1" target="_blank" rel="noopener">Optimal Bounded Thrust Powered Descent with Analytical Ground-Collision Avoidance</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17045v1" target="_blank" rel="noopener">Compact Spin-Charge Separated Neural Quantum States for Valence-Bond States</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17041v1" target="_blank" rel="noopener">Benchmarking LLM Agents on Meta-Analysis Articles from Nature Portfolio</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Gödel&#x27;s+Incompleteness+Theorems&labels=discussion&body=Topic:+[Gödel&#x27;s+Incompleteness+Theorems](https://dhein.github.io/daily_knowledge/topic/godel_incompleteness/)

@@ -219,58 +219,58 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div><strong>P</strong> is the class of decision problems solvable by a deterministic Turing machine in $O(n^k)$ time for some constant $k$. <strong>NP</strong> is the class solvable by a <em>nondeterministic</em> Turing machine in polynomial time — equivalently, problems whose solutions can be <em>verified</em> in polynomial time by a deterministic machine.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div><strong>P</strong> is the class of decision problems solvable by a deterministic Turing machine in time $O(n^k)$ for some constant $k$, where $n$ is input size. <strong>NP</strong> is the class of decision problems where a proposed solution (a <em>certificate</em>) can be <em>verified</em> in polynomial time by a deterministic Turing machine.</div></div>
 
-<p>The central question: does $\mathrm{P} = \mathrm{NP}$?</p>
+<p>The central question: does $\text{P} = \text{NP}$?</p>
 
-<p>Formally, let $L$ be a decision problem (a language over $\{0,1\}^*$). Then:</p>
+<p>Equivalently, if a nondeterministic Turing machine can solve a problem in polynomial time (by "guessing" a certificate and verifying it), can a deterministic machine do the same? The asymmetry between <em>finding</em> and <em>checking</em> is the crux.</p>
 
-<p>$$L \in \mathrm{NP} \iff \exists \text{ poly-time verifier } V \text{ s.t. } x \in L \Leftrightarrow \exists w,\, |w| \leq \mathrm{poly}(|x|),\, V(x, w) = 1$$</p>
+<p>Formally, a language $L \in \text{NP}$ iff there exists a polynomial $p$ and a polynomial-time verifier $V$ such that:</p>
 
-<p>where $w$ is a <em>certificate</em> (witness). P $\subseteq$ NP trivially — any polynomial solver serves as its own verifier. The open question is whether the containment is strict.</p>
+<p>$$x \in L \iff \exists\, c \in \{0,1\}^{p(|x|)} : V(x, c) = 1$$</p>
 
-<p>The widely-held belief is $\mathrm{P} \neq \mathrm{NP}$, though no proof exists. It is one of the seven <strong>Millennium Prize Problems</strong> ($1,000,000 prize from the Clay Mathematics Institute).</p>
+<p>The conjecture $\text{P} \neq \text{NP}$ is nearly universal among complexity theorists, but no proof exists in either direction.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>The stakes extend far beyond theoretical computer science:</p>
+<p>The stakes extend far beyond theoretical elegance:</p>
 
 <ul>
-<li><strong>Cryptography</strong>: Nearly all modern cryptographic primitives (RSA, elliptic-curve, hash-based schemes) derive security from the <em>presumed</em> hardness of NP problems like integer factorization and discrete log. If $\mathrm{P} = \mathrm{NP}$, these collapse. This would break TLS, PGP, and essentially all public-key infrastructure overnight.</li>
-<li><strong>Optimization &amp; AI</strong>: SAT solvers, scheduling, protein folding (NP-hard), and combinatorial optimization underpin enormous practical and scientific domains. Polynomial-time solutions would be transformative.</li>
-<li><strong>Mathematics itself</strong>: Proof verification is in NP (given a proof, checking it is poly-time). A $\mathrm{P} = \mathrm{NP}$ result would imply that finding proofs is no harder than checking them — effectively automating mathematical discovery.</li>
-<li><strong>Economics &amp; Game Theory</strong>: Nash equilibrium computation, mechanism design, and auction theory all bump against NP-hardness barriers.</li>
+<li><strong>Cryptography</strong>: Almost all public-key cryptography (RSA, elliptic curves) relies implicitly on $\text{P} \neq \text{NP}$ — if $\text{P} = \text{NP}$, integer factorization and discrete logarithm become tractable, collapsing current security infrastructure.</li>
+<li><strong>Optimization</strong>: Thousands of NP-hard combinatorial problems (TSP, SAT, graph coloring) would become efficiently solvable, revolutionizing logistics, circuit design, and drug discovery.</li>
+<li><strong>Mathematics itself</strong>: Proof verification is in NP. If $\text{P} = \text{NP}$, finding proofs of theorems would be no harder than checking them — a seismic epistemological shift.</li>
+<li><strong>AI and search</strong>: Heuristic methods dominate because we assume exact search is intractable. A $\text{P} = \text{NP}$ result would invalidate that assumption.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: The Asymmetry Insight</div><div>The problem captures a deep philosophical asymmetry: <em>recognizing</em> a solution versus <em>finding</em> one. This maps onto human experience — it is far easier to verify a crossword solution than to solve it from scratch. P vs NP asks whether this subjective difficulty gap is mathematically real.</div></div>
+<p>It is one of the seven <strong>Millennium Prize Problems</strong> ($1,000,000 USD prize each), underscoring its standing as the central open question in computer science.</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>NP-completeness</strong>: A problem $Q$ is NP-complete if $Q \in \mathrm{NP}$ and every problem in NP poly-time reduces to $Q$. Cook (1971) and Levin (1973) independently showed SAT is NP-complete. Karp then identified 21 canonical NP-complete problems. NP-complete problems are the "hardest" in NP — solving any one in poly-time implies $\mathrm{P} = \mathrm{NP}$.</li>
+<li><strong>NP-completeness as the hard core.</strong> A problem is <strong>NP-complete</strong> if it is in NP <em>and</em> every NP problem reduces to it in polynomial time (Cook-Levin, 1971). SAT was the first; now thousands of NP-complete problems are known. Solving any one efficiently solves all of NP.</li>
 </ol>
 
 <ol>
-<li><strong>The complexity landscape</strong>: The picture is richer than just P and NP:</li>
-</ol>
-<p>$$\mathrm{P} \subseteq \mathrm{NP} \cap \mathrm{co\text{-}NP} \subseteq \mathrm{NP} \subseteq \mathrm{PSPACE} \subseteq \mathrm{EXP}$$</p>
-<p>   Integer factorization sits in $\mathrm{NP} \cap \mathrm{co\text{-}NP}$ but is not known to be NP-complete — suggesting it may occupy an intermediate zone even if $\mathrm{P} \neq \mathrm{NP}$.</p>
-
-<ol>
-<li><strong>Relativization barrier</strong>: Baker, Gill & Solovay (1975) showed there exist oracles $A$, $B$ such that $\mathrm{P}^A = \mathrm{NP}^A$ and $\mathrm{P}^B \neq \mathrm{NP}^B$. Any proof technique that relativizes (holds with any oracle) cannot resolve P vs NP — ruling out large swaths of classical proof strategies.</li>
+<li><strong>The reduction hierarchy.</strong> Reductions are the connective tissue: $A \leq_p B$ means $A$ is polynomial-time reducible to $B$. NP-completeness is defined via <em>many-one</em> (Karp) reductions; stronger notions (Turing reductions) define NP-hardness without NP-membership.</li>
 </ol>
 
 <ol>
-<li><strong>Natural proofs barrier</strong>: Razborov & Rudich (1994) showed that "natural" combinatorial circuit lower-bound arguments cannot separate P from NP unless strong pseudorandom generators don't exist. This blocks another major proof avenue.</li>
+<li><strong>Relativization barrier.</strong> Baker, Gill, and Solovay (1975) showed oracles $A, B$ exist such that $\text{P}^A = \text{NP}^A$ and $\text{P}^B \neq \text{NP}^B$. Any proof technique that <em>relativizes</em> (works regardless of oracle) cannot resolve P vs NP — ruling out large classes of classical arguments.</li>
 </ol>
 
 <ol>
-<li><strong>Algebraization</strong>: Aaronson & Wigderson (2009) extended the oracle barrier to algebraic methods, further constraining viable proof strategies. The known barriers — relativization, natural proofs, algebraization — together suggest any resolution will require fundamentally new mathematics.</li>
+<li><strong>Natural proofs barrier (Razborov-Rudich, 1994).</strong> A wide class of circuit lower-bound proof strategies would, if successful, also yield efficient pseudorandom generator breaks — something most cryptographers believe impossible. This indirectly obstructs lower-bound approaches to P ≠ NP.</li>
 </ol>
+
+<ol>
+<li><strong>Algebrization barrier.</strong> Aaronson-Wigderson (2009) extended relativization to algebraic settings, showing that even algebraic techniques are insufficient. Three known barriers (relativization, natural proofs, algebrization) collectively rule out the most natural proof strategies.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP: The Gap Between Barriers and Impossibility</div><div>The barriers show <em>current techniques</em> fail — they do not prove the problem is unprovable. New structural insights (e.g., from proof complexity or geometric complexity theory) may circumvent all three.</div></div>
 
 <hr>
 
@@ -278,28 +278,19 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research directions include:</p>
-
-<ul>
-<li><strong>Circuit complexity</strong>: Proving super-polynomial lower bounds for explicit problems in restricted circuit classes (e.g., $\mathrm{ACC}^0$). Ryan Williams made progress in 2010 by separating $\mathrm{NEXP}$ from $\mathrm{ACC}^0$, the first major circuit lower bound in decades.</li>
-<li><strong>Geometric complexity theory (GCT)</strong>: Mulmuley & Sohoni's program uses algebraic geometry and representation theory to approach the problem via the permanent vs. determinant question — a closely related algebraic analogue.</li>
-<li><strong>Proof complexity</strong>: Connections between proof length in formal systems and circuit complexity may offer indirect handles on the problem.</li>
-<li><strong>Meta-complexity</strong>: Problems like MCSP (Minimum Circuit Size Problem) sit in a curious zone — likely not NP-complete under standard assumptions, yet hard — and studying them sheds light on the structure of NP itself.</li>
-</ul>
-
-<p>The consensus remains $\mathrm{P} \neq \mathrm{NP}$, but no serious candidate proof has survived peer scrutiny. Dozens of claimed proofs have been submitted and refuted.</p>
+<p>Active research frontiers include <strong>Geometric Complexity Theory</strong> (Mulmuley & Sohoni), which encodes complexity separations as representation-theoretic problems in algebraic geometry — a radically different approach that sidesteps known barriers. Proof complexity (studying the length of formal proofs) offers another avenue. No credible proof attempts have withstood scrutiny as of early 2026.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/NP-Completeness and Reductions">NP-Completeness and Reductions</a></li>
-<li><a href="/daily_knowledge/topic/Computational Complexity Classes">Computational Complexity Classes</a></li>
-<li><a href="/daily_knowledge/topic/Boolean Satisfiability (SAT)">Boolean Satisfiability (SAT)</a></li>
+<li><a href="/daily_knowledge/topic/Computational Complexity Theory">Computational Complexity Theory</a></li>
+<li><a href="/daily_knowledge/topic/NP-Completeness and Cook-Levin Theorem">NP-Completeness and Cook-Levin Theorem</a></li>
 <li><a href="/daily_knowledge/topic/Cryptographic Hardness Assumptions">Cryptographic Hardness Assumptions</a></li>
-<li><a href="/daily_knowledge/topic/Circuit Complexity">Circuit Complexity</a></li>
+<li><a href="/daily_knowledge/topic/Circuit Complexity and Lower Bounds">Circuit Complexity and Lower Bounds</a></li>
 <li><a href="/daily_knowledge/topic/Millennium Prize Problems">Millennium Prize Problems</a></li>
+<li><a href="/daily_knowledge/topic/Randomized Complexity Classes (BPP, RP, ZPP)">Randomized Complexity Classes (BPP, RP, ZPP)</a></li>
 </ul>
 
 <hr>
@@ -307,27 +298,21 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The three known barriers (relativization, natural proofs, algebraization) each rule out entire families of proof techniques. What would a proof strategy look like that evades <em>all three</em> simultaneously — and does GCT plausibly do this?</li>
-</ol>
-
-<ol>
-<li>If $\mathrm{P} = \mathrm{NP}$ but the polynomial degree were $n^{10^6}$, the result would be theoretically explosive but practically irrelevant. How should complexity theory weight "practical" vs. "asymptotic" hardness, and does this tension undermine the problem's centrality?</li>
-</ol>
-
-<ol>
-<li>The fact that proof <em>verification</em> is in NP but proof <em>discovery</em> may not be in P suggests a deep link between P vs NP and the limits of formal mathematical reasoning. Does this imply any form of mathematical incompleteness beyond Gödel's?</li>
+<li>The three barriers (relativization, natural proofs, algebrization) each block different proof strategies. Is there a unifying meta-barrier, or could a proof exploit gaps between them?</li>
+<li>If $\text{P} = \text{NP}$ but with an impractically large polynomial (say $O(n^{10^6})$), what changes in practice versus theory? Does the philosophical significance survive?</li>
+<li>Quantum computing places certain problems in <strong>BQP</strong> (e.g., factoring via Shor). Since BQP is believed neither to contain nor be contained in NP, how does quantum tractability interact with the P vs NP landscape?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/P_versus_NP_problem" target="_blank" rel="noopener"&gt;P vs NP Problem&lt;/a&gt; · Retrieved 2026-03-20</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/P_versus_NP_problem" target="_blank" rel="noopener"&gt;P vs NP Problem&lt;/a&gt; · Retrieved 2026-06-16</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19235v1" target="_blank" rel="noopener">Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19225v1" target="_blank" rel="noopener">FinTradeBench: A Financial Reasoning Benchmark for LLMs</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17056v1" target="_blank" rel="noopener">The Value Axis: Language Models Encode Whether They're on the Right Track</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17055v1" target="_blank" rel="noopener">T-Rex: Tactile-Reactive Dexterous Manipulation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.17053v1" target="_blank" rel="noopener">Context-Aware RL for Agentic and Multimodal LLMs</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+P+vs+NP+Problem&labels=discussion&body=Topic:+[P+vs+NP+Problem](https://dhein.github.io/daily_knowledge/topic/p_vs_np/)
