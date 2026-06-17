@@ -219,76 +219,70 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>type theory</strong> is a formal system in which every term carries a <strong>type</strong>, and well-formedness of expressions is governed by typing rules. At its core, it is an alternative to set theory as a foundation for mathematics — one where <em>membership</em> (∈) is replaced by <em>inhabitation</em> (∶).</div></div>
+<p>Type theory is the study of <strong>formal systems</strong> in which every expression is assigned a <em>type</em> — a classification that governs what the expression <em>is</em> and what operations are valid on it. This is not merely bookkeeping: the type discipline itself carries logical content.</p>
 
-<p>The central judgment is:</p>
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>A <strong>type theory</strong> is a formal system comprising a set of <em>types</em> $\tau$, a set of <em>terms</em> $t$, and a <strong>typing judgment</strong> of the form: $$\Gamma \vdash t : \tau$$ meaning "in context $\Gamma$, term $t$ has type $\tau$." Rules for forming valid judgments are called <em>typing rules</em>.</div></div>
 
-<p>$$\Gamma \vdash t : T$$</p>
-
-<p>read "in context $\Gamma$, term $t$ has type $T$." A <strong>context</strong> $\Gamma$ is an ordered list of variable-type bindings $(x_1 : T_1, \ldots, x_n : T_n)$. Type theories specify which such judgments are <em>derivable</em> via inference rules — the mechanical engine of the whole system.</p>
-
-<p>Two canonical pillars:</p>
+<p>The foundational dichotomy is between <strong>simple</strong> and <strong>dependent</strong> type theories:</p>
 
 <ul>
-<li><strong>Church's Simply Typed λ-Calculus (STLC)</strong> — introduces function types $A \to B$; terms are λ-abstractions and applications. The type system prevents paradoxes like untyped self-application.</li>
-<li><strong>Martin-Löf Type Theory (MLTT / Intuitionistic TT)</strong> — adds <strong>dependent types</strong>, where types can depend on terms: $\prod_{x:A} B(x)$ (dependent function) and $\sum_{x:A} B(x)$ (dependent pair). This collapses the proposition/type distinction into the <strong>Curry–Howard correspondence</strong>: propositions <em>are</em> types, proofs <em>are</em> terms.</li>
+<li><strong>Simple type theory</strong> (Church, 1940): types are fixed independently of terms. Function types written $\alpha \to \beta$.</li>
+<li><strong>Dependent type theory</strong> (Martin-Löf, 1972–84): types can <em>depend on terms</em>. The type $\text{Vec}(n)$ of vectors of length $n$ is a canonical example. This enables propositions to be encoded as types via the <strong>Curry–Howard correspondence</strong>: a proof of proposition $P$ <em>is</em> a term of type $P$.</li>
 </ul>
+
+<p>The identity type $\text{Id}_A(a, b)$ — whose inhabitants are proofs that $a = b$ — is the engine behind <a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a>, where paths between points in a space model propositional equality.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Type theory is simultaneously a <strong>foundation for mathematics</strong>, a <strong>logic</strong>, and a <strong>programming language theory</strong>. This triple role is unique among foundational systems.</p>
+<p>Type theory occupies a rare intersection of logic, computation, and mathematics:</p>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>The Curry–Howard–Lambek correspondence extends the duality further: types ↔ propositions ↔ objects in a category. A proof of $A \Rightarrow B$ is a λ-term of type $A \to B$ is a morphism $A \to B$ in a Cartesian closed category. This is not metaphor — it is a precise equivalence.</div></div>
+<ol>
+<li><strong>Foundation of mathematics</strong>: Martin-Löf Type Theory (MLTT) and the Calculus of Inductive Constructions (CIC) are serious rivals to <a href="/daily_knowledge/topic/Set Theory (ZFC)">Set Theory (ZFC)</a> as foundational frameworks — constructive by default, proof-relevant, and computation-aware.</li>
+<li><strong>Proof assistants</strong>: Rocq (Coq) runs on CIC; <a href="/daily_knowledge/topic/Lean 4">Lean 4</a> is built on a dependent type theory called the Calculus of Constructions with universe polymorphism. These tools machine-check real mathematical proofs.</li>
+<li><strong>Programming language design</strong>: Hindley-Milner type inference underlies ML and Haskell. Dependent types appear in Agda, Idris, and increasingly in industrial languages.</li>
+</ol>
 
-<p><strong>Proof assistants</strong> like Coq, Agda, Lean 4, and Rocq are all grounded in dependent type theories. The Curry–Howard lens means writing a program of a given type <em>is</em> constructing a mathematical proof. Correctness-by-construction becomes literal.</p>
-
-<p>In programming languages, type theory underpins:</p>
-<ul>
-<li><strong>Hindley–Milner type inference</strong> (ML, Haskell)</li>
-<li><strong>Subtyping</strong> and object-oriented systems</li>
-<li><strong>Linear/affine types</strong> for resource management (Rust's borrow checker)</li>
-<li><strong>Effect systems</strong> for tracking computational side-effects</li>
-</ul>
+<div class="callout tip"><div class="callout-title">TIP: Propositions as Types</div><div>The Curry–Howard correspondence is not an analogy — it is an <em>isomorphism</em>. $\Pi$-types are universal quantifiers; $\Sigma$-types are existential quantifiers; the empty type $\bot$ is falsehood; the unit type $\top$ is truth. Writing a program <em>is</em> writing a proof.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Dependent vs. Simple Types.</strong> In STLC, types and terms live in separate universes. In dependent type theory, types are first-class — $\text{Vec}(A, n)$ is a type parameterised by <em>value</em> $n : \mathbb{N}$. This expressivity is what enables formal verification.</li>
+<li><strong>Universes and Russell's Paradox</strong>: Naïve type theory admits $\text{Type} : \text{Type}$, which leads to Girard's Paradox (analogous to Russell's). The fix is a <em>universe hierarchy</em> $\mathcal{U}_0 : \mathcal{U}_1 : \mathcal{U}_2 : \cdots$, preventing a type from containing itself.</li>
 </ol>
 
 <ol>
-<li><strong>Universes and the Universe Hierarchy.</strong> Naïve type-in-type ($\text{Type} : \text{Type}$) leads to Girard's paradox (analog of Russell's). The resolution is a <strong>universe hierarchy</strong> $\mathcal{U}_0 : \mathcal{U}_1 : \mathcal{U}_2 : \cdots$, with <em>universe polymorphism</em> to avoid duplication.</li>
+<li><strong>Definitional vs. propositional equality</strong>: Two terms can be <em>definitionally equal</em> (interchangeable by computation rules, checked algorithmically) or merely <em>propositionally equal</em> (connected by an inhabitant of the identity type). The gap between these notions is where much subtlety lives.</li>
 </ol>
 
 <ol>
-<li><strong>Intensional vs. Extensional Identity.</strong> Intensional type theories (MLTT) distinguish <em>definitional</em> equality (reduction) from <em>propositional</em> equality (inhabited identity type $\text{Id}_A(a,b)$). Extensional theories collapse these, gaining expressivity but losing decidable type-checking — a critical tradeoff.</li>
+<li><strong>Univalence Axiom</strong>: In <a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a>, Voevodsky's Univalence Axiom states $(A \simeq B) \simeq (A = B)$ — equivalence of types <em>is</em> their identity. This is not provable in MLTT; it must be added, and <a href="/daily_knowledge/topic/Cubical Type Theory">Cubical Type Theory</a> makes it <em>definitionally</em> true.</li>
 </ol>
 
 <ol>
-<li><strong>Calculus of Inductive Constructions (CIC).</strong> Coquand and Huet's CIC underpins Coq/Rocq. It merges the Calculus of Constructions (impredicative $\text{Prop}$, universe polymorphism) with <strong>inductive types</strong> — the mechanism for defining $\mathbb{N}$, lists, trees, and the recursion/induction principles that come with them.</li>
+<li><strong>Termination and decidability</strong>: Typed lambda calculi with strong normalization (e.g., System F, CoC) guarantee all well-typed terms terminate — at the cost of not being Turing-complete as a programming language. The tension between expressiveness and decidability is fundamental.</li>
 </ol>
 
 <ol>
-<li><strong>Proof Irrelevance and Squashing.</strong> Distinguishing <em>data</em> from <em>mere proofs</em> matters for extraction and computation. The $\|-\|$ truncation (or $\text{Prop}$ in CIC) collapses all proofs of a proposition to a single irrelevant witness, essential for separating logical content from computational content.</li>
+<li><strong>Linear and substructural types</strong>: Restricting how variables can be used (used <em>exactly once</em> in linear types) gives resource-aware type systems. <a href="/daily_knowledge/topic/Rust">Rust</a>'s ownership model is an industrial instance of affine typing.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
 <p>Active frontiers include:</p>
 
 <ul>
-<li><strong>Homotopy Type Theory (HoTT)</strong> and <strong>Cubical Type Theory</strong> — Identity types are reinterpreted as paths in a space; the <strong>Univalence Axiom</strong> ($A \simeq B \Rightarrow A = B$) makes equivalent structures interchangeable. Cubical type theory (as in Agda's <code>--cubical</code> mode) gives a <em>computational</em> interpretation of univalence, avoiding the non-constructivity of the original HoTT book.</li>
-<li><strong>Directed / Modal Type Theory</strong> — Extending HoTT to directed homotopies (morphisms, not just paths) for ∞-category theory; modal operators ($\Box$, $\bigcirc$) for controlling access to resources or dimensions.</li>
-<li><strong>Two-Level Type Theory (2LTT)</strong> — Combining a strict metatheory with an inner homotopy layer, resolving some coherence nightmares in synthetic ∞-category theory.</li>
-<li><strong>Linear and Graded Type Theories</strong> — Tracking resource usage at the type level, with applications in quantum computing (no-cloning theorem enforced by linear types) and differential privacy.</li>
+<li><strong>Cubical type theories</strong> (CCHM, Cartesian Cubical TT): give computational interpretations of Univalence, making HoTT implementable.</li>
+<li><strong>Two-level type theories (2LTT)</strong>: separating a "fibrant" layer (homotopy-aware) from a "strict" layer for meta-reasoning.</li>
+<li><strong>Multimodal and graded type theories</strong>: tracking resource usage, phase distinctions (compile-time vs. runtime), and security levels within a single framework.</li>
+<li><strong>Proof assistant interoperability</strong>: projects like Dedukti aim to translate proofs across systems built on different type theories.</li>
 </ul>
 
 <hr>
@@ -296,12 +290,12 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Lambda Calculus">Lambda Calculus</a></li>
-<li><a href="/daily_knowledge/topic/Curry–Howard Correspondence">Curry–Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
 <li><a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Lambda Calculus">Lambda Calculus</a></li>
+<li><a href="/daily_knowledge/topic/Set Theory (ZFC)">Set Theory (ZFC)</a></li>
 <li><a href="/daily_knowledge/topic/Dependent Types">Dependent Types</a></li>
-<li><a href="/daily_knowledge/topic/Proof Assistants">Proof Assistants</a></li>
-<li><a href="/daily_knowledge/topic/Category Theory">Category Theory</a></li>
+<li><a href="/daily_knowledge/topic/Proof Assistants (Lean, Rocq)">Proof Assistants (Lean, Rocq)</a></li>
 </ul>
 
 <hr>
@@ -309,27 +303,21 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Foundations:</strong> Set theory is extensional by default (sets are equal iff same members); type theory is intensional. Does univalence in HoTT genuinely recover extensionality, or does it merely shift the tension elsewhere — into coherence conditions for higher structures?</li>
-</ol>
-
-<ol>
-<li><strong>Computation vs. Logic:</strong> CIC's <code>Prop</code> impredicativity is justified logically but causes inconsistency if used carelessly with classical axioms. Where should a proof assistant draw the line between a <em>logical</em> system and a <em>programming language</em> foundation?</li>
-</ol>
-
-<ol>
-<li><strong>Practicality:</strong> Dependent types are maximally expressive but impose heavy proof obligations (e.g., carrying length proofs with every <code>Vec</code> operation). When does the overhead of dependent types outweigh the safety guarantees — and how do gradual or optional dependent type systems address this tradeoff?</li>
+<li>Univalence makes type equivalence <em>identical</em> to type equality — does this dissolve the classical distinction between "isomorphism" and "equality," or merely relocate it?</li>
+<li>Dependent type theories are not Turing-complete (to ensure termination). Is this a fundamental limitation for verified software, or an acceptable trade-off? How do Coq/Lean escape it in practice?</li>
+<li>Both type theory and set theory can serve as foundations for mathematics, yet they have different ontological commitments (proofs as objects vs. extension-based sets). What mathematical practice would look like if dependent type theory became the default foundation taught first?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Type_theory" target="_blank" rel="noopener"&gt;Type Theory&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Type_theory" target="_blank" rel="noopener"&gt;Type Theory&lt;/a&gt; · Retrieved 2026-06-17</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19224v1" target="_blank" rel="noopener">EffectErase: Joint Video Object Removal and Insertion for High-Quality Effect Erasing</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19222v1" target="_blank" rel="noopener">Spectrally-Guided Diffusion Noise Schedules</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18251v1" target="_blank" rel="noopener">Superconductivity from interband coupling to ferroelectric quantum critical fluctuations in two dimensions</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18248v1" target="_blank" rel="noopener">Pushing the Primordial Frontier: Exact Linear Solutions in Multifield Inflation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18245v1" target="_blank" rel="noopener">Derived functors and Hilbert polynomials over Gorenstein rings</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Type+Theory&labels=discussion&body=Topic:+[Type+Theory](https://dhein.github.io/daily_knowledge/topic/type_theory/)

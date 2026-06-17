@@ -219,65 +219,51 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Lambda calculus (λ-calculus) is a formal system for expressing computation via <strong>function abstraction</strong> and <strong>application</strong>. Every program is either a variable, an abstraction, or an application — nothing else.</div></div>
+<p>Lambda calculus (λ-calculus) is a formal system for expressing computation through <strong>function abstraction</strong> and <strong>function application</strong>. Introduced by Alonzo Church in the 1930s, it is one of the two foundational models of computation — the other being the <a href="/daily_knowledge/topic/Turing Machine">Turing Machine</a> — and they are provably equivalent in expressive power.</p>
 
-<p>The full grammar fits in three lines:</p>
+<div class="callout info"><div class="callout-title">INFO: Syntax (BNF)</div><div>Every λ-term $e$ is one of: $$e ::= x \mid \lambda x.\, e \mid e_1\; e_2$$ — a <strong>variable</strong>, a <strong>lambda abstraction</strong> (binding $x$ in body $e$), or an <strong>application</strong> (applying $e_1$ to $e_2$).</div></div>
 
-<p>$$
-e \;::=\; x \;\mid\; \lambda x.\, e \;\mid\; e_1\; e_2
-$$</p>
+<p>The sole computational rule is <strong>β-reduction</strong>:</p>
 
-<p>where $x$ ranges over variables, $\lambda x.\, e$ binds $x$ in body $e$, and $e_1\; e_2$ applies $e_1$ to argument $e_2$.</p>
+<p>$$(\lambda x.\, e_1)\; e_2 \;\longrightarrow_\beta\; e_1[x := e_2]$$</p>
 
-<p>Computation proceeds by <strong>β-reduction</strong>: substituting the argument for the bound variable.</p>
+<p>Substituting $e_2$ for free occurrences of $x$ in $e_1$. An additional rule, <strong>α-conversion</strong>, allows bound variable renaming to avoid capture:</p>
 
-<p>$$
-(\lambda x.\, e_1)\; e_2 \;\longrightarrow_\beta\; e_1[x \mapsto e_2]
-$$</p>
+<p>$$\lambda x.\, e \;\equiv_\alpha\; \lambda y.\, e[x := y] \quad (y \notin \mathrm{FV}(e))$$</p>
 
-<p>A term with no further β-redexes is in <strong>β-normal form</strong>. An additional rule, <strong>η-reduction</strong> ($\lambda x.\, f\, x \longrightarrow_\eta f$ when $x \notin \text{FV}(f)$), captures extensional function equality.</p>
-
-<p>Church introduced the untyped λ-calculus in the 1930s while investigating the foundations of mathematics; a logically consistent fragment was documented by 1940.</p>
+<p><strong>η-conversion</strong> captures extensionality: $\lambda x.\, f\, x \equiv_\eta f$ when $x \notin \mathrm{FV}(f)$.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Lambda calculus is Turing-complete — any Turing machine computation can be encoded in it, and vice versa. This makes it <strong>the minimal universal model of computation</strong>, smaller and more mathematically tractable than Turing machines.</p>
-
-<p>Its influence is enormous:</p>
+<p>λ-calculus is the theoretical backbone of <strong>functional programming</strong> — Haskell, ML, Lisp, and Scheme are all direct descendants. Its significance extends far beyond PL design:</p>
 
 <ul>
-<li><strong>Programming languages</strong> — Lisp, ML, Haskell, and most functional languages are essentially typed or untyped λ-calculi with syntactic sugar.</li>
-<li><strong>Type theory</strong> — the Curry-Howard correspondence maps λ-calculus terms to proofs and types to propositions, bridging logic and computation.</li>
-<li><strong>Denotational semantics</strong> — programs are modelled as mathematical functions, formalizing meaning independent of any machine.</li>
-<li><strong>Proof assistants</strong> — Coq, Agda, and Lean are all built on dependent type theories that extend λ-calculus.</li>
+<li><strong>Foundations of mathematics</strong>: Church used it to investigate decidability, leading directly to the negative solution of the <em>Entscheidungsproblem</em> (independently resolved by Turing).</li>
+<li><strong>Proof theory</strong>: The <a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a> maps λ-terms to proofs and types to propositions — programs <em>are</em> proofs.</li>
+<li><strong>Denotational semantics</strong>: Provides the mathematical substrate for giving meaning to programs without executing them.</li>
+<li><strong>Type theory and dependent types</strong>: Typed λ-calculi (simply-typed, System F, CoC) underpin proof assistants like Coq and Lean.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Curry-Howard at a glance</div><div>A typed λ-term $t : A \to B$ <em>is</em> a proof that proposition $A$ implies $B$. Function application <em>is</em> modus ponens. This correspondence runs deep enough that proof checking and type checking are literally the same algorithm.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Church–Turing Thesis connection</div><div>The equivalence of untyped λ-calculus and Turing machines is non-trivial: λ-calculus encodes data (via Church numerals), conditionals, and recursion (via the Y combinator) purely through functions. There are no side effects, no memory — only substitution. This makes it an unusually <em>pure</em> model of computation.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Capture-avoiding substitution is non-trivial.</strong>  </p>
-<p>Naïve substitution breaks under variable shadowing. $(\lambda y.\, \lambda x.\, y)\; x$ must rename the bound $x$ before substituting, yielding $\lambda z.\, x$, not the broken $\lambda x.\, x$.</p>
+<p><strong>1. Church Encodings</strong> — Natural numbers, booleans, and pairs can all be represented as pure functions. The Church numeral for $n$ applies a function $f$ exactly $n$ times:</p>
+<p>$$\bar{n} \equiv \lambda f.\,\lambda x.\, f^n(x)$$</p>
 
-<p><strong>2. Fixed-point combinators enable recursion.</strong>  </p>
-<p>The untyped calculus has no primitive recursion, yet the Y combinator</p>
+<p><strong>2. The Y Combinator</strong> — Recursion without named functions is achieved via the fixed-point combinator:</p>
+<p>$$Y \equiv \lambda f.\,(\lambda x.\, f\,(x\,x))\,(\lambda x.\, f\,(x\,x))$$</p>
+<p>$Y\,g$ reduces to $g\,(Y\,g)$, threading recursion through self-application. Note: $Y$ has no normal form in the untyped calculus — it diverges if $g$ doesn't force termination.</p>
 
-<p>$$Y \;=\; \lambda f.\,(\lambda x.\, f\,(x\,x))\,(\lambda x.\, f\,(x\,x))$$</p>
+<p><strong>3. Confluence (Church-Rosser Theorem)</strong> — If a term $e$ reduces to both $e_1$ and $e_2$, there exists a $e_3$ such that both reduce to $e_3$. This guarantees <strong>determinism of normal forms</strong>: evaluation order affects <em>efficiency</em>, not <em>result</em>.</p>
 
-<p>satisfies $Y\, f \longrightarrow_\beta f\,(Y\, f)$, encoding arbitrary recursion. Notably, $Y$ cannot be typed in the simply-typed λ-calculus, which rules out non-termination by design.</p>
+<p><strong>4. Undecidability of β-equality</strong> — There is no algorithm to decide whether two arbitrary λ-terms are β-equal. This is the λ-calculus analogue of the halting problem.</p>
 
-<p><strong>3. Church encodings represent data as functions.</strong>  </p>
-<p>Booleans: $\mathbf{true} = \lambda t.\, \lambda f.\, t$, $\mathbf{false} = \lambda t.\, \lambda f.\, f$. Church numerals: $\overline{n} = \lambda f.\, \lambda x.\, f^n\, x$. Every data structure is ultimately a higher-order function.</p>
-
-<p><strong>4. Confluence (Church-Rosser theorem).</strong>  </p>
-<p>If $e \twoheadrightarrow_\beta e_1$ and $e \twoheadrightarrow_\beta e_2$, there exists $e_3$ with $e_1 \twoheadrightarrow_\beta e_3$ and $e_2 \twoheadrightarrow_\beta e_3$. Normal forms are unique when they exist, but not all terms terminate.</p>
-
-<p><strong>5. Reduction strategy matters.</strong>  </p>
-<p>Normal-order (leftmost-outermost) reduction finds a normal form whenever one exists; applicative-order (innermost-first, as in most languages) can diverge on terms that do have normal forms. Lazy evaluation is essentially call-by-need, a memoized normal-order strategy.</p>
+<p><strong>5. Typed vs. Untyped</strong> — Untyped λ-calculus is Turing-complete but permits non-termination. Simply-typed λ-calculus (<a href="/daily_knowledge/topic/STLC">STLC</a>) is strongly normalizing (all reductions terminate) but not Turing-complete — a fundamental trade-off between expressivity and decidability.</p>
 
 <hr>
 
@@ -285,12 +271,13 @@ $$</p>
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research lives in the <strong>typed</strong> extensions:</p>
+<p>Active research frontiers include:</p>
+
 <ul>
-<li><strong>Dependent types</strong> (Martin-Löf, CoC) unify types and terms, enabling proof-carrying code.</li>
-<li><strong>Linear and affine type systems</strong> (relevant to <a href="/daily_knowledge/topic/Rust Ownership Model">Rust Ownership Model</a>) track resource usage at the type level, deriving from linear logic.</li>
-<li><strong>Gradual typing</strong> mixes static and dynamic guarantees in a single λ-calculus framework.</li>
-<li><strong>Optimal reduction</strong> (Lévy, Lamping) minimises β-steps by sharing redexes via interaction nets — still an area of implementation research.</li>
+<li><strong>Homotopy Type Theory (HoTT)</strong>: Extensions of dependent type theory (rooted in typed λ-calculi) that treat type equality as path spaces from <a href="/daily_knowledge/topic/Homotopy Theory">Homotopy Theory</a>.</li>
+<li><strong>Probabilistic and quantum λ-calculi</strong>: Extending the formalism to model randomized and quantum computation.</li>
+<li><strong>Optimal reduction</strong>: Lévy's work on sharing redexes (implemented in interaction nets) seeks the minimal number of β-steps — still an open efficiency problem for practical implementations.</li>
+<li><strong>Linear λ-calculus</strong>: Restricting variable use to exactly once, connecting to <a href="/daily_knowledge/topic/Linear Logic">Linear Logic</a> and resource-sensitive computation models.</li>
 </ul>
 
 <hr>
@@ -298,12 +285,12 @@ $$</p>
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Turing Completeness">Turing Completeness</a></li>
 <li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
-<li><a href="/daily_knowledge/topic/Type Theory and Dependent Types">Type Theory and Dependent Types</a></li>
-<li><a href="/daily_knowledge/topic/Denotational Semantics">Denotational Semantics</a></li>
+<li><a href="/daily_knowledge/topic/Turing Machine">Turing Machine</a></li>
+<li><a href="/daily_knowledge/topic/Type Theory">Type Theory</a></li>
 <li><a href="/daily_knowledge/topic/Combinatory Logic">Combinatory Logic</a></li>
-<li><a href="/daily_knowledge/topic/Functional Programming Foundations">Functional Programming Foundations</a></li>
+<li><a href="/daily_knowledge/topic/Denotational Semantics">Denotational Semantics</a></li>
+<li><a href="/daily_knowledge/topic/Fixed-Point Combinators">Fixed-Point Combinators</a></li>
 </ul>
 
 <hr>
@@ -311,21 +298,21 @@ $$</p>
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Church encodings prove data is "just functions" — but is this a philosophical statement about the nature of data, or merely a formal trick? Where does the distinction break down?</li>
-<li>The Y combinator is untypable in simply-typed λ-calculus. Does the loss of self-application mean typed systems are <em>less</em> expressive, or do dependent and recursive types recover everything that matters?</li>
-<li>Normal-order reduction is theoretically complete but operationally expensive due to repeated substitution. How do modern compilers (GHC's STG machine, for instance) reconcile lazy evaluation with efficient memory layout?</li>
+<li>The Y combinator self-applies a term to itself — in what precise sense does this "simulate" recursion, and why does the simply-typed λ-calculus reject it?</li>
+<li>Church-Rosser guarantees confluence of normal forms, yet evaluation <em>order</em> matters operationally (call-by-name vs. call-by-value). How do these two facts coexist without contradiction?</li>
+<li>If untyped λ-calculus is Turing-complete and dependent type theory is not, what does this imply about the relationship between <em>provability</em> and <em>computability</em>?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Lambda_calculus" target="_blank" rel="noopener"&gt;Lambda Calculus&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Lambda_calculus" target="_blank" rel="noopener"&gt;Lambda Calculus&lt;/a&gt; · Retrieved 2026-06-17</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19224v1" target="_blank" rel="noopener">EffectErase: Joint Video Object Removal and Insertion for High-Quality Effect Erasing</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19221v1" target="_blank" rel="noopener">Online Learning and Equilibrium Computation with Ranking Feedback</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18251v1" target="_blank" rel="noopener">Superconductivity from interband coupling to ferroelectric quantum critical fluctuations in two dimensions</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18248v1" target="_blank" rel="noopener">Pushing the Primordial Frontier: Exact Linear Solutions in Multifield Inflation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18245v1" target="_blank" rel="noopener">Derived functors and Hilbert polynomials over Gorenstein rings</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Lambda+Calculus&labels=discussion&body=Topic:+[Lambda+Calculus](https://dhein.github.io/daily_knowledge/topic/lambda_calculus/)

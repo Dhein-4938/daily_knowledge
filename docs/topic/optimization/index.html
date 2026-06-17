@@ -215,113 +215,88 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Mathematical Optimization<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Math · Optimization &nbsp;·&nbsp; ~4 min read</div>
+<div class="topic-meta">Math · Optimization &nbsp;·&nbsp; ~3 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Mathematical optimization is the systematic selection of a <strong>best element</strong> from a feasible set according to some objective criterion. The canonical form is:</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Mathematical optimization is the selection of a <strong>best element</strong> from a feasible set according to some objective criterion — formally, finding $x^*$ such that: $$x^* = \arg\min_{x \in \mathcal{X}} f(x)$$ where $f : \mathcal{X} \to \mathbb{R}$ is the <strong>objective function</strong> and $\mathcal{X} \subseteq \mathbb{R}^n$ is the <strong>feasible set</strong>, defined by equality and inequality constraints $g_i(x) \leq 0$, $h_j(x) = 0$.</div></div>
 
-<p>$$
-\min_{\mathbf{x} \in \mathcal{X}} \; f(\mathbf{x}) \quad \text{subject to} \quad g_i(\mathbf{x}) \leq 0, \; h_j(\mathbf{x}) = 0
-$$</p>
+<p>Maximization reduces trivially: $\max f(x) \equiv \min -f(x)$. The field splits along the structure of $\mathcal{X}$ and $f$:</p>
 
-<p>where $f : \mathbb{R}^n \to \mathbb{R}$ is the <strong>objective function</strong>, $\mathcal{X}$ the feasible set, and $g_i, h_j$ define inequality and equality constraints respectively. Maximization is equivalent by negating $f$.</p>
-
-<div class="callout info"><div class="callout-title">INFO: Two Primary Subfields</div><div>- <strong>Continuous optimization</strong> — $\mathcal{X} \subseteq \mathbb{R}^n$; leverages calculus, geometry, and analysis - <strong>Discrete optimization</strong> — $\mathcal{X}$ is countable (e.g., integer programs, combinatorial structures); often NP-hard</div></div>
-
-<hr>
+<ul>
+<li><strong>Continuous optimization</strong> — $\mathcal{X}$ is a continuous domain; gradient information often available</li>
+<li><strong>Discrete (combinatorial) optimization</strong> — $\mathcal{X}$ is finite or countably infinite (e.g., integer programs, graph problems)</li>
+<li><strong>Mixed-integer</strong> — hybrid of both</li>
+</ul>
 
 <h2>Why It Matters</h2>
 
-<p>Optimization is the <em>lingua franca</em> of quantitative reasoning. It underlies:</p>
+<p>Optimization is the mathematical backbone of nearly every quantitative discipline. Machine learning training reduces to minimizing a loss function; circuit design minimizes power under timing constraints; logistics solves vehicle routing; economics finds equilibria via utility maximization. The universality is not coincidental — any <em>decision under constraint</em> is an optimization problem in disguise.</p>
 
-<ul>
-<li><strong>Machine learning</strong>: training a neural network is minimizing a loss $\mathcal{L}(\theta)$ over parameters $\theta$</li>
-<li><strong>Control theory</strong>: optimal control via <a href="/daily_knowledge/topic/Hamilton-Jacobi-Bellman Equation">Hamilton-Jacobi-Bellman Equation</a> or Pontryagin's minimum principle</li>
-<li><strong>Economics</strong>: utility maximization, equilibrium finding, mechanism design</li>
-<li><strong>Operations research</strong>: scheduling, routing, resource allocation</li>
-<li><strong>Physics</strong>: variational principles — mechanics, field theory, and thermodynamics all emerge from extremizing functionals</li>
-</ul>
-
-<div class="callout tip"><div class="callout-title">TIP: Duality as a Unifying Lens</div><div>The <a href="/daily_knowledge/topic/Lagrangian Duality">Lagrangian Duality</a> framework transforms constrained problems into unconstrained ones via multipliers, and strong duality (zero gap) reveals deep geometric structure. Many apparently different algorithms — SVM training, interior-point methods, message passing — are Lagrangian dual ascent in disguise.</div></div>
-
-<hr>
+<div class="callout tip"><div class="callout-title">TIP: Unifying Lens</div><div>Many seemingly distinct algorithms — EM, policy gradient, belief propagation, auction mechanisms — are optimization algorithms over different spaces (parameter space, policy space, marginal polytope, price space). Recognizing the underlying optimizer often reveals convergence guarantees hidden in domain-specific language.</div></div>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Convexity is the key structural divide.</strong></p>
-<p>A problem is <em>convex</em> when $f$ is convex and $\mathcal{X}$ is a convex set. Any local minimum is then global, and strong optimality conditions (KKT) are both necessary and sufficient. Convex problems are tractable in theory and practice; non-convex ones are generally hard.</p>
+<ol>
+<li><strong>Convexity is the central structural property.</strong> If $f$ is convex and $\mathcal{X}$ is a convex set, every local minimum is a global minimum. The KKT conditions become necessary <em>and</em> sufficient. Most tractable large-scale methods exploit convexity either directly or approximately.</li>
+</ol>
 
-<p>$$
-f(\lambda x + (1-\lambda)y) \leq \lambda f(x) + (1-\lambda) f(y), \quad \lambda \in [0,1]
-$$</p>
+<ol>
+<li><strong>First- and second-order conditions.</strong> At a smooth unconstrained local minimum: $\nabla f(x^*) = 0$ (stationarity) and $\nabla^2 f(x^*) \succeq 0$ (positive semidefinite Hessian). Constrained problems introduce Lagrange multipliers $\lambda_i$, giving the Lagrangian:</li>
+</ol>
+<p>$$\mathcal{L}(x, \lambda, \nu) = f(x) + \sum_i \lambda_i g_i(x) + \sum_j \nu_j h_j(x)$$</p>
 
-<p><strong>2. First- and second-order conditions.</strong></p>
-<p>A smooth interior point $x^*$ satisfies the <strong>first-order necessary condition</strong> $\nabla f(x^*) = 0$. The second-order condition requires $\nabla^2 f(x^*) \succeq 0$ (positive semidefinite Hessian) for a local minimum. For constrained problems, these generalize via KKT multipliers.</p>
+<ol>
+<li><strong>Duality.</strong> Every primal problem has a dual; strong duality ($p^* = d^*$) holds under constraint qualifications (e.g., Slater's condition for convex programs). Duality gaps signal non-convexity and guide branch-and-bound in integer programming.</li>
+</ol>
 
-<p><strong>3. Gradient descent and its variants.</strong></p>
-<p>The workhorse of large-scale optimization is the update $\mathbf{x}_{t+1} = \mathbf{x}_t - \eta_t \nabla f(\mathbf{x}_t)$. Convergence rates depend critically on the <strong>condition number</strong> $\kappa = L/\mu$ (ratio of Lipschitz smoothness to strong-convexity). Accelerated (Nesterov) methods achieve $O(1/t^2)$ vs. $O(1/t)$ for vanilla gradient descent.</p>
+<ol>
+<li><strong>Complexity landscape.</strong> Linear programs (LP) are solvable in polynomial time (ellipsoid method, interior-point). Quadratic programs (QP) with positive-definite Hessians are tractable; non-convex QPs are NP-hard. Most combinatorial problems (TSP, max-cut) are NP-hard exactly but admit approximation algorithms or semidefinite relaxations.</li>
+</ol>
 
-<p><strong>4. Combinatorial hardness and approximation.</strong></p>
-<p>Discrete problems (TSP, max-cut, set cover) are often NP-hard. The theory of <a href="/daily_knowledge/topic/Approximation Algorithms">Approximation Algorithms</a> studies polynomially-computable solutions guaranteed to be within factor $\alpha$ of optimal; SDP relaxations and LP relaxations are the primary tools.</p>
-
-<p><strong>5. Stochastic and online variants.</strong></p>
-<p>When $f(\mathbf{x}) = \mathbb{E}_\xi[\ell(\mathbf{x}, \xi)]$, <strong>stochastic gradient descent</strong> (SGD) replaces the full gradient with noisy estimates. Convergence is noisier but per-iteration cost drops from $O(n)$ to $O(1)$, enabling modern deep learning at scale.</p>
-
-<hr>
+<ol>
+<li><strong>Stochastic and gradient-free settings.</strong> When $f$ is a sum over data $f(x) = \frac{1}{n}\sum_i f_i(x)$, stochastic gradient descent (SGD) with noise variance $\sigma^2$ converges at rate $O(1/\sqrt{T})$ for convex $f$. Zeroth-order (derivative-free) methods are essential when gradients are unavailable — e.g., black-box simulators.</li>
+</ol>
 
 <h2>Current State</h2>
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research fronts include:</p>
+<p>Active frontiers include <strong>inference-time optimization</strong> — using optimization as a search mechanism at deployment, not just training. Recent robotics work (e.g., VERITAS, 2026) frames policy improvement as a generator-verifier loop where a gradient-free verifier steers action selection, effectively performing constrained search in trajectory space without gradient access. This connects to <strong>best-of-N sampling</strong>, <strong>MCTS</strong>, and <strong>diffusion-based planning</strong>.</p>
 
-<ul>
-<li><strong>Non-convex landscape theory</strong>: understanding why SGD finds good minima in overparameterized networks despite non-convexity — saddle-point avoidance, loss landscape geometry</li>
-<li><strong>Diffusion models as optimization</strong>: recent generative models (e.g., diffusion-based motion synthesis) frame sampling as iterative denoising, with explicit optimization steps enforcing kinematic or geometric constraints during the diffusion trajectory</li>
-<li><strong>Second-order methods at scale</strong>: Shampoo, K-FAC, and distributed quasi-Newton methods are making Hessian-aware optimization practical for LLMs</li>
-<li><strong>Bilevel optimization</strong>: problems where the objective depends on the solution of another optimization problem — prominent in meta-learning and hyperparameter tuning</li>
-</ul>
+<p>In deep learning, non-convex landscape analysis has matured: saddle points (not local minima) dominate in overparameterized networks, and implicit regularization from SGD noise partially explains generalization. <strong>Second-order methods</strong> (Shampoo, K-FAC) are resurging for large-scale training as compute costs justify better curvature estimates.</p>
 
-<hr>
+<p>On the discrete side, <strong>neural combinatorial optimization</strong> — learning heuristics for NP-hard problems via RL — challenges classical OR solvers on practical instances.</p>
 
 <h2>See Also</h2>
 
 <ul>
 <li><a href="/daily_knowledge/topic/Convex Analysis">Convex Analysis</a></li>
-<li><a href="/daily_knowledge/topic/Lagrangian Duality">Lagrangian Duality</a></li>
-<li><a href="/daily_knowledge/topic/Gradient Descent and Variants">Gradient Descent and Variants</a></li>
-<li><a href="/daily_knowledge/topic/Integer Programming">Integer Programming</a></li>
-<li><a href="/daily_knowledge/topic/Variational Calculus">Variational Calculus</a></li>
-<li><a href="/daily_knowledge/topic/Approximation Algorithms">Approximation Algorithms</a></li>
+<li><a href="/daily_knowledge/topic/Lagrangian Duality and KKT Conditions">Lagrangian Duality and KKT Conditions</a></li>
+<li><a href="/daily_knowledge/topic/Stochastic Gradient Descent">Stochastic Gradient Descent</a></li>
+<li><a href="/daily_knowledge/topic/Integer Programming and Branch-and-Bound">Integer Programming and Branch-and-Bound</a></li>
+<li><a href="/daily_knowledge/topic/Variational Inference">Variational Inference</a></li>
+<li><a href="/daily_knowledge/topic/Dynamic Programming and Bellman Equations">Dynamic Programming and Bellman Equations</a></li>
 </ul>
-
-<hr>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>When does convexity fail gracefully?</strong> Many non-convex problems in practice (neural network training, phase retrieval) yield to gradient methods. What structural properties — overparameterization, symmetry, implicit regularization — explain this empirically observed tractability?</li>
-</ol>
-
-<ol>
-<li><strong>The duality gap as information.</strong> In non-convex settings, the Lagrangian dual provides a lower bound but strong duality may fail. How should one interpret a large duality gap — as a hardness certificate, a modeling failure, or an algorithmic limitation?</li>
-</ol>
-
-<ol>
-<li><strong>Optimization versus sampling.</strong> Statistical inference often requires integration over a posterior, not maximization. When is MAP estimation (optimization) a sufficient proxy for full Bayesian inference, and where does this break down fundamentally?</li>
+<li>Convexity is sufficient but not necessary for tractability — what structural properties beyond convexity (e.g., submodularity, quasiconvexity, DR-submodularity) admit efficient optimization, and why?</li>
+<li>SGD's implicit regularization suggests that the <em>optimizer itself</em> encodes inductive bias. How should this change how we think about the distinction between model architecture and training algorithm?</li>
+<li>Inference-time optimization (best-of-N, tree search, verifier-guided steering) trades compute for performance at deployment. When does this dominate over training-time scaling, and what are the theoretical limits?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Mathematical_optimization" target="_blank" rel="noopener"&gt;Mathematical Optimization&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Mathematical_optimization" target="_blank" rel="noopener"&gt;Mathematical Optimization&lt;/a&gt; · Retrieved 2026-06-17</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19230v1" target="_blank" rel="noopener">The structure and evolution of the Galactic high-$α$ disc I. Chemical and age orbital cartography</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19227v1" target="_blank" rel="noopener">Bridging Semantic and Kinematic Conditions with Diffusion-based Discrete Motion Tokenizer</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19228v1" target="_blank" rel="noopener">SAMA: Factorized Semantic Anchoring and Motion Alignment for Instruction-Guided Video Editing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18247v1" target="_blank" rel="noopener">Visual Verification Enables Inference-time Steering and Autonomous Policy Improvement</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18246v1" target="_blank" rel="noopener">Variable-Width Transformers</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18244v1" target="_blank" rel="noopener">PAHSPECS: Spatially Resolved PAH Spectroscopy at cosmic noon with JWST MIRI MRS</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Mathematical+Optimization&labels=discussion&body=Topic:+[Mathematical+Optimization](https://dhein.github.io/daily_knowledge/topic/optimization/)

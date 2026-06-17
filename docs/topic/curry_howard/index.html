@@ -219,76 +219,83 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The <strong>Curry-Howard Correspondence</strong> is a deep structural isomorphism between systems of formal logic and typed computational calculi: <strong>propositions are types</strong>, <strong>proofs are programs</strong>, and <strong>proof normalization is computation</strong> (β-reduction).</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The <strong>Curry–Howard correspondence</strong> (also <em>isomorphism</em> or <em>proofs-as-programs</em>) is a structural identity between systems of formal logic and models of computation: <strong>propositions are types</strong>, and <strong>proofs are programs</strong>.</div></div>
 
-<p>The correspondence maps logical constructs to type-theoretic ones with precise fidelity:</p>
+<p>The correspondence is not merely metaphorical — it is an exact syntactic and semantic isomorphism between derivation trees in a logic and well-typed terms in a lambda calculus. The canonical alignment:</p>
 
 <p>| Logic | Type Theory |</p>
 <p>|---|---|</p>
-<p>| Proposition $A$ | Type $A$ |</p>
-<p>| Proof of $A$ | Term $t : A$ |</p>
-<p>| $A \Rightarrow B$ | Function type $A \to B$ |</p>
-<p>| $A \wedge B$ | Product type $A \times B$ |</p>
-<p>| $A \vee B$ | Sum type $A + B$ |</p>
-<p>| $\bot$ (false) | Empty type $\mathbf{0}$ |</p>
-<p>| $\top$ (true) | Unit type $\mathbf{1}$ |</p>
-<p>| $\forall x{:}A.\ P(x)$ | Dependent product $\Pi_{x:A}\ P(x)$ |</p>
-<p>| $\exists x{:}A.\ P(x)$ | Dependent sum $\Sigma_{x:A}\ P(x)$ |</p>
+<p>| Proposition $P$ | Type $\tau$ |</p>
+<p>| Proof of $P$ | Term $t : \tau$ |</p>
+<p>| Implication $P \Rightarrow Q$ | Function type $\tau \to \sigma$ |</p>
+<p>| Conjunction $P \land Q$ | Product type $\tau \times \sigma$ |</p>
+<p>| Disjunction $P \lor Q$ | Sum type $\tau + \sigma$ |</p>
+<p>| Falsehood $\bot$ | Empty type $\mathbf{0}$ |</p>
+<p>| Universal quantification $\forall x.\ P(x)$ | Dependent product $\Pi (x : A).\ B(x)$ |</p>
+<p>| Existential quantification $\exists x.\ P(x)$ | Dependent sum $\Sigma (x : A).\ B(x)$ |</p>
 
-<p>To <em>inhabit</em> a type is to <em>prove</em> the corresponding proposition. A program that typechecks is a proof; a proof that normalizes is a terminating computation. The logical cut-elimination rule and β-reduction are the same thing, viewed through different lenses.</p>
+<p>The base case: intuitionistic propositional logic corresponds exactly to the simply typed lambda calculus ($\lambda^\to$). Extend to first-order logic and you arrive at <strong>dependent type theory</strong> — the foundation of proof assistants like Coq and Agda.</p>
 
-<p>The isomorphism is grounded in <strong>intuitionistic (constructive) logic</strong> — classical logic with the Law of Excluded Middle ($A \vee \neg A$) corresponds to type systems with <em>call/cc</em> (continuations), a non-trivial and somewhat uncomfortable extension.</p>
+<p>$$
+\frac{\Gamma, x : \tau \vdash t : \sigma}{\Gamma \vdash \lambda x.\ t : \tau \to \sigma}
+\quad\longleftrightarrow\quad
+\frac{\Gamma, P \vdash \pi : Q}{\Gamma \vdash \lambda\text{-abstraction} : P \Rightarrow Q}
+$$</p>
+
+<p>Proof normalization (cut-elimination) corresponds exactly to <strong>beta-reduction</strong> in the lambda calculus — computation <em>is</em> proof simplification.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>The correspondence isn't a curiosity — it collapses three previously separate disciplines:</p>
+<p>This is not a curiosity — it is the deepest bridge between mathematics and computer science:</p>
 
 <ul>
-<li><strong>Programming languages</strong>: type systems gain logical meaning; well-typed programs are correctness certificates.</li>
-<li><strong>Proof theory</strong>: proofs become executable objects; proof assistants (Coq, Agda, Lean) exploit this directly.</li>
-<li><strong>Mathematics foundations</strong>: mathematical theorems can be <em>run</em>; existence proofs yield algorithms.</li>
+<li><strong>Proof assistants</strong>: Coq, Agda, Lean, and Idris are direct engineering consequences. Writing a type-correct program <em>is</em> constructing a proof.</li>
+<li><strong>Certified software</strong>: Security protocols, compilers (CompCert), and OS kernels can be verified by encoding correctness as a type that the program must inhabit.</li>
+<li><strong>Type system design</strong>: Linear types correspond to linear logic; session types correspond to classical sequent calculi; effect systems connect to modal logics.</li>
+<li><strong>Foundations of mathematics</strong>: Homotopy Type Theory (HoTT) extends the correspondence into homotopy theory, where types are spaces and proofs are paths.</li>
 </ul>
 
-<p>The three-way <strong>Curry-Howard-Lambek correspondence</strong> extends the picture: <em>categories</em> provide a third column, with objects as types/propositions and morphisms as programs/proofs. This unification is the backbone of categorical logic and topos theory.</p>
-
-<div class="callout tip"><div class="callout-title">TIP: Practical Payoff</div><div>Every time a Haskell type signature encodes a contract, or Lean verifies a proof by constructing a term, the correspondence is doing real work. Dependent types (Idris, Agda) push this further: the <em>value</em> of a term can appear in the <em>type</em> of another, allowing full program specifications as types.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: The Constructive Constraint</div><div>The correspondence holds for <strong>intuitionistic</strong> (constructive) logic, not classical logic. The law of excluded middle ($P \lor \neg P$) has no direct computational content — its "proof" doesn't tell you <em>which</em> side holds. Classical logic corresponds instead to lambda calculi with <strong>continuations</strong> (Parigot's $\lambda\mu$-calculus), where $\neg\neg P \Rightarrow P$ maps to double-negation elimination via <code>callcc</code>.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Normalization = computation.</strong></p>
-<p>Proof normalization (cutting out detours in a proof) corresponds exactly to β-reduction. Strong normalization of a type theory implies all programs terminate — which is why total languages like Agda reject general recursion.</p>
+<ol>
+<li><strong>BHK Interpretation precedes it</strong>: Brouwer–Heyting–Kolmogorov gave the <em>semantic</em> reading (a proof of $P \Rightarrow Q$ is a function from proofs of $P$ to proofs of $Q$); Curry–Howard made this <em>syntactic</em> and formal.</li>
+</ol>
 
-<p><strong>2. Classical logic requires control operators.</strong></p>
-<p>Adding $\neg\neg A \Rightarrow A$ (double-negation elimination) to the type theory requires <em>delimited continuations</em> or <em>call/cc</em>. Parigot's λμ-calculus and Griffin's observation (1990) made this precise. Classical proofs correspond to programs that can inspect and manipulate the call stack.</p>
+<ol>
+<li><strong>Normalization = Termination</strong>: Strong normalization of the typed calculus corresponds to consistency of the logic (no proof of $\bot$). An inconsistent type system allows non-terminating programs to inhabit every type — <code>undefined :: a</code> in Haskell being the canonical cheat.</li>
+</ol>
 
-<p><strong>3. Linear logic yields linear types.</strong></p>
-<p>Girard's linear logic ($A \multimap B$, resources used exactly once) corresponds to linear type systems — where a value cannot be duplicated or discarded. This is the logical foundation of Rust's ownership/borrow checker.</p>
+<ol>
+<li><strong>The Lambek extension</strong>: Category theory completes the trinity. A cartesian closed category (CCC) simultaneously models both the typed lambda calculus and intuitionistic logic. Objects = types/propositions; morphisms = terms/proofs; composition = cut/function application.</li>
+</ol>
 
-<p><strong>4. The correspondence is syntax-sensitive.</strong></p>
-<p>It lives at the level of <em>proof terms</em>, not just provability. Two different proofs of the same theorem are genuinely different programs with potentially different computational behavior. This is why proof <em>relevance vs. irrelevance</em> matters in dependent type theory.</p>
+<ol>
+<li><strong>Linear logic correspondence</strong>: Girard's linear logic (1987) corresponds to session types and resource-aware computation — a "use exactly once" proposition maps to a linear function type.</li>
+</ol>
 
-<p><strong>5. Homotopy Type Theory (HoTT) extends it further.</strong></p>
-<p>In HoTT, <em>types are spaces</em>, <em>terms are points</em>, <em>proofs of equality are paths</em>, and higher-dimensional structure (homotopies) corresponds to proof transformations. The Univalence Axiom states that equivalent types are equal — a statement with no direct classical analogue.</p>
+<ol>
+<li><strong>Proof relevance</strong>: In dependent type theory, the <em>identity</em> of two proofs of the same proposition can matter (proof relevance). HoTT radicalizes this: two proofs being "equal" becomes a homotopy path between points in a space.</li>
+</ol>
 
-<p>$$\text{Univalence:}\ (A \simeq B) \simeq (A =_{\mathcal{U}} B)$$</p>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research areas like cubical type theory implementations, the precise computational content of classical logic extensions, and HoTT's homotopy-theoretic foundations continue to evolve rapidly.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
-
-<p>Active research threads as of early 2026:</p>
+<p>The correspondence has expanded well beyond its origins:</p>
 
 <ul>
-<li><strong>Cubical type theory</strong> (cubical Agda, Redtt): constructive models of HoTT that make Univalence <em>computable</em>, resolving the prior situation where the axiom blocked computation.</li>
-<li><strong>Quantitative type theory (QTT)</strong>: tracking resource usage in types, merging linear and dependent typing — foundation of Idris 2.</li>
-<li><strong>Proof mining</strong>: extracting computational content (algorithms, bounds) from classical mathematical proofs via the correspondence, used actively in numerical analysis.</li>
-<li><strong>Propositions-as-sessions</strong>: extending the correspondence to <em>session types</em> for concurrent processes, where propositions in linear logic correspond to communication protocols.</li>
+<li><strong>Cubical type theory</strong> (Cohen et al., 2016 onward) gives computational content to the univalence axiom in HoTT, resolving a long-standing gap where the axiom had no canonical reduction rule.</li>
+<li><strong>Linear and graded type systems</strong> (e.g., Granule) track resource usage via correspondences with substructural logics.</li>
+<li><strong>Realizability theory</strong> generalizes the correspondence beyond lambda calculi to arbitrary models of computation (Turing machines, PCAs).</li>
+<li><strong>Proof mining</strong> uses the correspondence in reverse: extract computational witnesses (algorithms, bounds) from classical proofs by translating them into constructive form.</li>
 </ul>
 
 <hr>
@@ -298,10 +305,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Dependent Type Theory">Dependent Type Theory</a></li>
 <li><a href="/daily_knowledge/topic/Intuitionistic Logic">Intuitionistic Logic</a></li>
+<li><a href="/daily_knowledge/topic/Lambda Calculus">Lambda Calculus</a></li>
 <li><a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a></li>
-<li><a href="/daily_knowledge/topic/Linear Types and Ownership">Linear Types and Ownership</a></li>
-<li><a href="/daily_knowledge/topic/Categorical Semantics of Type Theory">Categorical Semantics of Type Theory</a></li>
-<li><a href="/daily_knowledge/topic/Proof Assistants (Coq, Lean, Agda)">Proof Assistants (Coq, Lean, Agda)</a></li>
+<li><a href="/daily_knowledge/topic/Linear Logic">Linear Logic</a></li>
+<li><a href="/daily_knowledge/topic/Brouwer-Heyting-Kolmogorov Interpretation">Brouwer-Heyting-Kolmogorov Interpretation</a></li>
 </ul>
 
 <hr>
@@ -309,27 +316,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Classical vs. constructive</strong>: If adding $\neg\neg$-elimination forces continuations, what does this say about the <em>computational meaning</em> of classical existence proofs — do they actually compute anything useful?</li>
+<li>If classical logic corresponds to continuations, does that mean every classical proof has a "computational cost" payable in control-flow complexity — and can this cost be made precise?</li>
 </ol>
 
 <ol>
-<li><strong>Normalization and totality</strong>: Strong normalization prevents general recursion, making Agda/Coq not Turing-complete as programming languages. Is this an acceptable trade-off, and how do real proof assistants escape it (e.g., Coq's <code>Fixpoint</code> guardedness checker)?</li>
+<li>Proof normalization and program evaluation are the same process under the isomorphism — so what does <em>proof complexity</em> (the study of how long proofs can be) say about computational complexity classes like P vs. NP?</li>
 </ol>
 
 <ol>
-<li><strong>HoTT and physics</strong>: The analogy between <em>types as spaces</em> and the role of homotopy in modern physics (topological field theory, cobordism) feels more than superficial. Is there a meaningful sense in which physical dualities (e.g., AdS/CFT) have a proof-theoretic shadow?</li>
+<li>HoTT treats proofs of $a = b$ as paths in a space, making <em>proof identity</em> geometrically meaningful. Does this suggest that the "intensional" vs. "extensional" type theory debate is really a question about the topology of the proof space?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Curry–Howard_correspondence" target="_blank" rel="noopener"&gt;Curry-Howard Correspondence&lt;/a&gt; · Retrieved 2026-03-21</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Curry–Howard_correspondence" target="_blank" rel="noopener"&gt;Curry-Howard Correspondence&lt;/a&gt; · Retrieved 2026-06-17</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19224v1" target="_blank" rel="noopener">EffectErase: Joint Video Object Removal and Insertion for High-Quality Effect Erasing</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19215v1" target="_blank" rel="noopener">$R$-equivalence on Cubic Surfaces I: Existing Cases with Non-Trivial Universal Equivalence</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18245v1" target="_blank" rel="noopener">Derived functors and Hilbert polynomials over Gorenstein rings</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18244v1" target="_blank" rel="noopener">PAHSPECS: Spatially Resolved PAH Spectroscopy at cosmic noon with JWST MIRI MRS</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.18243v1" target="_blank" rel="noopener">MOCHI: Motion Enhancement of Collaborative Human-object Interactions</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Curry-Howard+Correspondence&labels=discussion&body=Topic:+[Curry-Howard+Correspondence](https://dhein.github.io/daily_knowledge/topic/curry_howard/)
