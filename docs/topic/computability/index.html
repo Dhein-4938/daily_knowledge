@@ -215,90 +215,115 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Computability Theory<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Logic · Computation Theory &nbsp;·&nbsp; ~4 min read</div>
+<div class="topic-meta">Logic · Computation Theory &nbsp;·&nbsp; ~5 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Computability theory (also <em>recursion theory</em>) is the branch of mathematical logic studying which functions on natural numbers are <strong>effectively computable</strong>, and how non-computable problems are structured relative to one another. It originated in the 1930s through independent work by Gödel, Church, Turing, and Kleene.</div></div>
+<p>Computability theory (also <em>recursion theory</em>) is the branch of mathematical logic and theoretical computer science concerned with formalizing what it means for a function to be <em>effectively calculable</em>, and with classifying functions that are not.</p>
 
-<p>The central object is the <strong>partial recursive function</strong>: a function $f : \mathbb{N}^k \rightharpoonup \mathbb{N}$ computable by some Turing machine (or equivalently, definable via the $\mu$-operator from primitive recursion). The <strong>Church-Turing Thesis</strong> asserts this captures all physically realizable computation — a thesis rather than a theorem, since "effective procedure" resists formal definition.</p>
+<div class="callout info"><div class="callout-title">INFO: Church-Turing Thesis</div><div>Every effectively calculable function is computable by a Turing machine. This is not a theorem — it's a definition-level thesis that identifies the informal notion of "algorithm" with a precise mathematical model. The major equivalent models (λ-calculus, general recursive functions, Turing machines) all converge on the same class.</div></div>
 
-<p>Decidability is the binary case: a set $A \subseteq \mathbb{N}$ is <em>decidable</em> (recursive) if its characteristic function is total computable. The canonical undecidable problem is the <strong>Halting Problem</strong>:</p>
+<p>The primary object of study is the class of <strong>partial computable (recursive) functions</strong> $f : \mathbb{N}^k \rightharpoonup \mathbb{N}$, built from zero, successor, and projection via composition, primitive recursion, and the minimization ($\mu$) operator. Functions requiring $\mu$ may diverge — they are partial, not total.</p>
 
-<p>$$K = \{ e \mid \varphi_e(e) \downarrow \}$$</p>
+<p>A set $A \subseteq \mathbb{N}$ is <strong>computably enumerable (c.e.)</strong> if it is the domain of some partial computable function, equivalently if a Turing machine can enumerate its members (possibly without halting on non-members). $A$ is <strong>computable</strong> iff both $A$ and $\bar{A}$ are c.e.</p>
 
-<p>where $\varphi_e$ denotes the $e$-th partial recursive function. $K$ is computably enumerable (c.e.) but not computable — its complement $\overline{K}$ is neither.</p>
+<p>The canonical non-computable problem is the <strong>Halting Problem</strong> $K = \{e \mid \varphi_e(e) \downarrow\}$, which is c.e. but not computable. Its undecidability is proven by diagonalization: assume a decider exists, construct a contradiction.</p>
+
+<hr>
 
 <h2>Why It Matters</h2>
 
-<p>Computability theory establishes <strong>hard limits</strong> on what any algorithm can do, independent of hardware or cleverness. Results like Rice's Theorem (no non-trivial semantic property of programs is decidable) and the undecidability of first-order arithmetic have cascading consequences across logic, linguistics, and software verification.</p>
+<p>Computability theory draws the hard boundary of what any algorithm can ever do — not due to engineering limits, but in principle. Results here are <em>absolute</em>: no faster hardware, no cleverer language, no quantum speedup crosses the boundary set by Rice's Theorem or the undecidability of first-order logic.</p>
 
-<div class="callout tip"><div class="callout-title">TIP: Connection to Gödel Incompleteness</div><div>The undecidability of the halting problem and Gödel's First Incompleteness Theorem are two faces of the same coin — both encode self-reference to produce statements that escape the system. Turing's proof predates and independently implies Gödel's result when viewed through the lens of arithmetization.</div></div>
+<p>Connections fan out widely:</p>
+<ul>
+<li><strong>Proof theory</strong>: Gödel's incompleteness theorems are essentially computability arguments in disguise — unprovable sentences correspond to non-computable predicates.</li>
+<li><strong>Descriptive set theory</strong>: The arithmetical hierarchy $\Sigma^0_n / \Pi^0_n$ mirrors the Borel hierarchy of sets of reals; effective versions (lightface) are central to both fields.</li>
+<li><strong>Complexity theory</strong>: Computability theory is the "infinite-resource" ceiling above which complexity theory carves out finer, resource-bounded distinctions like $\mathsf{P}$ vs $\mathsf{NP}$.</li>
+<li><strong>Formal verification</strong>: Undecidability results (e.g., program equivalence, termination) set hard limits on what static analysis and model checkers can guarantee.</li>
+</ul>
 
-<p>Beyond foundations, computability theory informs complexity theory (by providing the unrelativized baseline), program analysis (static undecidability results), and formal verification (which properties are semi-decidable vs. hopeless).</p>
+<hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Turing Reducibility and Degrees</strong></p>
-<p>$A \leq_T B$ ("$A$ is Turing reducible to $B$") means $A$ is decidable given an oracle for $B$. This induces an equivalence relation; equivalence classes are <strong>Turing degrees</strong>. The degree $\mathbf{0}$ contains all computable sets; $\mathbf{0'}$ contains $K$. The structure of degrees under $\leq_T$ is a dense upper semi-lattice with no greatest element — extraordinarily complex.</p>
+<ol>
+<li><strong>The Arithmetical Hierarchy.</strong> Sets are stratified by quantifier alternation over $\mathbb{N}$:</li>
+</ol>
+<p>$$A \in \Sigma^0_n \iff A = \{x \mid \exists y_1\, \forall y_2\, \cdots\, Q y_n\; R(x, \vec{y})\}$$</p>
+<p>   $\Sigma^0_1$ = c.e. sets; $\Delta^0_1$ = computable sets. The hierarchy is strict and does not collapse.</p>
 
-<p><strong>2. The Arithmetical Hierarchy</strong></p>
-<p>Sets are stratified by quantifier complexity over $\mathbb{N}$:</p>
+<ol>
+<li><strong>Turing Reducibility and Degrees.</strong> $A \leq_T B$ (A is Turing-reducible to B) if a Turing machine with oracle $B$ can decide $A$. This induces an equivalence relation; the equivalence classes are <strong>Turing degrees</strong>. The degrees form an upper semilattice under join $A \oplus B$, but lack a meet in general — the structure is extraordinarily complex (every countable partial order embeds into it).</li>
+</ol>
 
-<p>$$\Sigma^0_n, \Pi^0_n, \Delta^0_n$$</p>
+<ol>
+<li><strong>The Jump Operator.</strong> $A' = \{e \mid \varphi_e^A(e) \downarrow\}$ (the <em>Turing jump</em>) strictly increases Turing degree: $A <_T A'$ always. Iterating gives $\mathbf{0}^{(n)}$, the degree of $\Sigma^0_n$-complete sets.</li>
+</ol>
 
-<p>$\Sigma^0_1$ = c.e. sets; $\Pi^0_1$ = co-c.e.; $\Delta^0_1$ = computable. Each level strictly contains the previous (by a diagonalization argument). The hierarchy collapses to $\Delta^0_1$ exactly when the oracle is $\emptyset^{(n-1)}$ — the $(n{-}1)$-th Turing jump.</p>
+<ol>
+<li><strong>Rice's Theorem.</strong> For any non-trivial semantic property $P$ of partial computable functions, the index set $\{e \mid \varphi_e \in P\}$ is undecidable. "Non-trivial" means $P$ holds for some functions and fails for others. This kills most hopes of static analysis in one stroke.</li>
+</ol>
 
-<p><strong>3. Post's Problem and Priority Arguments</strong></p>
-<p>Emil Post asked (1944) whether there exists a c.e. degree strictly between $\mathbf{0}$ and $\mathbf{0'}$. Friedberg and Muchnik (1956–57) independently answered <em>yes</em>, using <strong>priority arguments</strong> — an intricate finite injury construction that remains the core technique in higher computability theory.</p>
+<ol>
+<li><strong>Post's Problem and the Priority Method.</strong> Emil Post asked (1944) whether there exist c.e. degrees strictly between $\mathbf{0}$ and $\mathbf{0}'$. Friedberg and Muchnik (1956) independently answered yes, using the <strong>finite injury priority argument</strong> — a foundational technique for constructing degrees with incompatibility constraints.</li>
+</ol>
 
-<p><strong>4. Subrecursive Hierarchies</strong></p>
-<p>The <strong>Grzegorczyk hierarchy</strong> and the <strong>Fast-Growing Hierarchy</strong> stratify <em>total</em> computable functions by their growth rate, connecting to proof theory: the functions provably total in Peano Arithmetic are exactly the $\mathcal{E}^3$-level functions (primitive recursive). This links computability directly to consistency strength.</p>
+<div class="callout tip"><div class="callout-title">TIP: Recursion ≠ Repetition</div><div>The term "recursion theory" predates the programming usage of "recursion." It refers to <em>general recursive functions</em> (Gödel-Herbrand-Kleene), not to self-referential procedure calls. The renaming to "computability theory" reflects a cleaner conceptual framing, not a change of subject.</div></div>
 
-<p><strong>5. Relative Computability vs. Subrecursive Focus</strong></p>
-<p>Mathematical logicians study degree structures and definability in arithmetic; computer scientists focus on subrecursive classes ($\mathbf{PRIM}$, $\mathbf{LINSPACE}$, etc.) and decidable fragments of logical theories — a genuine bifurcation in methodology.</p>
+<hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research includes: the fine structure of <strong>$\omega$-c.e. degrees</strong>, interactions between computability and <strong>reverse mathematics</strong> (calibrating proof strength of theorems over $\text{RCA}_0$), and <strong>algorithmic randomness</strong> (where Kolmogorov complexity meets measure theory — 1-random reals are precisely those with trivial initial-segment complexity). Connections to <strong>computable structure theory</strong> — which countable algebraic structures have computable presentations — are also a growth area.</p>
+<p>Active research threads include:</p>
+<ul>
+<li><strong>Reverse mathematics</strong>: Calibrating which set-existence axioms are <em>needed</em> to prove classical theorems, using computable mathematics as the baseline ($\mathsf{RCA}_0$). The "Big Five" subsystems reveal surprising logical distinctions within ordinary mathematics.</li>
+<li><strong>Computable structure theory</strong>: Which countable algebraic/topological structures have computable presentations? What is the computable categoricity spectrum? (E.g., linear orders, Boolean algebras, groups.)</li>
+<li><strong>Continuous and higher computability</strong>: Extending the framework to real-number computation (Type-2 theory, computable analysis) and higher-type functionals — bridging to constructive analysis and homotopy type theory.</li>
+<li><strong>Algorithmic randomness</strong>: Characterizing random sequences via incompressibility (Kolmogorov complexity) or unpredictability (martingales). Martin-Löf randomness, Schnorr randomness, and their degree-theoretic properties remain actively studied.</li>
+</ul>
+
+<hr>
 
 <h2>See Also</h2>
 
 <ul>
 <li><a href="/daily_knowledge/topic/Turing Machines">Turing Machines</a></li>
-<li><a href="/daily_knowledge/topic/Church-Turing Thesis">Church-Turing Thesis</a></li>
 <li><a href="/daily_knowledge/topic/Computational Complexity Theory">Computational Complexity Theory</a></li>
 <li><a href="/daily_knowledge/topic/Gödel Incompleteness Theorems">Gödel Incompleteness Theorems</a></li>
-<li><a href="/daily_knowledge/topic/Algorithmic Randomness and Kolmogorov Complexity">Algorithmic Randomness and Kolmogorov Complexity</a></li>
+<li><a href="/daily_knowledge/topic/Descriptive Set Theory">Descriptive Set Theory</a></li>
+<li><a href="/daily_knowledge/topic/Algorithmic Information Theory">Algorithmic Information Theory</a></li>
 <li><a href="/daily_knowledge/topic/Reverse Mathematics">Reverse Mathematics</a></li>
 </ul>
+
+<hr>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The Church-Turing Thesis is empirically well-supported but unprovable — does hypercomputation (oracle machines, analog computation) represent a genuine challenge to it, or a category error about what "computation" means?</li>
+<li>Rice's Theorem rules out deciding any non-trivial semantic property of programs — but real-world static analyzers clearly <em>do</em> something useful. What is the precise nature of the approximation they make, and where exactly does undecidability bite in practice?</li>
 </ol>
 
 <ol>
-<li>Priority arguments (finite injury, infinite injury) are notoriously hard to verify and have occasionally contained subtle errors. Does this suggest computability theory needs more formalized proof infrastructure, or is the difficulty intrinsic to the subject matter?</li>
+<li>The Turing degree structure is known to be extremely wild (every countable partial order embeds in the c.e. degrees). Does this structural complexity reflect something deep about the nature of relative information, or is it a pathology of an overly coarse equivalence relation?</li>
 </ol>
 
 <ol>
-<li>Algorithmic randomness defines a "random" real as one that passes all effective statistical tests — but this definition is relative to a universal Turing machine. How seriously should we take machine-dependence as a philosophical objection to this framework?</li>
+<li>Computable analysis requires computable real numbers to be given as convergent sequences of rationals with a computable modulus of convergence — yet most reals are not computable. What does it mean to "compute" with an object you cannot even name, and how does this tension resolve in practice (e.g., in verified numerical algorithms)?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Computability_theory" target="_blank" rel="noopener"&gt;Computability Theory&lt;/a&gt; · Retrieved 2026-03-22</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Computability_theory" target="_blank" rel="noopener"&gt;Computability Theory&lt;/a&gt; · Retrieved 2026-06-27</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19225v1" target="_blank" rel="noopener">FinTradeBench: A Financial Reasoning Benchmark for LLMs</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19221v1" target="_blank" rel="noopener">Online Learning and Equilibrium Computation with Ranking Feedback</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19217v1" target="_blank" rel="noopener">LVOmniBench: Pioneering Long Audio-Video Understanding Evaluation for Omnimodal LLMs</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27365v1" target="_blank" rel="noopener">3D Imaging of Complex Skyrmion and Hopf Topologies in an Extended Sample</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27363v1" target="_blank" rel="noopener">The Effect of Topological Defects and Magnetic Flux on Fully-Heavy Tetraquarks and Mass Spectra of Heavy Quarkonia Using the Analytical Exact Iteration Method</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27354v1" target="_blank" rel="noopener">Error-Conditioned Neural Solvers</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Computability+Theory&labels=discussion&body=Topic:+[Computability+Theory](https://dhein.github.io/daily_knowledge/topic/computability/)

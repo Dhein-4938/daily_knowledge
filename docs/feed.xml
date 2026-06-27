@@ -6,6 +6,13 @@
   <description>Automated daily notes: Science, Tech, Math, Logic</description>
   <language>en-us</language>
   <item>
+    <title>June 27, 2026</title>
+    <link>https://dhein.github.io/daily_knowledge/digests/2026-06-27/</link>
+    <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-27/</guid>
+    <pubDate>Sat, 27 Jun 2026 07:00:00 +0000</pubDate>
+    <description>~18 min · Computability Theory, Computational Complexity, Causal Inference, Dark Matter</description>
+  </item>
+  <item>
     <title>June 17, 2026</title>
     <link>https://dhein.github.io/daily_knowledge/digests/2026-06-17/</link>
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-17/</guid>
@@ -207,13 +214,6 @@
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-08/</guid>
     <pubDate>Wed, 08 Apr 2026 07:00:00 +0000</pubDate>
     <description>Daily Knowledge Digest for April 8, 2026</description>
-  </item>
-  <item>
-    <title>April 7, 2026</title>
-    <link>https://dhein.github.io/daily_knowledge/digests/2026-04-07/</link>
-    <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-07/</guid>
-    <pubDate>Tue, 07 Apr 2026 07:00:00 +0000</pubDate>
-    <description>Daily Knowledge Digest for April 7, 2026</description>
   </item>
 </channel>
 </rss>

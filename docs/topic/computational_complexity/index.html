@@ -219,67 +219,68 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Computational complexity theory classifies problems by the <strong>minimum resources</strong> any algorithm requires to solve them — not the cost of a specific algorithm, but an intrinsic property of the problem itself.</div></div>
+<p>Computational complexity theory classifies <em>problems</em> — not algorithms — by the minimum resources any algorithm must expend to solve them. This is a subtle but crucial distinction: it asks what is <em>inherently hard</em> about a problem, independent of the cleverness of any particular solution.</p>
 
-<p>A <strong>complexity class</strong> is a set of problems solvable within a given resource bound on a particular computational model. The two primary resources are <strong>time</strong> and <strong>space</strong>, measured as functions of input size $n$.</p>
+<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>complexity class</strong> is a set of decision problems solvable within a given resource bound on a specified computational model. The two primary resources are <strong>time</strong> (number of steps) and <strong>space</strong> (memory cells used), measured as functions of input size $n$.</div></div>
 
-<p>Formally, for a deterministic Turing machine:</p>
+<p>The canonical classes are defined on a deterministic Turing machine:</p>
 
-<p>$$\text{TIME}(f(n)) = \{ L \mid L \text{ decided in } O(f(n)) \text{ steps} \}$$</p>
+<p>$$\text{TIME}(f(n)) = \{ L \mid L \text{ decidable in } O(f(n)) \text{ steps} \}$$</p>
 
-<p>$$\mathbf{P} = \bigcup_{k \geq 1} \text{TIME}(n^k), \quad \mathbf{PSPACE} = \bigcup_{k \geq 1} \text{SPACE}(n^k)$$</p>
+<p>$$\mathbf{P} = \bigcup_{k \geq 1} \text{TIME}(n^k), \qquad \mathbf{PSPACE} = \bigcup_{k \geq 1} \text{SPACE}(n^k)$$</p>
 
-<p>The nondeterministic analogue gives $\mathbf{NP}$: problems whose solutions can be <em>verified</em> in polynomial time, or equivalently, solved in polynomial time on a nondeterministic TM.</p>
+<p>Nondeterminism yields $\mathbf{NP}$ — problems verifiable in polynomial time — with the famous containment chain:</p>
+
+<p>$$\mathbf{P} \subseteq \mathbf{NP} \subseteq \mathbf{PSPACE} \subseteq \mathbf{EXP}$$</p>
+
+<p>At least one of these inclusions is strict; which ones, and how many, remains largely open.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Complexity theory draws the map of what is computably <em>feasible</em>, not just computable. This matters across:</p>
+<p>Complexity theory is the formal backbone of modern cryptography: RSA, elliptic-curve cryptography, and lattice-based schemes all stake their security on <em>assumed</em> hardness results (e.g., integer factorization $\notin \mathbf{P}$, or worst-case hardness of lattice problems). It also governs the tractability frontier for AI search, optimization, and verification — knowing a problem is <strong>NP-hard</strong> or <strong>#P-hard</strong> tells you to look for approximation algorithms, heuristics, or special-case structure rather than exact polynomial-time solutions.</p>
 
-<ul>
-<li><strong>Cryptography</strong>: RSA and elliptic-curve schemes rest on the assumed hardness of integer factoring and discrete log — problems believed outside $\mathbf{P}$ but in $\mathbf{NP}$.</li>
-<li><strong>Algorithm design</strong>: Knowing a problem is $\mathbf{NP}$-hard licenses approximation, randomization, or parametric approaches rather than futile search for exact poly-time solutions.</li>
-<li><strong>AI and ML</strong>: PAC learning complexity, VC dimension bounds, and the tractability of inference in graphical models all reduce to complexity questions.</li>
-<li><strong>Quantum computing</strong>: Complexity classes like $\mathbf{BQP}$ (bounded-error quantum polynomial time) let us reason about quantum advantage rigorously.</li>
-</ul>
+<p>Beyond classical computation, the framework extends cleanly: <strong>BQP</strong> captures quantum polynomial time, and the question of whether $\mathbf{BQP} \supsetneq \mathbf{P}$ (believed true, unproven) drives the entire quantum computing industry.</p>
 
-<div class="callout tip"><div class="callout-title">TIP: The Real Insight</div><div>Complexity theory shifts the question from "how fast is <em>this</em> algorithm?" (analysis of algorithms) to "how fast can <em>any</em> algorithm be?" This is a fundamentally different — and harder — question, often requiring lower-bound arguments rather than constructive proofs.</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>Complexity theory and <em>logic</em> are deeply intertwined via <strong>descriptive complexity</strong>: Fagin's theorem shows $\mathbf{NP}$ equals the class of problems expressible in existential second-order logic over finite structures — a purely logical characterization with no mention of Turing machines or time bounds.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Reductions and Completeness</strong></p>
-<p>A problem $A$ is <strong>polynomial-time reducible</strong> to $B$ ($A \leq_p B$) if any instance of $A$ can be transformed to an instance of $B$ in poly-time. $B$ is $\mathbf{NP}$-<em>complete</em> if $B \in \mathbf{NP}$ and every $A \in \mathbf{NP}$ reduces to $B$. Cook-Levin established 3-SAT as the first such problem.</p>
+<ol>
+<li><strong>Reductions as the central tool.</strong> A <em>polynomial-time many-one reduction</em> $A \leq_p B$ means an instance of $A$ can be transformed to an instance of $B$ in poly time. <strong>NP-completeness</strong> = NP-membership + hardness under these reductions. Cook–Levin (1971/1973) established SAT as the first NP-complete problem.</li>
+</ol>
 
-<p><strong>2. The Complexity Hierarchy</strong></p>
-<p>$$\mathbf{P} \subseteq \mathbf{NP} \subseteq \mathbf{PSPACE} \subseteq \mathbf{EXPTIME}$$</p>
-<p>All inclusions are known, but only $\mathbf{P} \subsetneq \mathbf{EXPTIME}$ is <em>strict</em> (by the time hierarchy theorem). Whether $\mathbf{P} = \mathbf{NP}$ remains open.</p>
+<ol>
+<li><strong>The oracle barrier.</strong> Results like Baker–Gill–Solovay (1975) showed that $\mathbf{P}^A \neq \mathbf{NP}^A$ for some oracles $A$ and $\mathbf{P}^B = \mathbf{NP}^B$ for others. This means any proof of $\mathbf{P} \neq \mathbf{NP}$ cannot relativize — ruling out a huge class of naive proof strategies.</li>
+</ol>
 
-<p><strong>3. Randomization</strong></p>
-<p>$\mathbf{BPP}$ admits bounded-error probabilistic poly-time algorithms. Most believe $\mathbf{BPP} = \mathbf{P}$ — i.e., randomness provides no asymptotic advantage — but this is unproven. Derandomization connects tightly to circuit lower bounds.</p>
+<ol>
+<li><strong>Circuit complexity as an alternative lens.</strong> Boolean circuits replace Turing machines; complexity is measured by circuit <em>size</em> (gates) and <em>depth</em> (parallel time). Showing that a specific function requires superpolynomial circuits would separate $\mathbf{P}$ from $\mathbf{NP}/\text{poly}$. Lower bound proofs (e.g., for $\mathbf{AC}^0$ via the switching lemma) are among the field's hardest technical achievements.</li>
+</ol>
 
-<p><strong>4. Circuit Complexity</strong></p>
-<p>Boolean circuits offer a non-uniform model: $\mathbf{P/poly}$ captures problems solvable by polynomial-size circuits. Proving super-polynomial lower bounds for explicit functions is one of the deepest open problems; progress has stalled since Razborov–Smolensky (1987) for $\mathbf{AC}^0[p]$.</p>
+<ol>
+<li><strong>Interactive proofs vastly expand verifiability.</strong> $\mathbf{IP} = \mathbf{PSPACE}$ (Shamir, 1992) and $\mathbf{MIP}^* = \mathbf{RE}$ (Ji et al., 2020) show that with interaction and entanglement, verifiers can check problems far beyond NP — the latter result using quantum entangled provers to decide <em>undecidable</em> languages.</li>
+</ol>
 
-<p><strong>5. Oracle Separations</strong></p>
-<p>Relativization shows limits of proof techniques: there exist oracles $A, B$ such that $\mathbf{P}^A = \mathbf{NP}^A$ and $\mathbf{P}^B \neq \mathbf{NP}^B$. Any proof resolving $\mathbf{P}$ vs. $\mathbf{NP}$ must be <em>non-relativizing</em>.</p>
+<ol>
+<li><strong>Average-case vs. worst-case.</strong> Standard complexity is worst-case. <strong>Cryptography requires average-case hardness</strong> — a problem useless for crypto if it's only hard on rare inputs. Bridging worst-case to average-case hardness (as lattice-based crypto does) is both theoretically deep and practically critical.</li>
+</ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
 <p>Active frontiers include:</p>
-
 <ul>
-<li><strong>$\mathbf{P}$ vs. $\mathbf{NP}$</strong>: The central open problem; no credible resolution in sight. Ryan Williams' 2010 result ($\mathbf{NEXP} \not\subset \mathbf{ACC}^0$) was a rare circuit lower bound breakthrough.</li>
-<li><strong>GCT (Geometric Complexity Theory)</strong>: Mulmuley and Sohoni's program uses algebraic geometry and representation theory to approach $\mathbf{P}$ vs. $\mathbf{NP}$; progress is slow but structurally novel.</li>
-<li><strong>Fine-grained complexity</strong>: Rather than poly vs. non-poly, this asks whether problems solvable in $O(n^2)$ can be solved in $O(n^{1.99})$. SETH (Strong Exponential Time Hypothesis) underpins many conditional lower bounds.</li>
-<li><strong>Quantum complexity</strong>: Clarifying the relationship between $\mathbf{BQP}$, $\mathbf{PH}$, and $\mathbf{PSPACE}$; it's known $\mathbf{BQP} \not\subset \mathbf{PH}$ relative to some oracle.</li>
-<li><strong>Meta-complexity</strong>: Studying the complexity of complexity problems themselves — e.g., is MCSP ($\text{Minimum Circuit Size Problem}$) $\mathbf{NP}$-hard?</li>
+<li><strong>Fine-grained complexity</strong>: Instead of polynomial vs. exponential, can we show that 3SUM requires $\Omega(n^{2-\epsilon})$ time unconditionally? This sub-field proves conditional lower bounds based on specific conjectures (SETH, 3SUM hypothesis).</li>
+<li><strong>Meta-complexity</strong>: Studying the complexity of complexity itself — e.g., the hardness of circuit minimization (MCSP), which connects to cryptography and learning theory in unexpected ways.</li>
+<li><strong>Proof complexity</strong>: Lower bounds on the length of proofs in systems like Resolution, Frege, and $\mathbf{AC}^0$-Frege, closely tied to whether $\mathbf{NP} \neq \mathbf{coNP}$.</li>
+<li><strong>Quantum separations</strong>: Post-2019 oracle separations (e.g., Raz–Tal) confirm $\mathbf{BQP} \not\subseteq \mathbf{PH}$ relative to an oracle, strengthening the case for quantum advantage.</li>
 </ul>
 
 <hr>
@@ -288,11 +289,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/P vs NP Problem">P vs NP Problem</a></li>
-<li><a href="/daily_knowledge/topic/NP-Completeness and Reductions">NP-Completeness and Reductions</a></li>
-<li><a href="/daily_knowledge/topic/Computability Theory">Computability Theory</a></li>
-<li><a href="/daily_knowledge/topic/Analysis of Algorithms">Analysis of Algorithms</a></li>
-<li><a href="/daily_knowledge/topic/Circuit Complexity">Circuit Complexity</a></li>
-<li><a href="/daily_knowledge/topic/Quantum Computing Complexity Classes">Quantum Computing Complexity Classes</a></li>
+<li><a href="/daily_knowledge/topic/Turing Machines and Computability">Turing Machines and Computability</a></li>
+<li><a href="/daily_knowledge/topic/Boolean Circuit Complexity">Boolean Circuit Complexity</a></li>
+<li><a href="/daily_knowledge/topic/Cryptographic Hardness Assumptions">Cryptographic Hardness Assumptions</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Complexity Classes (BQP, QMA)">Quantum Complexity Classes (BQP, QMA)</a></li>
+<li><a href="/daily_knowledge/topic/Interactive Proof Systems">Interactive Proof Systems</a></li>
 </ul>
 
 <hr>
@@ -300,21 +301,28 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The time hierarchy theorem proves $\mathbf{P} \neq \mathbf{EXPTIME}$ via diagonalization — yet the same technique cannot separate $\mathbf{P}$ from $\mathbf{NP}$ due to relativization barriers. What does this reveal about the <em>structure</em> of a potential $\mathbf{P} \neq \mathbf{NP}$ proof?</li>
+<li>The oracle barrier, the naturalization barrier (Razborov–Rudich), and the algebrization barrier together block virtually all known proof techniques from resolving P vs. NP. What would a <em>non-relativizing, non-naturalizing, non-algebrizing</em> proof strategy even look like structurally?</li>
 </ol>
 
 <ol>
-<li>Fine-grained complexity replaces the coarse poly/non-poly lens with exact exponent distinctions. Is this a deeper or more pragmatic theory than classical complexity, and what assumptions (like SETH) are we betting on when we use it?</li>
+<li>Fine-grained complexity trades the coarse P/NP dichotomy for precise exponent-level bounds under conjectures like SETH. Is this a sign the field is maturing beyond its founding questions, or an admission that the big questions are temporarily intractable?</li>
 </ol>
 
 <ol>
-<li>If $\mathbf{P} = \mathbf{NP}$ were proven constructively — yielding an explicit poly-time SAT algorithm with a large constant — how would that change the practical landscape of cryptography, optimization, and AI versus a merely existential proof?</li>
+<li>$\mathbf{MIP}^* = \mathbf{RE}$ implies entangled provers can convince a verifier of true statements about Turing machine halting — but the verification protocol itself is computable. What does this say about the relationship between physical resources (entanglement) and mathematical undecidability?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Computational_complexity_theory" target="_blank" rel="noopener"&gt;Computational Complexity&lt;/a&gt; · Retrieved 2026-03-22</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Computational_complexity_theory" target="_blank" rel="noopener"&gt;Computational Complexity&lt;/a&gt; · Retrieved 2026-06-27</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2606.27372v1" target="_blank" rel="noopener">DnA: Denoising Attention for Visual Tasks</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27365v1" target="_blank" rel="noopener">3D Imaging of Complex Skyrmion and Hopf Topologies in an Extended Sample</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27363v1" target="_blank" rel="noopener">The Effect of Topological Defects and Magnetic Flux on Fully-Heavy Tetraquarks and Mass Spectra of Heavy Quarkonia Using the Analytical Exact Iteration Method</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Computational+Complexity&labels=discussion&body=Topic:+[Computational+Complexity](https://dhein.github.io/daily_knowledge/topic/computational_complexity/)
 

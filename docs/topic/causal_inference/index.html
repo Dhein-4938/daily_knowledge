@@ -215,64 +215,76 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Causal Inference<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Math · Statistics &nbsp;·&nbsp; ~4 min read</div>
+<div class="topic-meta">Math · Statistics &nbsp;·&nbsp; ~5 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Causal inference is the formal process of identifying the <strong>independent, actual effect</strong> of a cause variable on an outcome variable — as distinct from mere statistical association. The core question is counterfactual: <em>what would have happened to</em> $Y$ <em>had</em> $X$ <em>been different, all else equal?</em></p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Causal inference is the process of identifying the <strong>independent, actual effect</strong> of a variable (cause) on another (effect) within a larger system — distinct from mere statistical association. It asks: <em>if I intervene on X, what happens to Y?</em></div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Potential Outcomes Framework (Rubin Causal Model)</div><div>For unit $i$, define potential outcomes $Y_i(1)$ and $Y_i(0)$ under treatment and control. The individual treatment effect is $\tau_i = Y_i(1) - Y_i(0)$. The <strong>fundamental problem of causal inference</strong> is that only one potential outcome is ever observed. The Average Treatment Effect (ATE) is: $$\text{ATE} = \mathbb{E}[Y_i(1) - Y_i(0)]$$ Identification requires assumptions (e.g., ignorability, SUTVA) to recover this from observed data.</div></div>
+<p>The canonical formalism is Pearl's <strong>do-calculus</strong>. Where standard probability conditions on observed values, the <em>do</em>-operator models intervention:</p>
 
-<p>The complementary framework is <strong>Pearl's do-calculus</strong>, which encodes causal structure in a Directed Acyclic Graph (DAG). The interventional distribution $P(Y \mid do(X = x))$ is fundamentally different from the observational $P(Y \mid X = x)$ — the former surgically sets $X$, severing its incoming edges in the DAG.</p>
+<p>$$P(Y \mid do(X = x)) \neq P(Y \mid X = x)$$</p>
+
+<p>The left side is a <em>causal</em> quantity (what would happen if we set $X$ to $x$); the right is an <em>associational</em> quantity (what we observe among units where $X = x$ happened naturally). Conflating them is the source of most causal fallacies.</p>
+
+<p>The <strong>Structural Causal Model (SCM)</strong> framework encodes this via a directed acyclic graph (DAG) $\mathcal{G}$ over variables $V$, with structural equations $X_i := f_i(\text{pa}(X_i), U_i)$ where $\text{pa}(X_i)$ are parents in $\mathcal{G}$ and $U_i$ are exogenous noise terms. Intervention $do(X = x)$ surgically removes incoming edges to $X$ and fixes its value.</p>
+
+<p>The <strong>Potential Outcomes</strong> (Rubin) framework is complementary: each unit $i$ has counterfactual outcomes $Y_i(1)$ and $Y_i(0)$ under treatment and control, and the fundamental problem of causal inference is that only one is ever observed. The Average Treatment Effect is:</p>
+
+<p>$$\text{ATE} = \mathbb{E}[Y_i(1) - Y_i(0)]$$</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Causal inference is the backbone of any claim that an action <em>produces</em> an outcome rather than merely correlating with it. Its reach spans:</p>
+<p>Correlation is abundant and cheap; causation is rare and expensive. The practical stakes are enormous:</p>
 
 <ul>
-<li><strong>Medicine &amp; Epidemiology</strong> — estimating drug efficacy from observational health records when RCTs are infeasible or unethical</li>
-<li><strong>Economics &amp; Policy</strong> — evaluating the effect of minimum wage laws, education interventions, or monetary policy</li>
-<li><strong>Machine Learning</strong> — distinguishing spurious correlations (shortcuts) from robust, generalizable features; enabling models that perform under distribution shift</li>
-<li><strong>Reinforcement Learning &amp; Robotics</strong> — agents must reason causally to plan: <em>if I take action</em> $a$, <em>what state results?</em></li>
+<li><strong>Policy</strong>: Does a job training program <em>cause</em> higher earnings, or do motivated people self-select into both?</li>
+<li><strong>Medicine</strong>: Does drug X <em>cause</em> recovery, or do healthier patients receive it more often?</li>
+<li><strong>ML fairness</strong>: Is a model's disparity a causal effect of a protected attribute, or a proxy correlation?</li>
+<li><strong>Science replication</strong>: Many "discoveries" collapse under causal scrutiny — they were spurious correlations amplified by publication bias.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Causality as the next frontier of ML</div><div>Purely associative models overfit to distributional patterns that break under intervention. Incorporating causal structure (e.g., via invariant risk minimization or causal representation learning) is increasingly seen as necessary for out-of-distribution generalization — a direct connection to the robustness problems in modern deep learning.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Observational Data as the Norm</div><div>Randomized controlled trials (RCTs) are the gold standard precisely because randomization breaks the dependence between treatment and confounders, making $P(Y \mid do(X)) = P(Y \mid X)$. But RCTs are often unethical, expensive, or impossible — hence the entire machinery of causal inference exists to extract causal signal from messy observational data.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Confounding and the Backdoor Criterion</strong></p>
-<p>A confounder $Z$ opens a spurious path $X \leftarrow Z \rightarrow Y$. Pearl's backdoor criterion gives a graphical condition: a set $\mathbf{Z}$ blocks all backdoor paths from $X$ to $Y$ without opening new ones, enabling identification via:</p>
-<p>$$P(Y \mid do(X)) = \sum_z P(Y \mid X, Z=z) \cdot P(Z=z)$$</p>
+<ol>
+<li><strong>Confounding and the Backdoor Criterion</strong>: A confounder $Z$ opens a <em>backdoor path</em> from $X$ to $Y$ — a non-causal path that creates spurious association. Pearl's backdoor criterion gives a graphical condition: a set $S$ blocks all backdoor paths from $X$ to $Y$ iff $P(Y \mid do(X)) = \sum_s P(Y \mid X, S=s)\,P(S=s)$. This justifies covariate adjustment — but only for the <em>right</em> covariates.</li>
+</ol>
 
-<p><strong>2. Randomized Controlled Trials (RCTs) as Gold Standard</strong></p>
-<p>Random assignment of treatment breaks all backdoor paths by construction ($X \perp\!\!\!\perp \mathbf{Z}$), making $P(Y \mid do(X)) = P(Y \mid X)$. When randomization is impossible, quasi-experimental designs approximate it.</p>
+<ol>
+<li><strong>Collider Bias</strong>: Conditioning on a <em>collider</em> (a node that is a common effect of two variables) opens a path that was previously closed, <em>inducing</em> spurious association. This is a subtle and frequently violated assumption in applied work (e.g., conditioning on a mediator or on sample selection).</li>
+</ol>
 
-<p><strong>3. Instrumental Variables (IV)</strong></p>
-<p>When unmeasured confounding remains, an instrument $Z$ — affecting $X$ but affecting $Y$ only through $X$ — allows identification of the Local Average Treatment Effect (LATE). Strong instruments are scarce; weak instruments inflate variance catastrophically.</p>
+<ol>
+<li><strong>Instrumental Variables (IV)</strong>: When unmeasured confounders exist, a valid instrument $Z$ — one that affects $X$ but affects $Y$ only <em>through</em> $X$ — allows identification of the Local Average Treatment Effect (LATE). The exclusion restriction (no direct $Z \to Y$ path) is unverifiable from data alone, making IV credibility partly a domain-knowledge judgment.</li>
+</ol>
 
-<p><strong>4. Regression Discontinuity &amp; Difference-in-Differences</strong></p>
-<p>Natural experiments exploit discontinuities (arbitrary cutoffs) or parallel-trends assumptions to extract causal effects from observational data. Both rest on non-trivial identification assumptions that must be argued, not assumed.</p>
+<ol>
+<li><strong>Identification vs. Estimation</strong>: These are distinct problems. <em>Identification</em> asks whether a causal quantity is in principle recoverable from the observational distribution (a graphical/algebraic question). <em>Estimation</em> asks how to estimate it from finite data (a statistical question). Conflating them leads to either overclaiming or unnecessary complexity.</li>
+</ol>
 
-<p><strong>5. Collider Bias</strong></p>
-<p>Conditioning on a common effect (collider) of $X$ and $Y$ <em>induces</em> spurious correlation. This is a frequent, underappreciated error in selection-bias scenarios (e.g., conditioning on hospitalization when studying a disease-drug relationship).</p>
+<ol>
+<li><strong>Regression Danger Zone</strong>: Linear regression estimates associational coefficients, not causal effects, unless the causal identification assumptions hold. The coefficient on $X$ in $Y \sim X + Z$ is causal only if $Z$ blocks all backdoors and opens no collider paths — conditions that require domain knowledge, not statistical testing alone.</li>
+</ol>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The debate over which causal frameworks (potential outcomes vs. structural causal models) are most appropriate across disciplines is ongoing. Methodological consensus, especially in social sciences and ML, continues to evolve rapidly.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The debate over best practices in observational causal inference (DiD vs. synthetic control vs. regression discontinuity) is extremely active, and methodological recommendations have shifted considerably in the 2020s — particularly around the credibility of parallel trends assumptions in difference-in-differences designs.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<p>Active research fronts as of early 2026:</p>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research frontiers as of mid-2026 include causal representation learning (learning SCMs from raw data, e.g., images), causal discovery algorithms (constraint-based like PC/FCI, score-based like GES, and hybrid), and integrating causal structure into large neural models. The arXiv papers above (PhysiFormer, ArBG) hint at adjacent concerns: neural simulators that implicitly must respect physical causality (temporal ordering, momentum conservation) — whether they do so structurally or merely behaviorally is an open question. <strong>Causal ML</strong> — using causal methods to make learned models more robust to distribution shift — is increasingly mainstream.</div></div>
 
+<p>Key unresolved tensions:</p>
 <ul>
-<li><strong>Causal Representation Learning</strong> — learning disentangled latent variables that correspond to causally meaningful factors, enabling interventional reasoning from high-dimensional data (images, text)</li>
-<li><strong>Causal Ablation in Neural Networks</strong> — using activation injection and causal intervention to identify which components of a network <em>causally</em> drive behavior, as opposed to merely correlating with outputs. Recent work on VLA robotics models (Grant et al., 2026) applies causal ablation to decompose visual vs. language vs. motor pathways, finding that visual features causally dominate action generation while language serves a disambiguating role only when visual context is insufficient</li>
-<li><strong>Double/Debiased Machine Learning</strong> — using flexible ML estimators for nuisance functions while preserving $\sqrt{n}$-consistent, asymptotically normal causal effect estimates (Chernozhukov et al.)</li>
-<li><strong>Transportability</strong> — formalizing when causal conclusions from one population transfer to another with different covariate distributions</li>
+<li>Can LLMs perform genuine causal reasoning, or do they pattern-match causal language?</li>
+<li>How to do causal inference on time-series with feedback loops (violating DAG acyclicity)?</li>
+<li>Scalable causal discovery in high dimensions remains computationally intractable without strong prior assumptions.</li>
 </ul>
 
 <hr>
@@ -280,11 +292,11 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Directed Acyclic Graphs (DAGs)">Directed Acyclic Graphs (DAGs)</a></li>
 <li><a href="/daily_knowledge/topic/Potential Outcomes Framework">Potential Outcomes Framework</a></li>
-<li><a href="/daily_knowledge/topic/Confounding and Selection Bias">Confounding and Selection Bias</a></li>
+<li><a href="/daily_knowledge/topic/Directed Acyclic Graphs (DAGs)">Directed Acyclic Graphs (DAGs)</a></li>
+<li><a href="/daily_knowledge/topic/Confounding and Collider Bias">Confounding and Collider Bias</a></li>
 <li><a href="/daily_knowledge/topic/Instrumental Variables">Instrumental Variables</a></li>
-<li><a href="/daily_knowledge/topic/Distribution Shift and Out-of-Distribution Generalization">Distribution Shift and Out-of-Distribution Generalization</a></li>
+<li><a href="/daily_knowledge/topic/Randomized Controlled Trials">Randomized Controlled Trials</a></li>
 <li><a href="/daily_knowledge/topic/Causal Representation Learning">Causal Representation Learning</a></li>
 </ul>
 
@@ -293,27 +305,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>The identification frontier</strong>: Most causal identification strategies trade one untestable assumption for another (e.g., parallel trends, exclusion restriction). How should we reason about <em>credibility of assumptions</em> versus <em>statistical efficiency</em> when choosing a strategy?</li>
+<li>The backdoor criterion requires knowing the true causal graph — but the graph itself must be inferred from data or domain knowledge. How do you reason about causal claims when the graph is uncertain or contested?</li>
 </ol>
 
 <ol>
-<li><strong>Causality in deep learning</strong>: Current large models are trained to minimize predictive loss over observed distributions, with no explicit causal structure. Is it possible to recover causal representations purely from scale and diversity of data, or does structural inductive bias remain essential?</li>
+<li>Pearl's do-calculus and the Potential Outcomes framework are mathematically equivalent in their expressive power, yet practitioners in different disciplines often commit hard to one. What does this disciplinary split reveal about the sociology of scientific methodology?</li>
 </ol>
 
 <ol>
-<li><strong>Causal ablation as a tool for interpretability</strong>: Techniques like activation injection (as in recent VLA studies) provide <em>causal</em> rather than merely correlational evidence about model internals. What are the limits of this approach — can we ever fully characterize what a neural network "knows" causally, given superposition and distributed representations?</li>
+<li>If a neural network trained on purely observational data generalizes perfectly to a new distribution, does that imply it has learned a causal model — or is robust generalization possible without causal structure?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Causal_inference" target="_blank" rel="noopener"&gt;Causal Inference&lt;/a&gt; · Retrieved 2026-03-22</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Causal_inference" target="_blank" rel="noopener"&gt;Causal Inference&lt;/a&gt; · Retrieved 2026-06-27</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.19233v1" target="_blank" rel="noopener">Not All Features Are Created Equal: A Mechanistic Study of Vision-Language-Action Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19231v1" target="_blank" rel="noopener">MonoArt: Progressive Structural Reasoning for Monocular Articulated 3D Reconstruction</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.19222v1" target="_blank" rel="noopener">Spectrally-Guided Diffusion Noise Schedules</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27371v1" target="_blank" rel="noopener">Don't Settle at the Mode! Mitigating Diversity Collapse in Pretrained Flow Models via Feature Self-Guidance</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27364v1" target="_blank" rel="noopener">PhysiFormer: Learning to Simulate Mechanics in World Space</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27361v1" target="_blank" rel="noopener">Autoregressive Boltzmann Generators</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Causal+Inference&labels=discussion&body=Topic:+[Causal+Inference](https://dhein.github.io/daily_knowledge/topic/causal_inference/)
