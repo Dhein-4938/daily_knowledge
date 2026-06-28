@@ -215,78 +215,79 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Neuroplasticity<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Science · Neuroscience &nbsp;·&nbsp; ~3 min read</div>
+<div class="topic-meta">Science · Neuroscience &nbsp;·&nbsp; ~4 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div><strong>Neuroplasticity</strong> is the capacity of neural networks to structurally and functionally reorganize — forming new synaptic connections, pruning old ones, and remapping cortical representations — in response to experience, injury, or environmental demand.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Neuroplasticity</strong> (syn. <em>neural plasticity</em>) is the capacity of neural networks to undergo structural and functional reorganization in response to intrinsic or extrinsic stimuli — encompassing changes at scales from individual synapses to large-scale cortical topology.</div></div>
 
-<p>The phenomenon spans multiple scales of biological organization:</p>
+<p>Plasticity manifests across a hierarchy of mechanisms:</p>
 
-<ul>
-<li><strong>Synaptic level</strong>: Hebbian strengthening/weakening — "neurons that fire together, wire together"</li>
-<li><strong>Circuit level</strong>: Long-term potentiation (LTP) and long-term depression (LTD) alter transmission efficacy</li>
-<li><strong>Systems level</strong>: Cortical remapping, where representations shift across topographic maps</li>
-</ul>
+<p>| Level | Example |</p>
+<p>|---|---|</p>
+<p>| Synaptic | Long-term potentiation / depression (LTP/LTD) |</p>
+<p>| Axonal | Sprouting, pruning, myelination changes |</p>
+<p>| Cortical map | Homuncular remapping after limb loss |</p>
+<p>| Network | Cross-modal reassignment, compensatory masquerade |</p>
 
-<p>Formally, synaptic weight updates in a Hebbian framework can be approximated as:</p>
+<p>The canonical Hebbian rule captures synaptic-level plasticity:</p>
 
 <p>$$\Delta w_{ij} = \eta \cdot x_i \cdot x_j$$</p>
 
-<p>where $w_{ij}$ is the synaptic weight between neurons $i$ and $j$, $\eta$ is the learning rate, and $x_i, x_j$ are activation levels. Modern neuroscience substantially complicates this with spike-timing-dependent plasticity (STDP), neuromodulatory gating, and homeostatic regulation.</p>
+<p>where $w_{ij}$ is the synaptic weight from neuron $j$ to $i$, $x$ are activation levels, and $\eta$ is a learning rate — colloquially: <em>neurons that fire together, wire together</em>. Modern formulations extend this to spike-timing-dependent plasticity (STDP), where the sign and magnitude of $\Delta w$ depend on the precise temporal ordering of pre- and postsynaptic spikes.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Neuroplasticity is the mechanistic substrate of <strong>learning, memory, and recovery</strong>. Its significance radiates outward into:</p>
+<p>Neuroplasticity is the biological substrate of <strong>learning, memory, and recovery</strong>. Its implications span:</p>
 
 <ul>
-<li><strong>Clinical neurology</strong>: Stroke and TBI rehabilitation exploit residual plasticity to reroute function through intact tissue</li>
-<li><strong>Cognitive science</strong>: Explains skill acquisition, habit formation, and the cognitive effects of chronic stress or meditation</li>
-<li><strong>AI/ML</strong>: Directly inspired Hebbian learning rules, self-organizing maps, and modern attention mechanisms — the brain as existence proof for adaptive representations</li>
+<li><strong>Clinical neurology</strong>: stroke rehabilitation, phantom limb therapy, treatment of amblyopia via occlusion during critical periods</li>
+<li><strong>Cognitive science</strong>: explains skill acquisition, expertise formation, and the cognitive effects of bilingualism</li>
+<li><strong>AI/ML</strong>: Hebbian learning, STDP, and cortical map dynamics directly inspired Hopfield networks, competitive learning, and self-organizing maps</li>
+<li><strong>Psychiatry</strong>: maladaptive plasticity underlies chronic pain sensitization, addiction, and PTSD consolidation</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>The adult brain retains far more plasticity than classical neuroscience assumed. This isn't just a hopeful finding — it implies that degenerative changes (e.g., from chronic stress or addiction) are also ongoing, not fixed. Plasticity is bidirectional and never "safe by default."</div></div>
+<div class="callout tip"><div class="callout-title">TIP: The double-edged sword</div><div>Plasticity is not inherently beneficial. The same mechanisms that enable recovery from stroke also drive the <em>entrenchment</em> of addiction circuits and the persistence of phantom limb pain. Plasticity is a property of the mechanism, not a guarantee of adaptive outcome.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Critical periods vs. adult plasticity</strong>: The developing brain exhibits heightened plasticity during <strong>critical periods</strong>, when sensory experience is essential for normal circuit maturation (e.g., ocular dominance columns). Adult plasticity is real but more constrained — requiring stronger or more sustained input to drive lasting change.</li>
+<li><strong>Critical periods are not binary.</strong> The developing brain exhibits markedly higher plasticity (especially in sensory cortex), but "closing" of critical periods is modulated by the balance of excitatory/inhibitory (E/I) tone, perineuronal nets, and neuromodulators like BDNF. Pharmacological or experiential interventions can partially reopen adult critical periods.</li>
 </ol>
 
 <ol>
-<li><strong>Mechanisms of adult plasticity</strong>: Key processes include neurogenesis in the hippocampal dentate gyrus (activity-dependent), axonal sprouting, dendritic remodeling, and glial structural changes. Not all brain regions are equally plastic — the hippocampus and prefrontal cortex show pronounced adult plasticity; primary sensory cortices less so.</li>
+<li><strong>Cortical remapping is use-dependent.</strong> Somatosensory and motor maps are dynamically allocated by input statistics. Blind individuals show cross-modal reassignment of V1 to auditory and tactile processing — demonstrating that areal identity is not genetically hard-coded but activity-sculpted.</li>
 </ol>
 
 <ol>
-<li><strong>Cross-modal reassignment</strong>: In the congenitally blind, visual cortex is co-opted for tactile and auditory processing. This is among the strongest evidence that cortical identity is not strictly genetically predetermined — it is experience-sculpted.</li>
+<li><strong>Structural vs. functional plasticity.</strong> Functional changes (altered synaptic efficacy, receptor trafficking) precede and sometimes occur without structural changes (spine morphology, axon growth). fMRI captures correlates of both but cannot distinguish them.</li>
 </ol>
 
 <ol>
-<li><strong>Maladaptive plasticity</strong>: Phantom limb pain, tinnitus, and addiction cravings are well-characterized examples where plasticity reinforces pathological states. Cortical remapping after limb loss can produce pain referral patterns that outlast the original injury by years.</li>
+<li><strong>Glial cells are active participants.</strong> Astrocytes regulate synaptic transmission via glutamate uptake and gliotransmitter release; microglia actively prune synapses via complement-mediated phagocytosis. Plasticity is a whole-tissue phenomenon, not merely neuronal.</li>
 </ol>
 
 <ol>
-<li><strong>Modulatory dependencies</strong>: Plasticity is gated by neuromodulators — acetylcholine (attention/arousal), dopamine (reward prediction error), norepinephrine (novelty/stress). Without appropriate neuromodulatory context, even repeated activation may fail to consolidate lasting changes.</li>
+<li><strong>Systemic factors modulate plasticity.</strong> Caloric intake, psychological stress, pregnancy hormones, and aerobic exercise all measurably alter neuroplastic capacity — via BDNF expression, glucocorticoid receptor density, and hippocampal neurogenesis rates.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research frontiers include:</p>
+<p>Active research fronts (as of early 2026) include:</p>
 
 <ul>
-<li><strong>Optogenetic circuit manipulation</strong> to test causal roles of specific cell types in plasticity induction</li>
-<li><strong>Engram cell biology</strong> — identifying the sparse populations that encode specific memories and understanding their reactivation</li>
-<li><strong>Glial contributions</strong>: Astrocytes and microglia are increasingly recognized as active participants in synaptic remodeling, not passive support cells</li>
-<li><strong>Non-invasive stimulation</strong> (TMS, tDCS) to induce or modulate plasticity therapeutically remains promising but mechanistically underspecified in human work</li>
-<li><strong>Computational models</strong> of homeostatic plasticity (Bienenstock-Cooper-Munro theory, synaptic scaling) are being refined against in vivo calcium imaging data</li>
+<li><strong>Engram cell biology</strong>: identifying and optogenetically manipulating specific memory traces to understand how plasticity encodes discrete memories</li>
+<li><strong>Rejuvenation of adult plasticity</strong>: manipulating PNN (perineuronal net) components or restoring juvenile E/I balance to treat amblyopia and post-stroke deficits in adults</li>
+<li><strong>Transcriptomics of plasticity</strong>: single-cell RNA-seq revealing gene-expression programs that gate plasticity windows at cellular resolution</li>
+<li><strong>Non-invasive neuromodulation</strong>: TMS and tDCS protocols that transiently enhance or suppress plasticity for therapeutic ends — efficacy still debated in the literature</li>
 </ul>
 
 <hr>
@@ -296,10 +297,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Hebbian Learning">Hebbian Learning</a></li>
 <li><a href="/daily_knowledge/topic/Long-Term Potentiation">Long-Term Potentiation</a></li>
-<li><a href="/daily_knowledge/topic/Cortical Remapping">Cortical Remapping</a></li>
 <li><a href="/daily_knowledge/topic/Critical Periods in Development">Critical Periods in Development</a></li>
+<li><a href="/daily_knowledge/topic/Cortical Remapping">Cortical Remapping</a></li>
 <li><a href="/daily_knowledge/topic/Spike-Timing-Dependent Plasticity">Spike-Timing-Dependent Plasticity</a></li>
-<li><a href="/daily_knowledge/topic/Cognitive Reserve">Cognitive Reserve</a></li>
+<li><a href="/daily_knowledge/topic/Brain-Derived Neurotrophic Factor (BDNF)">Brain-Derived Neurotrophic Factor (BDNF)</a></li>
 </ul>
 
 <hr>
@@ -307,23 +308,29 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>If plasticity is always active in the adult brain, what mechanisms prevent runaway reorganization — and what happens when those brakes fail (e.g., in epilepsy or neuropathic pain)?</li>
-<li>The line between <em>adaptive</em> and <em>maladaptive</em> plasticity is drawn retrospectively by outcome. Is there a principled mechanistic distinction, or is the same machinery always at work?</li>
-<li>Computational models of STDP and Hebbian learning capture something real, but miss neuromodulatory gating, glial involvement, and metabolic constraints. What would a more faithful model need to include to be genuinely useful for predicting therapeutic intervention outcomes?</li>
+<li><strong>Maladaptive vs. adaptive plasticity</strong>: What determines whether plasticity following trauma (stroke, chronic pain, addiction) converges on a functional or dysfunctional attractor? Is this fundamentally a question of initial conditions or ongoing input statistics?</li>
+</ol>
+
+<ol>
+<li><strong>Computational analogues</strong>: Biological STDP implements something close to a causal credit assignment rule. How faithfully does backpropagation-through-time or modern contrastive learning capture the computational essence of synaptic plasticity — and where does the analogy break down?</li>
+</ol>
+
+<ol>
+<li><strong>Identity and continuity</strong>: If cortical maps are continuously reshaped by experience, what does this imply about the stability of personality and skill over decades? Is the "same person" a useful fiction underwritten by slow-timescale plasticity dynamics?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Neuroplasticity" target="_blank" rel="noopener"&gt;Neuroplasticity&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Neuroplasticity" target="_blank" rel="noopener"&gt;Neuroplasticity&lt;/a&gt; · Retrieved 2026-06-28</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.20195v1" target="_blank" rel="noopener">Improved constraint on the Hubble constant from dark sirens with LIGO/Virgo/KAGRA O4a</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.20193v1" target="_blank" rel="noopener">From Masks to Pixels and Meaning: A New Taxonomy, Benchmark, and Metrics for VLM Image Tampering</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.20189v1" target="_blank" rel="noopener">MeanFlow Meets Control: Scaling Sampled-Data Control for Swarms</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.20188v1" target="_blank" rel="noopener">Wildfire Spread Scenarios: Increasing Sample Diversity of Segmentation Diffusion Models with Training-Free Methods</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.20187v1" target="_blank" rel="noopener">MuSteerNet: Human Reaction Generation from Videos via Observation-Reaction Mutual Steering</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27377v1" target="_blank" rel="noopener">DanceOPD: On-Policy Generative Field Distillation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27376v1" target="_blank" rel="noopener">Ask, Solve, Generate: Self-Evolving Unified Multimodal Understanding and Generation via Self-Consistency Rewards</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27375v1" target="_blank" rel="noopener">Scalable Behavior Cloning with Open Data, Training, and Evaluation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27374v1" target="_blank" rel="noopener">World Action Models Enable Continual Imitation Learning with Recurrent Generative Replays</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27369v1" target="_blank" rel="noopener">Reinforcement Learning without Ground-Truth Solutions can Improve LLMs</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Neuroplasticity&labels=discussion&body=Topic:+[Neuroplasticity](https://dhein.github.io/daily_knowledge/topic/neuroscience_plasticity/)

@@ -219,81 +219,69 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Evolution is the change in <strong>heritable characteristics</strong> of biological populations over successive generations, driven by processes acting on genetic variation: <strong>natural selection</strong>, <strong>genetic drift</strong>, <strong>mutation</strong>, and <strong>gene flow</strong>.</div></div>
+<p>Evolution is the <strong>change in heritable characteristics of biological populations across successive generations</strong>, driven by processes that alter allele frequencies in the gene pool. It is not directional progress but probabilistic change under environmental pressure.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>Let $p_t$ be the frequency of allele $A$ at generation $t$. Evolution occurs when $p_{t+1} \neq p_t$. The Hardy-Weinberg equilibrium ($p^2 + 2pq + q^2 = 1$) defines the null model — a population at rest — against which all evolutionary forces are measured.</div></div>
 
 <p>The four postulates underpinning natural selection (Darwin/Wallace, ~1858):</p>
 
 <ol>
-<li><strong>Superfecundity</strong> — populations produce more offspring than can survive</li>
-<li><strong>Variation</strong> — individuals differ in heritable traits</li>
-<li><strong>Differential fitness</strong> — traits confer unequal survival/reproduction rates</li>
-<li><strong>Heritability</strong> — fit traits are passed to offspring</li>
+<li><strong>Overproduction</strong> — more offspring are produced than can survive  </li>
+<li><strong>Variation</strong> — heritable trait differences exist within populations  </li>
+<li><strong>Differential fitness</strong> — traits vary in survival/reproduction payoff  </li>
+<li><strong>Heritability</strong> — advantageous traits are transmitted to offspring  </li>
 </ol>
 
-<p>This can be captured in the <strong>Price equation</strong>, which decomposes evolutionary change in a trait $z$ across one generation:</p>
+<p>The Modern Synthesis (~1930s–1950s) unified Darwinian selection with Mendelian genetics and population genetics. The molecular substrate is <strong>DNA</strong>: mutations introduce variation, which selection and drift then filter. The four canonical forces are:</p>
 
-<p>$$\Delta \bar{z} = \underbrace{\text{Cov}(w_i, z_i)/\bar{w}}_{\text{selection}} + \underbrace{E(w_i \Delta z_i)/\bar{w}}_{\text{transmission bias}}$$</p>
-
-<p>where $w_i$ is individual fitness and $\bar{w}$ is mean population fitness. The first term is pure selection; the second captures developmental/mutational transmission effects.</p>
+<p>$$\Delta p = \underbrace{\Delta p_{\text{sel}}}_{\text{natural selection}} + \underbrace{\Delta p_{\text{drift}}}_{\text{random sampling}} + \underbrace{\Delta p_{\text{mut}}}_{\text{mutation}} + \underbrace{\Delta p_{\text{flow}}}_{\text{gene flow}}$$</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Evolution is the <strong>unifying framework of all biology</strong> — without it, comparative anatomy, molecular phylogenetics, antibiotic resistance, and vaccine design are incoherent. Its practical reach extends far:</p>
+<p>Evolution is the organizing framework of all biology — Dobzhansky's dictum ("nothing in biology makes sense except in the light of evolution") holds. Its reach extends far beyond taxonomy:</p>
 
 <ul>
-<li><strong>Medicine</strong>: understanding pathogen evolution (SARS-CoV-2 variant emergence), cancer as somatic evolution, personalized genomics</li>
-<li><strong>Agriculture</strong>: artificial selection, resistance management in crops and pests</li>
-<li><strong>Computer science</strong>: evolutionary algorithms, genetic programming, neural architecture search inspired by fitness landscapes</li>
-<li><strong>Astrobiology</strong>: LUCA (Last Universal Common Ancestor, ~3.5–3.8 Ga) anchors hypotheses about life's origin and its possible forms elsewhere</li>
+<li><strong>Medicine</strong>: antibiotic resistance, cancer as somatic evolution, vaccine design against rapidly mutating viruses</li>
+<li><strong>Agriculture</strong>: selective breeding formalized; understanding of crop pathogen co-evolution</li>
+<li><strong>Computer science</strong>: evolutionary algorithms, genetic programming, neuroevolution (e.g., NEAT)</li>
+<li><strong>Phylogenetics</strong>: molecular clocks reconstruct divergence times; SARS-CoV-2 tracking is a live application</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Deep Connection — Fitness Landscapes</div><div>Sewall Wright's metaphor of a <strong>fitness landscape</strong> — where genotype space is mapped to fitness — bridges population genetics and complex systems theory. Epistasis creates rugged landscapes where gradient ascent (selection) gets stuck at local optima, a concept directly imported into machine learning as loss-surface analysis.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Evolution as Algorithm</div><div>Natural selection is a substrate-independent optimization process. This insight underlies evolutionary computation — the same logic (variation → selection → reproduction) applies whether the "genome" is DNA or floating-point weights. Evolutionary dynamics are now studied in machine learning contexts (e.g., quality-diversity algorithms).</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. The Modern Synthesis (~1930s–1950s)</strong></p>
-<p>Darwin lacked a mechanism of inheritance. The fusion of Mendelian genetics, population genetics (Fisher, Wright, Haldane), and paleontology into the Modern Synthesis resolved this: DNA is the physical substrate of heritable variation.</p>
+<ol>
+<li><strong>Genetic Drift vs. Selection</strong>: In small populations, stochastic sampling dominates over selection — deleterious alleles can fix by chance (Sewall Wright's random drift). Effective population size $N_e$ governs this tradeoff; when $N_e s \ll 1$, drift dominates over selection coefficient $s$.</li>
+</ol>
 
-<p><strong>2. Neutral Theory (Kimura, 1968)</strong></p>
-<p>Most molecular evolution is <em>not</em> driven by selection but by <strong>random fixation of neutral mutations</strong> via genetic drift. The neutral substitution rate equals the mutation rate $\mu$, independent of population size — a non-obvious and initially controversial result.</p>
+<ol>
+<li><strong>LUCA and Deep Time</strong>: All known life shares a Last Universal Common Ancestor ~3.5–3.8 Ga. This inference comes from universally conserved machinery (ribosomal RNA, genetic code, ATP synthase). Biogenic graphite in Greenlandite suggests life predates clean fossil records.</li>
+</ol>
 
-<p>$$k = \mu$$</p>
+<ol>
+<li><strong>Speciation Mechanisms</strong>: Allopatric (geographic isolation → divergence), sympatric (reproductive isolation without geography, e.g., polyploidy in plants), and parapatric (partial overlap). Speciation is not a discrete event but a continuum of reproductive isolation.</li>
+</ol>
 
-<p>This is foundational to molecular clocks used in phylogenetic dating.</p>
+<ol>
+<li><strong>Neutral Theory</strong>: Motoo Kimura (1968) proposed most molecular variation is selectively neutral. Observed synonymous substitution rates ≈ mutation rates — a key prediction confirmed empirically, and the basis for molecular clock dating.</li>
+</ol>
 
-<p><strong>3. Levels of Selection</strong></p>
-<p>Selection can operate at gene, individual, kin-group, or (controversially) species level. Hamilton's rule for kin selection: altruistic behavior evolves when</p>
-
-<p>$$rb > c$$</p>
-
-<p>where $r$ = relatedness, $b$ = benefit to recipient, $c$ = cost to actor.</p>
-
-<p><strong>4. Speciation Mechanisms</strong></p>
-<p>New species arise via reproductive isolation: allopatric (geographic separation), sympatric (ecological divergence without separation), and parapatric (along environmental gradients). The <strong>biological species concept</strong> (Mayr) defines species by reproductive isolation, but breaks down for asexual organisms and archaea.</p>
-
-<p><strong>5. Extended Evolutionary Synthesis</strong></p>
-<p>Post-2000 work incorporates phenomena the Modern Synthesis underemphasized: epigenetic inheritance, developmental plasticity, niche construction, and evolvability itself as a selectable trait.</p>
-
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The "Extended Evolutionary Synthesis" remains actively contested — consensus on how much it revises (vs. supplements) the Modern Synthesis is not yet settled as of this note's writing.</div></div>
+<ol>
+<li><strong>Extended Evolutionary Synthesis</strong>: Active debate on whether the Modern Synthesis requires expansion to include epigenetic inheritance, niche construction, developmental plasticity, and evolvability as first-class mechanisms.</li>
+</ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<p>Active research frontiers include:</p>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The Extended Evolutionary Synthesis debate is ongoing; consensus on which mechanisms require incorporating into core theory remains unsettled as of the mid-2020s. Ancient DNA paleogenomics and long-read sequencing are rapidly reshaping our picture of archaic human admixture and horizontal gene transfer in prokaryotes.</div></div>
 
-<ul>
-<li><strong>evo-devo</strong> (evolutionary developmental biology): how changes in gene regulatory networks produce morphological novelty with minimal mutational load</li>
-<li><strong>ancient DNA</strong> and paleogenomics: sequencing archaic hominins (Denisovans, Neanderthals) at population-genetic resolution, revealing introgression events</li>
-<li><strong>experimental evolution</strong>: evolving populations of <em>E. coli</em> (Lenski's LTEE, now >80,000 generations) directly observing mutation fixation dynamics</li>
-<li><strong>evolutionary medicine</strong>: co-evolutionary arms races between hosts and pathogens modeled as Red Queen dynamics</li>
-</ul>
-
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Ancient DNA methods and LTEE milestone generation counts are advancing rapidly; specific claims here reflect the state of knowledge through early 2026.</div></div>
+<p>Active research fronts include: <strong>ancient DNA</strong> reconstruction (Neanderthal/Denisovan introgression); <strong>transposable elements</strong> as evolutionary drivers; <strong>multilevel selection</strong> and major transitions (eukaryogenesis, multicellularity); and quantitative models of <strong>eco-evolutionary dynamics</strong> where population ecology and evolution operate on the same timescale.</p>
 
 <hr>
 
@@ -302,10 +290,10 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Natural Selection">Natural Selection</a></li>
 <li><a href="/daily_knowledge/topic/Population Genetics">Population Genetics</a></li>
-<li><a href="/daily_knowledge/topic/Phylogenetics and Cladistics">Phylogenetics and Cladistics</a></li>
-<li><a href="/daily_knowledge/topic/Molecular Clock">Molecular Clock</a></li>
-<li><a href="/daily_knowledge/topic/Fitness Landscapes">Fitness Landscapes</a></li>
-<li><a href="/daily_knowledge/topic/Last Universal Common Ancestor (LUCA)">Last Universal Common Ancestor (LUCA)</a></li>
+<li><a href="/daily_knowledge/topic/Phylogenetics and Molecular Clocks">Phylogenetics and Molecular Clocks</a></li>
+<li><a href="/daily_knowledge/topic/Genetic Drift and Neutral Theory">Genetic Drift and Neutral Theory</a></li>
+<li><a href="/daily_knowledge/topic/Speciation Mechanisms">Speciation Mechanisms</a></li>
+<li><a href="/daily_knowledge/topic/Evolutionary Algorithms">Evolutionary Algorithms</a></li>
 </ul>
 
 <hr>
@@ -313,27 +301,21 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The neutral theory and natural selection are often framed as competing explanations for molecular evolution — but are they genuinely in tension, or do they operate at different timescales and levels of resolution?</li>
-</ol>
-
-<ol>
-<li>The Price equation is mathematically general enough to describe cultural evolution and learning dynamics. Does this generality make it a deep insight or an empty tautology?</li>
-</ol>
-
-<ol>
-<li>If evolvability (the capacity to produce heritable variation) is itself heritable and selectable, does this imply evolution has "meta-evolved" its own search strategy — and what does that imply for how we design evolutionary algorithms?</li>
+<li>Neutral theory predicts that most molecular variation is invisible to selection — does this undermine adaptationist narratives, or do the two frameworks address different levels of biological organization?</li>
+<li>If evolution is a substrate-independent algorithm, what properties of DNA (error rate, modularity, recombination) make it a particularly <em>evolvable</em> encoding — and what would a better one look like?</li>
+<li>The Extended Evolutionary Synthesis proposes epigenetic inheritance as an additional channel of heritable variation. What experimental evidence would decisively resolve whether this requires modifying the core theory versus being explicable within it?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Evolution" target="_blank" rel="noopener"&gt;Theory of Evolution&lt;/a&gt; · Retrieved 2026-03-23</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Evolution" target="_blank" rel="noopener"&gt;Theory of Evolution&lt;/a&gt; · Retrieved 2026-06-28</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.20195v1" target="_blank" rel="noopener">Improved constraint on the Hubble constant from dark sirens with LIGO/Virgo/KAGRA O4a</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.20193v1" target="_blank" rel="noopener">From Masks to Pixels and Meaning: A New Taxonomy, Benchmark, and Metrics for VLM Image Tampering</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.20189v1" target="_blank" rel="noopener">MeanFlow Meets Control: Scaling Sampled-Data Control for Swarms</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27377v1" target="_blank" rel="noopener">DanceOPD: On-Policy Generative Field Distillation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27371v1" target="_blank" rel="noopener">Don't Settle at the Mode! Mitigating Diversity Collapse in Pretrained Flow Models via Feature Self-Guidance</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.27367v1" target="_blank" rel="noopener">Accessing both electrochemical SEIRA and SERS with ultrasensitive metamaterials for enhanced molecular identification</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Theory+of+Evolution&labels=discussion&body=Topic:+[Theory+of+Evolution](https://dhein.github.io/daily_knowledge/topic/evolution/)
