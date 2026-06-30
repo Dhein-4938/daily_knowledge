@@ -219,70 +219,78 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The Higgs boson is the quantum excitation of the <strong>Higgs field</strong> — a scalar field permeating all of spacetime. It is the only fundamental scalar particle (spin-0) confirmed in the Standard Model, with quantum numbers $J^{PC} = 0^{++}$: zero spin, positive parity, no charge, no color.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>The Higgs boson is the quantum excitation of the <strong>Higgs field</strong> — a spin-0, scalar field that permeates all of spacetime. It is the only fundamental scalar particle confirmed in the Standard Model, with quantum numbers $J^{PC} = 0^{++}$: zero spin, positive parity, no charge.</div></div>
 
-<p>The Higgs field $\phi$ is a complex $SU(2)_L$ doublet with four real degrees of freedom:</p>
+<p>The Higgs field $\phi$ is a complex $SU(2)_L$ doublet:</p>
 
-<p>$$\phi = \begin{pmatrix} \phi^+ \\ \phi^0 \end{pmatrix}, \quad \phi^0 = \frac{1}{\sqrt{2}}(v + h + i\eta)$$</p>
+<p>$$\phi = \begin{pmatrix} \phi^+ \\ \phi^0 \end{pmatrix}$$</p>
 
-<p>where $v \approx 246\text{ GeV}$ is the vacuum expectation value (VEV), $h$ is the physical Higgs field, and $\eta$ is the would-be Goldstone boson absorbed by the $Z$. The Mexican-hat (sombrero) potential</p>
+<p>with a Mexican-hat (sombrero) potential:</p>
 
-<p>$$V(\phi) = -\mu^2 |\phi|^2 + \lambda |\phi|^4, \quad \mu^2, \lambda > 0$$</p>
+<p>$$V(\phi) = -\mu^2 |\phi|^2 + \lambda |\phi|^4$$</p>
 
-<p>forces spontaneous symmetry breaking: $\langle \phi \rangle = v/\sqrt{2} \neq 0$ everywhere in the vacuum. This is the <strong>Higgs mechanism</strong>, which generates gauge boson masses via $m_W = \frac{1}{2}gv$ and fermion masses via Yukawa couplings $\mathcal{L}_Y = -y_f \bar{\psi}_L \phi \psi_R + \text{h.c.}$, so $m_f = y_f v/\sqrt{2}$.</p>
+<p>When $\mu^2 > 0$, the minimum sits at a nonzero vacuum expectation value (VEV):</p>
 
-<p>The observed Higgs boson mass is $m_h \approx 125.25\text{ GeV}$, discovered in 2012 at CERN's LHC by ATLAS and CMS.</p>
+<p>$$\langle \phi \rangle = \frac{1}{\sqrt{2}}\begin{pmatrix} 0 \\ v \end{pmatrix}, \quad v \approx 246 \text{ GeV}$$</p>
+
+<p>This spontaneous breaking of $SU(2)_L \times U(1)_Y \to U(1)_{\text{em}}$ is the <strong>Higgs mechanism</strong>: three Goldstone modes are "eaten" by the $W^\pm$ and $Z$ bosons (giving them mass), while the radial excitation survives as the physical Higgs boson with mass $m_H \approx 125.25$ GeV.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>The Higgs completes the Standard Model's logical structure: without it, $W$ and $Z$ bosons would be massless, fermion mass terms would violate gauge invariance, and weak-force cross-sections would diverge at high energy, violating unitarity. It is the <em>only known mechanism</em> by which particles acquire rest mass in a gauge-invariant way.</p>
+<p>The Higgs mechanism solves a deep theoretical crisis: in an unbroken gauge theory, explicit mass terms for the $W$ and $Z$ violate gauge invariance and destroy renormalizability. The Higgs field lets mass arise <em>dynamically</em> from a broken symmetry, preserving both gauge invariance and the UV completeness of the electroweak theory.</p>
 
-<div class="callout tip"><div class="callout-title">TIP: Deeper connection</div><div>The Higgs VEV doesn't give mass to photons or gluons because the $U(1)_{EM}$ and $SU(3)_C$ symmetries remain unbroken — only the $SU(2)_L \times U(1)_Y$ electroweak symmetry breaks. Gauge invariance is the organizing principle; the Higgs is the specific solution Nature chose.</div></div>
+<p>Fermion masses enter via <strong>Yukawa couplings</strong>:</p>
 
-<p>Beyond the Standard Model, the Higgs boson is a probe: its coupling strengths to each particle are fixed predictions ($g_{hff} \propto m_f/v$, $g_{hVV} \propto m_V^2/v$). Deviations signal new physics.</p>
+<p>$$\mathcal{L}_{\text{Yukawa}} = -y_f \bar{\psi}_L \phi \psi_R + \text{h.c.}$$</p>
+
+<p>so each fermion mass $m_f = y_f v / \sqrt{2}$ is proportional to its coupling strength to the field — top quark couples strongly ($y_t \approx 1$), electron feebly ($y_e \approx 3 \times 10^{-6}$).</p>
+
+<div class="callout tip"><div class="callout-title">TIP: Deeper connection</div><div>The Higgs VEV is the origin of <em>all</em> elementary particle masses in the SM except neutrinos (whose mass mechanism remains unknown). In this sense, the Higgs field structures the entire mass spectrum of visible matter.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Yukawa coupling hierarchy</strong> — The top quark's coupling $y_t \approx 1$ (near unity) while the electron's $y_e \approx 3 \times 10^{-6}$. This span of $\sim 5$ orders of magnitude is unexplained — the <strong>flavor puzzle</strong>.</li>
+<li><strong>Discovery (2012):</strong> ATLAS and CMS at CERN's LHC announced observation of a new boson at ~125 GeV with properties consistent with the SM Higgs. Higgs and Englert received the 2013 Nobel Prize in Physics.</li>
 </ol>
 
 <ol>
-<li><strong>Decay channels</strong> — Being massive and unstable ($\Gamma \approx 4\text{ MeV}$), the Higgs decays primarily to $b\bar{b}$ (~58%), $WW^*$ (~21%), $gg$ (~9%), $\tau\tau$ (~6%). The $h \to \gamma\gamma$ channel (~0.2%) was key to discovery despite low rate due to clean experimental signature.</li>
+<li><strong>Decay channels:</strong> The Higgs is extremely short-lived ($\tau \sim 10^{-22}$ s). Major decay modes by branching fraction: $H \to b\bar{b}$ (~58%), $H \to WW^*$ (~21%), $H \to gg$ (~9%, loop-induced), $H \to \tau\tau$ (~6%), $H \to ZZ^*$ (~3%, the "golden channel" for discovery).</li>
 </ol>
 
 <ol>
-<li><strong>Hierarchy problem</strong> — Radiative corrections drive $m_h^2$ toward the Planck scale $M_{Pl}^2$. Keeping $m_h \sim 125\text{ GeV}$ requires fine-tuning of $\sim 1$ part in $10^{34}$. Supersymmetry, compositeness, and extra dimensions all address this.</li>
+<li><strong>Self-coupling:</strong> The potential predicts a cubic and quartic Higgs self-interaction. Measuring $\lambda$ via di-Higgs production ($gg \to HH$) is a primary goal of future collider programs — currently only weak upper bounds exist.</li>
 </ol>
 
 <ol>
-<li><strong>Vacuum stability</strong> — The measured values of $m_h$ and $m_t$ place the electroweak vacuum in a <strong>metastable</strong> region: stable on cosmological timescales, but not absolutely stable. A true vacuum bubble could propagate at $c$.</li>
+<li><strong>Naturalness problem:</strong> Quantum corrections drive $m_H^2$ toward the UV cutoff (Planck scale, $\sim 10^{19}$ GeV) unless there is extraordinary fine-tuning or new physics (supersymmetry, compositeness) at the TeV scale. This <strong>hierarchy problem</strong> remains unresolved.</li>
 </ol>
 
 <ol>
-<li><strong>CP properties</strong> — The Higgs is confirmed to be CP-even ($0^+$). Any CP-odd admixture would be evidence of BSM physics and is constrained to be small by LHC angular analyses.</li>
+<li><strong>Scalar nature:</strong> Being spin-0, the Higgs has no spin-dependent production asymmetries; its couplings are proportional to mass, not charge. This makes it uniquely sensitive to any new heavy particles that acquire mass through the same mechanism.</li>
 </ol>
+
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Precision measurements of Higgs couplings, self-coupling bounds, and high-luminosity LHC results are actively evolving. The values and limits cited here reflect the status circa 2024–2025.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Post-2012 LHC Run 2 and Run 3 data have pushed Higgs coupling measurements to ~5–10% precision. The HL-LHC (High-Luminosity LHC) targets sub-percent precision on key couplings. Future lepton colliders (FCC-ee, CEPC, ILC) are proposed as "Higgs factories" to measure the $hZZ$ coupling with $<0.1\%$ accuracy. Key open questions include: self-coupling $\lambda_{hhh}$ (tests the shape of the sombrero potential directly), rare decays ($h \to \mu\mu$, $h \to Z\gamma$), and any off-shell coupling deviations.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research directions include: HL-LHC coupling precision (targeting ~1–2% on $\kappa_W, \kappa_Z, \kappa_t$), di-Higgs searches probing the self-coupling $\lambda_{HHH}$, off-shell $H^*$ measurements to constrain the Higgs width, and exotic decays (e.g., $H \to aa$ for pseudo-scalar searches). Future proposals — FCC-ee as a "Higgs factory," ILC, CEPC — aim to reduce coupling uncertainties by an order of magnitude.</div></div>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Electroweak Symmetry Breaking">Electroweak Symmetry Breaking</a></li>
 <li><a href="/daily_knowledge/topic/Standard Model of Particle Physics">Standard Model of Particle Physics</a></li>
 <li><a href="/daily_knowledge/topic/Spontaneous Symmetry Breaking">Spontaneous Symmetry Breaking</a></li>
-<li><a href="/daily_knowledge/topic/Goldstone Boson">Goldstone Boson</a></li>
-<li><a href="/daily_knowledge/topic/Hierarchy Problem">Hierarchy Problem</a></li>
+<li><a href="/daily_knowledge/topic/Electroweak Unification">Electroweak Unification</a></li>
+<li><a href="/daily_knowledge/topic/Naturalness and the Hierarchy Problem">Naturalness and the Hierarchy Problem</a></li>
+<li><a href="/daily_knowledge/topic/Yukawa Couplings">Yukawa Couplings</a></li>
 <li><a href="/daily_knowledge/topic/Large Hadron Collider">Large Hadron Collider</a></li>
 </ul>
 
@@ -291,27 +299,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The Higgs couples to mass — but the proton's mass is ~99% QCD binding energy, not Higgs-generated quark masses. What does it mean to say "the Higgs gives mass" at the composite-particle level?</li>
+<li>The Higgs potential's shape ($V = -\mu^2|\phi|^2 + \lambda|\phi|^4$) is put in <em>by hand</em> — what theoretical principle, if any, selects this form over alternatives, and could the true vacuum be metastable?</li>
 </ol>
 
 <ol>
-<li>The electroweak vacuum is metastable. What physical observables or cosmological constraints could sharpen the stability boundary, and what role does $m_t$ uncertainty play?</li>
+<li>Since $m_f \propto y_f v$, the Higgs mechanism explains <em>that</em> particles are massive but says nothing about <em>why</em> the Yukawa couplings span six orders of magnitude. What deeper structure might explain the fermion mass hierarchy?</li>
 </ol>
 
 <ol>
-<li>Given that the Higgs self-coupling $\lambda_{hhh}$ is currently unconstrained to within ~50% of its SM value, what would a factor-of-two deviation imply for electroweak baryogenesis and the phase transition in the early universe?</li>
+<li>If supersymmetry or compositeness resolves the hierarchy problem, what observable signatures at the LHC or future colliders would distinguish these from a "tuned" Standard Model with no new physics?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Higgs_boson" target="_blank" rel="noopener"&gt;Higgs Boson&lt;/a&gt; · Retrieved 2026-03-24</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Higgs_boson" target="_blank" rel="noopener"&gt;Higgs Boson&lt;/a&gt; · Retrieved 2026-06-30</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.22284v1" target="_blank" rel="noopener">Precision's arrow of time</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.22274v1" target="_blank" rel="noopener">Development and large-scale benchmarks of a protein-ligand absolute binding free energy toolkit</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.22268v1" target="_blank" rel="noopener">An Accurate Tensorial Model for Prediction of Full Zeolite NMR Spectra</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30645v1" target="_blank" rel="noopener">VLK: Learning Humanoid Loco-Manipulation from Synthetic Interactions in Reconstructed Scenes</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30637v1" target="_blank" rel="noopener">Lagrangian correspondences of nonabelian Hodge type and shifted twistor structures</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30636v1" target="_blank" rel="noopener">Authentication in Quantum Networks</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Higgs+Boson&labels=discussion&body=Topic:+[Higgs+Boson](https://dhein.github.io/daily_knowledge/topic/cern_higgs/)

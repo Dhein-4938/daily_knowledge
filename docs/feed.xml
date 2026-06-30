@@ -6,6 +6,13 @@
   <description>Automated daily notes: Science, Tech, Math, Logic</description>
   <language>en-us</language>
   <item>
+    <title>June 30, 2026</title>
+    <link>https://dhein.github.io/daily_knowledge/digests/2026-06-30/</link>
+    <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-30/</guid>
+    <pubDate>Tue, 30 Jun 2026 07:00:00 +0000</pubDate>
+    <description>~16 min · Higgs Boson, Climate Science, Stem Cell Biology, RISC-V Architecture</description>
+  </item>
+  <item>
     <title>June 28, 2026</title>
     <link>https://dhein.github.io/daily_knowledge/digests/2026-06-28/</link>
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-06-28/</guid>
@@ -207,13 +214,6 @@
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-10/</guid>
     <pubDate>Fri, 10 Apr 2026 07:00:00 +0000</pubDate>
     <description>Daily Knowledge Digest for April 10, 2026</description>
-  </item>
-  <item>
-    <title>April 9, 2026</title>
-    <link>https://dhein.github.io/daily_knowledge/digests/2026-04-09/</link>
-    <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-09/</guid>
-    <pubDate>Thu, 09 Apr 2026 07:00:00 +0000</pubDate>
-    <description>Daily Knowledge Digest for April 9, 2026</description>
   </item>
 </channel>
 </rss>

@@ -215,83 +215,83 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Stem Cell Biology<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Science · Biology &nbsp;·&nbsp; ~5 min read</div>
+<div class="topic-meta">Science · Biology &nbsp;·&nbsp; ~4 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>stem cell</strong> is a cell capable of two defining operations: <strong>self-renewal</strong> (symmetric or asymmetric division producing daughter stem cells) and <strong>potency</strong> (differentiation into one or more specialized cell types). These properties together distinguish stem cells from progenitor cells, which divide but cannot self-renew indefinitely, and terminally differentiated cells, which do neither.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>stem cell</strong> is a cell capable of two defining behaviors: <strong>self-renewal</strong> (symmetric division producing identical daughter stem cells) and <strong>differentiation</strong> (asymmetric division yielding more specialized progeny). Together these properties sustain cell lineages indefinitely.</div></div>
 
-<p>The differentiation hierarchy is formalized by potency class:</p>
+<p>Potency — the differentiation range — is the primary axis of classification:</p>
 
-<p>| Class | Scope | Example |</p>
+<p>$$\text{Totipotent} \supset \text{Pluripotent} \supset \text{Multipotent} \supset \text{Oligopotent} \supset \text{Unipotent}$$</p>
+
+<p>| Class | Example | Differentiation Range |</p>
 <p>|---|---|---|</p>
-<p>| <strong>Totipotent</strong> | All embryonic + extraembryonic lineages | Zygote, early blastomeres |</p>
-<p>| <strong>Pluripotent</strong> | All three germ layers; no extraembryonic | ESCs, iPSCs |</p>
-<p>| <strong>Multipotent</strong> | Restricted lineage | Hematopoietic stem cells |</p>
-<p>| <strong>Unipotent</strong> | Single cell type | Basal epidermal cells |</p>
+<p>| Totipotent | Zygote, early blastomeres | Any cell, including extraembryonic |</p>
+<p>| Pluripotent | Inner cell mass (ICM), ESCs, iPSCs | All three germ layers |</p>
+<p>| Multipotent | Hematopoietic stem cells (HSCs) | All blood/immune lineages |</p>
+<p>| Unipotent | Basal epidermal cells | One terminal type |</p>
 
-<p>Mathematically, asymmetric self-renewal can be modeled as a branching process. If $p$ is the probability a daughter cell self-renews, steady-state pool size requires $p = 0.5$ exactly; deviations drive either exhaustion ($p < 0.5$) or neoplastic expansion ($p > 0.5$).</p>
+<p>Stem cells are distinct from <strong>progenitor cells</strong> (limited division capacity, partially committed) and <strong>blast/precursor cells</strong> (committed, no self-renewal). This hierarchy matters for both developmental logic and therapeutic targeting.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Stem cells are the <strong>developmental and homeostatic substrate</strong> of multicellular life. Their relevance spans:</p>
+<p>Stem cells are the master regulators of <strong>tissue homeostasis and regeneration</strong>. Their malfunction underpins a vast disease landscape: HSC dysregulation drives leukemias; intestinal crypt stem cell mutations are early events in colorectal cancer; neural stem cell exhaustion is implicated in brain aging.</p>
 
+<p>Therapeutically, stem cells represent a potential universal cell source:</p>
 <ul>
-<li><strong>Regenerative medicine</strong>: Hematopoietic stem cell transplantation (HSCT) remains the only fully established stem cell therapy, curing otherwise fatal hematological malignancies since Georges Mathé's first procedure in 1958.</li>
-<li><strong>Disease modeling</strong>: Patient-derived induced pluripotent stem cells (iPSCs) allow <em>in vitro</em> recapitulation of genetic diseases in previously inaccessible cell types (neurons, cardiomyocytes).</li>
-<li><strong>Cancer biology</strong>: The "cancer stem cell" hypothesis posits that tumor maintenance and relapse trace to a small self-renewing subpopulation — directly influencing how therapies are evaluated.</li>
-<li><strong>Developmental biology</strong>: ESC differentiation in culture recapitulates gastrulation, enabling mechanistic dissection of anterior–posterior patterning, Wnt/BMP gradients, and lineage commitment.</li>
+<li><strong>Hematopoietic stem cell transplantation (HSCT)</strong> — the only fully established stem-cell therapy (first performed by Georges Mathé, 1958), used for leukemias, lymphomas, and autoimmune conditions.</li>
+<li><strong>iPSC-derived cell therapies</strong> — patient-specific, avoiding immune rejection.</li>
+<li><strong>Organoid platforms</strong> — pluripotent-derived mini-organs for drug screening and disease modelling.</li>
 </ul>
+
+<div class="callout tip"><div class="callout-title">TIP: Cross-field relevance</div><div>The self-renewal/differentiation decision is formally equivalent to a <strong>binary fate switch</strong> governed by bistable gene regulatory networks — making stem cells a rich model system for dynamical systems biology and stochastic gene expression theory.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. The Niche as a Control System</strong></p>
-<p>Adult stem cells don't self-regulate in isolation. The surrounding <em>niche</em> (stromal cells, extracellular matrix, paracrine signals) enforces quiescence and instructs symmetric vs. asymmetric division. Disrupting niche architecture — not just the stem cells themselves — can collapse tissue homeostasis.</p>
+<ol>
+<li><strong>The Niche as an Active Controller.</strong> Adult stem cells reside in specialized microenvironments (niches) — e.g., the bone marrow perivascular niche for HSCs, or intestinal crypts for Lgr5⁺ stem cells. Niche signals (Wnt, Notch, BMP gradients) are not passive; they dynamically regulate the symmetric vs. asymmetric division ratio in response to demand.</li>
+</ol>
 
-<p><strong>2. Epigenetic rather than Genetic Identity</strong></p>
-<p>ESCs and somatic cells share identical genomes. Pluripotency is maintained by a transcription factor core — primarily <strong>OCT4</strong>, <strong>SOX2</strong>, and <strong>NANOG</strong> — whose combinatorial binding keeps developmental genes in a bivalent chromatin state (simultaneous H3K4me3 activation and H3K27me3 repression marks), poised for rapid lineage commitment.</p>
+<ol>
+<li><strong>Epigenetic Rather Than Genetic Pluripotency.</strong> Pluripotency is maintained by a transcription factor circuit dominated by OCT4, SOX2, and NANOG, which co-occupy enhancers and mutually reinforce expression while suppressing differentiation genes. Chromatin bivalency (co-occurrence of activating H3K4me3 and repressive H3K27me3 at developmental gene promoters) holds lineage genes in a poised, rapidly resolvable state.</li>
+</ol>
 
-<div class="callout tip"><div class="callout-title">TIP: Bivalency as a developmental bet-hedge</div><div>Bivalent domains allow a pluripotent cell to rapidly activate <em>any</em> lineage program without needing <em>de novo</em> chromatin remodeling. This is mechanistic elegance: gene sets stay "armed but not fired" until signaling resolves the ambiguity.</div></div>
+<ol>
+<li><strong>Yamanaka Reprogramming.</strong> Shinya Yamanaka's 2006 discovery that introducing just four transcription factors (OCT3/4, SOX2, KLF4, c-MYC — "OSKM") into somatic cells generates <strong>induced pluripotent stem cells (iPSCs)</strong> collapsed the conceptual barrier between stem and differentiated cells. Reprogramming passes through a stochastic, epigenome-wide remodelling phase; the efficiency and fidelity of this process remain active research questions.</li>
+</ol>
 
-<p><strong>3. Yamanaka Reprogramming and Its Limits</strong></p>
-<p>In 2006, Shinya Yamanaka demonstrated that forced expression of just four factors (OCT3/4, SOX2, KLF4, c-MYC) converts differentiated somatic cells into <strong>induced pluripotent stem cells (iPSCs)</strong> — overturning the assumption that differentiation is irreversible. iPSCs are functionally near-equivalent to ESCs but carry an epigenetic "memory" of their cell of origin that subtly biases downstream differentiation.</p>
+<ol>
+<li><strong>Clonal Dynamics and Stochastic Fate.</strong> In steadily renewing tissues (intestine, skin, blood), individual stem cell clones expand and contract probabilistically. Neutral drift — not deterministic hierarchy — governs clone size distributions in some niches, consistent with a <strong>population asymmetry</strong> model rather than per-cell asymmetric division.</li>
+</ol>
 
-<p><strong>4. Asymmetric Division Mechanics</strong></p>
-<p>Asymmetric fate is enforced by polarized segregation of cell-fate determinants (e.g., Numb in Drosophila neuroblasts, which antagonizes Notch) and unequal partitioning of aged organelles — particularly mitochondria. Daughter cells inheriting older mitochondria tend toward differentiation; those with younger organelles toward self-renewal.</p>
-
-<p><strong>5. Plasticity vs. Commitment</strong></p>
-<p>The classical Waddington epigenetic landscape frames commitment as a ball rolling into progressively deeper valleys. Recent single-cell transcriptomics challenges the strict hierarchy: some adult progenitors can dedifferentiate under injury, and fate transitions are probabilistic rather than deterministic gate-crossings.</p>
-
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated. The therapeutic pipeline for iPSC-derived cell products (beta cells, RPE cells, cardiomyocytes) is advancing rapidly; efficacy and safety data from ongoing phase I/II trials will substantially revise the clinical picture.</div></div>
+<ol>
+<li><strong>Cancer Stem Cell Hypothesis.</strong> A subset of tumour cells may possess stem-like self-renewal capacity and drive tumour maintenance and metastasis. This model predicts that therapies sparing cancer stem cells will fail to achieve durable remission — with significant implications for trial endpoint design.</li>
+</ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<p>Active research fronts as of early 2026:</p>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<ul>
-<li><strong>Organoids and gastruloids</strong>: Self-organizing 3D structures from PSCs that model early embryogenesis, gut, brain, and kidney. These push the boundary of <em>in vitro</em> developmental biology but raise ethical questions about synthetic embryo-like entities.</li>
-<li><strong>Direct lineage reprogramming</strong>: Bypassing pluripotency entirely to convert one somatic type directly into another (fibroblast → neuron), potentially safer than iPSC-based routes.</li>
-<li><strong>Niche engineering</strong>: Bioengineered matrices and microfluidic "organ-on-chip" platforms designed to maintain adult stem cell identity <em>ex vivo</em> — a longstanding bottleneck for intestinal crypts and hair follicle stem cells.</li>
-<li><strong>Clonal dynamics in aging</strong>: Somatic evolution of stem cell clones (e.g., clonal hematopoiesis) is now recognized as a major risk factor for cardiovascular disease and hematological cancers independent of overt malignancy.</li>
-</ul>
+<p>Active frontiers include: clinical translation of iPSC-derived cardiomyocytes and retinal pigment epithelium; in vivo reprogramming as a tissue rejuvenation strategy; spatial transcriptomics revealing niche heterogeneity at single-cell resolution; and mechanistic dissection of partial reprogramming (cycling OSKM expression) to reverse epigenetic aging without inducing full pluripotency.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Induced Pluripotent Stem Cells">Induced Pluripotent Stem Cells</a></li>
-<li><a href="/daily_knowledge/topic/Epigenetic Landscape and Cell Fate">Epigenetic Landscape and Cell Fate</a></li>
-<li><a href="/daily_knowledge/topic/Hematopoiesis and Bone Marrow Niches">Hematopoiesis and Bone Marrow Niches</a></li>
-<li><a href="/daily_knowledge/topic/Wnt and BMP Signaling Pathways">Wnt and BMP Signaling Pathways</a></li>
-<li><a href="/daily_knowledge/topic/Cancer Stem Cell Hypothesis">Cancer Stem Cell Hypothesis</a></li>
-<li><a href="/daily_knowledge/topic/Organoids and Synthetic Embryology">Organoids and Synthetic Embryology</a></li>
+<li><a href="/daily_knowledge/topic/Epigenetics and Chromatin Remodelling">Epigenetics and Chromatin Remodelling</a></li>
+<li><a href="/daily_knowledge/topic/Gene Regulatory Networks">Gene Regulatory Networks</a></li>
+<li><a href="/daily_knowledge/topic/Developmental Biology — Germ Layers and Gastrulation">Developmental Biology — Germ Layers and Gastrulation</a></li>
+<li><a href="/daily_knowledge/topic/Hematopoiesis">Hematopoiesis</a></li>
+<li><a href="/daily_knowledge/topic/Induced Pluripotent Stem Cells (iPSCs)">Induced Pluripotent Stem Cells (iPSCs)</a></li>
+<li><a href="/daily_knowledge/topic/Cancer Biology — Tumour Heterogeneity">Cancer Biology — Tumour Heterogeneity</a></li>
 </ul>
 
 <hr>
@@ -299,29 +299,29 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Asymmetric division requires exquisite spatial control — what goes wrong in the stem cell compartment when tissue architecture is disrupted by fibrosis or inflammation, and how does this connect to cancer risk?</li>
+<li><strong>Determinism vs. stochasticity:</strong> If stem cell fate is governed by stochastic epigenetic fluctuations rather than deterministic signals, what does this imply for the reliability of iPSC-derived therapies — and how should manufacturing protocols account for clone-to-clone variance?</li>
 </ol>
 
 <ol>
-<li>iPSCs and ESCs are functionally similar but not identical; given that the epigenetic memory of origin persists, does this fundamentally limit iPSC utility for modeling diseases of specific tissues, or is it a tractable engineering problem?</li>
+<li><strong>Partial reprogramming paradox:</strong> Cycling OSKM expression reportedly reverses epigenetic age markers without full dedifferentiation. What distinguishes the "partially reprogrammed" state mechanistically, and is epigenetic age genuinely causal or merely correlated with functional decline?</li>
 </ol>
 
 <ol>
-<li>Clonal hematopoiesis reveals that stem cell somatic mutation accumulates silently for decades before becoming clinically visible — what does this imply for the Waddington model of irreversible commitment, and how should we rethink "healthy" aging at the cellular level?</li>
+<li><strong>Niche or cell-intrinsic?:</strong> Given that niche ablation can exhaust stem cell pools, and that ectopic niche signals can expand them, how much of what we call "stem cell capacity" is actually a property of the cell versus the local microenvironment — and does this distinction matter clinically?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Stem_cell" target="_blank" rel="noopener"&gt;Stem Cell Biology&lt;/a&gt; · Retrieved 2026-03-24</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Stem_cell" target="_blank" rel="noopener"&gt;Stem Cell Biology&lt;/a&gt; · Retrieved 2026-06-30</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.22269v1" target="_blank" rel="noopener">Computational modeling of RNA-protein binding interactions under an external force</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.22221v1" target="_blank" rel="noopener">Dynamics of the Takagi function and the shadowing property</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.22180v1" target="_blank" rel="noopener">On the influence of optical smoothing techniques on cross-beam energy transfer</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.22134v1" target="_blank" rel="noopener">Pansu pullback and spectral complexes</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.22132v1" target="_blank" rel="noopener">The Complete Intersection property for binomial ideals of collections of cells</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30622v1" target="_blank" rel="noopener">Non-linear control variate in δf particle-in-cell methods using symplectic neural networks</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30620v1" target="_blank" rel="noopener">Gaussian processes on ray-guided transformed uniform grids for fast, flexible, and auto-differentiable adaptive source reconstruction in lens modelling</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30613v1" target="_blank" rel="noopener">Sequential Planning via Anchored Robotic Keypoints</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30609v1" target="_blank" rel="noopener">C$^{2}$R: Cross-sample Consistency Regularization Mitigates Feature Splitting and Absorption in Sparse Autoencoders</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30596v1" target="_blank" rel="noopener">A thermal representation for conformal ladder integrals</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Stem+Cell+Biology&labels=discussion&body=Topic:+[Stem+Cell+Biology](https://dhein.github.io/daily_knowledge/topic/stem_cells/)

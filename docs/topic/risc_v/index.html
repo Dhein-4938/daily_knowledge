@@ -215,72 +215,63 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>RISC-V Architecture<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Tech · Computer Architecture &nbsp;·&nbsp; ~5 min read</div>
+<div class="topic-meta">Tech · Computer Architecture &nbsp;·&nbsp; ~4 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div>RISC-V is a free, open-standard <strong>Instruction Set Architecture (ISA)</strong> grounded in Reduced Instruction Set Computer (RISC) principles. It defines the boundary contract between hardware and software — the set of operations a processor must implement — without mandating <em>how</em> those operations are physically realized.</div></div>
+<p>RISC-V is a free, open-standard <strong>Instruction Set Architecture (ISA)</strong> built on Reduced Instruction Set Computer principles. Unlike x86 (Intel/AMD) or ARM (licensed), RISC-V specifications are released under permissive open-source licenses — any entity can implement, extend, or manufacture RISC-V silicon without royalties or NDA.</p>
 
-<p>Unlike x86 (Intel/AMD) or ARM (ARM Holdings), RISC-V carries no royalty burden and its specification is released under permissive open-source licenses. This separates the <em>architectural standard</em> from any particular <em>microarchitectural implementation</em>, enabling a Cambrian explosion of independent hardware designs all sharing a compatible software ecosystem.</p>
+<div class="callout info"><div class="callout-title">INFO: ISA vs Microarchitecture</div><div>An ISA defines the programmer-visible contract: opcodes, registers, memory model, and calling conventions. The <em>microarchitecture</em> (pipeline depth, cache topology, branch predictor) is a separate implementation concern. RISC-V separates these cleanly, enabling wildly different implementations (in-order MCU cores to superscalar server chips) under the same ISA umbrella.</div></div>
 
-<p>The ISA is <strong>modular</strong>: a mandatory base integer ISA (RV32I, RV64I, or RV128I for 32-, 64-, and 128-bit address widths respectively) is supplemented by standard optional extensions:</p>
+<p>The base integer ISA comes in two width variants:</p>
 
-<p>| Extension | Adds |</p>
-<p>|-----------|------|</p>
-<p>| <code>M</code> | Integer multiply/divide |</p>
-<p>| <code>A</code> | Atomic operations |</p>
-<p>| <code>F</code> / <code>D</code> | Single / double-precision FP |</p>
-<p>| <code>C</code> | Compressed (16-bit) instructions |</p>
-<p>| <code>V</code> | Vector operations |</p>
+<p>$$\text{XLEN} \in \{32, 64, 128\}$$</p>
 
-<p>A common embedded target is <strong>RV32IMAC</strong>; a typical Linux-capable core targets <strong>RV64GC</strong> (<code>G</code> = <code>IMAFD</code>).</p>
+<p>where XLEN denotes the native integer register width. The canonical configurations are <strong>RV32I</strong>, <strong>RV64I</strong>, and the speculative <strong>RV128I</strong>. Extensions are denoted by suffixes: <code>M</code> (multiply/divide), <code>A</code> (atomics), <code>F</code>/<code>D</code>/<code>Q</code> (floating-point), <code>C</code> (compressed 16-bit instructions), <code>V</code> (vector). The combination <code>RV64GC</code> (G = IMAFD) is the standard Linux-capable baseline.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>RISC-V matters structurally, not just technically. Every prior ISA success story came bundled with either monopoly power (x86) or licensing friction (ARM). RISC-V decouples <em>standardization</em> from <em>commercialization</em>, which has three downstream effects:</p>
+<p><strong>Strategic decoupling from proprietary stacks.</strong> Nations, universities, and companies that cannot afford ARM licensing fees — or that face export-control risk on x86 — now have a credible alternative. This has major geopolitical significance: China's DAMO Academy (Alibaba) and domestic RISC-V investment signal ISA sovereignty as a policy goal.</p>
 
-<ol>
-<li><strong>Academic freedom</strong> — Universities can tape out real silicon without NDAs, accelerating computer architecture research.</li>
-<li><strong>Supply-chain sovereignty</strong> — Nations and companies can build processors without geopolitical licensing exposure.</li>
-<li><strong>Vertical integration at low cost</strong> — A startup can design a custom RISC-V core, add proprietary accelerator extensions, and ship a product without a per-unit royalty.</li>
-</ol>
+<p><strong>Research platform.</strong> Because the ISA is public and modifiable, academia can propose and prototype extensions without legal friction. RISC-V has replaced MIPS as the default teaching and research ISA at most top CS programs.</p>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>The real competitive moat in RISC-V isn't the ISA itself — it's the software ecosystem. The moment GCC, LLVM, Linux, and glibc support RV64GC, every language runtime and OS that compiles from source inherits that support for free. This is the flywheel ARM spent decades building; RISC-V inherited it almost immediately.</div></div>
+<p><strong>Embedded proliferation.</strong> Espressif's ESP32-C series and Raspberry Pi's RP2350 (secondary RISC-V cores) have put RISC-V into millions of consumer devices, giving the ecosystem a critical mass of toolchain maturity (GCC, LLVM, Rust, Zephyr RTOS, Linux kernel support).</p>
+
+<div class="callout tip"><div class="callout-title">TIP: RISC-V and the "ISA tax"</div><div>ARM charges per-core royalties that scale with volume — a significant cost for high-volume IoT silicon. RISC-V eliminates this, shifting competition entirely to microarchitecture quality and software ecosystem depth, which favors incumbents with strong engineering teams rather than IP portfolios.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Load-store architecture.</strong> Like all RISC designs, RISC-V operates on registers only; memory is accessed exclusively via explicit load/store instructions. This simplifies pipeline design and enables aggressive out-of-order execution.</p>
+<ol>
+<li><strong>Modular, not monolithic.</strong> The ISA is intentionally split into a stable <em>ratified</em> base plus optional extensions. This avoids x86's burden of backward-compatible cruft accumulating over decades. Custom extensions (prefix <code>X</code>) allow vertical-market differentiation without forking the base.</li>
+</ol>
 
-<p><strong>2. Fixed-width base encoding (with optional compression).</strong> Base instructions are 32 bits, 4-byte aligned. The <code>C</code> extension adds 16-bit instruction forms for common operations, reducing code density cost — a historical RISC weakness — to near-CISC levels.</p>
+<ol>
+<li><strong>Privileged architecture is separate.</strong> The unprivileged ISA (user-space instructions) is ratified independently from the privileged spec (machine mode M, supervisor mode S, hypervisor H extension). This clean layering simplifies formal verification and OS porting.</li>
+</ol>
 
-<p><strong>3. No legacy baggage.</strong> x86 carries 45+ years of backward compatibility constraints. RISC-V was designed from scratch in 2010 with knowledge of what those constraints cost in silicon area, power, and verification complexity. There are no vestigial modes, no segmentation, no microcode for legacy decode.</p>
+<ol>
+<li><strong>Memory model: RVWMO.</strong> RISC-V uses the <em>RISC-V Weak Memory Ordering</em> model — weaker than x86's TSO but stronger than ARM's relaxed model. Programmers using atomics (<code>A</code> extension) must reason carefully about <code>fence</code> instructions.</li>
+</ol>
 
-<p><strong>4. Custom extension space is standardized.</strong> The spec reserves opcode space (<code>custom-0</code> through <code>custom-3</code>) explicitly for vendor extensions, with defined rules preventing conflicts with future standard extensions. This enables domain-specific acceleration (crypto, ML, DSP) without forking the ISA.</p>
+<ol>
+<li><strong>Compressed instructions reduce code density.</strong> The <code>C</code> extension interleaves 16-bit encodings with 32-bit ones (variable-length within a fixed-alignment scheme). Benchmarks show ~25–30% code-size reduction vs. RV64G alone, closing much of the gap with ARM Thumb-2.</li>
+</ol>
 
-<p><strong>5. Privileged architecture is separate.</strong> The user-level ISA spec and the privileged spec (defining M/S/U privilege modes, CSRs, virtual memory via Sv39/Sv48/Sv57 schemes) are distinct documents. This means a minimal embedded core can implement M-mode only, while a full Linux-capable core adds S-mode and a page-table walker.</p>
+<ol>
+<li><strong>Vector extension (RV-V 1.0) uses variable-length registers.</strong> Unlike SIMD (fixed-width SSE/AVX), RV-V exposes a <em>vector length register</em> (<code>vl</code>) and element-width setting (<code>vtype</code>), letting software write vector loops once that adapt to hardware VLEN at runtime — from 128-bit embedded to 512-bit+ server implementations.</li>
+</ol>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>Sv39 uses a 3-level page table over 39-bit virtual addresses — exactly 512 GB of VA space, sufficient for current server workloads. The $$2^{39}$$ ceiling is a deliberate engineering trade-off, not a limitation of the ISA; Sv48 and Sv57 extend this to $$2^{48}$$ and $$2^{57}$$ bytes respectively by adding page-table levels.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The high-performance server and desktop RISC-V segment (SiFive P870, SpacemiT X60) is rapidly evolving. Performance parity claims vs. ARM Cortex-A or Apple Silicon should be verified against current benchmarks.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
-
-<p>As of early 2026, RISC-V is transitioning from embedded/microcontroller dominance toward competitive general-purpose compute:</p>
-
-<ul>
-<li><strong>Embedded/IoT</strong> is mature: Espressif's ESP32-C series, SiFive's E-series cores, and Raspberry Pi's RP2350 (which includes RISC-V cores alongside ARM) demonstrate production-grade adoption.</li>
-<li><strong>High-performance implementations</strong> are emerging: SiFive's P870, SpacemiT's X60 cluster (used in the Banana Pi BPI-F3), and Alibaba's DAMO Academy XuanTie series push RISC-V into laptop and server territory.</li>
-<li><strong>Vector extension (RV V 1.0)</strong> ratification in 2021 unblocked ML/HPC workloads; toolchain support (GCC 14+, LLVM 17+) has since matured.</li>
-<li><strong>RISC-V International</strong> continues ratifying extensions: hypervisor (<code>H</code>), cryptography (<code>Zk*</code> family), and the forthcoming <strong>RVA23 profile</strong> standardizes a minimum capability baseline for application-class Linux systems — critical for OS and firmware portability.</li>
-</ul>
-
-<p>The unresolved challenge is <strong>single-thread performance</strong>. High-IPC, deeply out-of-order RISC-V cores exist (e.g., BOOM from Berkeley, CVA6), but no commercial RISC-V core yet matches Apple Silicon or AMD Zen in peak single-thread throughput.</p>
+<p>Active research and engineering fronts include: out-of-order superscalar open-source cores (CVA6/Ara, BOOM), formal ISA verification via Sail model, security extensions (pointer authentication analogue, CFI proposals), and hypervisor-class deployments. The RISC-V Vector extension reaching 1.0 ratification in 2021 unblocked ML accelerator design that reuses the vector machinery.</p>
 
 <hr>
 
@@ -288,11 +279,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/RISC vs CISC">RISC vs CISC</a></li>
-<li><a href="/daily_knowledge/topic/ARM Architecture">ARM Architecture</a></li>
-<li><a href="/daily_knowledge/topic/Computer Microarchitecture">Computer Microarchitecture</a></li>
-<li><a href="/daily_knowledge/topic/LLVM Compiler Infrastructure">LLVM Compiler Infrastructure</a></li>
-<li><a href="/daily_knowledge/topic/POSIX and ABI Compatibility">POSIX and ABI Compatibility</a></li>
-<li><a href="/daily_knowledge/topic/Custom Silicon and ASICs">Custom Silicon and ASICs</a></li>
+<li><a href="/daily_knowledge/topic/Memory Consistency Models">Memory Consistency Models</a></li>
+<li><a href="/daily_knowledge/topic/Hardware Security and Trusted Execution Environments">Hardware Security and Trusted Execution Environments</a></li>
+<li><a href="/daily_knowledge/topic/Open-Source Silicon and PDKs">Open-Source Silicon and PDKs</a></li>
+<li><a href="/daily_knowledge/topic/LLVM Backend Architecture">LLVM Backend Architecture</a></li>
+<li><a href="/daily_knowledge/topic/Embedded Systems and RTOS">Embedded Systems and RTOS</a></li>
 </ul>
 
 <hr>
@@ -300,21 +291,22 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Ecosystem vs. Architecture:</strong> ARM's success came largely from its software ecosystem, not the ISA itself. Given that RISC-V inherits most of that ecosystem through open-source toolchains, what is the remaining defensible advantage for ARM in the next decade?</li>
-</ol>
-
-<ol>
-<li><strong>Extension fragmentation risk:</strong> The custom extension mechanism prevents royalty conflicts but could fragment the ecosystem if vendors implement incompatible overlapping extensions. How does the RISC-V standardization process (profiles, ratification tracks) mitigate — or fail to mitigate — this risk in practice?</li>
-</ol>
-
-<ol>
-<li><strong>Security implications of openness:</strong> Proprietary ISAs can obscure microarchitectural details, making certain side-channel attacks harder to exploit publicly. Does full ISA openness change the threat model for attacks like Spectre/Meltdown, and how should RISC-V implementers reason about this?</li>
+<li>RISC-V's modular extension system prevents "ISA creep" — but does voluntary fragmentation (every vendor adding custom <code>X</code> extensions) recreate the compatibility problems it was designed to avoid?</li>
+<li>How does RVWMO's memory model compare practically to TSO when porting lock-free data structures from x86? Where do silent bugs lurk?</li>
+<li>Given that microarchitecture quality — not ISA — determines performance, what stops a well-funded ARM licensee from simply outcompeting any open RISC-V implementation indefinitely?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/RISC-V" target="_blank" rel="noopener"&gt;RISC-V Architecture&lt;/a&gt; · Retrieved 2026-03-24</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/RISC-V" target="_blank" rel="noopener"&gt;RISC-V Architecture&lt;/a&gt; · Retrieved 2026-06-30</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2606.30645v1" target="_blank" rel="noopener">VLK: Learning Humanoid Loco-Manipulation from Synthetic Interactions in Reconstructed Scenes</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30643v1" target="_blank" rel="noopener">Expansion rate of the young, oxygen-rich supernova remnant G292.0+1.8</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.30642v1" target="_blank" rel="noopener">LeVo 2: Stable and Melodious Song Generation via Hierarchical Representation Modeling and Progressive Post-Training</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+RISC-V+Architecture&labels=discussion&body=Topic:+[RISC-V+Architecture](https://dhein.github.io/daily_knowledge/topic/risc_v/)
 
