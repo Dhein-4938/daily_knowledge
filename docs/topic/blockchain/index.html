@@ -219,62 +219,71 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>blockchain</strong> is an append-only distributed ledger composed of cryptographically linked records (blocks). Each block commits to its predecessor via a hash pointer, forming an authenticated chain: $$B_i = \langle H(B_{i-1}),\ t_i,\ \text{root}(\mathcal{T}_i) \rangle$$ where $H$ is a collision-resistant hash function, $t_i$ is a timestamp, and $\text{root}(\mathcal{T}_i)$ is the Merkle root of the transaction set in block $i$.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>blockchain</strong> is an append-only distributed ledger composed of cryptographically linked blocks, where each block commits to its predecessor via a hash pointer, making retroactive tampering computationally infeasible without network-wide consensus.</div></div>
 
-<p>The structure is essentially a <strong>hash-linked list</strong>: mutating any block $B_k$ invalidates $H(B_k)$, which cascades to invalidate $B_{k+1}, \ldots, B_n$. Retroactive tampering therefore requires recomputing every subsequent block <em>and</em> convincing the network to accept the revised chain — a bar set deliberately high by consensus mechanisms.</p>
+<p>Formally, treat each block $B_i$ as a tuple:</p>
 
-<p>Transaction data within a block is organized as a <strong>Merkle tree</strong>: leaf nodes are transaction hashes, interior nodes are hashes of their children, and the root is a 32-byte commitment to the entire set. This allows $O(\log n)$ inclusion proofs, enabling lightweight clients (SPV) to verify membership without downloading full blocks.</p>
+<p>$$B_i = (h_{i-1},\ t_i,\ \text{root}(\mathcal{T}_i),\ \text{nonce}_i)$$</p>
+
+<p>where $h_{i-1} = H(B_{i-1})$ is the parent's cryptographic hash, $t_i$ is a timestamp, and $\text{root}(\mathcal{T}_i)$ is the Merkle root of the transaction tree $\mathcal{T}_i$. Altering any $B_j$ invalidates $h_j$, which cascades to invalidate $B_{j+1}, \ldots, B_n$—requiring recomputation of all subsequent proof-of-work (or equivalent) plus capturing network consensus. This is the chain's tamper-evidence guarantee.</p>
+
+<p>The Merkle tree structure provides $O(\log n)$ inclusion proofs: a lightweight client can verify a single transaction without downloading the full block, crucial for scalability.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Blockchain solved a fundamental problem in distributed systems: <strong>double-spending without a trusted third party</strong>. Prior to Bitcoin (2008), preventing a digital asset from being spent twice required a central authority. Nakamoto's design replaced the authority with a decentralized consensus protocol, bootstrapping trust from economic incentives and cryptographic proofs.</p>
+<p>Blockchain solved the <strong>double-spend problem</strong> for digital cash—previously requiring a trusted central authority—by replacing institutional trust with cryptoeconomic incentive alignment. This is architecturally significant: it instantiates a <em>trustless</em> system from untrusted peers.</p>
 
-<p>Significance extends well beyond currency:</p>
-
+<p>Key application domains:</p>
 <ul>
-<li><strong>Smart contracts</strong> (Ethereum, 2015): Turing-complete code executed deterministically on every validating node, enabling trustless programmable agreements.</li>
-<li><strong>Supply chain provenance</strong>: Immutable audit trails without a single custodian.</li>
-<li><strong>Byzantine fault tolerance</strong>: Blockchains operationalize a BFT system tolerating up to $f < n/3$ (BFT) or $f < n/2$ (PoW Nakamoto) malicious nodes.</li>
-<li><strong>Digital identity and credentials</strong>: Self-sovereign identity anchored to a public ledger.</li>
+<li><strong>Cryptocurrency</strong> — Bitcoin, Ethereum: permissionless value transfer</li>
+<li><strong>Smart contracts</strong> — Turing-complete execution (Ethereum EVM) enabling DeFi, DAOs, NFTs</li>
+<li><strong>Supply chain provenance</strong> — Immutable audit trails without a central record-keeper</li>
+<li><strong>Digital identity &amp; credentialing</strong> — Self-sovereign identity (SSI) systems</li>
+<li><strong>Payment rails</strong> — Settlement finality without correspondent banking</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Connection to Distributed Systems Theory</div><div>Blockchain consensus is a concrete realization of the <strong>Byzantine Generals Problem</strong>. PoW sidesteps the classical BFT impossibility result (FLP, 1985) by introducing probabilistic finality and economic cost-of-attack rather than deterministic agreement — a subtle but critical departure from academic BFT literature.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Broader systems connection</div><div>Blockchain is a specialization of <strong>Byzantine Fault Tolerant (BFT) replicated state machines</strong>. The novelty of Nakamoto consensus was achieving BFT in an <em>open, permissionless</em> setting using proof-of-work as a Sybil-resistance mechanism—something classical BFT protocols (PBFT, Tendermint) assume away by requiring known validator sets.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Consensus Mechanisms</strong>: Proof-of-Work (PoW) achieves agreement via computational expenditure; the longest valid chain wins. Proof-of-Stake (PoS) replaces computation with collateralized stake, slashing dishonest validators. The security model differs fundamentally: PoW attacks cost energy; PoS attacks cost locked capital.</li>
+<li><strong>Consensus Mechanisms differ fundamentally in trust model.</strong> Proof-of-Work (PoW) ties voting power to physical compute; Proof-of-Stake (PoS) ties it to bonded capital with slashing conditions. PoS reduces energy cost by ~99.9% but introduces different attack surfaces (long-range attacks, nothing-at-stake).</li>
 </ol>
 
 <ol>
-<li><strong>Merkle Trees and Efficiency</strong>: The Merkle root enables <em>stateless verification</em>. A client can prove transaction inclusion with a path of $\lceil \log_2 n \rceil$ hashes — critical for mobile and IoT nodes that can't store gigabytes of chain data.</li>
+<li><strong>Forks are real and consequential.</strong> Blockchains are <em>not</em> immutable in an absolute sense—a sufficiently resourced adversary controlling >50% of hashrate (PoW) or stake (PoS) can reorg the chain. The security guarantee is probabilistic: after $k$ confirmations, reversion cost exceeds rational attacker budget.</li>
 </ol>
 
 <ol>
-<li><strong>Forks</strong>: A chain fork occurs when two valid blocks extend the same parent simultaneously. In PoW, the network resolves forks via the longest-chain (Nakamoto) rule. <em>Hard forks</em> introduce backward-incompatible rule changes and can permanently split chains (see: Bitcoin/Bitcoin Cash, 2017). Finality is thus <strong>probabilistic</strong> in Nakamoto consensus, not absolute.</li>
+<li><strong>Merkle trees enable SPV clients.</strong> Simple Payment Verification uses $O(\log n)$ sibling hashes to prove inclusion—this is what makes light wallets possible and is a key scalability primitive.</li>
 </ol>
 
 <ol>
-<li><strong>Permissioned vs. Permissionless</strong>: Public chains (Bitcoin, Ethereum) allow open participation; permissioned chains (Hyperledger Fabric) restrict node membership. Permissioned chains can run classical BFT protocols (e.g., PBFT, HotStuff) achieving <em>deterministic finality</em>, but sacrifice censorship resistance.</li>
+<li><strong>Permissioned vs. permissionless is an architectural spectrum.</strong> Permissioned chains (Hyperledger Fabric, Quorum) trade decentralization for throughput and privacy—meaningful for enterprise use cases, but they sacrifice the Sybil-resistance property that motivates the design in the first place.</li>
 </ol>
 
 <ol>
-<li><strong>Storage Scalability</strong>: Full nodes store every block since genesis. Bitcoin's UTXO model and Ethereum's world-state trie both grow monotonically. Stateless clients and Verkle trees are active research directions to decouple verification from full-state storage.</li>
+<li><strong>The trilemma frames all design tradeoffs.</strong> Vitalik Buterin's scalability trilemma posits you can optimize at most two of {decentralization, security, scalability}. Layer-2 solutions (rollups, state channels) attempt to escape it by moving execution off-chain while inheriting L1 security.</li>
 </ol>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the Layer-2 ecosystem (ZK-rollups, optimistic rollups) and PoS adoption (Ethereum Merge, 2022) are rapidly evolving; specific protocol details may have shifted.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<p>Active research fronts as of 2026:</p>
 
-<p>Active research concentrates on <strong>scalability trilemma</strong> trade-offs (decentralization / security / throughput): Layer-2 rollups (optimistic and ZK-based) bundle transactions off-chain and post compressed proofs on-chain. ZK-rollups use succinct proofs (SNARKs/STARKs) to verify batches of thousands of transactions with a single on-chain proof, potentially achieving near-mainchain security at a fraction of the cost.</p>
-
-<p>Ethereum's post-Merge PoS transition (2022) demonstrated large-scale migration of a live network from PoW to PoS, reducing energy consumption by ~99.95%. <strong>Danksharding</strong> (proto-danksharding via EIP-4844) introduces blob-carrying transactions to reduce rollup data costs, a stepping stone to full data availability sampling.</p>
+<ul>
+<li><strong>ZK-SNARKs / ZK-STARKs for rollups</strong> — validity proofs compress batch transactions; STARK-based systems (StarkNet, Polygon zkEVM) avoid trusted setups at cost of larger proof size</li>
+<li><strong>Cross-chain interoperability</strong> — bridges remain a primary attack surface; formal verification of bridge contracts is an open problem</li>
+<li><strong>MEV (Maximal Extractable Value)</strong> — miner/validator ordering power creates front-running and sandwich attacks; PBS (Proposer-Builder Separation) and encrypted mempools are proposed mitigations</li>
+<li><strong>Formal verification of consensus</strong> — mechanized proofs of safety/liveness for PoS protocols under asynchronous network models</li>
+</ul>
 
 <hr>
 
@@ -282,11 +291,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/Merkle Trees">Merkle Trees</a></li>
-<li><a href="/daily_knowledge/topic/Consensus Algorithms">Consensus Algorithms</a></li>
-<li><a href="/daily_knowledge/topic/Cryptographic Hash Functions">Cryptographic Hash Functions</a></li>
 <li><a href="/daily_knowledge/topic/Byzantine Fault Tolerance">Byzantine Fault Tolerance</a></li>
+<li><a href="/daily_knowledge/topic/Cryptographic Hash Functions">Cryptographic Hash Functions</a></li>
 <li><a href="/daily_knowledge/topic/Zero-Knowledge Proofs">Zero-Knowledge Proofs</a></li>
-<li><a href="/daily_knowledge/topic/Distributed Ledger Technology">Distributed Ledger Technology</a></li>
+<li><a href="/daily_knowledge/topic/Distributed Consensus Algorithms">Distributed Consensus Algorithms</a></li>
+<li><a href="/daily_knowledge/topic/Smart Contracts">Smart Contracts</a></li>
 </ul>
 
 <hr>
@@ -294,21 +303,21 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>PoW achieves probabilistic finality through cumulative work — what are the philosophical and engineering implications of a system where "truth" is never absolute but only increasingly expensive to reverse?</li>
+<li><strong>Consensus vs. finality:</strong> PoW achieves probabilistic finality while BFT-style PoS achieves absolute finality after a supermajority vote—what are the latency and liveness tradeoffs, and when would you prefer one over the other in a system design?</li>
 </ol>
 
 <ol>
-<li>The FLP impossibility theorem states no deterministic algorithm can achieve consensus in an asynchronous network with even one faulty node. How do real blockchain systems escape this result, and what assumptions do they smuggle in to do so?</li>
+<li><strong>The permissioned paradox:</strong> If a permissioned blockchain requires trusting the entity that controls membership, what security properties does it actually provide over a traditional replicated database like CockroachDB or Spanner—and when, if ever, is it the right tool?</li>
 </ol>
 
 <ol>
-<li>Permissioned blockchains can achieve higher throughput and deterministic finality than permissionless ones — so under what precise conditions (threat models, trust assumptions, regulatory contexts) is a permissionless chain strictly <em>necessary</em> rather than merely ideologically preferred?</li>
+<li><strong>Trilemma escape routes:</strong> Layer-2 rollups inherit L1 security by posting state roots on-chain, but validity depends on data availability. How does danksharding (EIP-4844 and successors) address the data availability bottleneck, and what residual trust assumptions remain?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Blockchain" target="_blank" rel="noopener"&gt;Blockchain Technology&lt;/a&gt; · Retrieved 2026-03-25</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Blockchain" target="_blank" rel="noopener"&gt;Blockchain Technology&lt;/a&gt; · Retrieved 2026-07-01</em></p></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Blockchain+Technology&labels=discussion&body=Topic:+[Blockchain+Technology](https://dhein.github.io/daily_knowledge/topic/blockchain/)
 

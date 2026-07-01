@@ -219,80 +219,55 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>Graph Neural Network (GNN)</strong> is a neural architecture that operates directly on graph-structured data $G = (V, E)$, learning node, edge, or graph-level representations through iterative <strong>message passing</strong> between neighboring nodes.</div></div>
+<div class="callout info"><div class="callout-title">INFO</div><div>A <strong>Graph Neural Network (GNN)</strong> is a neural architecture that operates directly on graph-structured inputs $G = (V, E, \mathbf{X})$, where $V$ is the node set, $E$ the edge set, and $\mathbf{X} \in \mathbb{R}^{|V| \times d}$ the node feature matrix.</div></div>
 
-<p>At each layer $\ell$, a node $v$ aggregates messages from its neighborhood $\mathcal{N}(v)$ and updates its hidden state:</p>
+<p>The defining mechanism is <strong>pairwise message passing</strong>: each node $v$ iteratively aggregates representations from its neighborhood $\mathcal{N}(v)$ to update its own embedding. A single layer takes the general form:</p>
 
-<p>$$h_v^{(\ell+1)} = \text{UPDATE}^{(\ell)}\!\left(h_v^{(\ell)},\; \text{AGG}^{(\ell)}\!\left(\{h_u^{(\ell)} : u \in \mathcal{N}(v)\}\right)\right)$$</p>
+<p>$$\mathbf{h}_v^{(k)} = \phi\!\left(\mathbf{h}_v^{(k-1)},\; \bigoplus_{u \in \mathcal{N}(v)} \psi\!\left(\mathbf{h}_v^{(k-1)}, \mathbf{h}_u^{(k-1)}, \mathbf{e}_{uv}\right)\right)$$</p>
 
-<p>The choice of $\text{AGG}$ (sum, mean, max, attention-weighted) and $\text{UPDATE}$ (MLP, GRU cell, etc.) distinguishes the major architectures:</p>
+<p>where $\psi$ is the <strong>message function</strong>, $\bigoplus$ is a permutation-invariant aggregator (sum, mean, max), and $\phi$ is the <strong>update function</strong>. After $K$ layers, the $K$-hop neighborhood of each node has been incorporated.</p>
 
-<p>| Architecture | AGG scheme | Key property |</p>
-<p>|---|---|---|</p>
-<p>| GCN (Kipf & Welling) | Normalized sum | Spectral grounding |</p>
-<p>| GraphSAGE | Sample + mean/LSTM | Inductive (unseen nodes) |</p>
-<p>| GAT | Attention-weighted | Learnable neighbor weights |</p>
-<p>| MPNN | Edge-featured sum | Chemistry-friendly |</p>
-<p>| GIN | Sum + MLP | Maximally expressive (WL-equivalent) |</p>
-
-<p>After $k$ layers, $h_v^{(k)}$ encodes the <strong>$k$-hop neighborhood structure</strong> around $v$.</p>
-
-<hr>
+<p>Two symmetry properties are load-bearing:</p>
+<ul>
+<li><strong>Permutation equivariance</strong> (node-level): reorder nodes → representations reorder identically.</li>
+<li><strong>Permutation invariance</strong> (graph-level): a readout $R(\{\mathbf{h}_v^{(K)}\}_{v \in V})$ must be insensitive to node ordering — typically implemented via a summing or max-pooling readout followed by an MLP.</li>
+</ul>
 
 <h2>Why It Matters</h2>
 
-<p>Graphs are the natural representation for a vast class of real-world systems — molecules, social networks, citation graphs, knowledge bases, physical simulations, and road networks — where Euclidean structure is absent and variable-size inputs are the norm. GNNs are the canonical tool for <strong>inductive reasoning over relational data</strong>.</p>
+<p>Graphs are the natural representation for a vast range of structured data: molecules (atoms = nodes, bonds = edges), social networks, citation graphs, knowledge bases, physical simulations, and combinatorial optimization instances. CNNs and RNNs impose a grid or sequence topology that is artificial for these domains.</p>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>GNNs unify seemingly disparate architectures. A standard 2D <strong>CNN</strong> is a GNN on a grid graph (nodes = pixels, edges = adjacency). A <strong>Transformer</strong> is a GNN on a <em>complete</em> graph with attention as the message-passing kernel. This perspective — part of <strong>geometric deep learning</strong> — reveals a single blueprint: exploit the symmetries of the input domain.</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>GNNs unify apparently distinct architectures. A <strong>CNN layer</strong> is a GNN on a grid graph where each pixel connects only to its spatial neighbors. A <strong>Transformer layer</strong> is a GNN on a <em>complete</em> graph — every token attends to every other — making self-attention a special case of message passing with learned, edge-wise weights. This geometric deep learning perspective cleanly explains why both architectures generalize across scales.</div></div>
 
-<p>Applications with production impact:</p>
-<ul>
-<li><strong>Drug discovery</strong>: molecular property prediction, de novo generation (AlphaFold-adjacent pipelines)</li>
-<li><strong>Recommender systems</strong>: Pinterest, Uber Eats use GNN-based collaborative filtering</li>
-<li><strong>Combinatorial optimization</strong>: TSP, MaxCut approximation via learned heuristics</li>
-<li><strong>Physics simulations</strong>: learned simulators (e.g., GNS) replace numerical solvers for fluids and rigid bodies</li>
-</ul>
-
-<hr>
+<p>The molecular drug design use case is paradigmatic: predict a molecule's bioactivity (e.g., against <em>E. coli</em>) from its graph structure and atom-level chemical features, where inputs vary in size across compounds. No fixed-size representation is possible without GNNs or ad hoc featurization.</p>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Expressiveness ceiling — the WL hierarchy.</strong> Standard message-passing GNNs are at most as expressive as the 1-Weisfeiler-Lehman (1-WL) graph isomorphism test. They cannot distinguish certain non-isomorphic graphs (e.g., regular graphs of the same degree). Higher-order WL tests inspire $k$-GNNs, but at exponential cost.</li>
+<li><strong>Expressive power and the WL test.</strong> The expressive power of message-passing GNNs is bounded by the 1-dimensional Weisfeiler-Lehman (1-WL) graph isomorphism test. Two non-isomorphic graphs that 1-WL cannot distinguish will produce identical representations — a hard ceiling for standard architectures.</li>
 </ol>
 
 <ol>
-<li><strong>Over-smoothing and over-squashing.</strong> Stacking many layers causes node features to converge (over-smoothing). Independently, exponentially many nodes must route information through graph bottlenecks, causing information loss (over-squashing). These are distinct failure modes requiring different mitigations (residual connections, graph rewiring).</li>
+<li><strong>Over-smoothing.</strong> Stacking many message-passing layers causes node representations to converge (all nodes look the same), since each layer effectively blurs features across larger neighborhoods. Practical GNNs are often shallow (2–5 layers) relative to sequence models.</li>
 </ol>
 
 <ol>
-<li><strong>Positional encodings on graphs.</strong> Unlike sequences or grids, graphs have no canonical node ordering. Learned or spectral positional encodings (Laplacian eigenvectors, random-walk statistics) break symmetry and boost expressiveness without full $k$-WL overhead.</li>
+<li><strong>Augmented message passing.</strong> Many architectures marketed as "beyond message passing" (e.g., those using higher-order structural features or virtual nodes) can be reframed as message passing on a <em>modified</em> graph. The 2022 position paper term <strong>augmented message passing</strong> captures this: the graph topology is enriched, not the mechanism itself.</li>
 </ol>
 
 <ol>
-<li><strong>Edge and global features.</strong> The MPNN framework naturally handles edge attributes $e_{uv}$ by incorporating them into the message function $\phi(h_u, h_v, e_{uv})$. Graph-level tasks use a final $\text{READOUT}$ pooling step (sum/attention over all nodes).</li>
+<li><strong>Edge and global features.</strong> Real graphs often carry edge attributes (e.g., bond type, distance) and a global graph state. Architectures like MPNN and GN-framework incorporate these explicitly in $\mathbf{e}_{uv}$ and a graph-level latent $\mathbf{u}$.</li>
 </ol>
 
 <ol>
-<li><strong>Heterogeneous graphs.</strong> Real knowledge graphs have typed nodes and edges. Relational GCN (R-GCN) and HAN use type-specific weight matrices, preventing spurious cross-type message mixing.</li>
+<li><strong>Scalability.</strong> Full neighborhood aggregation is $\mathcal{O}(|E|)$ per layer, but on dense graphs or deep stacks this is prohibitive. Neighbor sampling (GraphSAGE), cluster-based batching (Cluster-GCN), and sparse attention are active engineering mitigations.</li>
 </ol>
-
-<hr>
 
 <h2>Current State</h2>
 
 <div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active research fronts as of early 2026:</p>
-
-<ul>
-<li><strong>Scalability</strong>: Full-batch message passing is $O(|E|)$ per layer — intractable for billion-edge graphs. Cluster-GCN, GraphSAINT, and neighbor sampling (GraphSAGE) are standard mitigations; scaling laws for GNNs remain underexplored.</li>
-<li><strong>Going beyond message passing</strong>: It is an open question whether expressive-enough GNNs <em>must</em> be built on message passing, or whether fundamentally different paradigms (e.g., subgraph GNNs, spectral methods) offer asymptotic advantages.</li>
-<li><strong>Graph Transformers</strong>: Architectures like GraphGPS and Exphormer hybridize attention with local message passing, effectively sidestepping the over-squashing bottleneck.</li>
-<li><strong>Generative GNNs</strong>: Diffusion models on graphs (e.g., DiGress) enable molecular generation with discrete graph structure — a rapidly maturing area.</li>
-</ul>
-
-<hr>
+<p>Active research threads include: pushing expressive power beyond 1-WL via $k$-WL-equivalent designs (NGNN, OSAN, subgraph GNNs); <strong>GNN + LLM</strong> hybrids for heterogeneous graphs with rich text attributes (see FedLAB-style federated multimodal graph learning); and <strong>graph foundation models</strong> that pretrain on large corpora of graphs for cross-domain transfer. Position papers continue to argue about whether architectural complexity is necessary or whether expressive augmented message passing suffices for most tasks.</p>
 
 <h2>See Also</h2>
 
@@ -302,37 +277,29 @@ MathJax = {
 <li><a href="/daily_knowledge/topic/Geometric Deep Learning">Geometric Deep Learning</a></li>
 <li><a href="/daily_knowledge/topic/Transformer Architecture">Transformer Architecture</a></li>
 <li><a href="/daily_knowledge/topic/Molecular Property Prediction">Molecular Property Prediction</a></li>
-<li><a href="/daily_knowledge/topic/Graph Transformers">Graph Transformers</a></li>
+<li><a href="/daily_knowledge/topic/Graph Representation Learning">Graph Representation Learning</a></li>
 </ul>
-
-<hr>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The 1-WL expressiveness ceiling is a hard theoretical limit for vanilla MPNNs — but does it matter empirically? Under what real-world distribution of graphs do non-isomorphic-but-WL-equivalent pairs actually appear, and is this a practical concern for molecular or social-network tasks?</li>
-</ol>
-
-<ol>
-<li>Transformers on full-attention graphs and GNNs on sparse graphs occupy opposite ends of a locality-globality tradeoff. What inductive biases, if any, does sparsity <em>productively</em> impose — and when should you prefer a sparse GNN over a dense graph Transformer?</li>
-</ol>
-
-<ol>
-<li>Over-squashing can be framed as an information-theoretic bottleneck: a node's $k$-hop receptive field grows exponentially while its embedding dimension stays fixed. Does this suggest a fundamental limit on how much <em>graph-global</em> reasoning a fixed-width GNN can do, and how does this relate to the circuit-complexity lower bounds in theoretical CS?</li>
+<li>Given that Transformers are GNNs on complete graphs, what does the success of sparse attention (e.g., local windows in Swin) suggest about the <em>inductive bias</em> value of restricting the graph topology?</li>
+<li>Over-smoothing is fundamentally a depth problem. How do skip connections (as in ResGCN) or learnable diffusion timescales address this, and where do they fall short compared to the WL expressive-power ceiling?</li>
+<li>The readout function must be permutation-invariant, but many practical choices (sum, mean, max) lose information. What is the theoretically <em>most expressive</em> permutation-invariant readout, and why is it rarely used in practice?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Graph_neural_network" target="_blank" rel="noopener"&gt;Graph Neural Networks&lt;/a&gt; · Retrieved 2026-03-25</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Graph_neural_network" target="_blank" rel="noopener"&gt;Graph Neural Networks&lt;/a&gt; · Retrieved 2026-07-01</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.23496v1" target="_blank" rel="noopener">Estimating Flow Velocity and Vehicle Angle-of-Attack from Non-invasive Piezoelectric Structural Measurements Using Deep Learning</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.23495v1" target="_blank" rel="noopener">VISion On Request: Enhanced VLLM efficiency with sparse, dynamically selected, vision-language interactions</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.23490v1" target="_blank" rel="noopener">Dynamic Light Spanners in Doubling Metrics</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.23478v1" target="_blank" rel="noopener">UniFunc3D: Unified Active Spatial-Temporal Grounding for 3D Functionality Segmentation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.23468v1" target="_blank" rel="noopener">Information-Theoretic Scaling Laws of Neural Quantum States</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32040v1" target="_blank" rel="noopener">FaceMoE: Mixture of Experts for Low-Resolution Face Recognition</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32036v1" target="_blank" rel="noopener">PointSplat: Compact Gaussian Splatting via Human-Centric Prediction</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32025v1" target="_blank" rel="noopener">Generative Skill Composition for LLM Agents</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32018v1" target="_blank" rel="noopener">Automated Background Swapping for Robustness against Spurious Backgrounds</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32016v1" target="_blank" rel="noopener">FedLAB: Traceable Semantic Codebooks for Federated Multimodal Graph Foundation Learning</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Graph+Neural+Networks&labels=discussion&body=Topic:+[Graph+Neural+Networks](https://dhein.github.io/daily_knowledge/topic/graph_neural_networks/)

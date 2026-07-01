@@ -219,84 +219,80 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div><strong>WebAssembly (Wasm)</strong> is a stack-based virtual instruction set architecture (ISA) defined by a portable binary format (<code>.wasm</code>) and an isomorphic text format (<code>.wat</code>). It specifies a structured execution model with formal semantics: a program is a <em>module</em> containing typed functions, linear memory, tables, and imports/exports — all validated before execution.</div></div>
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>WebAssembly (Wasm)</strong> is a portable, binary instruction format for a stack-based virtual machine. It defines a compact binary encoding (<code>.wasm</code>) and a human-readable text format (<code>.wat</code>), along with a formal embedding API — the <em>JavaScript API</em> and <em>Web API</em> — for host-environment integration.</div></div>
 
-<p>The type system is intentionally minimal: <code>i32</code>, <code>i64</code>, <code>f32</code>, <code>f64</code> (with <code>v128</code> for SIMD extensions). Instructions operate on a typed operand stack, and control flow is <em>structured</em> — no arbitrary jumps, only blocks, loops, and conditionals with explicit label targets. This design enables single-pass validation and makes formal proofs tractable.</p>
+<p>Wasm is not a traditional ISA; it targets a <em>virtual</em> Harvard-architecture machine with linear memory, a value-typed operand stack, and structured control flow (no arbitrary jumps — only blocks, loops, and branches). Programs execute in a sandboxed environment with no implicit access to the host.</p>
 
-<p>The formal soundness theorem for the type system guarantees:</p>
+<p>The core type system is minimal:</p>
 
-<p>$$\text{If } \vdash m : \text{module} \text{ and } m \to^* c, \text{ then } c \text{ is not stuck}$$</p>
+<p>$$\text{valtype} ::= \mathtt{i32} \mid \mathtt{i64} \mid \mathtt{f32} \mid \mathtt{f64}$$</p>
 
-<p>i.e., well-typed modules don't reach undefined states — a property that C/C++ natively lacks.</p>
+<p>Extended proposals add <code>v128</code> (SIMD), <code>funcref</code>/<code>externref</code> (reference types), and garbage-collected structs (GC proposal). The module format bundles typed functions, a linear memory, tables, globals, and import/export declarations into a self-describing unit.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Wasm decouples <em>compilation target</em> from <em>execution environment</em>. A Rust crate, Go library, or C++ codec can compile once to <code>.wasm</code> and run in any compliant host — browser, server, edge node, embedded device — with near-native performance and memory-safety guarantees the host can enforce.</p>
+<p>Wasm closes the gap between <em>native performance</em> and <em>safe, portable execution</em>. Key use cases:</p>
 
-<p>Key impact zones:</p>
 <ul>
-<li><strong>Web performance</strong>: Heavy workloads (codecs, physics engines, ML inference) run at speeds unreachable with JavaScript.</li>
-<li><strong>Sandboxed plugins</strong>: Host embedders can expose a capability API; the module can't escape the sandbox without explicit imports. Used heavily in <a href="/daily_knowledge/topic/eBPF">eBPF</a>-adjacent edge computing.</li>
-<li><strong>Universal compute substrate</strong>: WASI (WebAssembly System Interface) extends Wasm into a POSIX-like capability-oriented OS interface, enabling server-side and CLI use cases.</li>
-<li><strong>Language portability</strong>: Any language with an LLVM backend gains a Wasm target essentially for free.</li>
+<li><strong>Browser compute</strong>: Video codecs, game engines, physics simulations, and cryptographic libraries run near-native speed without plugins.</li>
+<li><strong>Edge / serverless</strong>: Runtimes like Wasmtime, WASMer, and WAMR execute Wasm outside browsers with <1 ms cold-start times — a decisive advantage over container-based functions.</li>
+<li><strong>Language universality</strong>: C, C++, Rust, Go, Kotlin, and Python all compile to Wasm; the module format is language-agnostic by design.</li>
+<li><strong>Plugin architectures</strong>: Wasm's sandbox makes it an ideal untrusted plugin substrate (see Envoy filters, Extism, and VS Code's WASI-based extension host).</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>Wasm's structured control flow is not a limitation — it's a feature. It allows JIT compilers to skip a full CFG reconstruction pass that native ISA decompilation requires, giving embedders faster compile-to-native pipelines (e.g., V8's Liftoff baseline compiler).</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>Wasm's structured control flow is not a limitation — it's what enables one-pass validation in $O(n)$ time and makes JIT compilation significantly simpler than for x86. The spec mandates that <em>any</em> compliant engine must validate a module before execution, making supply-chain exploits structurally harder.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<ol>
-<li><strong>Linear Memory Model</strong>: A Wasm module has a flat, byte-addressable memory region starting at address 0. The host controls growth (<code>memory.grow</code>). Crucially, the Wasm program cannot access host memory — isolation is structural, not policy-based.</li>
-</ol>
+<p><strong>1. Linear Memory Model</strong></p>
+<p>Wasm memory is a contiguous, byte-addressable <code>ArrayBuffer</code> (initially 0–4 GiB in wasm32, extended to 64-bit in wasm64). Bounds checks are explicit in the bytecode; hardware memory protection via guard pages is a common JIT optimization. Pointer arithmetic is therefore <em>auditable</em>, unlike native binaries.</p>
 
-<ol>
-<li><strong>The Validation Algorithm is O(n)</strong>: The type-checking pass is linear in module size due to the stack-polymorphic type system and the absence of backward type dependencies. This matters for JIT-heavy environments where startup latency is critical.</li>
-</ol>
+<p><strong>2. WASI — The System Interface</strong></p>
+<p>The <em>WebAssembly System Interface</em> (WASI) provides a capability-based POSIX-like API for file I/O, sockets, clocks, and randomness. Rather than ambient authority, WASI passes pre-opened file descriptors explicitly — a deliberate application of the <em>principle of least privilege</em> at the ABI layer. WASI Preview 2 (Component Model) restructures this around typed interfaces described in WIT (Wasm Interface Type).</p>
 
-<ol>
-<li><strong>Component Model</strong>: The nascent <em>Wasm Component Model</em> (in active development) layers a rich IDL (<em>WIT — Wasm Interface Types</em>) atop core Wasm, enabling typed, language-agnostic inter-module calls. This is the foundation for Wasm-based microservices and plugin ecosystems.</li>
-</ol>
+<p><strong>3. The Component Model</strong></p>
+<p>The Component Model lifts Wasm from a low-level binary format to a <em>composable module system</em>. Components expose and consume typed interfaces (records, variants, streams) using the Canonical ABI, enabling language-agnostic linking without FFI boilerplate.</p>
 
-<ol>
-<li><strong>WASI and Capability Security</strong>: Rather than ambient authority (like POSIX), WASI passes capabilities as module imports. A module that isn't given a file-descriptor handle literally cannot open files — the sandbox is enforced at the ABI level, not via runtime checks.</li>
-</ol>
+<p><strong>4. Compilation Tiers</strong></p>
+<p>Production engines (V8, SpiderMonkey, Wasmtime) use a two-tier strategy: a fast baseline compiler (Liftoff / Cranelift single-pass) for immediate execution, and an optimizing compiler (TurboFan / Cranelift full) running concurrently. This amortizes compilation latency while converging to near-native throughput.</p>
 
-<ol>
-<li><strong>Threads and Atomics</strong>: The <code>threads</code> proposal adds shared linear memory and <code>i32.atomic.*</code> instructions, enabling parallel Wasm across Web Workers. The memory model aligns with <a href="/daily_knowledge/topic/C++ Memory Model">C++ Memory Model</a> (SC-DRF): data-race-free programs get sequentially consistent behavior.</li>
-</ol>
+<p><strong>5. Security Boundary</strong></p>
+<p>The sandbox enforces <em>memory isolation</em>, <em>control-flow integrity</em> (structured CFG), and <em>type safety</em> at the bytecode level. Spectre-class attacks remain a concern — engines mitigate via <code>retpoline</code>, serializing memory accesses, and disabling <code>SharedArrayBuffer</code>/<code>Atomics</code> under threat models.</p>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the Component Model and WASI Preview 2 specs were still stabilizing as of early 2026; implementation support across runtimes (Wasmtime, WasmEdge, V8) may have shifted significantly.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the Component Model and WASI Preview 2 ecosystem were still maturing as of early 2026; toolchain support (especially for languages beyond Rust and C) was uneven.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<p>Active development fronts as of early 2026:</p>
+<p>Active standardization tracks as of 2026:</p>
 
-<ul>
-<li><strong>GC Proposal</strong>: Adds heap-allocated, garbage-collected structs and arrays, enabling high-fidelity compilation of managed languages (Kotlin, Dart, OCaml) without bundling a full GC runtime.</li>
-<li><strong>WASI Preview 2 / Component Model</strong>: Defining a stable ABI for composable, cross-language Wasm components — essentially a new universal FFI.</li>
-<li><strong>WasmGPU / GPGPU</strong>: Experimental proposals for exposing GPU compute (tied to WebGPU) through Wasm modules.</li>
-<li><strong>Wasm in non-web runtimes</strong>: Wasmtime (Bytecode Alliance) and WasmEdge are seeing adoption in serverless platforms (Fastly Compute, Fermyon Spin) as a lighter-weight alternative to containers.</li>
-</ul>
+<p>| Proposal | Status | Impact |</p>
+<p>|---|---|---|</p>
+<p>| GC (Garbage Collection) | Shipped in V8/FF | Enables managed languages (Kotlin, Dart) without bundled GC |</p>
+<p>| Threads + Atomics | Phase 4 | Shared <code>ArrayBuffer</code>, <code>wait</code>/<code>notify</code> — enables pthreads |</p>
+<p>| Tail Calls | Phase 4 | Enables functional languages without stack overflow |</p>
+<p>| Exception Handling | Phase 4 | Native <code>try</code>/<code>catch</code> in Wasm |</p>
+<p>| Memory64 | Phase 4 | 64-bit linear address space |</p>
+<p>| WASI Preview 2 | Active | Component Model, async I/O via <code>wit-bindgen</code> |</p>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the ecosystem is evolving rapidly and feature stabilization timelines shift frequently.</div></div>
+<p>The <strong>Component Model</strong> is arguably the most architecturally significant shift — it repositions Wasm from "portable C ABI" to a universal composition layer analogous to what Docker did for deployment.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/LLVM IR">LLVM IR</a> — Primary intermediate target before Wasm codegen; shares the typed SSA philosophy</li>
-<li><a href="/daily_knowledge/topic/eBPF">eBPF</a> — Comparable sandboxed bytecode model for kernel/network contexts</li>
-<li><a href="/daily_knowledge/topic/JIT Compilation">JIT Compilation</a> — How V8 (Liftoff → TurboFan) and Wasmtime (Cranelift) tier-compile Wasm</li>
-<li><a href="/daily_knowledge/topic/Capability-Based Security">Capability-Based Security</a> — Theoretical foundation for WASI's ambient-authority-free design</li>
-<li><a href="/daily_knowledge/topic/C++ Memory Model">C++ Memory Model</a> — Wasm threads proposal adopts the same SC-DRF formal model</li>
-<li><a href="/daily_knowledge/topic/Stack Machine">Stack Machine</a> — Wasm's execution model; compare with register machines like <a href="/daily_knowledge/topic/LLVM IR">LLVM IR</a></li>
+<li><a href="/daily_knowledge/topic/WASI — WebAssembly System Interface">WASI — WebAssembly System Interface</a></li>
+<li><a href="/daily_knowledge/topic/Capability-Based Security">Capability-Based Security</a></li>
+<li><a href="/daily_knowledge/topic/JIT Compilation and Tiered Optimization">JIT Compilation and Tiered Optimization</a></li>
+<li><a href="/daily_knowledge/topic/eBPF — Kernel-Sandboxed Bytecode">eBPF — Kernel-Sandboxed Bytecode</a></li>
+<li><a href="/daily_knowledge/topic/Portable Native Client (NaCl)">Portable Native Client (NaCl)</a></li>
+<li><a href="/daily_knowledge/topic/Stack-Based Virtual Machines">Stack-Based Virtual Machines</a></li>
 </ul>
 
 <hr>
@@ -304,21 +300,30 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Wasm's type system intentionally omits reference types to host objects (beyond opaque <code>externref</code>). What are the tradeoffs of this design for embedding high-level language runtimes, and how does the GC proposal change the calculus?</li>
+<li><strong>Composition vs. isolation</strong>: The Component Model enables fine-grained inter-component calls, but each component maintains its own linear memory. How does this compare to the zero-copy IPC approaches in microkernel OS design (e.g., seL4 capabilities)? Is crossing component boundaries fundamentally expensive?</li>
 </ol>
 
 <ol>
-<li>WASI's capability model prevents ambient authority, but composing components that <em>delegate</em> capabilities reintroduces confused-deputy risks. How should the Component Model's type system encode attenuation and revocation?</li>
+<li><strong>Wasm vs. eBPF</strong>: Both are sandboxed bytecode formats for untrusted code in trusted environments. eBPF lives in the kernel; Wasm in userspace runtimes. What does each design reveal about the trust model and performance constraints of its target environment?</li>
 </ol>
 
 <ol>
-<li>Wasm is increasingly used as a compilation target for formal verification tools (e.g., compiling Lean proofs to Wasm for web deployment). Does Wasm's own formal semantics make it a <em>better</em> target for verified software than native ISAs, or does the translation gap simply relocate the trust boundary?</li>
+<li><strong>The GC proposal tension</strong>: Adding GC to Wasm lets managed-language runtimes avoid bundling their own collector — but it introduces a shared, host-managed heap that partially dissolves the clean linear-memory sandbox. Where does this leave the security and predictability story for latency-sensitive embedded Wasm targets?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/WebAssembly" target="_blank" rel="noopener"&gt;WebAssembly&lt;/a&gt; · Retrieved 2026-03-25</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/WebAssembly" target="_blank" rel="noopener"&gt;WebAssembly&lt;/a&gt; · Retrieved 2026-07-01</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2606.32040v1" target="_blank" rel="noopener">FaceMoE: Mixture of Experts for Low-Resolution Face Recognition</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32036v1" target="_blank" rel="noopener">PointSplat: Compact Gaussian Splatting via Human-Centric Prediction</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32034v1" target="_blank" rel="noopener">QVal: Cheaply Evaluating Dense Supervision Signals for Long-Horizon LLM Agents</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32033v1" target="_blank" rel="noopener">SpheRoPE: Zero-Shot Optimization-Free 360 Panorama Generation with Spherical RoPE</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2606.32032v1" target="_blank" rel="noopener">Reinforcement Learning with Metacognitive Feedback Elicits Faithful Uncertainty Expression in LLMs</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+WebAssembly&labels=discussion&body=Topic:+[WebAssembly](https://dhein.github.io/daily_knowledge/topic/webassembly/)
 
