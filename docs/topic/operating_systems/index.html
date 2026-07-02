@@ -215,90 +215,88 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Operating System Design<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Tech · Systems &nbsp;·&nbsp; ~4 min read</div>
+<div class="topic-meta">Tech · Systems &nbsp;·&nbsp; ~5 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>An <strong>operating system</strong> is privileged system software that mediates between application code and physical hardware, providing resource abstractions, isolation guarantees, and common services. Its design space is governed by a fundamental tension: <em>efficiency</em> (minimizing indirection) versus <em>safety</em> (enforcing protection boundaries).</p>
+<p>An <strong>operating system</strong> is the privileged software layer that arbitrates access to hardware resources—CPU, memory, I/O devices, storage—and presents a stable, abstract interface to user-space programs via <strong>system calls</strong>.</p>
 
-<p>The OS executes in a privileged execution mode (kernel mode / ring 0), while user applications run in unprivileged mode. Transitions between these modes occur via <strong>system calls</strong> (syscalls) — synchronous software-triggered traps — or <strong>interrupts</strong> — asynchronous hardware signals.</p>
+<p>[!info] Formal definition</p>
+<p>The OS can be modeled as a <strong>resource multiplexer</strong> and <strong>hardware abstractor</strong>: it enforces isolation between processes, schedules CPU time, and exposes a virtual machine to each process. Formally, for $n$ competing processes $P_1, \ldots, P_n$ each demanding resource $R$, the OS defines a policy $\pi: \mathcal{P}(R) \to \text{Allocation}$ subject to safety and liveness constraints.</p>
 
-<div class="callout info"><div class="callout-title">INFO</div><div>A syscall is not a function call. It triggers a mode switch through a gate (e.g., <code>SYSCALL</code>/<code>SYSRET</code> on x86-64), saving registers, switching stacks, and jumping to a kernel handler. Round-trip cost is typically 100–300 ns on modern hardware, often dominating I/O latency in fine-grained workloads.</div></div>
-
-<p>The core abstractions an OS must provide:</p>
-
-<p>| Abstraction | Underlying Resource |</p>
-<p>|---|---|</p>
-<p>| Process / Thread | CPU |</p>
-<p>| Virtual Memory | Physical RAM + swap |</p>
-<p>| File / inode | Persistent storage |</p>
-<p>| Socket / pipe | Network / IPC |</p>
-<p>| Device file | Peripheral hardware |</p>
+<p>The central tension in OS design is the <strong>mechanism vs. policy</strong> separation: the kernel provides <em>mechanisms</em> (context switching, page tables, interrupt handling), while <em>policies</em> (scheduling discipline, eviction strategy, security rules) are ideally kept configurable or user-defined. This principle, articulated by Lampson and Levin, remains the backbone of microkernel and exokernel architectures.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>OS design choices propagate through the entire software stack. Scheduler policy determines tail latency for cloud services. Memory allocator design shapes GC pause times. Filesystem semantics define the failure modes of databases.</p>
+<p>Operating systems are the substrate on which all other software runs. Their design choices propagate upward through the entire software stack:</p>
 
-<p>$$\text{Throughput} \approx \frac{N}{\text{Latency}} \quad \text{(Little's Law)}$$</p>
+<ul>
+<li><strong>Performance</strong>: Cache-oblivious scheduling, NUMA-aware memory allocation, and zero-copy I/O paths can alter end-to-end throughput by orders of magnitude.</li>
+<li><strong>Security posture</strong>: The OS defines the trust boundary. A kernel vulnerability collapses all isolation guarantees simultaneously.</li>
+<li><strong>Abstractions exported</strong>: The POSIX file/process/socket model shaped four decades of software design; deviating from it (e.g., Plan 9's "everything is a file, including the network namespace") changes what application patterns are natural.</li>
+<li><strong>Cross-domain relevance</strong>: Scheduler theory borrows from queueing theory; virtual memory maps directly to the theory of paging in combinatorics; IPC protocol design intersects with distributed systems consensus.</li>
+</ul>
 
-<p>where $N$ is concurrency. The OS controls both $N$ (thread scheduling, connection limits) and latency (syscall overhead, lock contention), making it the primary determinant of system-level performance.</p>
-
-<p>Beyond performance: OS design is the foundation of <strong>security</strong>. The kernel's trusted computing base (TCB) must be minimal — every line of kernel code is a potential privilege-escalation vector. This motivates microkernel architectures (Mach, seL4) despite their IPC overhead.</p>
-
-<div class="callout tip"><div class="callout-title">TIP</div><div>The seL4 microkernel is formally <em>verified</em> correct in Isabelle/HOL — its implementation provably matches its specification. This is the gold standard for TCB minimization: ~10K lines of C, fully proved. Compare to Linux at ~30M lines.</div></div>
+<p>[!tip] OS design as language design</p>
+<p>The system call API is an ABI-stable language the OS speaks to user space. Like programming languages, every OS represents a bet on which abstractions pay off over decades. Linux's monolithic kernel won partly because its ABI stability let an enormous ecosystem accumulate — a lesson in network effects over theoretical elegance.</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Scheduling Algorithms and Their Trade-offs</strong></p>
-<p>Classical schedulers (Round Robin, MLFQ) optimize for average throughput. Real-time schedulers (EDF, Rate-Monotonic) provide <em>deadline guarantees</em>. The Completely Fair Scheduler (CFS) in Linux uses a red-black tree keyed on virtual runtime to approximate fair CPU sharing in $O(\log n)$ per operation.</p>
+<h3>1. Kernel Architectures</h3>
+<p>| Architecture | Mechanism | Trade-off |</p>
+<p>|---|---|---|</p>
+<p>| <strong>Monolithic</strong> | All services in kernel space | Fast IPC, large TCB |</p>
+<p>| <strong>Microkernel</strong> | Minimal kernel; services as user processes | Small TCB, IPC overhead |</p>
+<p>| <strong>Exokernel</strong> | Expose raw hardware; library OSes | Maximum flexibility, complex apps |</p>
+<p>| <strong>Unikernel</strong> | Single address space, one application | Near-zero overhead, no isolation |</p>
 
-<p><strong>2. Virtual Memory and the TLB</strong></p>
-<p>The MMU walks a multi-level page table (4-level on x86-64) to translate virtual → physical addresses. The TLB caches recent translations. A TLB miss costs ~30–100 cycles; a page fault (OS intervention required) costs thousands. Huge pages (2 MB, 1 GB) reduce TLB pressure at the cost of internal fragmentation.</p>
+<h3>2. Scheduling Complexity</h3>
+<p>CPU scheduling is NP-hard in the general case. Real schedulers use heuristics: Linux's <strong>Completely Fair Scheduler (CFS)</strong> tracks <em>virtual runtime</em> $v_i$ per process and always dispatches the process minimising $v_i$, approximating max-min fairness in $O(\log n)$ per operation via a red-black tree.</p>
 
-<p><strong>3. Monolithic vs. Microkernel vs. Exokernel</strong></p>
-<ul>
-<li><strong>Monolithic</strong> (Linux, XNU): all subsystems in one address space — fast IPC, large TCB.</li>
-<li><strong>Microkernel</strong> (seL4, QNX): minimal kernel, services as user processes — isolated but IPC-heavy.</li>
-<li><strong>Exokernel</strong> (MIT): kernel only enforces protection; <em>library OSes</em> implement abstractions — maximum flexibility, minimal abstraction overhead.</li>
-</ul>
+<h3>3. Virtual Memory &amp; the TLB Bottleneck</h3>
+<p>The page table walk is $O(\log_{512} \text{VA space})$ on x86-64 (4 levels). The TLB caches translations, but TLB shootdowns under multi-core invalidation are an underappreciated scalability bottleneck. Huge pages (2 MiB, 1 GiB) trade internal fragmentation for fewer TLB misses — a classic space-time tradeoff.</p>
 
-<p><strong>4. Synchronization Primitives</strong></p>
-<p>Spinlocks waste CPU on contention; mutexes sleep but involve kernel transitions. The <code>futex</code> (fast userspace mutex) in Linux uses an atomic compare-and-swap in userspace and only drops into the kernel on contention — the common uncontended path costs ~2 ns.</p>
+<h3>4. Interrupt Handling &amp; the Kernel/User Boundary</h3>
+<p>Every system call crosses the privilege ring boundary, flushing pipeline state. Post-Spectre/Meltdown, <strong>KPTI (Kernel Page-Table Isolation)</strong> maps separate page tables for kernel and user space, adding 10–30% syscall overhead on some workloads — a security constraint permanently reshaping performance models.</p>
 
-<p><strong>5. Filesystem Consistency</strong></p>
-<p>Journaling (ext4, NTFS), copy-on-write (ZFS, Btrfs), and log-structured (F2FS, NILFS) are the three dominant strategies for crash consistency. COW provides snapshots and checksumming "for free" but amplifies write I/O; journaling has lower write amplification but no inherent data integrity checks.</p>
+<h3>5. Synchronisation Primitives</h3>
+<p>Locks, semaphores, and condition variables are OS-mediated. <strong>Futexes</strong> (Fast Userspace muTEXes) optimise the common uncontended case by avoiding syscalls entirely — the kernel is only invoked on contention. This exemplifies a recurring OS pattern: <em>fast path in user space, slow path via kernel</em>.</p>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<p>[!warning] Note: this information may be dated</p>
+<p>Market share figures (Android 38%, Windows 33%, iOS/iPadOS 15%, macOS 4%, Linux 1% as of late 2025) shift continuously, especially in the mobile and embedded segments.</p>
 
 <p>Active research fronts include:</p>
 
 <ul>
-<li><strong>Unikernels</strong> (MirageOS, Unikraft): compile only necessary OS components into a single-address-space image for VMs, eliminating syscall overhead entirely for cloud-native workloads.</li>
-<li><strong>io_uring</strong> (Linux 5.1+): an async I/O interface using shared-memory ring buffers, allowing thousands of I/O operations to be submitted/reaped with <em>zero</em> syscalls in the steady state.</li>
-<li><strong>eBPF</strong>: allows verified user-supplied bytecode to run in kernel context, enabling programmable networking, tracing, and security policy without kernel patches — effectively a safe, JIT-compiled extension mechanism.</li>
-<li><strong>RISC-V and capability hardware</strong> (CHERI): hardware-enforced pointer capabilities that could fundamentally change how kernels enforce memory isolation, potentially making type-safe OS components trivially enforceable.</li>
-<li><strong>AI/ML workload scheduling</strong>: modern datacenter OSes must co-schedule GPU kernels, handle NUMA topology across accelerators, and manage memory bandwidth — problems ill-addressed by classical scheduler theory.</li>
+<li><strong>Kernel bypass / io_uring</strong>: Moving I/O submission and completion entirely to shared ring buffers between kernel and user space, eliminating syscall overhead for high-throughput storage and networking.</li>
+<li><strong>Formal verification</strong>: seL4 (a microkernel) is fully formally verified in Isabelle/HOL — proving functional correctness and information-flow security. Scaling this to production kernels remains open.</li>
+<li><strong>WASM-based OS abstractions</strong>: WebAssembly runtimes are emerging as a portable, sandboxed alternative to processes, blurring the OS/runtime boundary.</li>
+<li><strong>LLM-integrated memory management</strong>: Recent work (e.g., AutoMem, 2026) treats memory as a <em>learnable</em> cognitive skill for agents — an architectural idea that echoes OS virtual memory but applied to language model context windows, with the model itself learning eviction and retrieval policy.</li>
+<li><strong>RISC-V &amp; privilege model experimentation</strong>: The open ISA enables novel privilege level designs (e.g., hypervisor extensions, PMP for physical memory protection) that were impractical to prototype on x86.</li>
 </ul>
+
+<p>[!tip] Conceptual bridge to active matter</p>
+<p>Recent theoretical physics (Stahl et al., 2026) shows that Brownian ratchets — systems harnessing temperature differentials to do directed work — can universally simulate nonequilibrium dynamics. This maps loosely onto OS schedulers: both convert a raw energy/time budget into directed, ordered computation from an otherwise chaotic substrate.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Process Scheduling and Concurrency">Process Scheduling and Concurrency</a></li>
+<li><a href="/daily_knowledge/topic/Process Scheduling Algorithms">Process Scheduling Algorithms</a></li>
 <li><a href="/daily_knowledge/topic/Virtual Memory and Paging">Virtual Memory and Paging</a></li>
-<li><a href="/daily_knowledge/topic/Filesystem Internals">Filesystem Internals</a></li>
-<li><a href="/daily_knowledge/topic/Hypervisors and Virtualization">Hypervisors and Virtualization</a></li>
+<li><a href="/daily_knowledge/topic/Microkernel vs Monolithic Kernel">Microkernel vs Monolithic Kernel</a></li>
+<li><a href="/daily_knowledge/topic/Concurrency Primitives and Synchronisation">Concurrency Primitives and Synchronisation</a></li>
+<li><a href="/daily_knowledge/topic/Capability-Based Security">Capability-Based Security</a></li>
 <li><a href="/daily_knowledge/topic/Formal Verification of Systems Software">Formal Verification of Systems Software</a></li>
-<li><a href="/daily_knowledge/topic/Hardware Security and Trusted Execution Environments">Hardware Security and Trusted Execution Environments</a></li>
 </ul>
 
 <hr>
@@ -306,27 +304,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>The exokernel hypothesis</strong> argues that OS abstractions should be mechanisms, not policies — that library OSes can outperform monolithic kernels for specialized workloads. Where does this argument break down at scale, and does unikernel adoption vindicate it thirty years later?</li>
+<li><strong>The exokernel thesis</strong> argues that the OS should expose hardware directly and let library OSes implement policy. Thirty years on, why have unikernels succeeded in narrow domains (cloud functions, embedded) but not displaced general-purpose kernels — and is that a technical or economic answer?</li>
 </ol>
 
 <ol>
-<li><strong>io_uring vs. kernel-bypass</strong>: DPDK and RDMA bypass the kernel entirely for networking. io_uring reduces syscall frequency to near-zero but stays in-kernel. What does the persistence of both approaches reveal about the actual bottleneck in high-throughput I/O — is it the syscall itself, or context switching, or something else?</li>
+<li>Spectre/Meltdown revealed that hardware performance optimisations (speculative execution) can violate OS isolation guarantees. How should the OS/hardware interface be redesigned to make security properties <em>composable</em> with microarchitectural optimisations, rather than perpetually in tension?</li>
 </ol>
 
 <ol>
-<li><strong>Formal verification</strong> (seL4) proves correctness of implementation against specification — but who verifies the specification captures the right security model? Where does proof end and trust begin in a verified OS stack?</li>
+<li>If an LLM agent's context window is its "working memory" and its retrieval system is its "storage," what OS concepts (scheduling, eviction policy, protection domains) translate meaningfully into agent architecture — and where does the analogy break down?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Operating_system" target="_blank" rel="noopener"&gt;Operating System Design&lt;/a&gt; · Retrieved 2026-03-26</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Operating_system" target="_blank" rel="noopener"&gt;Operating System Design&lt;/a&gt; · Retrieved 2026-07-02</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.24590v1" target="_blank" rel="noopener">Electronic properties of the Radium-monochalcogenides RaX (X = O,S,Se) and RaO+/- ions</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.24587v1" target="_blank" rel="noopener">DreamerAD: Efficient Reinforcement Learning via Latent World Model for Autonomous Driving</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.24582v1" target="_blank" rel="noopener">The Stochastic Gap: A Markovian Framework for Pre-Deployment Reliability and Oversight-Cost Auditing in Agentic Artificial Intelligence</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.01231v1" target="_blank" rel="noopener">Brownian ratchets and pumps universally simulate many-body active dynamics</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.01230v1" target="_blank" rel="noopener">Distributed Containment of a Compromised Agent through Repulsive Cages</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.01224v1" target="_blank" rel="noopener">AutoMem: Automated Learning of Memory as a Cognitive Skill</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Operating+System+Design&labels=discussion&body=Topic:+[Operating+System+Design](https://dhein.github.io/daily_knowledge/topic/operating_systems/)

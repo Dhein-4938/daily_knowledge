@@ -219,92 +219,123 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Topology studies properties of spaces preserved under <strong>continuous deformations</strong> — stretching, twisting, bending — but not tearing, gluing, or self-intersection. Informally, a coffee mug and a donut are "the same" topologically (both have genus 1), while a sphere and a torus are not.</p>
+<p>Topology studies properties of spaces preserved under <strong>continuous deformations</strong> — stretching, twisting, bending — but not tearing, gluing, or self-intersection. The central objects are <strong>topological spaces</strong>: sets $X$ equipped with a topology $\mathcal{T}$, a collection of "open" subsets satisfying three axioms:</p>
 
-<div class="callout info"><div class="callout-title">INFO: Topological Space</div><div>A <strong>topological space</strong> is a pair $(X, \mathcal{T})$ where $X$ is a set and $\mathcal{T} \subseteq \mathcal{P}(X)$ is a <strong>topology</strong>: a collection of "open" sets satisfying: 1. $\emptyset, X \in \mathcal{T}$ 2. Arbitrary unions of elements of $\mathcal{T}$ are in $\mathcal{T}$ 3. Finite intersections of elements of $\mathcal{T}$ are in $\mathcal{T}$</div></div>
+<p>$$
+\emptyset, X \in \mathcal{T}; \quad \bigcup_\alpha U_\alpha \in \mathcal{T}; \quad U_1 \cap U_2 \in \mathcal{T}
+$$</p>
 
-<p>The canonical morphisms are <strong>homeomorphisms</strong> — bijections $f: X \to Y$ where both $f$ and $f^{-1}$ are continuous — and <strong>homotopies</strong>, continuous deformations between maps $f, g: X \to Y$. A <strong>topological invariant</strong> is any property preserved by homeomorphism: dimension, compactness, connectedness, fundamental group, homology groups, etc.</p>
+<p>(arbitrary unions and finite intersections of opens are open).</p>
+
+<p>[!info]</p>
+<p><strong>Homeomorphism</strong>: A bijection $f: X \to Y$ where both $f$ and $f^{-1}$ are continuous. Two homeomorphic spaces are topologically identical — a coffee mug and a donut are the canonical example.</p>
+
+<p>The key invariants distinguishing topological spaces include <strong>homotopy type</strong>, <strong>homology groups</strong> $H_n(X)$, <strong>fundamental group</strong> $\pi_1(X)$, and higher homotopy groups $\pi_n(X)$. A <strong>homotopy</strong> between maps $f, g: X \to Y$ is a continuous $H: X \times [0,1] \to Y$ with $H(\cdot, 0) = f$ and $H(\cdot, 1) = g$ — a formal notion of "continuously deforming one map into another."</p>
+
+<hr>
 
 <h2>Why It Matters</h2>
 
-<p>Topology is the lingua franca of modern mathematics. It underpins:</p>
+<p>Topology sits at the intersection of geometry, algebra, and analysis, exporting tools to nearly every corner of mathematics and physics.</p>
 
 <ul>
-<li><strong>Analysis</strong>: the definitions of continuity, convergence, and compactness generalize seamlessly from $\mathbb{R}^n$ to arbitrary spaces.</li>
-<li><strong>Differential geometry / physics</strong>: manifolds are topological spaces with extra structure; the topology of spacetime constrains physical theories (e.g., Chern–Simons theory, topological insulators).</li>
-<li><strong>Data science</strong>: <a href="/daily_knowledge/topic/Persistent Homology">Persistent Homology</a> and <a href="/daily_knowledge/topic/Topological Data Analysis (TDA)">Topological Data Analysis (TDA)</a> extract shape features from point clouds invariant to noise.</li>
-<li><strong>Computer science</strong>: domain theory (denotational semantics) uses non-Hausdorff topologies; topological methods appear in distributed computing impossibility proofs.</li>
-<li><strong>Robotics / vision</strong>: configuration spaces of robots are manifolds; surgical reconstruction systems must handle "fixed-topology" constraints on deformable tissue (an active pain point, per recent work).</li>
+<li><strong>Analysis</strong>: Compactness (every open cover has a finite subcover) underlies the extreme value theorem and uniform continuity results. Connectedness formalizes the intermediate value theorem.</li>
+<li><strong>Physics</strong>: Topological invariants classify phases of matter — topological insulators, Weyl semimetals, and quantum Hall states are distinguished not by local order parameters but by global topological charges (Chern numbers, winding numbers).</li>
+<li><strong>Data science</strong>: Persistent homology extracts multi-scale topological features from point clouds — voids and loops that survive across filtration parameters encode genuine structure.</li>
+<li><strong>Dynamics</strong>: Fixed-point theorems (Brouwer, Lefschetz) guarantee solutions to differential equations without constructing them explicitly.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: The Real Power Is Abstraction</div><div>By stripping geometry down to open sets, topology isolates <em>why</em> theorems like the intermediate value theorem or the extreme value theorem are true — they follow from connectedness and compactness, not from the real number line specifically.</div></div>
+<p>[!tip]</p>
+<p>Euler's polyhedron formula $V - E + F = 2$ is topology's first theorem in disguise: the Euler characteristic $\chi = V - E + F$ is a topological invariant of the sphere $S^2$, generalized by the alternating sum of Betti numbers $\chi = \sum_k (-1)^k \text{rank}\, H_k$.</p>
+
+<hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Separation Axioms (T₀–T₄ hierarchy)</strong></p>
-<p>Not all topological spaces are equally "nice." Hausdorff spaces ($T_2$) guarantee limits are unique. Normal spaces ($T_4$) admit Urysohn functions, enabling Tietze extension. Much of classical analysis assumes at least $T_3$ (regular + $T_1$).</p>
+<ol>
+<li><strong>Separation axioms</strong> stratify topological spaces by how well points and closed sets can be distinguished. The Hausdorff ($T_2$) condition — distinct points have disjoint neighborhoods — is the minimal assumption for most analysis. Metric spaces are always Hausdorff.</li>
+</ol>
 
-<p><strong>2. Compactness is the right generalization of "finiteness"</strong></p>
-<p>A space is compact iff every open cover has a finite subcover. In metric spaces this coincides with sequential compactness. Key consequence: continuous image of compact is compact, yielding the extreme value theorem in full generality.</p>
+<ol>
+<li><strong>Compactness vs. sequential compactness</strong>: In metric spaces these coincide, but in general topological spaces they diverge. The correct general notion (via nets or filters) is essential in functional analysis and model theory.</li>
+</ol>
 
-<p><strong>3. Fundamental Group and Higher Homotopy</strong></p>
-<p>$$\pi_1(X, x_0) = \{\text{loops at } x_0\} / \text{homotopy rel. endpoints}$$</p>
-<p>This group captures "1-dimensional holes." Higher groups $\pi_n$ are harder; $\pi_n(S^n) \cong \mathbb{Z}$ but $\pi_3(S^2) \cong \mathbb{Z}$ (Hopf fibration) — a famous surprise.</p>
+<ol>
+<li><strong>The fundamental group $\pi_1(X, x_0)$</strong>: Loops based at $x_0$ modulo homotopy, with concatenation as the group operation. Non-abelian in general; $\pi_1(S^1) \cong \mathbb{Z}$, $\pi_1(T^2) \cong \mathbb{Z}^2$. Higher $\pi_n$ for $n \geq 2$ are always abelian (Eckmann–Hilton argument).</li>
+</ol>
 
-<p><strong>4. Homology vs. Homotopy</strong></p>
-<p>Singular homology $H_n(X; \mathbb{Z})$ is generally more computable than homotopy groups and still distinguishes spaces by their "holes" in each dimension. The <a href="/daily_knowledge/topic/Euler Characteristic">Euler Characteristic</a> $\chi = \sum_n (-1)^n \text{rank}(H_n)$ is a coarse but powerful invariant.</p>
+<ol>
+<li><strong>CW complexes</strong> provide a combinatorial handle on topology: spaces built by attaching $n$-cells $D^n$ along their boundaries $S^{n-1}$. Cellular homology computes $H_n$ efficiently from the attaching maps.</li>
+</ol>
 
-<p><strong>5. Fixed-Point Theorems</strong></p>
-<p>The <strong>Brouwer Fixed-Point Theorem</strong> (every continuous $f: D^n \to D^n$ has a fixed point) and <strong>Lefschetz Fixed-Point Theorem</strong> are purely topological results with profound implications in economics, game theory, and dynamical systems.</p>
+<ol>
+<li><strong>Fiber bundles and characteristic classes</strong>: A bundle $F \hookrightarrow E \to B$ is locally $B \times F$ but can be globally twisted. Characteristic classes (Chern, Stiefel-Whitney, Pontryagin) in cohomology measure this twist — they are the bridge to physics via gauge theory and index theorems.</li>
+</ol>
+
+<hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<p>[!warning]</p>
+<p>Note: this information may be dated</p>
 
-<p>Active frontiers include:</p>
+<p>Active frontiers span several distinct regimes:</p>
 
 <ul>
-<li><strong>Topological Data Analysis</strong>: persistent homology pipelines (Ripser, Gudhi) are now standard in ML pipelines for shape analysis and feature engineering on point clouds.</li>
-<li><strong>Applied topology in deep learning</strong>: enforcing topological constraints in neural network outputs (e.g., preserving connectivity in segmentation maps, reconstructing deformable tissue geometry in surgical robotics where fixed-topology mesh assumptions break down).</li>
-<li><strong>Floer homology and low-dimensional topology</strong>: the Poincaré conjecture (dimension 3) was resolved by Perelman via Ricci flow in 2003, but the smooth 4D Poincaré conjecture remains open.</li>
-<li><strong>Higher category theory / $\infty$-toposes</strong>: Lurie's work re-frames homotopy theory as a branch of category theory, blurring the line between topology and logic.</li>
+<li><strong>Symplectic and contact topology</strong>: The study of Reeb dynamics on contact manifolds $(M, \xi)$ is flourishing. Recent work (Abreu & Macarini, 2026) establishes sharp lower bounds $r_M$ for the number of simple closed Reeb orbits on manifolds with periodic equivariant symplectic homology, showing $r_M = \dim H_*(M/S^1; \mathbb{Q})$ for prequantization spaces — a striking bridge between dynamics and algebraic topology.</li>
 </ul>
+
+<ul>
+<li><strong>Geometric group theory</strong>: The coarse geometry of homeomorphism groups of Stone spaces (Domat, Hoganson, Lyman, 2026) gives one of the first complete coarse-equivalence classifications for non-locally compact groups, connecting to Hamming cube geometry in the intermediate class.</li>
+</ul>
+
+<ul>
+<li><strong>Topological phases in condensed matter</strong>: Nontrivial topology co-existing with flat bands near the Fermi level — observed in bulk TaRhTe₄ — opens platforms where topological invariants interact with strongly correlated physics outside DFT predictions.</li>
+</ul>
+
+<ul>
+<li><strong>$\infty$-categories and homotopy type theory</strong>: The reformulation of homotopy theory via $(\infty,1)$-categories (Lurie's work) and Voevodsky's univalence axiom in HoTT recast topology as a foundation for all mathematics.</li>
+</ul>
+
+<hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Metric Spaces">Metric Spaces</a></li>
 <li><a href="/daily_knowledge/topic/Homology and Cohomology">Homology and Cohomology</a></li>
 <li><a href="/daily_knowledge/topic/Differential Geometry">Differential Geometry</a></li>
-<li><a href="/daily_knowledge/topic/Topological Data Analysis (TDA)">Topological Data Analysis (TDA)</a></li>
-<li><a href="/daily_knowledge/topic/Manifolds">Manifolds</a></li>
-<li><a href="/daily_knowledge/topic/Category Theory">Category Theory</a></li>
+<li><a href="/daily_knowledge/topic/Symplectic Geometry">Symplectic Geometry</a></li>
+<li><a href="/daily_knowledge/topic/Topological Phases of Matter">Topological Phases of Matter</a></li>
+<li><a href="/daily_knowledge/topic/Algebraic K-Theory">Algebraic K-Theory</a></li>
+<li><a href="/daily_knowledge/topic/Persistent Homology">Persistent Homology</a></li>
 </ul>
+
+<hr>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The topology on a set is far from unique — the discrete and indiscrete topologies sit at opposite extremes. What does the <em>choice</em> of topology encode about the "information structure" of a space, and how does this connect to domain theory in semantics?</li>
+<li><strong>What is the "right" notion of equivalence?</strong> Homeomorphism, homotopy equivalence, and cobordism give increasingly coarse notions of sameness — when does each actually matter, and what invariants distinguish them at each level?</li>
 </ol>
 
 <ol>
-<li>Compactness and connectedness are purely topological, yet they recover deep analytic theorems. What other analytic or algebraic facts might have "cleaner" topological proofs waiting to be found?</li>
+<li><strong>How does topology enter physics operationally?</strong> The Chern number of a Bloch bundle is an integer because the Berry curvature integrates to $2\pi \mathbb{Z}$ — but why should a <em>physical</em> observable care about a global, path-independent integer? Unpack the argument from first principles.</li>
 </ol>
 
 <ol>
-<li>Persistent homology effectively applies topology to finite, noisy data. What are the fundamental limits of this approach — when does the "shape" of data become ill-defined or computationally intractable to recover?</li>
+<li><strong>Is there a unified framework for "topological data analysis" that genuinely extends algebraic topology, or is persistent homology still best understood as ad hoc computational machinery?</strong></li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Topology" target="_blank" rel="noopener"&gt;Topology&lt;/a&gt; · Retrieved 2026-03-26</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Topology" target="_blank" rel="noopener"&gt;Topology&lt;/a&gt; · Retrieved 2026-07-02</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.24577v1" target="_blank" rel="noopener">EndoVGGT: GNN-Enhanced Depth Estimation for Surgical 3D Reconstruction</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.24575v1" target="_blank" rel="noopener">VFIG: Vectorizing Complex Figures in SVG with Vision-Language Models</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.24571v1" target="_blank" rel="noopener">Towards Training-Free Scene Text Editing</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.01219v1" target="_blank" rel="noopener">Multiplicity of closed Reeb orbits on contact manifolds with periodic equivariant symplectic homology</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.01196v1" target="_blank" rel="noopener">Coarse geometry of homeomorphism groups: Classifying countable Stone spaces</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.01186v1" target="_blank" rel="noopener">Observation of Flat Bands in Type-II Weyl Semimetal TaRhTe$_{4}$</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Topology&labels=discussion&body=Topic:+[Topology](https://dhein.github.io/daily_knowledge/topic/topology/)
