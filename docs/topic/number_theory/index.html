@@ -219,73 +219,75 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Number theory is the branch of pure mathematics concerned with the properties of <strong>integers</strong> and objects built from them — rational numbers, algebraic integers, arithmetic functions — as well as the integers as solutions to equations.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Number theory is the branch of mathematics concerned with the integers $\mathbb{Z}$, arithmetic functions on them, and structures derived from or generalizing them — including rational numbers $\mathbb{Q}$, algebraic integers, and $p$-adic numbers.</div></div>
 
-<p>At its core, number theory asks: what deep structure underlies the natural numbers? The central object is the ring $\mathbb{Z}$, but the field expands quickly into $\mathbb{Q}$, algebraic number fields $K/\mathbb{Q}$, $p$-adic fields $\mathbb{Q}_p$, and adele rings $\mathbb{A}_\mathbb{Q}$.</p>
+<p>The field fractures into several interlocking subdomains:</p>
 
-<p>The fundamental theorem of arithmetic — every integer $n > 1$ factors uniquely into primes — is the bedrock, but the <em>distribution</em> of primes is far subtler. The Prime Number Theorem gives the asymptotic density:</p>
+<ul>
+<li><strong>Elementary number theory</strong> — divisibility, congruences, the fundamental theorem of arithmetic</li>
+<li><strong>Algebraic number theory</strong> — fields $\mathbb{Q}(\sqrt{d})$, rings of integers $\mathcal{O}_K$, ideal class groups</li>
+<li><strong>Analytic number theory</strong> — encoding arithmetic in complex-analytic objects; the Riemann zeta function $\zeta(s) = \sum_{n=1}^{\infty} n^{-s}$ is the canonical example</li>
+<li><strong>Diophantine geometry</strong> — integer/rational solutions to polynomial equations, viewed through algebraic geometry</li>
+<li><strong>Diophantine approximation</strong> — how well irrationals are approximable by rationals; e.g., Dirichlet's theorem guarantees $|x - p/q| < 1/q^2$ has infinitely many solutions for any irrational $x$</li>
+</ul>
 
-<p>$$\pi(x) \sim \frac{x}{\ln x}$$</p>
-
-<p>where $\pi(x)$ counts primes up to $x$. The precise error term depends on the Riemann Hypothesis, the field's deepest open problem.</p>
+<p>The prime numbers are the irreducible atoms. Their distribution is governed by the <strong>Prime Number Theorem</strong>:</p>
+<p>$$\pi(x) \sim \frac{x}{\ln x} \quad \text{as } x \to \infty$$</p>
+<p>whose proof depends entirely on the analytic behavior of $\zeta(s)$ in the complex plane.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Number theory was long considered the purest of pure mathematics — a virtue, not a flaw. That changed decisively in the 1970s when the <strong>RSA cryptosystem</strong> (Rivest, Shamir, Adleman, 1977) weaponized the difficulty of factoring large semiprimes. Modern public-key infrastructure — TLS, PGP, digital signatures — rests entirely on number-theoretic hardness assumptions.</p>
+<div class="callout tip"><div class="callout-title">TIP: The unreasonable applicability of "pure" mathematics</div><div>Gauss called number theory the "queen of mathematics" precisely because it seemed untouchably pure. Then RSA (1977) made prime factorization the security foundation of the modern internet — a direct conversion of pure number theory into infrastructure.</div></div>
 
-<div class="callout tip"><div class="callout-title">TIP: Unexpected depth</div><div>Fermat's Last Theorem ($a^n + b^n = c^n$ has no positive integer solutions for $n > 2$) looks like a curiosity about integers, yet Wiles's 1995 proof required the full machinery of elliptic curves, modular forms, and Galois representations — connecting number theory to algebraic geometry, complex analysis, and representation theory simultaneously.</div></div>
+<p><strong>Cryptography</strong> is the most consequential application. RSA relies on the apparent asymmetry between multiplying large primes (trivial) and factoring their product (believed hard). Elliptic curve cryptography — used in TLS, Bitcoin, signal protocol — rests on the group structure of $E(\mathbb{F}_p)$, a direct product of algebraic number theory and algebraic geometry.</p>
 
-<p>Beyond cryptography: lattice-based post-quantum cryptography (NTRU, Kyber, Dilithium) relies on the hardness of problems in algebraic number theory. Coding theory, hash functions, and pseudorandom generation all draw from the field.</p>
+<p>Beyond cryptography: error-correcting codes (algebraic coding theory), pseudorandom number generation, lattice-based post-quantum cryptography (hardness of SVP/CVP), and the distribution of quantum energy levels (Riemann zeros ↔ GUE eigenvalues).</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Sub-disciplines</strong> — The field fractures into: <em>elementary</em> (divisibility, congruences), <em>algebraic</em> (rings of integers in number fields, ideal class groups), <em>analytic</em> (L-functions, sieve methods), <em>arithmetic geometry</em> (elliptic curves, Diophantine geometry), and <em>computational</em> (primality testing, factoring algorithms).</li>
+<li><strong>The Riemann Hypothesis</strong> — The nontrivial zeros of $\zeta(s)$ all lie on the critical line $\text{Re}(s) = \frac{1}{2}$. If true, it gives the sharpest known bounds on $\pi(x)$: $|\pi(x) - \text{Li}(x)| = O(\sqrt{x}\ln x)$. Unproven; one of the Millennium Prize Problems.</li>
 </ol>
 
 <ol>
-<li><strong>The Riemann Zeta Function</strong> — The analytic continuation of $\zeta(s) = \sum_{n=1}^\infty n^{-s}$ encodes prime distribution through its zeros. The <strong>Euler product</strong> $\zeta(s) = \prod_p (1 - p^{-s})^{-1}$ makes explicit the link between analytic objects and primes. The Riemann Hypothesis — all non-trivial zeros lie on $\text{Re}(s) = \tfrac{1}{2}$ — remains unproven after 167 years.</li>
+<li><strong>Modularity and Langlands</strong> — Fermat's Last Theorem ($a^n + b^n = c^n$ has no positive integer solutions for $n > 2$) was proved by Wiles in 1995 via the <strong>modularity theorem</strong>: every elliptic curve over $\mathbb{Q}$ is modular. This is a special case of the Langlands program — a vast conjectured dictionary between Galois representations and automorphic forms.</li>
 </ol>
 
 <ol>
-<li><strong>Quadratic Reciprocity</strong> — Gauss's <em>theorema aureum</em>: for distinct odd primes $p, q$,</li>
-</ol>
-<p>$$\left(\frac{p}{q}\right)\left(\frac{q}{p}\right) = (-1)^{\frac{p-1}{2}\cdot\frac{q-1}{2}}$$</p>
-<p>This is the prototype for the vast generalizations in class field theory and Langlands reciprocity.</p>
-
-<ol>
-<li><strong>Diophantine Hardness</strong> — Hilbert's 10th problem (solved negatively by Matiyasevich, 1970) shows there is no general algorithm to decide integer solvability of polynomial equations. Specific families (elliptic curves over $\mathbb{Q}$, abelian varieties) remain active research fronts.</li>
+<li><strong>$p$-adic numbers</strong> — The completion of $\mathbb{Q}$ under the $p$-adic absolute value $|x|_p = p^{-v_p(x)}$ yields $\mathbb{Q}_p$, an entirely different metric space. By Ostrowski's theorem, $|\cdot|_\infty$ and $\{|\cdot|_p\}$ are the <em>only</em> nontrivial absolute values on $\mathbb{Q}$. The adeles $\mathbb{A}_\mathbb{Q} = \mathbb{R} \times \prod_p' \mathbb{Q}_p$ unify all completions simultaneously.</li>
 </ol>
 
 <ol>
-<li><strong>The Langlands Program</strong> — A sweeping web of conjectures relating Galois representations to automorphic forms. It unifies algebraic number theory, representation theory, and harmonic analysis under one framework. Partial results (e.g., Wiles, Taylor, Harris–Taylor) have resolved major open problems.</li>
+<li><strong>Goldbach's Conjecture</strong> — Every even integer $> 2$ is the sum of two primes. Unresolved since 1742. Vinogradov (1937) proved every sufficiently large <em>odd</em> integer is the sum of three primes; Chen (1973) proved every large even integer is $p + P_2$ (prime + semiprime).</li>
+</ol>
+
+<ol>
+<li><strong>Integrability meets number theory</strong> — Zeros of $\zeta(s)$ appear to follow the same eigenvalue statistics as random Hermitian matrices (GUE), connecting number theory to quantum chaos — a relationship with no proof yet.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active frontiers as of mid-2026 include: progress on the Langlands program (geometric Langlands proof announced 2024 by Fargues–Scholze circle), post-quantum lattice cryptography standardization (NIST PQC finalists), and analytic methods for gaps between primes following Zhang/Maynard.</div></div>
 
-<p>Active frontiers include: the <strong>abc conjecture</strong> (Mochizuki's claimed 2012 proof remains disputed), <strong>Goldbach's conjecture</strong> (every even integer $> 2$ is a sum of two primes — unproven since 1742), and <strong>Bounded gaps between primes</strong> (Zhang, 2013 proved infinitely many prime pairs within 70 million; the bound has since been reduced to 246). Elliptic curve BSD conjecture (Clay Millennium Problem) and the Langlands correspondence for $p$-adic groups are intensely active.</p>
-
-<p>Computationally, quantum algorithms (Shor's) would break RSA in polynomial time, driving migration to lattice cryptography whose security reduces to hard problems in algebraic number theory — closing a circle elegantly.</p>
+<p>The arXiv papers in the source material (quantum chaos, PTA gravitational waves, embodied AI) are not directly relevant to number theory — the quantum chaos paper touches on <strong>integrability breaking</strong>, which echoes the number-theoretic study of $\zeta(s)$ zeros and quantum chaos, but represents a separate physics research thread.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Prime Numbers">Prime Numbers</a></li>
 <li><a href="/daily_knowledge/topic/Riemann Hypothesis">Riemann Hypothesis</a></li>
 <li><a href="/daily_knowledge/topic/Elliptic Curves">Elliptic Curves</a></li>
 <li><a href="/daily_knowledge/topic/Langlands Program">Langlands Program</a></li>
-<li><a href="/daily_knowledge/topic/Public-Key Cryptography">Public-Key Cryptography</a></li>
-<li><a href="/daily_knowledge/topic/Algebraic Number Fields">Algebraic Number Fields</a></li>
+<li><a href="/daily_knowledge/topic/RSA Cryptosystem">RSA Cryptosystem</a></li>
+<li><a href="/daily_knowledge/topic/p-adic Numbers">p-adic Numbers</a></li>
+<li><a href="/daily_knowledge/topic/Diophantine Equations">Diophantine Equations</a></li>
 </ul>
 
 <hr>
@@ -293,21 +295,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The Langlands Program is sometimes called a "grand unified theory" of mathematics — what would it mean for a <em>proof</em> of the full correspondence, and which barriers seem most fundamental today?</li>
-<li>Shor's algorithm makes RSA insecure under quantum computation; how do the hardness assumptions underlying lattice cryptography differ epistemologically from the discrete-log / factoring assumptions they replace?</li>
-<li>Goldbach's conjecture is simple to state and verified computationally to $4 \times 10^{18}$ — does the gap between computational evidence and proof reflect a fundamental limitation of current proof techniques, or something deeper about arithmetic?</li>
+<li>The Riemann Hypothesis can be stated in terms of the error in $\pi(x)$ — what would a <em>counterexample</em> (a zero off the critical line) imply for the distribution of primes, and how catastrophic would it be for analytic number theory?</li>
+</ol>
+
+<ol>
+<li>The Langlands program posits a deep equivalence between Galois representations and automorphic forms. What intuition justifies treating <em>arithmetic</em> objects (Galois groups) and <em>analytic</em> objects (modular forms) as "the same thing" in disguise?</li>
+</ol>
+
+<ol>
+<li>Post-quantum cryptography pivots from integer factorization to lattice problems like Learning With Errors (LWE). Does this shift represent number theory becoming less central to cryptography, or just a deeper layer of it?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Number_theory" target="_blank" rel="noopener"&gt;Number Theory&lt;/a&gt; · Retrieved 2026-03-27</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Number_theory" target="_blank" rel="noopener"&gt;Number Theory&lt;/a&gt; · Retrieved 2026-07-03</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.25742v1" target="_blank" rel="noopener">Pseudogap and Non-Fermi-liquid criticality in double Kondo model for bilayer nickelates</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25729v1" target="_blank" rel="noopener">$θ$ Angle and Axial Anomaly in Holographic QCD</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25721v1" target="_blank" rel="noopener">Bayesian analysis of $α$-Starobinsky model with Planck, ACT and DESI data</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02506v1" target="_blank" rel="noopener">On the emergence of quantum many-body chaos for tunably-broken integrability</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02505v1" target="_blank" rel="noopener">A critical look at low-scale cosmological phase transitions in the PTA era</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02501v1" target="_blank" rel="noopener">Embodied.cpp: A Portable Inference Runtime of Embodied AI Models on Heterogeneous Robots</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Number+Theory&labels=discussion&body=Topic:+[Number+Theory](https://dhein.github.io/daily_knowledge/topic/number_theory/)

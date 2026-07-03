@@ -219,83 +219,92 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Category theory is the mathematics of <em>structure and structure-preserving maps</em>. Where set theory asks "what are things made of?", category theory asks "how do things relate?". It was introduced by Samuel Eilenberg and Saunders Mac Lane (1945) while formalizing constructions in algebraic topology.</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>category</strong> $\mathcal{C}$ consists of: - A collection of <strong>objects</strong> $\text{ob}(\mathcal{C})$ - For each pair $A, B \in \text{ob}(\mathcal{C})$, a set of <strong>morphisms</strong> $\text{Hom}(A, B)$ - A <strong>composition law</strong>: if $f \in \text{Hom}(A,B)$ and $g \in \text{Hom}(B,C)$, then $g \circ f \in \text{Hom}(A,C)$ - <strong>Identity morphisms</strong>: $\text{id}_A \in \text{Hom}(A,A)$ for each object $A$  Subject to: <strong>associativity</strong> $(h \circ g) \circ f = h \circ (g \circ f)$ and <strong>unit laws</strong> $f \circ \text{id}_A = f = \text{id}_B \circ f$.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Definition: Category</div><div>A <strong>category</strong> $\mathcal{C}$ consists of: - A collection of <strong>objects</strong> $\text{Ob}(\mathcal{C})$ - For each pair $A, B \in \text{Ob}(\mathcal{C})$, a collection of <strong>morphisms</strong> $\text{Hom}(A, B)$ - A <strong>composition law</strong>: if $f \in \text{Hom}(A,B)$ and $g \in \text{Hom}(B,C)$, then $g \circ f \in \text{Hom}(A,C)$ - <strong>Identity morphisms</strong> $\text{id}_A \in \text{Hom}(A,A)$ for each object  Subject to <strong>associativity</strong>: $(h \circ g) \circ f = h \circ (g \circ f)$, and <strong>unit laws</strong>: $f \circ \text{id}_A = f = \text{id}_B \circ f$.</div></div>
+<p>Category theory, introduced by Eilenberg and Mac Lane (1945) in the context of algebraic topology, is often described as "the mathematics of mathematics." It abstracts away the internal structure of objects, focusing entirely on how structures <em>relate</em> — the morphisms between them.</p>
 
-<p>A <strong>functor</strong> $F : \mathcal{C}_1 \to \mathcal{C}_2$ is a structure-preserving map between categories — it sends objects to objects and morphisms to morphisms while respecting composition:</p>
+<p>A <strong>functor</strong> $F : \mathcal{C}_1 \to \mathcal{C}_2$ is a structure-preserving map between categories: it sends objects to objects and morphisms to morphisms, respecting composition and identities. A <strong>natural transformation</strong> $\eta : F \Rightarrow G$ between two functors is then a coherent family of morphisms $\eta_A : F(A) \to G(A)$ that commutes with all morphisms in the source category — it is a "morphism between morphisms between categories," completing a three-level hierarchy.</p>
 
-<p>$$F(g \circ f) = F(g) \circ F(f), \quad F(\text{id}_A) = \text{id}_{F(A)}$$</p>
-
-<p>A <strong>natural transformation</strong> $\eta : F \Rightarrow G$ between two functors provides a coherent family of morphisms $\eta_A : F(A) \to G(A)$ such that for every morphism $f : A \to B$, the naturality square commutes: $G(f) \circ \eta_A = \eta_B \circ F(f)$.</p>
+<p>$$F(f) \circ \eta_A = \eta_B \circ G(f) \quad \forall f : A \to B$$</p>
 
 <h2>Why It Matters</h2>
 
-<p>Category theory is uniquely powerful because it <em>abstracts away the interior</em> of mathematical objects. The same categorical construction — limits, colimits, adjunctions — appears independently in topology, algebra, logic, and computer science. This lets you prove theorems once and apply them everywhere.</p>
+<p>Category theory serves as a <strong>unifying language</strong> across mathematics: limits/colimits subsume products, coproducts, equalizers, and pullbacks under one concept; adjunctions capture free/forgetful constructions and dualities ubiquitous across algebra and topology.</p>
 
-<div class="callout tip"><div class="callout-title">TIP: The Adjunction Insight</div><div>Adjoint functors $F \dashv G$ (where $\text{Hom}(FA, B) \cong \text{Hom}(A, GB)$ naturally) capture an enormous range of mathematical duality: free/forgetful, product/exponential, quantifier/substitution. MacLane's dictum: <em>"Adjoint functors arise everywhere."</em></div></div>
+<p>In computer science, the connection is deep and productive:</p>
+<ul>
+<li><strong>Monads</strong> (a monoid in the category of endofunctors) model computational effects in Haskell and other functional languages</li>
+<li><strong>Cartesian closed categories</strong> are the semantic backbone of the typed lambda calculus via the Curry–Howard–Lambek correspondence</li>
+<li><strong>Functors</strong> map directly onto <code>fmap</code> in Haskell's <code>Functor</code> typeclass</li>
+</ul>
 
-<p>In <strong>functional programming</strong>, category theory is the semantic backbone. Monads are monoids in the category of endofunctors; the <code>fmap</code> of Haskell's <code>Functor</code> typeclass is literally a functor mapping. In <strong>logic</strong>, the Curry–Howard–Lambek correspondence triangulates propositions, types, and objects of a cartesian closed category.</p>
+<div class="callout tip"><div class="callout-title">TIP: The Yoneda Perspective</div><div>The <strong>Yoneda Lemma</strong> — arguably the most important result in category theory — states that any object $A$ is completely determined by the functor $\text{Hom}(A, -)$: its relationships to all other objects. This is a precise formulation of the structuralist intuition that an object <em>is</em> its role in a system, not its internal constitution. $$\text{Nat}(\text{Hom}(A,-), F) \cong F(A)$$</div></div>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Morphisms over elements.</strong> A monoid is a category with one object — its elements are morphisms. A group is the same with all morphisms invertible. A preorder is a category where $|\text{Hom}(A,B)| \leq 1$. The categorical perspective unifies these with no extra effort.</li>
+<li><strong>Limits and Colimits</strong>: Universal constructions that generalize products, equalizers, pullbacks (limits) and coproducts, pushouts, quotients (colimits). A category with all small limits is called <em>complete</em>; all small colimits, <em>cocomplete</em>.</li>
 </ol>
 
 <ol>
-<li><strong>Universal properties.</strong> Products, coproducts, limits, and colimits are defined purely by universal properties — existence and uniqueness up to unique isomorphism. This is categorically <em>the right</em> way to define constructions; it guarantees they're canonical.</li>
+<li><strong>Adjunctions</strong>: A functor pair $F \dashv G$ (left and right adjoint) satisfies $\text{Hom}_{\mathcal{D}}(FA, B) \cong \text{Hom}_{\mathcal{C}}(A, GB)$, naturally in $A$ and $B$. Adjoints are pervasive: free/forgetful, suspension/loop space, product/exponential.</li>
 </ol>
 
 <ol>
-<li><strong>Yoneda Lemma.</strong> Arguably the most important theorem in category theory:</li>
-</ol>
-<p>$$\text{Nat}(\text{Hom}(A, -),\ F) \cong F(A)$$</p>
-<p>An object is completely determined by how other objects map into it. This grounds representability and is the categorical foundation of sheaf theory and algebraic geometry.</p>
-
-<ol>
-<li><strong>Size issues.</strong> Naïve category theory runs into set-theoretic paradoxes (the category of all sets). Handling this requires Grothendieck universes, or working with <em>small</em> vs. <em>large</em> categories explicitly.</li>
+<li><strong>Equivalence vs. Isomorphism</strong>: Category theory enforces the discipline that the <em>right</em> notion of sameness between categories is <strong>equivalence</strong> (not strict isomorphism), where the unit and counit of an adjunction are natural isomorphisms — a lesson that extends into homotopy type theory.</li>
 </ol>
 
 <ol>
-<li><strong>Contravariant functors.</strong> A contravariant functor $F : \mathcal{C}^{op} \to \mathcal{D}$ reverses arrows. This is how cohomology arises from homology — it's the same structure, dualised.</li>
+<li><strong>Higher Categories</strong>: $n$-categories have morphisms between morphisms between… up to level $n$, with $(\infty,1)$-categories (quasi-categories, complete Segal spaces) central to modern homotopy theory and derived algebraic geometry.</li>
+</ol>
+
+<ol>
+<li><strong>Topos Theory</strong>: A <strong>topos</strong> is a category that behaves like the category of sets — it has a subobject classifier, power objects, and finite limits. Every topos defines an internal logic; Grothendieck toposes underpin modern algebraic geometry.</li>
 </ol>
 
 <h2>Current State</h2>
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research fronts include <strong>Higher Category Theory</strong> (∞-categories, (∞,1)-categories via quasi-categories or complete Segal spaces), which has transformed modern homotopy theory through Lurie's <em>Higher Topos Theory</em>. <strong>Homotopy Type Theory (HoTT)</strong> uses categorical semantics to give a computational foundation for mathematics where identity is homotopy. Applied category theory is growing rapidly — compositional approaches appear in quantum computing (ZX-calculus), systems biology, and database schema migration.</p>
+<p>Active research fronts include <strong>$(\infty,1)$-category theory</strong> (Lurie's program via <em>Higher Topos Theory</em>), <strong>homotopy type theory</strong> (where types are $\infty$-groupoids and univalence is the categorical identity principle), and <strong>applied category theory</strong> — using categorical structure in databases (functorial data migration), machine learning (compositional models via string diagrams), and distributed systems (sheaf-based consistency).</p>
+
+<p>String diagrams have recently gained traction as a graphical calculus for monoidal categories, offering an intuitive but rigorous proof framework used heavily in quantum computing and linguistics.</p>
 
 <h2>See Also</h2>
 
 <ul>
 <li><a href="/daily_knowledge/topic/Functor">Functor</a></li>
-<li><a href="/daily_knowledge/topic/Natural Transformation">Natural Transformation</a></li>
 <li><a href="/daily_knowledge/topic/Adjoint Functors">Adjoint Functors</a></li>
 <li><a href="/daily_knowledge/topic/Yoneda Lemma">Yoneda Lemma</a></li>
-<li><a href="/daily_knowledge/topic/Monads in Functional Programming">Monads in Functional Programming</a></li>
+<li><a href="/daily_knowledge/topic/Monad (Functional Programming)">Monad (Functional Programming)</a></li>
 <li><a href="/daily_knowledge/topic/Homotopy Type Theory">Homotopy Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Topos Theory">Topos Theory</a></li>
 </ul>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The Yoneda lemma says an object is determined by its relationships. Is this a mathematical accident or a deep philosophical claim about the nature of identity?</li>
-<li>Adjoint functors capture free/forgetful dualities across mathematics — can you identify an adjunction lurking in a domain you work in (databases, type systems, physics)?</li>
-<li>Higher category theory demands that equality itself be replaced by coherent homotopy equivalence. What does this mean for the foundations of proof?</li>
+<li>The Yoneda Lemma says an object is determined by how everything maps <em>into</em> it (contravariant) or <em>out of</em> it (covariant). Does this align with or challenge your intuition about mathematical identity?</li>
+</ol>
+
+<ol>
+<li>Adjunctions appear everywhere: free/forgetful, product/hom, suspension/loop. Is there a meta-principle for <em>recognizing</em> when two constructions should be adjoint before proving it?</li>
+</ol>
+
+<ol>
+<li>Category theory is sometimes criticized as "abstract nonsense" that repackages known mathematics without generating new theorems. How would you argue for or against this view, given cases like Grothendieck's revolution in algebraic geometry?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Category_theory" target="_blank" rel="noopener"&gt;Category Theory&lt;/a&gt; · Retrieved 2026-03-27</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Category_theory" target="_blank" rel="noopener"&gt;Category Theory&lt;/a&gt; · Retrieved 2026-07-03</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.25743v1" target="_blank" rel="noopener">RefAlign: Representation Alignment for Reference-to-Video Generation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25742v1" target="_blank" rel="noopener">Pseudogap and Non-Fermi-liquid criticality in double Kondo model for bilayer nickelates</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25741v1" target="_blank" rel="noopener">Vega: Learning to Drive with Natural Language Instructions</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02515v1" target="_blank" rel="noopener">PointDiT: Pixel-Space Diffusion for Monocular Geometry Estimation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02514v1" target="_blank" rel="noopener">Distributed Attacks in Persistent-State AI Control</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02512v1" target="_blank" rel="noopener">Program-as-Weights: A Programming Paradigm for Fuzzy Functions</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Category+Theory&labels=discussion&body=Topic:+[Category+Theory](https://dhein.github.io/daily_knowledge/topic/category_theory_math/)

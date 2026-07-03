@@ -219,77 +219,69 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Graph theory studies <strong>graphs</strong> — abstract structures encoding pairwise relations between objects.</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>graph</strong> $G = (V, E)$ consists of a set of <strong>vertices</strong> $V$ and a set of <strong>edges</strong> $E \subseteq \binom{V}{2}$ (for undirected) or $E \subseteq V \times V$ (for directed). Edges encode pairwise relations between objects.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>A graph $G = (V, E)$ consists of a finite set of <strong>vertices</strong> $V$ and a set of <strong>edges</strong> $E \subseteq \binom{V}{2}$ (for undirected graphs) or $E \subseteq V \times V$ (for directed graphs, i.e., <strong>digraphs</strong>). The <strong>order</strong> of a graph is $|V|$; its <strong>size</strong> is $|E|$.</div></div>
+<p>The fundamental distinction between graph types sets the stage for entirely different theories:</p>
 
-<p>Key variants:</p>
 <ul>
-<li><strong>Undirected</strong>: edges are unordered pairs $\{u, v\}$; relation is symmetric.</li>
-<li><strong>Directed (digraph)</strong>: edges are ordered pairs $(u, v)$; asymmetric — an arc from $u$ to $v$ does not imply one from $v$ to $u$.</li>
-<li><strong>Weighted</strong>: edges carry a scalar $w: E \to \mathbb{R}$, encoding cost, capacity, or probability.</li>
-<li><strong>Multigraph</strong>: allows multiple edges between the same pair of vertices.</li>
-<li><strong>Hypergraph</strong>: edges can connect more than two vertices; generalises the binary relation model.</li>
+<li><strong>Undirected graph</strong>: edge $\{u, v\} = \{v, u\}$ — symmetry is baked in</li>
+<li><strong>Directed graph (digraph)</strong>: edge $(u, v) \neq (v, u)$ — asymmetry enables modeling flow, causality, hierarchy</li>
+<li><strong>Weighted graph</strong>: each edge carries a scalar $w: E \to \mathbb{R}$, enabling optimization problems over path costs</li>
 </ul>
 
-<p>The <strong>degree</strong> of vertex $v$ in an undirected graph is $\deg(v) = |\{u \in V : \{u,v\} \in E\}|$. The handshaking lemma follows immediately:</p>
+<p>Key invariants include the <strong>degree</strong> $\deg(v) = |\{e \in E : v \in e\}|$, with the handshaking lemma guaranteeing:</p>
 
 <p>$$\sum_{v \in V} \deg(v) = 2|E|$$</p>
+
+<p>For digraphs, indegree and outdegree split this count, and the adjacency matrix $A$ where $A_{ij} = 1$ iff $(i,j) \in E$ becomes a primary algebraic handle on the structure.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Graph theory is the lingua franca of relational structure across science and engineering:</p>
+<p>Graph theory is arguably the most versatile branch of discrete mathematics — it is the natural language of <em>relational structure</em>. Applications span:</p>
 
 <ul>
-<li><strong>Algorithms &amp; CS</strong>: shortest paths (Dijkstra, Bellman-Ford), spanning trees (Kruskal, Prim), network flow (Ford-Fulkerson), matching (Hopcroft-Karp), planarity testing (linear-time via Kuratowski's theorem).</li>
-<li><strong>Networks</strong>: the internet, social graphs, biological interaction networks, and power grids are all naturally modelled as graphs.</li>
-<li><strong>Combinatorics &amp; Logic</strong>: graph coloring encodes constraint satisfaction; Ramsey theory asks what structure must appear in any sufficiently large graph.</li>
-<li><strong>Physics &amp; Chemistry</strong>: molecular graphs, lattice models in statistical mechanics, and tensor network contractions are all graph-theoretic.</li>
-<li><strong>Machine Learning</strong>: Graph Neural Networks (GNNs) extend deep learning to non-Euclidean domains — predicting molecular properties, recommendation systems, knowledge-graph reasoning.</li>
+<li><strong>Computer science</strong>: shortest paths (Dijkstra, Bellman-Ford), network flow (max-flow min-cut), scheduling (graph coloring), compiler register allocation</li>
+<li><strong>Biology</strong>: protein interaction networks, phylogenetic trees, connectomes</li>
+<li><strong>Social science</strong>: community detection, influence propagation, small-world phenomena</li>
+<li><strong>Physics</strong>: spin models on lattices, tensor network contraction, Feynman diagrams as graphs</li>
+<li><strong>Cryptography &amp; complexity</strong>: graph isomorphism sits at an unusual complexity-theoretic position — not known to be in P nor NP-complete</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Unexpected Bridge</div><div>The <strong>graph spectrum</strong> — eigenvalues of the adjacency or Laplacian matrix — connects combinatorial properties (connectivity, bipartiteness, expansion) to linear algebra and geometry. Spectral graph theory underpins both fast solvers for PDEs on meshes and community detection in social networks via the Fiedler vector.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Spectral Bridge</div><div>The <strong>eigenvalues of the Laplacian</strong> $L = D - A$ (where $D$ is the degree matrix) encode global connectivity. The second-smallest eigenvalue $\lambda_2$ (the <em>algebraic connectivity</em> or Fiedler value) measures how well-connected a graph is — $\lambda_2 = 0$ iff the graph is disconnected. This spectral perspective connects graph theory to differential geometry via discrete Hodge theory.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Graph Isomorphism</strong>: Determining whether two graphs are structurally identical ($G \cong H$) is one of the few natural problems not known to be in P or NP-complete. The Weisfeiler-Leman hierarchy of isomorphism tests directly shapes the expressive power of GNNs.</li>
+<li><strong>Graph isomorphism</strong> — Determining whether two graphs $G \cong H$ (same structure up to vertex relabeling) is in complexity class GI, believed strictly between P and NP-complete. The Weisfeiler-Leman algorithm gives practical heuristics and underlies the expressiveness limits of Graph Neural Networks.</li>
 </ol>
 
 <ol>
-<li><strong>Planarity</strong>: A graph is planar iff it contains no subdivision of $K_5$ or $K_{3,3}$ (Kuratowski's theorem). Euler's formula $V - E + F = 2$ holds for any connected planar graph embedded in the sphere.</li>
+<li><strong>Planarity</strong> — A graph is planar iff it embeds in $\mathbb{R}^2$ without edge crossings. Kuratowski's theorem: $G$ is planar $\iff$ it contains no subdivision of $K_5$ or $K_{3,3}$. Planar graphs satisfy Euler's formula $V - E + F = 2$ and are always 4-colorable (Four Color Theorem, proved 1976 with computer assistance).</li>
 </ol>
 
 <ol>
-<li><strong>Graph Coloring</strong>: The chromatic number $\chi(G)$ is the minimum number of colors needed to color $V$ such that no adjacent vertices share a color. The four-color theorem ($\chi \le 4$ for planar graphs) required a computer-assisted proof (Appel & Haken, 1976) — one of the first such proofs in mathematics.</li>
+<li><strong>Trees</strong> — A connected acyclic graph on $n$ vertices has exactly $n-1$ edges. Cayley's formula gives $n^{n-2}$ labeled trees on $n$ vertices — a striking result proved elegantly via Prüfer sequences.</li>
 </ol>
 
 <ol>
-<li><strong>Trees &amp; Spanning Trees</strong>: A tree is a connected acyclic graph; it satisfies $|E| = |V| - 1$. Cayley's formula gives $n^{n-2}$ labeled trees on $n$ vertices, proven elegantly via the Prüfer sequence bijection.</li>
+<li><strong>Graph minors</strong> — Robertson–Seymour theorem: graphs are <strong>well-quasi-ordered</strong> under the minor relation, implying every minor-closed family has a finite forbidden-minor characterization. This is one of the deepest results in combinatorics.</li>
 </ol>
 
 <ol>
-<li><strong>Random Graphs</strong>: The Erdős-Rényi model $G(n, p)$ places each edge independently with probability $p$. The sharp threshold phenomenon — properties like connectivity or triangle-freeness appear almost surely above a critical $p^*(n)$ — is a cornerstone of probabilistic combinatorics.</li>
+<li><strong>Random graphs</strong> — The Erdős–Rényi model $G(n,p)$ exhibits sharp <strong>phase transitions</strong>: at $p = \frac{1}{n}$, a giant connected component suddenly emerges. This threshold behavior connects graph theory to statistical physics.</li>
 </ol>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — the complexity status of Graph Isomorphism, GNN expressivity results, and random graph thresholds are all actively evolving research areas.</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research areas like graph neural networks, quantum graph algorithms, and parameterized complexity results evolve rapidly — specific state-of-the-art claims here may be superseded.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<p>Active frontiers include:</p>
-
-<ul>
-<li><strong>Parameterized complexity</strong>: tractable algorithms for NP-hard graph problems when a structural parameter (treewidth, genus) is small.</li>
-<li><strong>Graph Neural Networks</strong>: characterising what GNNs can and cannot compute via the Weisfeiler-Leman hierarchy; designing architectures that capture higher-order structure.</li>
-<li><strong>Extremal graph theory</strong>: Turán-type problems — how many edges force a given subgraph — and their connections to arithmetic combinatorics (e.g., Szemerédi regularity lemma).</li>
-<li><strong>Dynamic &amp; streaming graphs</strong>: maintaining connectivity, matchings, and shortest paths under edge insertions/deletions in sub-linear space or time.</li>
-</ul>
+<p>Graph Neural Networks (GNNs) have renewed theoretical interest in graph isomorphism: the WL hierarchy precisely characterizes which graph properties a GNN can distinguish, spurring work on higher-order GNNs and equivariant architectures. Parameterized complexity of graph problems (treewidth, treedepth decompositions) is an active frontier, as is the study of <strong>graph limits</strong> (graphons) which give a analytic framework for sequences of dense graphs. Quantum computing promises polynomial speedups for certain graph problems via amplitude amplification and quantum walk algorithms.</p>
 
 <hr>
 
@@ -297,11 +289,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/Spectral Graph Theory">Spectral Graph Theory</a></li>
+<li><a href="/daily_knowledge/topic/Network Flow &amp; Max-Flow Min-Cut">Network Flow &amp; Max-Flow Min-Cut</a></li>
 <li><a href="/daily_knowledge/topic/Graph Neural Networks">Graph Neural Networks</a></li>
-<li><a href="/daily_knowledge/topic/Network Flow and Matching">Network Flow and Matching</a></li>
 <li><a href="/daily_knowledge/topic/Computational Complexity">Computational Complexity</a></li>
-<li><a href="/daily_knowledge/topic/Probabilistic Combinatorics">Probabilistic Combinatorics</a></li>
-<li><a href="/daily_knowledge/topic/Discrete Mathematics">Discrete Mathematics</a></li>
+<li><a href="/daily_knowledge/topic/Combinatorics">Combinatorics</a></li>
+<li><a href="/daily_knowledge/topic/Random Graphs &amp; Phase Transitions">Random Graphs &amp; Phase Transitions</a></li>
 </ul>
 
 <hr>
@@ -309,27 +301,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The four-color theorem's computer-assisted proof remains controversial to some mathematicians who demand human-verifiable proofs. What epistemic standards should mathematical proof satisfy, and does the answer change as formal verification matures?</li>
+<li>The Four Color Theorem was the first major proof relying on exhaustive computer case-checking — does this constitute a valid mathematical proof, and what does it say about the nature of mathematical knowledge?</li>
 </ol>
 
 <ol>
-<li>Treewidth measures how "tree-like" a graph is and unlocks polynomial algorithms for otherwise NP-hard problems. Where else does structural sparsity buy tractability — in logic, linear algebra, or probabilistic inference?</li>
+<li>Graph isomorphism occupies a peculiar complexity-theoretic niche. What structural properties of graphs make the problem "almost easy" in practice despite the lack of a known polynomial algorithm?</li>
 </ol>
 
 <ol>
-<li>Graph Neural Networks are provably bounded by 1-WL isomorphism tests on most architectures. Does this limitation reveal something deep about the geometry of relational learning, or is it an artifact of the message-passing paradigm specifically?</li>
+<li>The spectral gap of a graph's Laplacian controls both mixing times of random walks and expansion properties. How does this connect the discrete geometry of graphs to the continuous geometry of Riemannian manifolds, and where does the analogy break down?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Graph_theory" target="_blank" rel="noopener"&gt;Graph Theory&lt;/a&gt; · Retrieved 2026-03-27</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Graph_theory" target="_blank" rel="noopener"&gt;Graph Theory&lt;/a&gt; · Retrieved 2026-07-03</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.25742v1" target="_blank" rel="noopener">Pseudogap and Non-Fermi-liquid criticality in double Kondo model for bilayer nickelates</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25736v1" target="_blank" rel="noopener">How good was my shot? Quantifying Player Skill Level in Table Tennis</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25730v1" target="_blank" rel="noopener">PackForcing: Short Video Training Suffices for Long Video Sampling and Long Context Inference</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02516v1" target="_blank" rel="noopener">Alignment Is All You Need For X-to-4D Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02506v1" target="_blank" rel="noopener">On the emergence of quantum many-body chaos for tunably-broken integrability</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02505v1" target="_blank" rel="noopener">A critical look at low-scale cosmological phase transitions in the PTA era</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Graph+Theory&labels=discussion&body=Topic:+[Graph+Theory](https://dhein.github.io/daily_knowledge/topic/graph_theory/)

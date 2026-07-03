@@ -219,72 +219,69 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>differential equation</strong> is an equation relating an unknown function $f$ and one or more of its derivatives. The <strong>order</strong> is the highest derivative that appears; the <strong>degree</strong> is the power of that derivative (when polynomial).</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>differential equation</strong> is an equation relating an unknown function $f$ to one or more of its derivatives. Formally, an $n$-th order ODE takes the form: $$F\!\left(x,\, y,\, y',\, y'',\, \ldots,\, y^{(n)}\right) = 0$$ where $y = f(x)$ is the unknown. For PDEs, the unknown $u$ depends on multiple variables and partial derivatives appear instead.</div></div>
 
-<p>The general form of an $n$-th order ODE:</p>
+<p>The <strong>order</strong> of a DE is the highest derivative present; the <strong>degree</strong> is the power of that highest-order term (when the equation is polynomial in derivatives). Linearity is the most structurally decisive property: a linear DE satisfies superposition — if $y_1$ and $y_2$ are solutions, so is $c_1 y_1 + c_2 y_2$.</p>
 
-<p>$$F\!\left(x,\, y,\, y',\, y'',\, \ldots,\, y^{(n)}\right) = 0$$</p>
+<p>The general taxonomy:</p>
 
-<p>For PDEs, the unknown depends on multiple variables: $u = u(x_1, \ldots, x_k)$, and the equation involves partial derivatives $\partial u / \partial x_i$.</p>
-
-<p><strong>Classification axes:</strong></p>
-<p>| Axis | Values |</p>
-<p>|---|---|</p>
-<p>| Variable count | ODE vs. PDE |</p>
-<p>| Linearity | Linear vs. nonlinear |</p>
-<p>| Homogeneity | Homogeneous vs. inhomogeneous |</p>
-<p>| Order | 1st, 2nd, … |</p>
-
-<p>A linear ODE has the form $\sum_{k=0}^n a_k(x)\, y^{(k)} = g(x)$. Nonlinearity — e.g., $y'' + \sin y = 0$ (pendulum) — destroys superposition and makes closed-form solutions rare.</p>
+<p>| Class | Variables | Example |</p>
+<p>|---|---|---|</p>
+<p>| ODE | Single independent | $y'' + \omega^2 y = 0$ |</p>
+<p>| PDE | Multiple independent | $\nabla^2 u = 0$ |</p>
+<p>| SDE | Stochastic forcing | $dX = \mu\,dt + \sigma\,dW$ |</p>
+<p>| DDE | Delayed argument | $y'(t) = f(y(t-\tau))$ |</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>DEs are the native language of continuous dynamics. Nearly every law of physics is a differential equation: Newton's second law $F = m\ddot{x}$, Maxwell's equations, Schrödinger's equation, the Navier–Stokes equations. Beyond physics:</p>
+<p>DEs are the native language of continuity. Virtually every physical law that involves <em>rates</em> — Newton's second law, Maxwell's equations, the Schrödinger equation, the Black-Scholes model, epidemiological SIR models — is a differential equation. Their significance is structural:</p>
 
 <ul>
-<li><strong>Economics</strong>: optimal control (Hamilton–Jacobi–Bellman PDE), Black–Scholes option pricing</li>
-<li><strong>Biology</strong>: epidemic models (SIR), neural firing (Hodgkin–Huxley)</li>
-<li><strong>Engineering</strong>: control systems, structural analysis, heat transfer</li>
+<li><strong>Physics</strong>: Newton's $F = ma$ is $m\ddot{x} = F(x, \dot{x}, t)$; quantum mechanics is built on the PDE $i\hbar\,\partial_t \psi = \hat{H}\psi$.</li>
+<li><strong>Engineering</strong>: Control systems, heat transfer, fluid dynamics (Navier-Stokes) all reduce to DEs.</li>
+<li><strong>Economics</strong>: Optimal growth (Ramsey model), option pricing (Black-Scholes PDE), and game dynamics (replicator equations).</li>
+<li><strong>Biology</strong>: Population dynamics, neural firing (Hodgkin-Huxley), morphogenesis (reaction-diffusion).</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Deeper connection</div><div>Every ODE system $\dot{\mathbf{x}} = F(\mathbf{x})$ defines a <strong>vector field</strong> on state space. Solutions are integral curves — geometry and analysis interlock here. This is why <a href="/daily_knowledge/topic/Differential Geometry">Differential Geometry</a> and <a href="/daily_knowledge/topic/Dynamical Systems Theory">Dynamical Systems Theory</a> are natural companions.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Insight</div><div>The fact that <em>most</em> DEs lack closed-form solutions is not a failure — it forced the development of entire fields: numerical analysis, functional analysis, dynamical systems theory, and ergodic theory. The "unsolvability" is mathematically productive.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Existence and Uniqueness (Picard–Lindelöf)</strong></p>
-<p>For the IVP $y' = f(x,y)$, $y(x_0)=y_0$: if $f$ is continuous and Lipschitz in $y$ on a rectangle around $(x_0, y_0)$, a unique local solution exists. Lipschitz failure signals potential blow-up or branching.</p>
+<p><strong>1. Existence and Uniqueness (Picard-Lindelöf)</strong></p>
+<p>For the IVP $y' = f(x,y)$, $y(x_0) = y_0$: if $f$ is continuous and Lipschitz in $y$, a unique local solution exists. Lipschitz failure → possible non-uniqueness (e.g., $y' = y^{1/2}$, $y(0)=0$ has infinitely many solutions).</p>
 
-<p><strong>2. Linear Systems and the Matrix Exponential</strong></p>
-<p>$\dot{\mathbf{x}} = A\mathbf{x}$ has the exact solution $\mathbf{x}(t) = e^{At}\mathbf{x}_0$. The eigenstructure of $A$ governs stability: all eigenvalues with $\text{Re}(\lambda) < 0$ → asymptotically stable equilibrium. This is the backbone of <a href="/daily_knowledge/topic/Linear Stability Analysis">Linear Stability Analysis</a>.</p>
+<p><strong>2. Linear vs. Nonlinear</strong></p>
+<p>Linear DEs admit superposition and have well-developed solution theory (variation of parameters, Green's functions, spectral methods). Nonlinear DEs can exhibit chaos, bifurcations, and blow-up in finite time — qualitatively richer and analytically harder.</p>
 
-<p><strong>3. The Fundamental Solution / Green's Function</strong></p>
-<p>For a linear operator $\mathcal{L}u = f$, the Green's function $G(x, s)$ satisfies $\mathcal{L}_x G = \delta(x-s)$. The particular solution is then:</p>
-<p>$$u(x) = \int G(x,s)\, f(s)\, ds$$</p>
-<p>A powerful inversion framework linking PDEs to <a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a>.</p>
+<p><strong>3. Phase Portraits and Qualitative Theory</strong></p>
+<p>Even without explicit solutions, the geometry of the vector field $\dot{\mathbf{x}} = \mathbf{f}(\mathbf{x})$ reveals equilibria, limit cycles, stable/unstable manifolds, and bifurcation structure. This is the core of Poincaré's program.</p>
 
-<p><strong>4. Bifurcations in Nonlinear DEs</strong></p>
-<p>As a parameter $\mu$ varies, qualitative behavior can change abruptly — saddle-node, Hopf, pitchfork bifurcations. These are not perturbative phenomena; they require global geometric analysis (<a href="/daily_knowledge/topic/Phase Portraits">Phase Portraits</a>, center manifold reduction).</p>
+<p><strong>4. Green's Functions</strong></p>
+<p>For a linear operator $\mathcal{L}$, the Green's function $G(x, s)$ satisfies $\mathcal{L}G = \delta(x-s)$. The solution to $\mathcal{L}y = f$ is then:</p>
+<p>$$y(x) = \int G(x,s)\,f(s)\,ds$$</p>
+<p>This encodes the <em>impulse response</em> and connects DEs to integral equations and functional analysis.</p>
 
 <p><strong>5. Numerical Methods</strong></p>
-<p>When closed forms fail, discretization takes over. Runge–Kutta schemes (RK4 is the workhorse), multistep Adams methods, and stiff-equation solvers (BDF, implicit Runge–Kutta) each trade stability, accuracy, and cost differently. Stiffness — widely separated timescales — is the dominant practical challenge.</p>
+<p>When closed forms fail: Euler, Runge-Kutta (RK4 is the workhorse), Adams-Bashforth (multistep), and stiff-equation solvers (implicit methods like BDF). For PDEs: finite differences, finite elements, spectral methods. Stability (Lax equivalence theorem) and consistency must both hold for convergence.</p>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active frontiers include:</p>
+<p>Active research frontiers include:</p>
 
 <ul>
-<li><strong>Neural ODEs</strong>: parameterizing the vector field with a neural network and backpropagating through the ODE solver via the adjoint method — bridges DEs and deep learning.</li>
-<li><strong>Physics-Informed Neural Networks (PINNs)</strong>: embedding PDE residuals into the loss function; promising for inverse problems and high-dimensional PDEs where classical methods hit the curse of dimensionality.</li>
-<li><strong>Mean-field and kinetic PDEs</strong>: Vlasov–Fokker–Planck equations for large particle systems are seeing renewed rigor alongside applications in multi-agent learning and interacting diffusions.</li>
-<li><strong>Data-driven discovery of DEs</strong> (SINDy and variants): sparse regression over a library of candidate terms to recover governing equations from trajectory data.</li>
+<li><strong>Neural ODEs</strong>: parameterizing the derivative $\dot{\mathbf{h}} = f_\theta(\mathbf{h}, t)$ with a neural network, treating depth as continuous time. Enables memory-efficient training via the adjoint method.</li>
+<li><strong>Physics-Informed Neural Networks (PINNs)</strong>: embedding PDE residuals into the loss function; competitive on forward/inverse problems where data is sparse.</li>
+<li><strong>Operator learning</strong> (DeepONet, Fourier Neural Operator): learning mappings between function spaces — effectively learning solution operators for families of PDEs.</li>
+<li><strong>Stochastic PDEs</strong>: rough path theory (Hairer's regularity structures, 2014 Fields Medal) provides rigorous foundations for SPDEs previously ill-defined under classical Itô calculus.</li>
+<li><strong>Long-time behavior</strong>: proving ergodicity, mixing rates, and invariant measure properties for dissipative PDEs (e.g., Navier-Stokes, KPZ equation).</li>
 </ul>
 
 <hr>
@@ -292,12 +289,12 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Dynamical Systems Theory">Dynamical Systems Theory</a></li>
+<li><a href="/daily_knowledge/topic/Ordinary Differential Equations">Ordinary Differential Equations</a></li>
 <li><a href="/daily_knowledge/topic/Partial Differential Equations">Partial Differential Equations</a></li>
-<li><a href="/daily_knowledge/topic/Linear Algebra and Eigenvalue Problems">Linear Algebra and Eigenvalue Problems</a></li>
+<li><a href="/daily_knowledge/topic/Dynamical Systems Theory">Dynamical Systems Theory</a></li>
 <li><a href="/daily_knowledge/topic/Numerical Analysis">Numerical Analysis</a></li>
-<li><a href="/daily_knowledge/topic/Fourier Analysis and Spectral Methods">Fourier Analysis and Spectral Methods</a></li>
-<li><a href="/daily_knowledge/topic/Calculus of Variations">Calculus of Variations</a></li>
+<li><a href="/daily_knowledge/topic/Fourier Analysis">Fourier Analysis</a></li>
+<li><a href="/daily_knowledge/topic/Stochastic Differential Equations">Stochastic Differential Equations</a></li>
 </ul>
 
 <hr>
@@ -305,28 +302,21 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The Picard–Lindelöf theorem guarantees only <em>local</em> existence. What geometric or analytical features of a DE cause solutions to blow up in finite time, and how can one detect this without solving explicitly?</li>
+<li><strong>Existence vs. computability</strong>: Picard-Lindelöf guarantees a unique solution to many IVPs, yet most lack closed forms. What does this say about the gap between mathematical existence and constructive knowledge — and where does numerical approximation sit in that gap?</li>
 </ol>
 
 <ol>
-<li>Neural ODEs treat network depth as a continuous variable. What are the genuine mathematical trade-offs vs. discrete residual networks — and does the adjoint method introduce approximation errors that accumulate differently than standard backprop?</li>
+<li><strong>Discretization choices</strong>: Finite difference, finite element, and spectral methods each discretize the same PDE differently, with different error profiles and stability properties. When is spectral convergence worth the non-locality, and when do finite elements win on complex geometry?</li>
 </ol>
 
 <ol>
-<li>Stiffness is often described informally as "widely separated timescales," but can be made precise via the eigenvalues of the Jacobian. How should this inform the choice between explicit and implicit solvers in practice, and when does operator splitting offer a better decomposition?</li>
+<li><strong>Neural ODEs and physical modeling</strong>: Neural ODEs and PINNs inject ML into DE-solving, but they optimize for empirical loss rather than rigorous error bounds. Does this represent a genuine paradigm shift in scientific computing, or a heuristic tool whose domain of trustworthy application remains poorly delineated?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Differential_equation" target="_blank" rel="noopener"&gt;Differential Equations&lt;/a&gt; · Retrieved 2026-03-27</em></p>
-
-<p><strong>Recent arXiv papers:</strong></p>
-<ul>
-<li><a href="https://arxiv.org/abs/2603.25746v1" target="_blank" rel="noopener">ShotStream: Streaming Multi-Shot Video Generation for Interactive Storytelling</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25742v1" target="_blank" rel="noopener">Pseudogap and Non-Fermi-liquid criticality in double Kondo model for bilayer nickelates</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25741v1" target="_blank" rel="noopener">Vega: Learning to Drive with Natural Language Instructions</a> (2026)</li>
-</ul></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Differential_equation" target="_blank" rel="noopener"&gt;Differential Equations&lt;/a&gt; · Retrieved 2026-07-03</em></p></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Differential+Equations&labels=discussion&body=Topic:+[Differential+Equations](https://dhein.github.io/daily_knowledge/topic/differential_equations/)
 

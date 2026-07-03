@@ -6,6 +6,13 @@
   <description>Automated daily notes: Science, Tech, Math, Logic</description>
   <language>en-us</language>
   <item>
+    <title>July 3, 2026</title>
+    <link>https://dhein.github.io/daily_knowledge/digests/2026-07-03/</link>
+    <guid>https://dhein.github.io/daily_knowledge/digests/2026-07-03/</guid>
+    <pubDate>Fri, 03 Jul 2026 07:00:00 +0000</pubDate>
+    <description>~16 min · Number Theory, Graph Theory, Differential Equations, Category Theory</description>
+  </item>
+  <item>
     <title>July 2, 2026</title>
     <link>https://dhein.github.io/daily_knowledge/digests/2026-07-02/</link>
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-07-02/</guid>
@@ -207,13 +214,6 @@
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-21/</guid>
     <pubDate>Tue, 21 Apr 2026 07:00:00 +0000</pubDate>
     <description>Daily Knowledge Digest for April 21, 2026</description>
-  </item>
-  <item>
-    <title>April 12, 2026</title>
-    <link>https://dhein.github.io/daily_knowledge/digests/2026-04-12/</link>
-    <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-12/</guid>
-    <pubDate>Sun, 12 Apr 2026 07:00:00 +0000</pubDate>
-    <description>Daily Knowledge Digest for April 12, 2026</description>
   </item>
 </channel>
 </rss>
