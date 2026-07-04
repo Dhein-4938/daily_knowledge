@@ -219,105 +219,95 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Boolean Satisfiability (SAT)</div><div>Given a Boolean formula $\varphi$ over variables $x_1, \dots, x_n$, determine whether there exists an assignment $\sigma: \{x_i\} \to \{\top, \bot\}$ such that $\varphi(\sigma) = \top$. If so, $\varphi$ is <strong>satisfiable</strong>; otherwise <strong>unsatisfiable</strong>.</div></div>
+<p>A <strong>SAT solver</strong> is an algorithm that decides whether a Boolean formula — typically in <strong>Conjunctive Normal Form (CNF)</strong> — has a satisfying variable assignment. Formally:</p>
 
-<p>In practice, formulas are presented in <strong>Conjunctive Normal Form (CNF)</strong>: a conjunction of <em>clauses</em>, each a disjunction of <em>literals</em> (a variable or its negation):</p>
+<p>$$\text{Given } \varphi(x_1, \ldots, x_n) \in \text{CNF}, \text{ find } \mathbf{v} \in \{0,1\}^n \text{ s.t. } \varphi(\mathbf{v}) = \top, \text{ or report UNSAT}$$</p>
 
-<p>$$\varphi = \bigwedge_{i=1}^{m} \left( \bigvee_{j=1}^{k_i} l_{ij} \right)$$</p>
+<p>A CNF formula is a conjunction of <strong>clauses</strong>, each clause being a disjunction of <strong>literals</strong> (variables or their negations). The hardness of SAT is governed by clause-to-variable ratio; near the <strong>phase transition</strong> (~4.267 for 3-SAT), instances become exponentially harder.</p>
 
-<p>The SAT problem is the canonical <strong>NP-complete</strong> problem — established by the <strong>Cook–Levin theorem</strong> (1971). Every problem in NP reduces to SAT in polynomial time, making it a universal target for combinatorial problem encoding.</p>
-
-<hr>
+<p>[!info] <strong>Cook–Levin Theorem</strong></p>
+<p>SAT was the <em>first</em> problem proven NP-complete (Cook 1971, Levin 1973). Every problem in NP reduces to SAT in polynomial time, making it the canonical hard problem. Solving SAT in deterministic polynomial time would prove P = NP.</p>
 
 <h2>Why It Matters</h2>
 
-<p>SAT occupies a peculiar position: theoretically intractable in the worst case, yet practically dominant in real-world verification tasks. Its importance spans several domains:</p>
+<p>SAT solvers are a cornerstone of modern computer science despite the NP-completeness barrier, because <em>practical</em> instances are often far easier than worst-case:</p>
 
 <ul>
-<li><strong>Hardware/software verification</strong>: Model checkers (e.g., CBMC, IC3/PDR) encode system reachability as SAT/SMT queries</li>
-<li><strong>AI planning</strong>: Classical planning (STRIPS) encodes plan-existence as SAT</li>
-<li><strong>Cryptanalysis</strong>: Algebraic attacks encode cipher inversion as SAT instances</li>
-<li><strong>Compiler optimization</strong>: Instruction scheduling, register allocation via pseudo-Boolean SAT</li>
-<li><strong>Theorem proving</strong>: SAT backends underpin tools like Lean's <code>decide</code> tactic for decidable propositions</li>
+<li><strong>Hardware verification</strong>: Equivalence checking and model checking for circuits (bounded model checking reduces directly to SAT)</li>
+<li><strong>Software analysis</strong>: Symbolic execution, program synthesis, bug finding</li>
+<li><strong>AI planning &amp; scheduling</strong>: STRIPS-style planning encodes as SAT</li>
+<li><strong>Cryptanalysis</strong>: Algebraic attacks on stream/block ciphers</li>
+<li><strong>Combinatorics</strong>: Resolving open conjectures (e.g., Schur number five proven via SAT in 2016)</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: SAT as a lingua franca</div><div>Because NP-completeness guarantees polynomial reductions <em>from</em> all NP problems <em>to</em> SAT, a fast SAT solver is implicitly a fast solver for hundreds of problems simultaneously. This universality explains the intense engineering investment in solver performance.</div></div>
-
-<hr>
+<p>[!tip] SAT solvers are often the <em>hidden engine</em> behind higher-level tools — SMT solvers (Z3, CVC5) reduce to SAT for the Boolean skeleton, while model checkers like IC3/PDR use incremental SAT calls internally.</p>
 
 <h2>Key Details</h2>
 
-<h3>1. DPLL and CDCL</h3>
-<p>Modern solvers descend from the <strong>Davis–Putnam–Logemann–Loveland (DPLL)</strong> backtracking procedure (1962). The decisive leap came with <strong>Conflict-Driven Clause Learning (CDCL)</strong> in the 1990s (GRASP, Chaff): when a contradiction is reached, the solver analyzes the <em>implication graph</em> to derive a <em>learned clause</em> that prunes the search space globally. This transforms worst-case exponential search into something empirically tractable on structured instances.</p>
+<p><strong>1. DPLL and CDCL</strong></p>
+<p>The dominant paradigm is <strong>Conflict-Driven Clause Learning (CDCL)</strong>, extending the Davis–Putnam–Logemann–Loveland (DPLL) backtracking algorithm. When a conflict is reached, the solver performs <em>resolution</em> on the implication graph to derive a <strong>learned clause</strong>, then backtracks non-chronologically. This transforms exponential search into targeted pruning.</p>
 
-<h3>2. Unit Propagation and BCP</h3>
-<p><strong>Boolean Constraint Propagation (BCP)</strong> — aka unit propagation — is the inner loop of every CDCL solver. When a clause has exactly one unassigned literal, that literal is <em>forced</em>. Speed of BCP (via the <strong>two-watched-literal</strong> scheme) dominates solver runtime.</p>
+<p><strong>2. Unit Propagation and BCP</strong></p>
+<p><strong>Boolean Constraint Propagation (BCP)</strong> — the forced assignment of unit clauses — is the inner loop and consumes ~80% of runtime. The <strong>two-watched-literal scheme</strong> makes BCP nearly O(1) amortized per propagation.</p>
 
-<h3>3. VSIDS Heuristic</h3>
-<p><strong>Variable State Independent Decaying Sum (VSIDS)</strong> scores variables by recent conflict involvement, decaying older scores. This bias toward "hot" variables exploits locality in structured industrial instances and is why modern solvers scale where pure random backtracking fails.</p>
+<p><strong>3. Variable &amp; Restart Heuristics</strong></p>
+<ul>
+<li><strong>VSIDS</strong> (Variable State Independent Decaying Sum): prioritizes variables involved in recent conflicts — captures a form of learned relevance</li>
+<li><strong>Luby restarts</strong>: periodic restart schedule provably near-optimal for certain random distributions</li>
+<li><strong>Phase saving</strong>: remembers last polarity for each variable, exploiting structure in industrial instances</li>
+</ul>
 
-<h3>4. Phase Saving</h3>
-<p>Rather than defaulting to $\bot$ on a variable, solvers remember the last assigned polarity. This <strong>phase saving</strong> heuristic dramatically reduces thrashing on problems with large satisfying regions.</p>
+<p><strong>4. Preprocessing</strong></p>
+<p>Modern solvers (CaDiCaL, Kissat) apply aggressive preprocessing: <strong>variable elimination</strong> via resolution, <strong>subsumption</strong>, <strong>blocked clause elimination</strong>. These can reduce formula size by orders of magnitude before search begins.</p>
 
-<h3>5. #SAT and Beyond</h3>
-<p>The <em>counting</em> variant, <strong>#SAT</strong> (count satisfying assignments), is <strong>#P-complete</strong> — strictly harder than NP under standard assumptions. This matters for probabilistic inference in graphical models and is not amenable to the same CDCL tricks.</p>
-
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Solver performance figures from the Wikipedia extract (2007-era, "tens of thousands of variables") are long obsolete. Competition-grade solvers (CaDiCaL, Kissat, Glucose) routinely handle millions of variables and billions of clauses in industrial instances as of the mid-2020s.</div></div>
-
-<hr>
+<p><strong>5. Proof Logging</strong></p>
+<p>Industrial-strength solvers now emit <strong>DRAT proofs</strong> (Delete Resolution Asymmetric Tautology), enabling independent verification of UNSAT certificates — critical for formal hardware proofs.</p>
 
 <h2>Current State</h2>
 
-<p>The annual <strong>SAT Competition</strong> continues to drive solver engineering. Active research threads include:</p>
+<p>[!warning] Note: this information may be dated</p>
 
-<ul>
-<li><strong>Machine learning for solver configuration</strong>: GNN-based branching heuristics (NeuroSAT, G2SAT) learn structure from training distributions, outperforming VSIDS on some crafted instances</li>
-<li><strong>Parallel and distributed SAT</strong>: Portfolio solvers (e.g., Mallob) partition clause-sharing across cores; cube-and-conquer splits the search space combinatorially</li>
-<li><strong>MaxSAT and UNSAT cores</strong>: Optimization variants with strong ties to pseudo-Boolean optimization and weighted partial MaxSAT for industrial scheduling</li>
-<li><strong>SAT modulo theories (SMT)</strong>: Integrating SAT with theory solvers (linear arithmetic, arrays, bit-vectors) via DPLL(T) — the architecture underlying Z3, CVC5</li>
-</ul>
+<p>The frontier is <strong>neuro-symbolic hybridization</strong>. Recent work (G-RRM, 2026) demonstrates that <strong>recurrent reasoning models</strong> can guide CDCL solvers by predicting branching decisions. The key finding: neural guidance yields substantial speedups (up to 33×) <em>only</em> when (1) the combinatorial search space is large, and (2) the solver can override incorrect neural hints. Critically, CaDiCaL 3.0.0 showed <em>no</em> significant speedup because it always commits to injected hints without recovery — underscoring that graceful degradation under imperfect advice is architecturally non-trivial.</p>
 
-<hr>
+<p>Parallel to this, <strong>MaxSAT</strong> and <strong>#SAT</strong> (counting satisfying assignments) solvers are seeing active development for probabilistic inference and optimization workloads. The annual <strong>SAT Competition</strong> continues to drive incremental improvements in heuristics and preprocessing.</p>
 
 <h2>See Also</h2>
 
 <ul>
 <li><a href="/daily_knowledge/topic/NP-Completeness">NP-Completeness</a></li>
-<li><a href="/daily_knowledge/topic/Cook-Levin Theorem">Cook-Levin Theorem</a></li>
-<li><a href="/daily_knowledge/topic/CDCL Algorithms">CDCL Algorithms</a></li>
+<li><a href="/daily_knowledge/topic/CDCL Algorithm">CDCL Algorithm</a></li>
 <li><a href="/daily_knowledge/topic/SMT Solvers">SMT Solvers</a></li>
-<li><a href="/daily_knowledge/topic/Model Checking">Model Checking</a></li>
-<li><a href="/daily_knowledge/topic/Complexity Classes P and NP">Complexity Classes P and NP</a></li>
+<li><a href="/daily_knowledge/topic/Formal Verification">Formal Verification</a></li>
+<li><a href="/daily_knowledge/topic/Constraint Satisfaction Problems">Constraint Satisfaction Problems</a></li>
+<li><a href="/daily_knowledge/topic/P vs NP Problem">P vs NP Problem</a></li>
 </ul>
-
-<hr>
 
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Practical tractability vs. theoretical hardness</strong>: CDCL solvers crush industrial instances that are structurally "easy" yet still NP-complete. What structural properties (community structure, backbone size, clause density near the phase transition) explain this gap — and can they be exploited <em>a priori</em>?</li>
+<li>CDCL's learned clauses can be seen as a form of <em>compression</em> of the search history — in what sense does a good learned clause encode more information than a bad one, and how does this relate to proof complexity?</li>
 </ol>
 
 <ol>
-<li><strong>The P vs. NP interface</strong>: SAT is NP-complete, but learned clause databases can grow exponentially. In what sense does a CDCL solver implicitly "prove" unsatisfiability, and how does resolution proof complexity relate to solver runtime in practice?</li>
+<li>The G-RRM results suggest that neural guidance is most valuable in large search spaces but requires the solver to be able to <em>ignore</em> bad hints. Does this point toward a general principle for safe neuro-symbolic integration beyond SAT?</li>
 </ol>
 
 <ol>
-<li><strong>Neural SAT solvers</strong>: Graph neural networks trained on random SAT instances generalize poorly to structured industrial instances. Is this a data distribution problem, an architectural limitation, or evidence that the two families genuinely require different algorithmic strategies?</li>
+<li>SAT solvers routinely solve "NP-hard" industrial instances with millions of variables — yet worst-case instances with ~hundreds of variables can defeat them. What does this gap tell us about the structure of real-world problem distributions, and is NP-completeness the right lens for practical solver design?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Boolean_satisfiability_problem" target="_blank" rel="noopener"&gt;SAT Solvers&lt;/a&gt; · Retrieved 2026-03-28</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Boolean_satisfiability_problem" target="_blank" rel="noopener"&gt;SAT Solvers&lt;/a&gt; · Retrieved 2026-07-04</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.25723v1" target="_blank" rel="noopener">Natural-Language Agent Harnesses</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25710v1" target="_blank" rel="noopener">Stone Duality for Monads</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25682v1" target="_blank" rel="noopener">On the Formalization of Network Topology Matrices in HOL</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25655v1" target="_blank" rel="noopener">Worldwide Reactor Neutrino Propagation to Underground Labs: Matter Effects and Flux Predictions</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.25633v1" target="_blank" rel="noopener">Is Mathematical Problem-Solving Expertise in Large Language Models Associated with Assessment Performance?</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02517v1" target="_blank" rel="noopener">WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02512v1" target="_blank" rel="noopener">Program-as-Weights: A Programming Paradigm for Fuzzy Functions</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02491v1" target="_blank" rel="noopener">G-RRM: Guiding Symbolic Solvers with Recurrent Reasoning Models</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02482v1" target="_blank" rel="noopener">Automated logical Clifford gadgets for heterogeneous architectures via chain maps</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02336v1" target="_blank" rel="noopener">Block Preconditioning for Shifted Boundary Method Discretisations of the Stokes Problem</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+SAT+Solvers&labels=discussion&body=Topic:+[SAT+Solvers](https://dhein.github.io/daily_knowledge/topic/sat_solvers/)

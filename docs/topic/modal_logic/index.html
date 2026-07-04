@@ -219,61 +219,53 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Modal logic extends classical propositional and predicate logic with operators that qualify the <em>mode</em> of truth of a statement — principally <strong>necessity</strong> and <strong>possibility</strong>.</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Modal logic</strong> extends classical propositional or predicate logic with unary operators for <em>necessity</em> ($\Box$) and <em>possibility</em> ($\Diamond$), allowing reasoning about statements qualified by mode — what <em>must</em> be true vs. what <em>could</em> be true.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Primitive Operators</div><div>- $\Box P$ — "necessarily $P$" (true in <em>all</em> accessible worlds) - $\Diamond P$ — "possibly $P$" (true in <em>some</em> accessible world) The two are <strong>interdefinable</strong>: $\Diamond P \equiv \neg\Box\neg P$</div></div>
+<p>The two primitive operators are dual:</p>
 
-<p>The standard semantics is Kripkean <strong>relational semantics</strong>: a model $\mathcal{M} = \langle W, R, V \rangle$ where $W$ is a set of possible worlds, $R \subseteq W \times W$ is an accessibility relation, and $V$ assigns truth values. The truth conditions are:</p>
+<p>$$\Diamond P \equiv \neg\Box\neg P$$</p>
 
-<p>$$\mathcal{M}, w \models \Box P \iff \forall v.\; wRv \Rightarrow \mathcal{M}, v \models P$$</p>
-<p>$$\mathcal{M}, w \models \Diamond P \iff \exists v.\; wRv \land \mathcal{M}, v \models P$$</p>
+<p>That is, "$P$ is possible" iff "it is not necessary that $\neg P$." The semantics are given by <strong>Kripke frames</strong> — a pair $(W, R)$ where $W$ is a set of possible worlds and $R \subseteq W \times W$ is an accessibility relation:</p>
 
-<p>This single framework yields a <strong>family</strong> of logics by imposing different constraints on $R$.</p>
+<p>$$\mathcal{M}, w \models \Box P \iff \forall v\,(wRv \Rightarrow \mathcal{M}, v \models P)$$</p>
+<p>$$\mathcal{M}, w \models \Diamond P \iff \exists v\,(wRv \wedge \mathcal{M}, v \models P)$$</p>
+
+<p>Truth is <em>world-relative</em>. A formula valid in all worlds of all models is a <strong>modal tautology</strong>; the target is identifying which axiom systems characterize which frame conditions.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Modal logic is not merely philosophical ornament — it is load-bearing infrastructure across multiple disciplines:</p>
+<p>Modal logic is the backbone of several critical reasoning frameworks:</p>
 
 <ul>
-<li><strong>Epistemology / AI</strong>: Epistemic logic (Hintikka) models knowledge and belief; deployed in multi-agent systems and distributed computing (knowledge-based protocols, common knowledge).</li>
-<li><strong>Program verification</strong>: Temporal logics (LTL, CTL) are modal logics over time-ordered worlds; they underpin model checking tools like SPIN and NuSMV.</li>
-<li><strong>Provability logic (GL)</strong>: Gödel–Löb logic interprets $\Box P$ as "PA proves $P$", giving modal proofs of incompleteness results.</li>
-<li><strong>Deontic / legal reasoning</strong>: Formalizes obligation, permission, and prohibition in legal AI and normative systems.</li>
-<li><strong>Metaphysics</strong>: Kripke's modal arguments reshaped debates on identity, essentialism, and the a priori/necessary distinction.</li>
+<li><strong>Epistemology</strong> (epistemic logic): $\Box P$ means "agent knows $P$." The axiom $\Box P \to P$ (knowledge implies truth) distinguishes knowledge from mere belief.</li>
+<li><strong>Deontic logic</strong>: $\Box P$ reads "it is obligatory that $P$." Here $\Box P \to P$ fails — obligations can go unmet.</li>
+<li><strong>Temporal logic</strong>: $\Box P$ becomes "always $P$"; $\Diamond P$ becomes "eventually $P$." This underpins formal verification (model checking in hardware/software).</li>
+<li><strong>Provability logic (GL)</strong>: $\Box P$ means "$P$ is provable in PA," connecting to Gödel incompleteness.</li>
+<li><strong>Computer science</strong>: program correctness, type theory, and process calculi all draw on modal reasoning.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: The Accessibility Relation IS the Logic</div><div>Every named modal logic corresponds to a class of frames defined by a first-order property of $R$. This frame correspondence is the deepest structural insight — changing one axiom changes the geometry of the space of worlds.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: The Frame Correspondence Theorem</div><div>Restrictions on $R$ correspond precisely to modal axioms. Reflexivity ($wRw$) gives <strong>T</strong> ($\Box P \to P$); transitivity gives <strong>4</strong> ($\Box P \to \Box\Box P$); symmetry gives <strong>B</strong> ($P \to \Box\Diamond P$). This makes the axiom-frame correspondence a classification <em>machine</em> — you can read off semantic properties from syntactic axioms and vice versa.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. The Cube of Modal Systems</strong></p>
-<p>Axioms added to the base system <strong>K</strong> yield a lattice of systems. Key ones:</p>
+<p><strong>1. Hierarchy of normal modal logics</strong></p>
+<p>The base system <strong>K</strong> adds just the distribution axiom $\Box(P \to Q) \to (\Box P \to \Box Q)$ plus necessitation ($\vdash P \Rightarrow\, \vdash \Box P$). Richer systems stack additional axioms: K → T → S4 → S5, each corresponding to stronger frame conditions (reflexive, transitive, equivalence relation).</p>
 
-<p>| System | Axiom added | Constraint on $R$ |</p>
-<p>|--------|-------------|-------------------|</p>
-<p>| <strong>T</strong> | $\Box P \to P$ | Reflexive |</p>
-<p>| <strong>S4</strong> | $\Box P \to \Box\Box P$ | Reflexive + transitive |</p>
-<p>| <strong>S5</strong> | $\Diamond P \to \Box\Diamond P$ | Equivalence relation |</p>
-<p>| <strong>D</strong> | $\Box P \to \Diamond P$ | Serial |</p>
-<p>| <strong>B</strong> | $P \to \Box\Diamond P$ | Symmetric |</p>
+<p><strong>2. Soundness and completeness</strong></p>
+<p>Every normal modal logic is sound w.r.t. its class of frames. Completeness is harder — Kripke completeness fails for some logics (e.g., certain intermediate logics). Canonical model constructions are the standard completeness proof technique.</p>
 
-<p>S5 is the canonical logic for absolute necessity and often for knowledge (though contested).</p>
+<p><strong>3. Bisimulation invariance</strong></p>
+<p>Modal formulas are exactly the bisimulation-invariant fragment of first-order logic (van Benthem's theorem). This places modal logic at a sweet spot: expressively bounded, yet decidable and tractable.</p>
 
-<p><strong>2. Frame Correspondence and Canonicity</strong></p>
-<p>Many axioms $\alpha$ correspond to a first-order sentence $\text{Fr}(\alpha)$ on frames via the <strong>Sahlqvist correspondence theorem</strong>. Sahlqvist formulas are guaranteed to be canonical — meaning the canonical model for their logic validates exactly the right frames. This gives a powerful, automated route from syntax to semantics.</p>
+<p><strong>4. Multimodal and graded operators</strong></p>
+<p>Extensions allow multiple accessibility relations ($[a], \langle a \rangle$ per agent in epistemic logic) or counted quantification ($\Diamond_{\geq k} P$: "at least $k$ accessible worlds satisfy $P$"). Description logics used in OWL/semantic web are essentially multimodal.</p>
 
-<p><strong>3. Completeness vs. Incompleteness</strong></p>
-<p>Not all modal logics are Kripke-complete. Fine (1974) and Thomason (1974) produced logics valid on no class of Kripke frames — motivating <strong>neighborhood semantics</strong> (sets of propositions rather than worlds) and <strong>topological semantics</strong> as more general alternatives.</p>
-
-<p><strong>4. First-Order Modal Logic is Hard</strong></p>
-<p>Extending modal logic with quantifiers introduces serious complications: the Barcan formula $\forall x\,\Box Fx \to \Box\forall x\,Fx$ is valid on constant domains but not varying domains. Completeness fails for many natural quantified modal systems; decidability often collapses.</p>
-
-<p><strong>5. Bisimulation as Modal Equivalence</strong></p>
-<p>Two models are <strong>bisimilar</strong> iff they satisfy exactly the same modal formulas. Bisimulation is the right notion of structural equivalence for modal logic — connecting it deeply to process algebra and coalgebra.</p>
+<p><strong>5. Neighborhood semantics</strong></p>
+<p>An alternative to Kripke frames using <em>neighborhood functions</em> $N: W \to \mathcal{P}(\mathcal{P}(W))$. This generalizes the relational semantics and captures non-normal modal logics (where the necessitation rule fails), relevant for modeling non-ideal agents.</p>
 
 <hr>
 
@@ -281,14 +273,14 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research areas include:</p>
+<p>Active research threads include:</p>
 
 <ul>
-<li><strong>Coalgebraic modal logic</strong>: A categorical generalization where modalities arise from functors; unifies many logics (PDL, graded modalities, probabilistic logic) under one framework.</li>
-<li><strong>Dynamic Epistemic Logic (DEL)</strong>: Models how knowledge changes after public/private announcements — active in formal epistemology and AI.</li>
-<li><strong>Hybrid logic</strong>: Adds nominals (names for worlds) and the $@_i$ operator, restoring some first-order expressiveness while preserving decidability.</li>
-<li><strong>Modal $\mu$-calculus</strong>: Adds least/greatest fixed-point operators; strictly more expressive than CTL or PDL, and a central tool in program verification theory.</li>
-<li><strong>Neighborhood / topological semantics</strong>: Growing interest as alternatives to Kripke frames for capturing non-normal modalities (e.g., where $\Box(P \land Q) \not\Rightarrow \Box P$).</li>
+<li><strong>Dynamic epistemic logic (DEL)</strong>: modeling how knowledge changes after public/private announcements — central to social epistemology and multi-agent AI.</li>
+<li><strong>Hyperintensional logics</strong>: going beyond possible-worlds by distinguishing necessarily equivalent propositions (relevant for reasoning about aboutness, belief in contradictions).</li>
+<li><strong>Provability and set-theoretic applications</strong>: modal logic over multiverse set theory (forcing as a modal operator), explored by Hamkins and colleagues.</li>
+<li><strong>Coalgebraic modal logic</strong>: unifying modal semantics via coalgebras, yielding uniform completeness results for broad classes of logics.</li>
+<li><strong>LLM-agent epistemic modeling</strong>: as multi-agent systems proliferate, formalizing agent belief, intention, and strategic deception (cf. research on public vs. off-the-record LLM divergence) pushes DEL toward richer, possibly non-idealized agent models.</li>
 </ul>
 
 <hr>
@@ -296,12 +288,12 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Possible Worlds Semantics">Possible Worlds Semantics</a></li>
-<li><a href="/daily_knowledge/topic/Temporal Logic and Model Checking">Temporal Logic and Model Checking</a></li>
-<li><a href="/daily_knowledge/topic/Kripke Structures">Kripke Structures</a></li>
+<li><a href="/daily_knowledge/topic/Kripke Semantics">Kripke Semantics</a></li>
 <li><a href="/daily_knowledge/topic/Epistemic Logic and Common Knowledge">Epistemic Logic and Common Knowledge</a></li>
-<li><a href="/daily_knowledge/topic/Provability Logic">Provability Logic</a></li>
-<li><a href="/daily_knowledge/topic/Bisimulation and Coalgebra">Bisimulation and Coalgebra</a></li>
+<li><a href="/daily_knowledge/topic/Temporal Logic and Model Checking">Temporal Logic and Model Checking</a></li>
+<li><a href="/daily_knowledge/topic/Description Logics and OWL">Description Logics and OWL</a></li>
+<li><a href="/daily_knowledge/topic/Provability Logic and Gödel's Theorems">Provability Logic and Gödel's Theorems</a></li>
+<li><a href="/daily_knowledge/topic/Dynamic Epistemic Logic">Dynamic Epistemic Logic</a></li>
 </ul>
 
 <hr>
@@ -309,21 +301,28 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Frame correspondence as geometry</strong>: The accessibility relation encodes structural assumptions about the space of possibilities. Is there a principled way to <em>choose</em> the right system for a given domain, or is it always a modeling judgment call?</li>
+<li><strong>The S5 idealization problem</strong>: S5 models knowledge as truth in all epistemically accessible worlds, implying logical omniscience ($\Box(P \to Q), \Box P \models \Box Q$). Real agents aren't omniscient. Which weaker systems (e.g., awareness logics, impossible-world semantics) best model bounded rationality, and what do you sacrifice in tractability?</li>
 </ol>
 
 <ol>
-<li><strong>The quantifier problem</strong>: First-order modal logic resists clean completeness theorems. Does this suggest that de re modality (necessity <em>of</em> an object) is philosophically incoherent, or merely technically inconvenient?</li>
+<li><strong>Frame definability limits</strong>: Not every first-order condition on $R$ is definable by a modal formula (e.g., irreflexivity is not). What does this tell us about the expressive limits of $\Box/\Diamond$, and how does it inform the choice between modal and full first-order formalisms when modeling a domain?</li>
 </ol>
 
 <ol>
-<li><strong>Modal logic in AI verification</strong>: LTL and CTL model temporal properties of programs as modal logics over execution paths. What are the expressiveness trade-offs between the two, and why does the model-checking complexity jump from P to PSPACE when moving from CTL to LTL?</li>
+<li><strong>Modal logic and AI alignment</strong>: If $\Box P$ in deontic logic represents obligation, can we encode corrigibility, value uncertainty, or multi-principal conflicts as frame conditions — and does the soundness/completeness theory give us any formal guarantees about AI systems that "satisfy" such a deontic theory?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Modal_logic" target="_blank" rel="noopener"&gt;Modal Logic&lt;/a&gt; · Retrieved 2026-03-28</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Modal_logic" target="_blank" rel="noopener"&gt;Modal Logic&lt;/a&gt; · Retrieved 2026-07-04</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2607.02517v1" target="_blank" rel="noopener">WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02516v1" target="_blank" rel="noopener">Alignment Is All You Need For X-to-4D Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02507v1" target="_blank" rel="noopener">What LLM Agents Say When No One Is Watching: Social Structure and Latent Objective Emergence in Multi-Agent Debates</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Modal+Logic&labels=discussion&body=Topic:+[Modal+Logic](https://dhein.github.io/daily_knowledge/topic/modal_logic/)
 

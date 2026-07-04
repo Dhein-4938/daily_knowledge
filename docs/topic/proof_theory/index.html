@@ -219,66 +219,68 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div><strong>Proof theory</strong> treats proofs as first-class mathematical objects — inductively defined data structures (trees, sequences, boxed lists) built from axioms and inference rules of a formal system. Its analysis is purely <strong>syntactic</strong>, operating on symbol manipulation rather than semantic interpretation.</div></div>
+<p>Proof theory treats <strong>proofs as first-class mathematical objects</strong> — syntactic entities that can be studied, classified, and transformed using mathematical techniques. Rather than asking "is this statement true?" (the model-theoretic question), proof theory asks "what is the structure of the derivation that establishes it?"</p>
 
-<p>The central objects of study are <strong>formal derivations</strong>. Given a logical system $\mathcal{L}$ with axiom schemas $\mathcal{A}$ and inference rules $\mathcal{R}$, a proof of $\phi$ is a finite tree where:</p>
+<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>A <strong>proof</strong> in a formal system $\mathcal{S}$ is a finite, inductively-defined data structure (tree, sequence, or DAG) whose leaves are axioms of $\mathcal{S}$ and whose internal nodes correspond to applications of inference rules. A proof of $\varphi$ is a witness that $\mathcal{S} \vdash \varphi$.</div></div>
 
-<p>$$\frac{\Gamma_1 \vdash \phi_1 \quad \cdots \quad \Gamma_n \vdash \phi_n}{\Gamma \vdash \phi} \in \mathcal{R}$$</p>
+<p>The central syntactic/semantic duality:</p>
 
-<p>This structural view underpins all of proof theory — whether you're studying sequent calculi, natural deduction, or type-theoretic systems.</p>
+<p>$$\underbrace{\mathcal{S} \vdash \varphi}_{\text{proof theory (syntax)}} \qquad \longleftrightarrow \qquad \underbrace{\mathcal{M} \models \varphi}_{\text{model theory (semantics)}}$$</p>
+
+<p>Soundness and completeness theorems (e.g., Gödel's completeness theorem for FOL) are precisely what connects these two columns.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Proof theory sits at the intersection of foundations, computation, and philosophy of mathematics. Its significance spans several domains:</p>
+<p>Proof theory sits at the intersection of <strong>foundations, computation, and meaning</strong>:</p>
 
 <ul>
-<li><strong>Foundations of mathematics</strong>: Hilbert's program sought to justify all of mathematics via finitary proofs. Gödel's incompleteness theorems were proof-theoretic bombshells — establishing that no consistent extension of PA can prove its own consistency (within the system).</li>
-<li><strong>The Curry-Howard correspondence</strong>: Proofs in intuitionistic logic correspond directly to programs in typed lambda calculi ($\Pi$-types ↔ universal quantifiers, $\Sigma$-types ↔ existential quantifiers). Proof theory <em>is</em> type theory.</li>
-<li><strong>Automated reasoning</strong>: Proof-search algorithms (resolution, tableaux, sequent calculus search) power SMT solvers, proof assistants (Coq, Lean, Isabelle), and formal verification.</li>
-<li><strong>Computational complexity</strong>: Proof complexity studies the minimum size of proofs in propositional systems — directly connected to the $\mathbf{P}$ vs $\mathbf{NP}$ question.</li>
+<li><strong>Foundations of mathematics</strong>: Hilbert's program sought to secure all of mathematics via finitary proofs. Gödel's incompleteness theorems refuted the program's maximalist goals but sharpened the questions enormously.</li>
+<li><strong>Curry–Howard correspondence</strong>: Proofs in intuitionistic logic are <em>identical</em> to programs in typed lambda calculi — a fact with sweeping consequences for programming language theory, dependent types, and verified software.</li>
+<li><strong>Proof assistants</strong>: Coq, Lean, Agda, and Isabelle are direct applications; the type-theoretic foundations they rely on are proof-theoretic in nature.</li>
+<li><strong>Ordinal analysis</strong>: Assigns a "proof-theoretic ordinal" $|T|$ to a theory $T$, measuring its consistency strength. E.g., $|\mathsf{PA}| = \varepsilon_0$.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>The <strong>Curry-Howard-Lambek</strong> correspondence extends the proofs-as-programs analogy to category theory: proofs ↔ programs ↔ morphisms. This triality makes proof theory a unifying language across logic, CS, and algebra.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: The Curry–Howard Iceberg</div><div>The surface reading is "proofs ↔ programs, propositions ↔ types." The deeper consequence is that <strong>proof normalization = program execution</strong>. Cut-elimination in sequent calculus corresponds to $\beta$-reduction in the $\lambda$-calculus. This makes proof theory a theory of computation, not merely of deduction.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Sequent Calculus vs. Natural Deduction</strong>: Gentzen's two formalisms. Sequents $\Gamma \vdash \Delta$ (multiple conclusions) make structural rules explicit — weakening, contraction, cut. The <strong>cut-elimination theorem</strong> (Gentzen's <em>Hauptsatz</em>) states that every proof with cuts has a cut-free equivalent; it's the syntactic analogue of interpolation and implies consistency.</li>
+<li><strong>Sequent calculus &amp; natural deduction</strong> are the two dominant proof systems. Gentzen's <em>Hauptsatz</em> (cut-elimination theorem, 1935) is the field's cornerstone result: every proof using the "cut" rule (modus ponens generalized) can be transformed into a cut-free proof, establishing consistency of first-order arithmetic by transfinite induction up to $\varepsilon_0$.</li>
 </ol>
 
 <ol>
-<li><strong>Ordinal Analysis</strong>: Assigns a <strong>proof-theoretic ordinal</strong> $|T|$ to a theory $T$ — the supremum of ordinals provably well-founded in $T$. For PA, $|PA| = \varepsilon_0$. For stronger systems like $\Pi^1_1\text{-CA}_0$, ordinals reach into the Bachmann–Howard hierarchy. This measures "how much transfinite induction" a theory encodes.</li>
+<li><strong>Ordinal analysis</strong> calibrates theories by the least ordinal whose well-foundedness cannot be proved inside the theory. The ladder runs: $\mathsf{PRA} < \mathsf{PA}$ (at $\varepsilon_0$) $< \mathsf{ATR}_0$ (at $\Gamma_0$, the Feferman–Schütte ordinal) $< \Pi^1_1\text{-}\mathsf{CA}_0 \cdots$</li>
 </ol>
 
 <ol>
-<li><strong>Structural Proof Theory</strong>: Studies how the <em>shape</em> of proofs encodes logical structure. Substructural logics (linear, relevant, affine) arise by restricting structural rules. Linear logic, for instance, drops weakening and contraction — turning proofs into resource-sensitive computations.</li>
+<li><strong>Reverse mathematics</strong> inverts the usual direction: given a theorem, find the <em>weakest</em> axiomatic system that proves it. Most theorems of classical analysis fall into one of five canonical subsystems ($\mathsf{RCA}_0, \mathsf{WKL}_0, \mathsf{ACA}_0, \mathsf{ATR}_0, \Pi^1_1\text{-}\mathsf{CA}_0$).</li>
 </ol>
 
 <ol>
-<li><strong>Reverse Mathematics</strong>: Works in the opposite direction — given a theorem, what axioms are <em>necessary</em> to prove it? Most classical analysis falls into five subsystems ($\mathsf{RCA}_0$ through $\Pi^1_1\text{-CA}_0$), revealing a tight calibration between mathematical content and foundational strength.</li>
+<li><strong>Proof complexity</strong> asks about the <em>size</em> of shortest proofs. The $\mathsf{P}$ vs. $\mathsf{NP}$ problem is equivalent to asking whether tautologies have polynomial-size proofs in some propositional proof system (Cook–Reckhow theorem). Extended Frege systems remain a major open battleground.</li>
 </ol>
 
 <ol>
-<li><strong>Proof Mining (Unwinding)</strong>: Kohlenbach's program extracts quantitative information (bounds, rates of convergence) from non-constructive proofs. A proof of $\forall x\, \exists y\, P(x,y)$ can often be <em>mined</em> for a computable witness $f$ such that $P(x, f(x))$.</li>
+<li><strong>Proof mining</strong> (Kohlenbach) extracts <em>computational content</em> — explicit witnesses and bounds — from non-constructive proofs, yielding quantitative results in analysis and ergodic theory without reproving results from scratch.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
 <p>Active research fronts include:</p>
 
 <ul>
-<li><strong>Homotopy Type Theory (HoTT)</strong> and the univalence axiom — extending proof-theoretic foundations into higher-dimensional type theory where proofs of equality are paths.</li>
-<li><strong>Proof complexity lower bounds</strong>: Proving that tautologies require super-polynomial proofs in Extended Frege or stronger systems remains open and deeply tied to circuit complexity.</li>
-<li><strong>Cyclic proof systems</strong>: Proofs with back-edges (cycles) for inductive/coinductive reasoning — soundness is enforced by global trace conditions rather than structural induction.</li>
-<li><strong>Probabilistic and quantum proof systems</strong>: Interactive proof complexity (IP = PSPACE, MIP* = RE) blurs the boundary between proof theory and computational complexity in striking ways.</li>
+<li><strong>Homotopy Type Theory (HoTT)</strong> and the <strong>Univalent Foundations</strong> program (Voevodsky), which enriches proof theory with homotopy-theoretic structure; proofs of equality become paths in a space.</li>
+<li><strong>Deep inference</strong> (Guglielmi's calculus of structures) allows inference rules to apply inside any formula context, breaking the asymmetry of sequent calculus and enabling more fine-grained proof-complexity analyses.</li>
+<li><strong>Automated theorem proving</strong> via SAT/SMT solvers and interactive proof assistants, with large formal libraries (Mathlib in Lean 4) pushing the boundary of what machine-checked mathematics covers.</li>
+<li><strong>Proof-theoretic semantics</strong> (Prawitz, Dummett) grounds meaning in proof conditions rather than truth conditions — a philosophical alternative to Tarskian model theory with implications for anti-realist semantics.</li>
 </ul>
 
 <hr>
@@ -286,12 +288,12 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
+<li><a href="/daily_knowledge/topic/Curry–Howard Correspondence">Curry–Howard Correspondence</a></li>
 <li><a href="/daily_knowledge/topic/Gödel's Incompleteness Theorems">Gödel's Incompleteness Theorems</a></li>
-<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
 <li><a href="/daily_knowledge/topic/Type Theory">Type Theory</a></li>
 <li><a href="/daily_knowledge/topic/Model Theory">Model Theory</a></li>
+<li><a href="/daily_knowledge/topic/Ordinal Arithmetic">Ordinal Arithmetic</a></li>
 <li><a href="/daily_knowledge/topic/Reverse Mathematics">Reverse Mathematics</a></li>
-<li><a href="/daily_knowledge/topic/Linear Logic">Linear Logic</a></li>
 </ul>
 
 <hr>
@@ -299,21 +301,22 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Cut-elimination guarantees that any provable sequent has a <em>direct</em> proof — but cut-free proofs can be non-elementarily longer. What does this explosion in proof length say about the relationship between logical power and computational tractability?</li>
-</ol>
-
-<ol>
-<li>Ordinal analysis assigns $\varepsilon_0$ to PA and much larger ordinals to impredicative systems. Is there a sense in which these ordinals <em>explain</em> the consistency of the theory, or are they merely a calibration tool that relocates rather than resolves foundational questions?</li>
-</ol>
-
-<ol>
-<li>The Curry-Howard correspondence makes every proof a program. Does proof normalization (cut-elimination, $\beta$-reduction) constitute a form of <em>computation</em>, and if so, what is being computed — the proof's content, its meaning, or something else?</li>
+<li>Cut-elimination guarantees consistency but requires transfinite induction beyond the theory's own reach — does this circularity undermine Hilbert's program, or just redirect it toward ordinal analysis?</li>
+<li>If proofs are programs (Curry–Howard), what is the computational interpretation of a proof by contradiction or the law of excluded middle? What does this imply for classical vs. constructive mathematics?</li>
+<li>Proof complexity lower bounds (e.g., for the pigeonhole principle in Resolution) are some of the few unconditional complexity separations we have — why hasn't this approach yet cracked $\mathsf{P} \neq \mathsf{NP}$?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Proof_theory" target="_blank" rel="noopener"&gt;Proof Theory&lt;/a&gt; · Retrieved 2026-03-28</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Proof_theory" target="_blank" rel="noopener"&gt;Proof Theory&lt;/a&gt; · Retrieved 2026-07-04</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2607.02515v1" target="_blank" rel="noopener">PointDiT: Pixel-Space Diffusion for Monocular Geometry Estimation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02506v1" target="_blank" rel="noopener">On the emergence of quantum many-body chaos for tunably-broken integrability</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02505v1" target="_blank" rel="noopener">A critical look at low-scale cosmological phase transitions in the PTA era</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Proof+Theory&labels=discussion&body=Topic:+[Proof+Theory](https://dhein.github.io/daily_knowledge/topic/proof_theory/)
 
