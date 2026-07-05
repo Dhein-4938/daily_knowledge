@@ -219,70 +219,59 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>Game theory is the mathematical study of <strong>strategic interaction</strong> among rational agents — situations where each agent's optimal choice depends on the choices of others. A <em>game</em> is formally a tuple $(N, \{S_i\}, \{u_i\})$ where $N$ is the set of players, $S_i$ the strategy set of player $i$, and $u_i : S_1 \times \cdots \times S_n \to \mathbb{R}$ the utility (payoff) function.</div></div>
+<p>[!info] Definition</p>
+<p>Game theory is the mathematical study of strategic interactions among rational agents, where each agent's outcome depends not only on their own choices but on the choices of others. Formally, a game in normal form is a triple $G = (N, A, u)$ where $N$ is a set of players, $A = A_1 \times \cdots \times A_n$ is the joint action space, and $u = (u_1, \ldots, u_n)$ is a vector of utility functions $u_i : A \to \mathbb{R}$.</p>
 
-<p>The foundational solution concept is the <strong>Nash Equilibrium</strong>: a strategy profile $s^* = (s_1^*, \ldots, s_n^*)$ such that no player can unilaterally improve their payoff:</p>
+<p>The foundational solution concept is the <strong>Nash Equilibrium</strong>: a strategy profile $a^* \in A$ such that no player $i$ can increase their utility by unilaterally deviating:</p>
 
-<p>$$u_i(s_i^*, s_{-i}^*) \geq u_i(s_i, s_{-i}^*) \quad \forall s_i \in S_i, \forall i \in N$$</p>
+<p>$$u_i(a_i^*, a_{-i}^*) \geq u_i(a_i, a_{-i}^*) \quad \forall a_i \in A_i, \forall i \in N$$</p>
 
-<p>Von Neumann's minimax theorem (1928) established the foundational result for two-player zero-sum games: every such finite game has a saddle-point solution in mixed strategies, provable via Brouwer's fixed-point theorem. Nash (1950) generalized this to $n$-player non-zero-sum games.</p>
+<p>Nash proved that every finite game admits at least one equilibrium in <strong>mixed strategies</strong> (probability distributions over actions), using Brouwer's fixed-point theorem — the same topological tool von Neumann used earlier for two-player zero-sum games.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Game theory is the lingua franca of strategic reasoning across disciplines:</p>
+<p>Game theory is the backbone of modern microeconomics, mechanism design, and auction theory — the latter earning Milgrom and Wilson the 2020 Nobel Prize for designing spectrum auctions worth hundreds of billions. Its reach is strikingly broad:</p>
 
 <ul>
-<li><strong>Economics</strong>: auction design, oligopoly pricing, contract theory, mechanism design</li>
-<li><strong>Computer Science</strong>: algorithm design (competitive analysis), network routing, multi-agent systems, cryptographic protocols</li>
-<li><strong>Biology</strong>: evolutionary stable strategies (ESS) explain phenotype frequencies in populations without invoking conscious rationality</li>
-<li><strong>Political Science</strong>: voting systems, arms races, coalition formation</li>
-<li><strong>AI</strong>: reinforcement learning framing, multi-agent training (e.g., self-play in AlphaGo)</li>
+<li><strong>Economics</strong>: market competition, bargaining, contract theory, oligopoly pricing</li>
+<li><strong>Political science</strong>: voting systems, arms races, coalition formation</li>
+<li><strong>Biology</strong>: evolutionary stable strategies (Maynard Smith's ESS), predator-prey signaling</li>
+<li><strong>CS/AI</strong>: multi-agent reinforcement learning, adversarial ML, algorithmic mechanism design</li>
+<li><strong>Logic &amp; philosophy</strong>: common knowledge, epistemic game theory</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Unexpected Depth</div><div>The connection to <strong>fixed-point theorems</strong> is not incidental — Nash's proof of equilibrium existence uses Kakutani's fixed-point theorem on best-response correspondences. This places game theory in direct dialogue with topology and functional analysis, not just economics.</div></div>
+<p>[!tip] The Deeper Insight</p>
+<p>Game theory doesn't just model competition — it models <em>any</em> situation involving interdependence of decisions. Cooperation, signaling, reputation, and commitment are all game-theoretic phenomena. The framework unifies strategic reasoning across wildly different domains because the structure of interdependence, not the content, is what matters.</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<ol>
-<li><strong>Zero-sum vs. Non-zero-sum</strong>: In zero-sum games, $\sum_i u_i = 0$ — pure conflict. Non-zero-sum games admit cooperation, coordination problems, and the possibility that equilibria are Pareto-suboptimal (the Prisoner's Dilemma being the canonical case).</li>
-</ol>
+<p><strong>1. Zero-sum vs. Non-zero-sum.</strong> In zero-sum games $\sum_i u_i(a) = 0$ for all $a$ — one player's gain is another's loss. The minimax theorem guarantees an optimal mixed strategy. Non-zero-sum games introduce cooperation, coordination failures, and the Pareto frontier as distinct from Nash equilibria.</p>
 
-<ol>
-<li><strong>Mixed vs. Pure Strategies</strong>: A <em>pure strategy</em> selects a single action; a <em>mixed strategy</em> is a probability distribution $\sigma_i \in \Delta(S_i)$. Nash equilibria in mixed strategies always exist for finite games but can be counterintuitive — players must be genuinely indifferent at equilibrium to mix.</li>
-</ol>
+<p><strong>2. Dominant Strategies &amp; Iterated Elimination.</strong> A strategy $a_i$ strictly dominates $a_i'$ if $u_i(a_i, a_{-i}) > u_i(a_i', a_{-i})$ for all $a_{-i}$. Iteratively eliminating dominated strategies (IESDS) can solve games without equilibrium computation, but requires common knowledge of rationality — a strong epistemic assumption.</p>
 
-<ol>
-<li><strong>Refinements of Nash Equilibrium</strong>: Many games have multiple Nash equilibria. Refinements like <em>subgame-perfect equilibrium</em> (Selten), <em>trembling-hand perfection</em>, and <em>proper equilibrium</em> prune implausible ones by imposing sequential rationality or perturbation stability.</li>
-</ol>
+<p><strong>3. Repeated Games &amp; Folk Theorems.</strong> In infinitely repeated games with discount factor $\delta \to 1$, virtually any individually rational payoff profile can be sustained as an equilibrium. This formalizes how cooperation and reputation emerge without central enforcement — the formal underpinning of why long-term relationships deter defection.</p>
 
-<ol>
-<li><strong>Mechanism Design ("Reverse Game Theory")</strong>: Instead of solving a given game, design the rules of the game to induce a desired outcome. The Gibbard–Satterthwaite theorem sets fundamental limits; Vickrey–Clarke–Groves mechanisms achieve truthful revelation for social-welfare objectives.</li>
-</ol>
+<p><strong>4. Mechanism Design (Reverse Game Theory).</strong> Rather than analyzing a given game, mechanism design asks: <em>what rules induce desired outcomes among strategic agents?</em> The revelation principle shows any implementable outcome can be achieved by a direct, incentive-compatible mechanism — agents truthfully report preferences.</p>
 
-<ol>
-<li><strong>Evolutionary Game Theory</strong>: Replace rational agents with populations of strategy-playing individuals subject to selection pressure. The <strong>replicator dynamics</strong>:</li>
-</ol>
-<p>$$\dot{x}_i = x_i \left[ f_i(x) - \bar{f}(x) \right]$$</p>
-<p>show how strategy frequencies evolve. ESS corresponds to asymptotically stable fixed points of this system.</p>
+<p><strong>5. Incomplete Information &amp; Bayesian Games.</strong> When players have private information (types), the game becomes a Bayesian game. Equilibrium generalizes to a <strong>Bayes-Nash Equilibrium</strong>, where strategies are functions from types to actions. Harsanyi's type-space model handles arbitrary belief hierarchies.</p>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<p>[!warning] Note: this information may be dated</p>
 
 <p>Active research fronts include:</p>
 
 <ul>
-<li><strong>Algorithmic Game Theory</strong>: Computational complexity of finding Nash equilibria (PPAD-completeness of Nash, Daskalakis–Goldberg–Papadimitriou 2006), price of anarchy in networks</li>
-<li><strong>Multi-agent RL</strong>: Learning in games (convergence of gradient-based methods, regret minimization via no-regret algorithms like Hedge/EXP3)</li>
-<li><strong>Causal Game Theory</strong>: Integrating Pearl's causal hierarchy with strategic reasoning to handle counterfactual utility</li>
-<li><strong>Quantum Game Theory</strong>: Replacing classical probability distributions with quantum superpositions over strategies — some classical dilemmas dissolve under entanglement</li>
-<li><strong>Large Language Models as agents</strong>: LLMs in economic games exhibit surprisingly consistent (though not always rational) strategic behavior, reopening empirical questions about bounded rationality</li>
+<li><strong>Algorithmic game theory</strong>: computational complexity of finding Nash equilibria (PPAD-completeness of Nash), no-regret learning in games, and convergence of gradient-based dynamics</li>
+<li><strong>Multi-agent AI</strong>: game-theoretic foundations for LLM agents cooperating or competing, alignment under strategic behavior, and mechanism design for AI systems</li>
+<li><strong>Evolutionary and behavioral game theory</strong>: bounded rationality, quantal response equilibria, and empirical departures from classical predictions</li>
+<li><strong>Auction &amp; market design</strong>: combinatorial auctions, matching markets (Roth, Shapley), and real-time bidding systems at internet scale</li>
 </ul>
 
 <hr>
@@ -293,9 +282,9 @@ MathJax = {
 <li><a href="/daily_knowledge/topic/Nash Equilibrium">Nash Equilibrium</a></li>
 <li><a href="/daily_knowledge/topic/Mechanism Design">Mechanism Design</a></li>
 <li><a href="/daily_knowledge/topic/Evolutionary Game Theory">Evolutionary Game Theory</a></li>
-<li><a href="/daily_knowledge/topic/Prisoner's Dilemma">Prisoner's Dilemma</a></li>
-<li><a href="/daily_knowledge/topic/Decision Theory">Decision Theory</a></li>
 <li><a href="/daily_knowledge/topic/Multi-Agent Reinforcement Learning">Multi-Agent Reinforcement Learning</a></li>
+<li><a href="/daily_knowledge/topic/Decision Theory">Decision Theory</a></li>
+<li><a href="/daily_knowledge/topic/Information Economics">Information Economics</a></li>
 </ul>
 
 <hr>
@@ -303,21 +292,28 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Nash equilibria are guaranteed to exist in finite games, but computing them is PPAD-complete — does this computational intractability undermine their prescriptive force as a rationality standard?</li>
+<li>Nash equilibria are guaranteed to exist but are often computationally intractable to find and may be Pareto-inferior — does this undermine their prescriptive value, or are they still the right <em>descriptive</em> baseline?</li>
 </ol>
 
 <ol>
-<li>Evolutionary game theory achieves game-theoretic predictions without assuming rationality. Does this suggest rationality is an <em>emergent</em> property of selection pressure, or merely a convenient fiction that happens to match equilibria?</li>
+<li>The Folk Theorem shows that cooperation is theoretically sustainable in repeated games, yet defection is common in practice. What gap between theory and behavior does this reveal, and how do behavioral extensions (bounded rationality, finite horizons) address it?</li>
 </ol>
 
 <ol>
-<li>In mechanism design, the revelation principle allows restricting attention to direct, truthful mechanisms — but it assumes commitment power by the designer. How does the theory change when the mechanism itself is subject to renegotiation?</li>
+<li>As LLM-based agents increasingly act in markets, negotiations, and resource allocation, what new game-theoretic phenomena emerge that classical theory wasn't designed to handle — and does this demand new equilibrium concepts?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Game_theory" target="_blank" rel="noopener"&gt;Game Theory&lt;/a&gt; · Retrieved 2026-03-29</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Game_theory" target="_blank" rel="noopener"&gt;Game Theory&lt;/a&gt; · Retrieved 2026-07-05</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2607.02517v1" target="_blank" rel="noopener">WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02510v1" target="_blank" rel="noopener">Online Safety Monitoring for LLMs</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02508v1" target="_blank" rel="noopener">From SRA to Self-Flow: Data Augmentation or Self-Supervision?</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Game+Theory&labels=discussion&body=Topic:+[Game+Theory](https://dhein.github.io/daily_knowledge/topic/game_theory/)
 

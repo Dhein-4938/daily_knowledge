@@ -219,69 +219,70 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div><strong>Synthetic Biology (SynBio)</strong> is the application of engineering design principles — abstraction, modularity, standardization, and iteration — to biological systems, with the goal of constructing novel organisms or redesigning existing ones with predictable, programmable behavior.</div></div>
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Synthetic Biology (SynBio)</strong> applies the engineering paradigm — abstraction, modularity, and standardisation — to biological systems. The goal is to design and construct novel biological parts, devices, and systems, or to redesign existing natural systems with predictable, robust, and useful behaviours.</div></div>
 
-<p>Where classical genetic engineering edits genes, SynBio treats the cell as a <em>programmable substrate</em>. The central design hierarchy mirrors software engineering:</p>
+<p>The field borrows its conceptual vocabulary directly from electrical engineering: <em>parts</em> (promoters, RBS sequences, terminators) compose into <em>devices</em> (toggle switches, oscillators), which compose into <em>systems</em> (metabolic pathways, whole-chassis organisms). This hierarchy mirrors the abstraction stack from transistors to logic gates to CPUs.</p>
 
-<p>$$\text{Parts} \subset \text{Devices} \subset \text{Systems} \subset \text{Chassis}$$</p>
+<p>A central formalism is the use of ordinary differential equations to model gene regulatory networks. For a simple activator-repressor circuit:</p>
 
-<ul>
-<li><strong>Parts</strong>: minimal functional DNA elements (promoters, RBSs, coding sequences, terminators)</li>
-<li><strong>Devices</strong>: logic gates, oscillators, toggles assembled from parts</li>
-<li><strong>Systems</strong>: full genetic circuits performing computation or synthesis</li>
-<li><strong>Chassis</strong>: the host organism (e.g., <em>E. coli</em>, <em>S. cerevisiae</em>, cell-free extract)</li>
-</ul>
+<p>$$
+\frac{d[A]}{dt} = \frac{\alpha_A}{1 + ([R]/K_R)^n} - \delta_A [A]
+$$</p>
 
-<p>This abstraction stack is formalized by the <strong>BioBrick standard</strong> (RFC 10), which defines restriction-site flanking for composable DNA assembly.</p>
+<p>where $\alpha_A$ is max transcription rate, $K_R$ is repressor binding affinity, $n$ is the Hill coefficient (cooperativity), and $\delta_A$ is the degradation rate. Tuning these parameters is the SynBio equivalent of setting resistor values.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>SynBio sits at the intersection of medicine, materials, computation, and ecology — a rare field where the design medium <em>evolves</em>. Key application domains:</p>
+<p>SynBio sits at the intersection of a remarkable number of high-impact domains:</p>
 
 <ul>
-<li><strong>Biomanufacturing</strong>: microbial cell factories producing artemisinin, spider silk proteins, or bio-based plastics at scale</li>
-<li><strong>Therapeutics</strong>: engineered CAR-T cells, living medicines that sense and respond to disease markers in situ</li>
-<li><strong>Biosensing</strong>: whole-cell biosensors detecting heavy metals, pathogens, or environmental toxins</li>
-<li><strong>Computation</strong>: DNA-based logic and storage (DNA can encode ~$10^{18}$ bytes/gram, vastly exceeding silicon density)</li>
-<li><strong>Agriculture</strong>: nitrogen-fixing crops, pest-resistant strains without pesticide dependence</li>
+<li><strong>Medicine</strong>: engineered CAR-T cells, programmable bacteria for tumour microenvironment sensing, and biosensors for diagnostics.</li>
+<li><strong>Materials</strong>: biologically synthesised polymers, living materials with self-repair, and spider-silk proteins expressed in heterologous hosts.</li>
+<li><strong>Sustainability</strong>: microbial production of biofuels, carbon capture pathways, and replacing petroleum-derived chemicals with bio-fermentation.</li>
+<li><strong>Computing</strong>: DNA-based data storage (theoretical density ~$10^{18}$ bytes/g) and biological logic circuits for <em>in vivo</em> computing.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>The deepest significance is epistemological: <em>building</em> a system is the most rigorous test of <em>understanding</em> it. SynBio turns hypothesis into hardware — if your model of a gene regulatory network is wrong, your circuit fails.</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>The ribosome is already a molecular assembler — it reads a linear tape (mRNA) and produces arbitrary 3D polymer structures. SynBio's deeper ambition is to co-opt and extend this machinery rather than build nanomachines from scratch, exploiting 3.8 billion years of optimisation.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. The Noise Problem</strong></p>
-<p>Biological "circuits" are stochastic. Gene expression involves low-copy-number molecules; cell-to-cell variance is substantial. Deterministic ODE models of circuit dynamics break down; one must use stochastic simulation (Gillespie algorithm) or Fokker-Planck equations to accurately predict behavior.</p>
+<ol>
+<li><strong>The BioBricks Standard</strong>: Parts are defined by flanking restriction sites (EcoRI, XbaI, SpeI, PstI), enabling combinatorial assembly. The Registry of Standard Biological Parts (~20,000 entries) is SynBio's equivalent of an open-source component library — though <em>characterisation quality</em> varies enormously.</li>
+</ol>
 
-<p><strong>2. Retroactivity and Context-Dependence</strong></p>
-<p>Composing parts is non-trivial because biological components are <em>not</em> impedance-matched. Loading a downstream device changes upstream dynamics — a phenomenon termed <strong>retroactivity</strong> (Del Vecchio & Murray). Insulation devices (e.g., phosphorylation-based buffers) are required for true modularity.</p>
+<ol>
+<li><strong>Chassis Organisms</strong>: <em>E. coli</em>, <em>S. cerevisiae</em>, and <em>B. subtilis</em> are canonical chassis, but minimal-genome organisms (e.g., JCVI-syn3.0, ~473 genes) offer reduced metabolic crosstalk for cleaner circuit behaviour.</li>
+</ol>
 
-<p><strong>3. Metabolic Burden</strong></p>
-<p>Synthetic circuits consume cellular resources (ribosomes, ATP, amino acids). High expression of foreign genes creates <strong>metabolic burden</strong>, reducing host fitness and selecting for circuit-loss mutations. Evolutionary stability is a non-obvious engineering constraint absent in silicon.</p>
+<ol>
+<li><strong>Retroactivity and Context-Dependence</strong>: Biological parts are <em>not</em> truly modular. Loading effects (retroactivity) mean a downstream device alters the dynamics of an upstream promoter — analogous to impedance mismatch. This is a core unsolved engineering challenge.</li>
+</ol>
 
-<p><strong>4. Genetic Toggle and Oscillators as Canonical Benchmarks</strong></p>
-<p>The Gardner toggle switch (2000) and Elowitz repressilator (2000) are the field's "hello world" programs — bistable and periodic gene circuits demonstrating that rational design of dynamic behavior is achievable. They remain reference points for model validation.</p>
+<ol>
+<li><strong>Design-Build-Test-Learn (DBTL) Cycle</strong>: The iterative loop is accelerated by automated platforms (liquid-handling robots, high-throughput sequencing, machine learning-guided design), collapsing weeks-long cycles to days.</li>
+</ol>
 
-<p><strong>5. Orthogonality as Design Goal</strong></p>
-<p>Robust circuits require <strong>orthogonal</strong> components — transcription factors, ribosomes, and signaling molecules that don't cross-react with native cell machinery. Engineered orthogonal ribosomes (e.g., ribo-Q) that read quadruplet codons enable expanded genetic codes with non-canonical amino acids.</p>
+<ol>
+<li><strong>Biosafety and Containment</strong>: Genetic firewalls — auxotrophic strains dependent on synthetic amino acids, or recoded genomes with non-canonical codons — prevent engineered organisms from persisting or exchanging genes outside the lab.</li>
+</ol>
+
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated. The minimal-genome and synthetic chromosome projects are advancing rapidly; capability benchmarks from even 2–3 years ago may significantly understate current state of the art.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+<p>Active research frontiers as of mid-2026:</p>
 
-<p>Active frontiers include:</p>
 <ul>
-<li><strong>Cell-free systems</strong>: TX-TL (transcription-translation) extracts allow rapid prototyping outside living cells, decoupling circuit testing from organism fitness</li>
-<li><strong>Minimal genomes</strong>: JCVI's <em>syn3.0</em> (~473 genes) probes the lower bound of life, providing a clean chassis</li>
-<li><strong>Whole-cell modeling</strong>: efforts to simulate an entire cell at molecular resolution (e.g., Karr <em>et al.</em> whole-cell <em>M. genitalium</em> model) as a design oracle</li>
-<li><strong>Spatial patterning</strong>: engineering Turing-like morphogen gradients in synthetic multicellular systems</li>
-<li><strong>Biosafety by design</strong>: genetic kill switches, auxotrophy-based containment, and semantic containment (recoding stop codons) to prevent environmental escape</li>
+<li><strong>Cell-free systems</strong>: TX/TL (transcription-translation) systems enable rapid prototyping without live cells, and are being deployed for point-of-care diagnostics (e.g., SHERLOCK, DETECTR).</li>
+<li><strong>Whole-genome synthesis and recoding</strong>: Extending work on <em>E. coli</em> with all UAG codons reassigned, enabling sense-codon reassignment and expanded genetic alphabets.</li>
+<li><strong>Multicellular engineering</strong>: Moving from single-cell circuits to <em>programmed morphogenesis</em> — engineering developmental-biology-like differentiation programs in synthetic consortia.</li>
+<li><strong>AI-assisted design</strong>: AlphaFold-class structure prediction is being integrated into protein-part design pipelines, dramatically shortening the characterisation bottleneck.</li>
 </ul>
 
 <hr>
@@ -290,11 +291,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/Gene Regulatory Networks">Gene Regulatory Networks</a></li>
-<li><a href="/daily_knowledge/topic/CRISPR-Cas9 and Genome Editing">CRISPR-Cas9 and Genome Editing</a></li>
+<li><a href="/daily_knowledge/topic/CRISPR-Cas9 Mechanisms">CRISPR-Cas9 Mechanisms</a></li>
 <li><a href="/daily_knowledge/topic/Systems Biology">Systems Biology</a></li>
 <li><a href="/daily_knowledge/topic/DNA Data Storage">DNA Data Storage</a></li>
 <li><a href="/daily_knowledge/topic/Metabolic Engineering">Metabolic Engineering</a></li>
-<li><a href="/daily_knowledge/topic/Stochastic Gene Expression">Stochastic Gene Expression</a></li>
+<li><a href="/daily_knowledge/topic/Bioethics and Dual-Use Research">Bioethics and Dual-Use Research</a></li>
 </ul>
 
 <hr>
@@ -302,21 +303,30 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Retroactivity implies that biological modularity is fundamentally harder than electronic modularity — is there a biological equivalent of the transistor's high input/output impedance that could solve this structurally?</li>
+<li>Retroactivity fundamentally breaks the modularity assumption borrowed from electronics. What alternative abstraction models — perhaps borrowed from control theory or software (interfaces, type systems) — might better capture biological context-dependence?</li>
 </ol>
 
 <ol>
-<li>If directed evolution can outperform rational design for many protein engineering tasks, what is the precise epistemic role of the "design" in SynBio's design-build-test-learn cycle?</li>
+<li>The DBTL cycle is compressing biological design timelines toward software-like iteration speeds. Does this shift the primary bottleneck from <em>design</em> to <em>safety evaluation</em>, and if so, what institutional structures are adequate?</li>
 </ol>
 
 <ol>
-<li>Semantic containment (reassigning codons so engineered organisms require synthetic amino acids) offers stronger biosafety than kill switches — but raises the question of whether <em>any</em> containment strategy is robust against sufficient evolutionary time. How should risk frameworks account for evolutionary escape probability?</li>
+<li>Minimal-genome chassis eliminate "noise" from evolved metabolic crosstalk, but also strip out resilience mechanisms honed by selection. Is a maximally engineered chassis inherently more brittle in deployment, and how should that trade-off be quantified?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Synthetic_biology" target="_blank" rel="noopener"&gt;Synthetic Biology&lt;/a&gt; · Retrieved 2026-03-29</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Synthetic_biology" target="_blank" rel="noopener"&gt;Synthetic Biology&lt;/a&gt; · Retrieved 2026-07-05</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2607.02513v1" target="_blank" rel="noopener">LACUNA: A Testbed for Evaluating Localization Precision for LLM Unlearning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02506v1" target="_blank" rel="noopener">On the emergence of quantum many-body chaos for tunably-broken integrability</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02494v1" target="_blank" rel="noopener">Towards Robustness against Typographic Attack with Training-free Concept Localization</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02482v1" target="_blank" rel="noopener">Automated logical Clifford gadgets for heterogeneous architectures via chain maps</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02481v1" target="_blank" rel="noopener">Symmetries of Pauli Noise from Lindbladian Dynamics</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Synthetic+Biology&labels=discussion&body=Topic:+[Synthetic+Biology](https://dhein.github.io/daily_knowledge/topic/synthetic_biology/)
 

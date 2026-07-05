@@ -219,56 +219,55 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO</div><div><strong>Homotopy Type Theory (HoTT)</strong> is a foundational framework that interprets the <em>types</em> of Martin-Löf dependent type theory as <em>spaces</em> (in the homotopy-theoretic sense), <em>terms</em> as points in those spaces, and crucially, <em>proofs of equality</em> as <em>paths</em> between points.</div></div>
+<p>Homotopy Type Theory (HoTT) is a foundational framework for mathematics that interprets types not merely as sets or propositions, but as <strong>spaces</strong> in the sense of homotopy theory — with elements as points, equalities as paths, and higher equalities as homotopies between paths.</p>
 
-<p>The pivotal reinterpretation is of the <strong>identity type</strong>. In ordinary type theory, <code>Id_A(a, b)</code> is a proposition asserting <code>a = b</code>. In HoTT, it becomes the <em>path space</em> between <code>a</code> and <code>b</code> in the space <code>A</code> — paths can themselves have higher paths between them (homotopies between homotopies), giving rise to an intrinsically ∞-groupoid structure.</p>
+<div class="callout info"><div class="callout-title">INFO</div><div>The central insight: in Martin-Löf dependent type theory, the <strong>identity type</strong> $\text{Id}_A(a, b)$ (proofs that $a = b$ in type $A$) is reinterpreted as the <em>path space</em> between points $a$ and $b$ in a topological space. This transforms equality from a flat, propositional relation into a structured, higher-dimensional object.</div></div>
 
-<p>The <strong>Univalence Axiom</strong>, due to Voevodsky, is the engine of the whole enterprise:</p>
+<p>The key axiom distinguishing HoTT from standard type theory is the <strong>Univalence Axiom</strong> (due to Voevodsky):</p>
 
-<p>$$
-(A \simeq B) \simeq (A =_{\mathcal{U}} B)
-$$</p>
+<p>$$\text{Univalence}: (A \simeq B) \simeq (A =_{\mathcal{U}} B)$$</p>
 
-<p>An equivalence of types <em>is</em> an identification in the universe $\mathcal{U}$. This collapses a longstanding gap between "isomorphic" and "equal" and makes type theory <em>invariant under equivalence</em> by construction.</p>
+<p>That is, an equivalence of types $A \simeq B$ is itself equivalent to a path between $A$ and $B$ in the universe $\mathcal{U}$. Equivalences become <em>the same thing</em> as identifications.</p>
 
-<p><strong>Higher Inductive Types (HITs)</strong> extend ordinary inductive types by allowing constructors that produce inhabitants of identity types — not just points, but paths, 2-paths, etc. The circle $S^1$, for instance, is defined by a point <code>base : S^1</code> and a path <code>loop : base = base</code>.</p>
+<p><strong>Higher Inductive Types (HITs)</strong> extend this: you can define a type by specifying not just its point constructors but also its path constructors. The circle $S^1$, for instance, is the HIT with one point <code>base : S^1</code> and one path <code>loop : base = base</code>.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>HoTT sits at the intersection of three deep subjects:</p>
+<p>HoTT sits at a remarkable intersection:</p>
 
 <ul>
-<li><strong>Foundations of mathematics</strong>: It offers an alternative to set-theoretic foundations (ZFC) where equality is <em>structural</em>, not extensional set membership. Univalence encodes the mathematical practice of treating isomorphic objects as interchangeable.</li>
-<li><strong>∞-category theory</strong>: HoTT provides an <em>internal language</em> for (∞,1)-toposes, much as ordinary type theory is the internal language of locally cartesian closed categories. This connection, via Grothendieck's homotopy hypothesis, links syntactic proof theory to deep geometry.</li>
-<li><strong>Verified mathematics</strong>: The entire framework is machine-checkable. Proofs of classical results (e.g., van Kampen's theorem, the Blakers–Massey theorem) have been formalized in Coq and Agda, often revealing new synthetic proofs shorter than classical ones.</li>
+<li><strong>Foundations of mathematics</strong>: It provides an alternative to ZFC set theory where homotopy-invariant structure is <em>native</em>, not encoded. Mathematical objects behave correctly under equivalence by construction.</li>
+<li><strong>Proof assistants</strong>: HoTT has been formalized in Agda, Coq, and Lean. Proofs are programs; the univalence axiom makes transport along equivalences automatic rather than tedious.</li>
+<li><strong>∞-category theory</strong>: HoTT serves as the <em>internal language</em> of (∞,1)-toposes. Results proved synthetically in HoTT hold in any such topos simultaneously.</li>
+<li><strong>Computer science</strong>: Dependent types with univalence give a principled account of abstraction boundaries — isomorphic implementations are provably interchangeable.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>Univalence is <em>not</em> provable in MLTT — it requires a new axiom. But it is <em>consistent</em>, as witnessed by the simplicial set model of Voevodsky and the cubical set models. This means it adds genuine proof-theoretic strength.</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>Univalence enforces "representation independence" for free. If two data structures are provably equivalent, any theorem about one transfers to the other via <code>transport</code>. This is the formal analogue of the informal mathematical practice of treating isomorphic objects as identical.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>∞-Groupoid Semantics</strong>: Every type <code>A</code> carries the structure of an ∞-groupoid: points are 0-cells, paths are 1-cells, paths between paths are 2-cells, etc. Types with trivial higher structure are <em>sets</em> (h-sets); types with at most one inhabitant are <em>propositions</em> (h-props). This stratification is the <strong>homotopy level</strong> (h-level).</li>
+<li><strong>$n$-types and truncation</strong>: Types are stratified by homotopy complexity. A <em>proposition</em> (mere $(-1)$-type) has at most one path between any two points. A <em>set</em> (0-type) has contractible path spaces. Higher $n$-types carry non-trivial homotopy up to level $n$. The truncation operator $\|{-}\|_n$ projects any type down.</li>
 </ol>
 
 <ol>
-<li><strong>Truncation</strong>: The $n$-truncation $\|A\|_n$ kills homotopy above level $n$. The (-1)-truncation $\|A\|_{-1}$ converts any type into the mere proposition of its inhabitedness — recovering classical logic as a shadow.</li>
+<li><strong>Path induction</strong>: The eliminator for identity types — <code>J</code> — says that to prove a property of <em>all</em> paths, it suffices to prove it for reflexivity. This is exactly the statement that the path space $\text{Id}_A(a,-)$ is contractible (has <code>a</code> as a center of contraction).</li>
 </ol>
 
 <ol>
-<li><strong>Cubical Type Theory</strong>: A computationally well-behaved variant (CCHM/Cubical Agda) gives univalence a <em>definitional</em> computational interpretation using an interval primitive $\mathbb{I}$, resolving the original HoTT book's use of univalence as an axiom with no reduction rule.</li>
+<li><strong>Cubical type theory</strong>: Classical HoTT with the Univalence Axiom is not <em>computationally</em> satisfying — <code>transport</code> along univalence has no canonical reduction. <strong>Cubical type theory</strong> (CCHM, XTT, Cartesian cubical) solves this by building paths from first principles using an interval type, making univalence <em>provable</em> and <em>computational</em>.</li>
 </ol>
 
 <ol>
-<li><strong>Synthetic Homotopy Theory</strong>: Classical results like $\pi_1(S^1) \cong \mathbb{Z}$ and the Hopf fibration are proved synthetically — <em>inside</em> the type theory, without building topological spaces explicitly. The proofs are often more elegant and illuminating.</li>
+<li><strong>Synthetic homotopy theory</strong>: HoTT lets you calculate homotopy groups of spaces purely type-theoretically. The classical result $\pi_1(S^1) \cong \mathbb{Z}$ has a fully formal proof in HoTT requiring no point-set topology.</li>
 </ol>
 
 <ol>
-<li><strong>Propositional vs. Definitional Equality</strong>: HoTT sharpens the distinction. Definitional equality is invisible to the type-checker; propositional equality is a type. Cubical variants blur this by making more equalities definitional via <code>transp</code> and <code>hcomp</code> primitives.</li>
+<li><strong>Propositional vs. definitional equality</strong>: HoTT sharply distinguishes $a = b$ (a type, possibly inhabited by multiple paths) from $a \equiv b$ (definitional/judgmental equality, a metatheoretic assertion). Conflating these is a common source of confusion.</li>
 </ol>
 
 <hr>
@@ -277,7 +276,7 @@ $$</p>
 
 <div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active frontiers include: completing the <strong>Homotopy Type System</strong> (HTS) that mixes strict and weak equality; formalizing the <strong>chromatic tower</strong> and stable homotopy theory internally; developing <strong>modalities</strong> for cohesion and differential cohesion (Schreiber's program in <strong>Modal HoTT</strong>); and scaling proof assistants (Agda, Lean 4 with Mathlib) to handle large synthetic topology libraries. The question of a fully satisfactory <strong>∞-topos-internal language</strong> remains partially open.</p>
+<p>Active research fronts include: completing <strong>Agda's cubical library</strong> and the HoTT-relevant parts of Lean 4's Mathlib; formalizing <strong>condensed mathematics</strong> and <strong>synthetic algebraic geometry</strong> in cohesive HoTT; and resolving the <strong>coherence problem</strong> for semi-simplicial types (defining Kan complexes internally without assuming univalence). The HoTT Book (IAS, 2013) remains the canonical reference, but cubical developments have substantially moved the computational story forward.</p>
 
 <hr>
 
@@ -286,10 +285,10 @@ $$</p>
 <ul>
 <li><a href="/daily_knowledge/topic/Martin-Löf Dependent Type Theory">Martin-Löf Dependent Type Theory</a></li>
 <li><a href="/daily_knowledge/topic/Univalence Axiom">Univalence Axiom</a></li>
-<li><a href="/daily_knowledge/topic/Higher Inductive Types">Higher Inductive Types</a></li>
-<li><a href="/daily_knowledge/topic/∞-Toposes and Homotopy Hypothesis">∞-Toposes and Homotopy Hypothesis</a></li>
 <li><a href="/daily_knowledge/topic/Cubical Type Theory">Cubical Type Theory</a></li>
-<li><a href="/daily_knowledge/topic/Proof Assistants (Coq, Agda, Lean)">Proof Assistants (Coq, Agda, Lean)</a></li>
+<li><a href="/daily_knowledge/topic/∞-Toposes and Higher Category Theory">∞-Toposes and Higher Category Theory</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Formal Proof Assistants (Agda, Coq, Lean)">Formal Proof Assistants (Agda, Coq, Lean)</a></li>
 </ul>
 
 <hr>
@@ -297,15 +296,22 @@ $$</p>
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Univalence makes "isomorphic implies equal" a theorem schema — but does this <em>dissolve</em> or merely <em>relocate</em> the philosopher's question of identity? What does it mean for two types to be "the same"?</li>
-<li>Cubical type theory restores computational content to univalence. Does this suggest that the original HoTT axiom was always a <em>meta-theoretical</em> stopgap, or is the cubical interval itself philosophically loaded?</li>
-<li>Synthetic homotopy theory proves results about $\pi_n(S^m)$ without building spaces — the logic <em>is</em> the geometry. What are the limits of this synthesis? Are there topological phenomena fundamentally resistant to type-theoretic internalization?</li>
+<li>Univalence makes equivalence and equality interchangeable — but does this <em>eliminate</em> the distinction between "same structure" and "same object," or merely relocate the philosophical tension?</li>
+<li>Cubical type theory restores computational content to univalence, but at the cost of a more complex type theory. Is there a fundamental trade-off between <em>synthetic</em> elegance and <em>computational</em> tractability in foundations?</li>
+<li>If HoTT is the internal language of ∞-toposes, what would it mean to do <em>physics</em> — e.g., gauge theory — entirely synthetically inside a suitable topos, without ever mentioning manifolds or fiber bundles directly?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Homotopy_type_theory" target="_blank" rel="noopener"&gt;Homotopy Type Theory&lt;/a&gt; · Retrieved 2026-03-29</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Homotopy_type_theory" target="_blank" rel="noopener"&gt;Homotopy Type Theory&lt;/a&gt; · Retrieved 2026-07-05</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2607.02514v1" target="_blank" rel="noopener">Distributed Attacks in Persistent-State AI Control</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02506v1" target="_blank" rel="noopener">On the emergence of quantum many-body chaos for tunably-broken integrability</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02505v1" target="_blank" rel="noopener">A critical look at low-scale cosmological phase transitions in the PTA era</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Homotopy+Type+Theory&labels=discussion&body=Topic:+[Homotopy+Type+Theory](https://dhein.github.io/daily_knowledge/topic/homotopy_type_theory/)
 

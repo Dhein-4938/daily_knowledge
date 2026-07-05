@@ -6,6 +6,13 @@
   <description>Automated daily notes: Science, Tech, Math, Logic</description>
   <language>en-us</language>
   <item>
+    <title>July 5, 2026</title>
+    <link>https://dhein.github.io/daily_knowledge/digests/2026-07-05/</link>
+    <guid>https://dhein.github.io/daily_knowledge/digests/2026-07-05/</guid>
+    <pubDate>Sun, 05 Jul 2026 07:00:00 +0000</pubDate>
+    <description>~16 min · Homotopy Type Theory, Synthetic Biology, Game Theory, Elliptic Curves</description>
+  </item>
+  <item>
     <title>July 4, 2026</title>
     <link>https://dhein.github.io/daily_knowledge/digests/2026-07-04/</link>
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-07-04/</guid>
@@ -207,13 +214,6 @@
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-23/</guid>
     <pubDate>Thu, 23 Apr 2026 07:00:00 +0000</pubDate>
     <description>Daily Knowledge Digest for April 23, 2026</description>
-  </item>
-  <item>
-    <title>April 22, 2026</title>
-    <link>https://dhein.github.io/daily_knowledge/digests/2026-04-22/</link>
-    <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-22/</guid>
-    <pubDate>Wed, 22 Apr 2026 07:00:00 +0000</pubDate>
-    <description>Daily Knowledge Digest for April 22, 2026</description>
   </item>
 </channel>
 </rss>

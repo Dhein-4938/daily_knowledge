@@ -219,49 +219,56 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>An <strong>elliptic curve</strong> over a field $K$ (with $\text{char}(K) \neq 2, 3$) is a smooth, projective algebraic curve of <strong>genus one</strong> equipped with a distinguished identity point $O$. In affine coordinates it takes the <strong>Weierstrass form</strong>: $$y^2 = x^3 + ax + b, \quad a, b \in K$$ Non-singularity requires the discriminant condition: $$\Delta = -16(4a^3 + 27b^2) \neq 0$$ which ensures no cusps or self-intersections. The projective closure adds $O = [0:1:0]$ as the unique point at infinity.</div></div>
+<p>An <strong>elliptic curve</strong> over a field $K$ (with $\text{char}(K) \neq 2, 3$) is a smooth, projective algebraic curve of genus one equipped with a distinguished point $O$. In affine coordinates it takes the <strong>Weierstrass form</strong>:</p>
 
-<p>The genus-one condition is load-bearing: genus zero gives a conic (topologically a sphere), while genus $\geq 2$ prohibits a group law by Hurwitz. Genus one is the unique sweet spot admitting both a non-trivial topology <em>and</em> an algebraic group structure.</p>
+<p>$$y^2 = x^3 + ax + b, \quad a, b \in K$$</p>
+
+<p>Non-singularity imposes the discriminant condition:</p>
+
+<p>$$\Delta = -16(4a^3 + 27b^2) \neq 0$$</p>
+
+<p>which rules out cusps and node self-intersections. The projective closure adds the unique point at infinity $O = [0:1:0]$, which serves as the group identity.</p>
+
+<div class="callout info"><div class="callout-title">INFO: Genus vs. Ellipse</div><div>An elliptic curve is <em>not</em> an ellipse. The name descends from <strong>elliptic integrals</strong> (arc-length of an ellipse involves $\int dx/\sqrt{\text{cubic}}$). A conic (ellipse, parabola) has genus 0; an elliptic curve has genus 1 — the topological difference is fundamental.</div></div>
+
+<p>The <strong>$j$-invariant</strong> classifies elliptic curves up to isomorphism over $\bar{K}$:</p>
+
+<p>$$j(E) = -1728 \frac{(4a)^3}{\Delta/(-16)} = 1728 \frac{4a^3}{4a^3 + 27b^2}$$</p>
+
+<p>Two curves over $\bar{K}$ are isomorphic iff they share the same $j$-invariant.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Elliptic curves sit at an extraordinary intersection of fields:</p>
+<p>Elliptic curves sit at the intersection of several deep mathematical worlds:</p>
 
 <ul>
-<li><strong>Number theory</strong>: Wiles's proof of Fermat's Last Theorem reduced the problem to showing every semistable elliptic curve over $\mathbb{Q}$ is modular (Taniyama–Shimura–Weil conjecture). The BSD conjecture — one of the seven Millennium Problems — concerns the rank of $E(\mathbb{Q})$.</li>
-<li><strong>Cryptography (ECC)</strong>: The discrete logarithm problem on $E(\mathbb{F}_p)$ is believed harder than its multiplicative-group analogue, enabling shorter keys at equivalent security. Curve25519 and NIST P-256 underpin modern TLS.</li>
-<li><strong>Factorization</strong>: Lenstra's elliptic curve method (ECM) is the best known algorithm for finding mid-size factors, running in $O\!\left(e^{\sqrt{2\ln p \ln \ln p}}\right)$ time in the factor $p$.</li>
+<li><strong>Number theory</strong>: Central to Wiles's proof of Fermat's Last Theorem via the Taniyama–Shimura–Weil conjecture (every rational elliptic curve is modular). The BSD conjecture — one of the Millennium Prize Problems — concerns the rank of $E(\mathbb{Q})$.</li>
+<li><strong>Cryptography (ECC)</strong>: The discrete logarithm problem on $E(\mathbb{F}_p)$ is computationally harder per bit than RSA, enabling shorter keys with equivalent security (e.g., 256-bit ECC $\approx$ 3072-bit RSA).</li>
+<li><strong>Complex analysis</strong>: Over $\mathbb{C}$, every elliptic curve is isomorphic to a torus $\mathbb{C}/\Lambda$ for some lattice $\Lambda$. This identification is a group isomorphism — the addition law on $E$ <em>is</em> addition on the torus.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Topology dictates algebra</div><div>Over $\mathbb{C}$, every elliptic curve is isomorphic to $\mathbb{C}/\Lambda$ for a lattice $\Lambda = \mathbb{Z} + \tau\mathbb{Z}$, $\text{Im}(\tau) > 0$. The group law on the curve <em>is</em> addition mod $\Lambda$ — the torus topology forces commutativity and associativity without any algebraic sleight of hand.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Abelian Variety of Dimension 1</div><div>Elliptic curves are the simplest non-trivial <strong>abelian varieties</strong>. Studying them provides the template for higher-dimensional generalizations (Jacobians, Shimura varieties) and makes the abstract machinery concrete.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<ol>
-<li><strong>The Group Law geometrically</strong>: Given points $P, Q \in E(K)$, draw the line $PQ$; it meets $E$ at a third point $R'$ (Bézout guarantees this in $\mathbb{P}^2$). Reflect $R'$ across the $x$-axis to obtain $P + Q$. The identity $O$ is the point at infinity, and $-P = (x, -y)$ for $P = (x,y)$.</li>
-</ol>
+<p><strong>1. The Group Law (Chord-and-Tangent)</strong></p>
+<p>Given $P, Q \in E(K)$, draw the line through them; it meets $E$ at a third point $R'$. Reflect $R'$ over the $x$-axis to get $P + Q$. This is algebraically expressed by explicit rational formulas — no choice of coordinates involved — making it computable.</p>
 
-<ol>
-<li><strong>$j$-invariant classifies curves up to isomorphism</strong> (over $\bar{K}$):</li>
-</ol>
-<p>$$j(E) = 1728 \cdot \frac{4a^3}{4a^3 + 27b^2}$$</p>
-<p>Two curves are isomorphic over $\bar{K}$ iff they share the same $j$-invariant. Twists — curves with the same $j$ but non-isomorphic over $K$ — are classified by $H^1(\text{Gal}(\bar{K}/K), \text{Aut}(E))$.</p>
+<p><strong>2. Torsion and Rank</strong></p>
+<p>For $K = \mathbb{Q}$, the Mordell–Weil theorem states $E(\mathbb{Q}) \cong \mathbb{Z}^r \oplus E(\mathbb{Q})_{\text{tors}}$. The torsion subgroup is classified (Mazur's theorem: at most 16 possibilities). The <strong>rank</strong> $r$ is the deep mystery — no algorithm proven to always compute it.</p>
 
-<ol>
-<li><strong>Mordell's Theorem</strong>: $E(\mathbb{Q}) \cong \mathbb{Z}^r \oplus E(\mathbb{Q})_{\text{tors}}$, where $r \geq 0$ is the <strong>rank</strong> and the torsion subgroup is finite (Mazur's theorem limits it to 15 possibilities). Computing $r$ in general remains open.</li>
-</ol>
+<p><strong>3. Reduction Modulo $p$</strong></p>
+<p>A curve over $\mathbb{Q}$ can be reduced mod primes $p$. If $\Delta \equiv 0 \pmod{p}$, the curve has <strong>bad reduction</strong> (nodal or cuspidal singularity). Primes of good reduction feed the $L$-function $L(E,s)$, whose analytic properties encode the arithmetic of $E$.</p>
 
-<ol>
-<li><strong>Over finite fields</strong>: $|E(\mathbb{F}_p)|$ satisfies Hasse's bound $|{|E(\mathbb{F}_p)| - (p+1)}| \leq 2\sqrt{p}$. The Frobenius endomorphism $\phi: (x,y) \mapsto (x^p, y^p)$ satisfies $\phi^2 - t\phi + p = 0$ for trace $t$ with $|t| \leq 2\sqrt{p}$.</li>
-</ol>
+<p><strong>4. Endomorphisms and CM</strong></p>
+<p>Generic curves have $\text{End}(E) \cong \mathbb{Z}$. Curves with <strong>complex multiplication</strong> (CM) have $\text{End}(E) \otimes \mathbb{Q}$ an imaginary quadratic field — they are arithmetically special and appear in class field theory.</p>
 
-<ol>
-<li><strong>Char 2 and 3</strong>: The short Weierstrass form breaks down. General Weierstrass: $y^2 + a_1 xy + a_3 y = x^3 + a_2 x^2 + a_4 x + a_6$. This matters practically — hardware implementations over $\mathbb{F}_{2^m}$ (binary fields) use distinct formulas.</li>
-</ol>
+<p><strong>5. Weil Conjectures (Hasse Bound)</strong></p>
+<p>Over $\mathbb{F}_p$: $\#E(\mathbb{F}_p) = p + 1 - t_p$ where $|t_p| \leq 2\sqrt{p}$ (Hasse's theorem, the genus-1 case of the Weil conjectures). The trace of Frobenius $t_p$ is the key local datum.</p>
 
 <hr>
 
@@ -269,23 +276,16 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
 
-<p>Active research fronts include:</p>
-
-<ul>
-<li><strong>BSD conjecture</strong>: Partial results exist (rank 0 and 1 cases via Kolyvagin/Gross–Zagier), but the general case is open. Computational verification has been pushed to large ranks ($r \geq 28$ examples known).</li>
-<li><strong>Arithmetic statistics</strong>: Goldfeld's conjecture predicts average rank $= \frac{1}{2}$ over $\mathbb{Q}$; Bhargava–Shankar proved average rank $< 1$ (and $< 0.885$ in improved bounds).</li>
-<li><strong>Post-quantum concerns</strong>: ECC is broken by Shor's algorithm on a quantum computer. NIST's post-quantum standards (CRYSTALS-Kyber, etc.) do not use elliptic curves, though isogeny-based schemes (SIDH/CSIDH) attempted to — SIDH was broken in 2022 by Castryck–Decru.</li>
-<li><strong>$p$-adic and $\ell$-adic methods</strong>: Iwasawa theory studies $E$ over $\mathbb{Z}_p$-extensions; $\ell$-adic Tate modules encode arithmetic of $E$ via Galois representations.</li>
-</ul>
+<p>Active frontiers include: (1) <strong>Langlands program</strong> — the modularity theorem for elliptic curves over $\mathbb{Q}$ is complete, but extensions to totally real fields and beyond are ongoing; (2) <strong>BSD conjecture</strong> — verified computationally for vast families but unproven in general; (3) <strong>post-quantum ECC</strong> — classical ECC is vulnerable to Shor's algorithm; isogeny-based schemes (e.g., CSIDH) leverage the structure of isogeny graphs between elliptic curves as a quantum-resistant replacement; (4) <strong>explicit Chabauty–Coleman</strong> methods for bounding rational points on curves of higher genus via elliptic curve machinery.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Modular Forms">Modular Forms</a></li>
 <li><a href="/daily_knowledge/topic/Abelian Varieties">Abelian Varieties</a></li>
-<li><a href="/daily_knowledge/topic/Elliptic Curve Cryptography">Elliptic Curve Cryptography</a></li>
+<li><a href="/daily_knowledge/topic/Modular Forms and Modularity Theorem">Modular Forms and Modularity Theorem</a></li>
+<li><a href="/daily_knowledge/topic/Elliptic Curve Cryptography (ECC)">Elliptic Curve Cryptography (ECC)</a></li>
 <li><a href="/daily_knowledge/topic/Birch and Swinnerton-Dyer Conjecture">Birch and Swinnerton-Dyer Conjecture</a></li>
 <li><a href="/daily_knowledge/topic/Algebraic Number Theory">Algebraic Number Theory</a></li>
 <li><a href="/daily_knowledge/topic/Isogeny-Based Cryptography">Isogeny-Based Cryptography</a></li>
@@ -296,21 +296,28 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The group law on an elliptic curve is defined by a geometric construction (chord-and-tangent), yet it is provably associative — a highly non-trivial algebraic fact. What is the cleanest proof of associativity, and what does it reveal about the structure?</li>
+<li><strong>Rank mystery</strong>: No algorithm is proven to always determine the rank of $E(\mathbb{Q})$. What obstruction prevents a clean decision procedure, and how does BSD connect analytic data ($L(E,1)$) to this algebraic invariant?</li>
 </ol>
 
 <ol>
-<li>Hasse's bound $|E(\mathbb{F}_p)| \approx p + 1$ has an intuitive explanation via the "square root cancellation" heuristic for character sums. How does the Riemann Hypothesis for curves (Weil conjectures) formalize this, and what is the geometric content of that proof?</li>
+<li><strong>Torus duality</strong>: Over $\mathbb{C}$, the group law on $E$ becomes addition on $\mathbb{C}/\Lambda$. Does this complex-analytic perspective <em>explain</em> why the chord-and-tangent law is associative, or is it merely a correspondence — and what's the cleanest proof of associativity?</li>
 </ol>
 
 <ol>
-<li>SIDH's catastrophic 2022 break showed that isogenies between <em>supersingular</em> curves leak too much structure when auxiliary torsion points are revealed. What does this say more broadly about how <em>extra structure</em> in cryptographic group actions can be a liability rather than a feature?</li>
+<li><strong>Isogeny graphs and cryptography</strong>: Post-quantum schemes like CSIDH treat the set of $\mathbb{F}_p$-isomorphism classes of elliptic curves as a torsor for an ideal class group, with isogenies as edges. What algebraic structure makes this a hard problem even for quantum computers, and where does it potentially break down?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Elliptic_curve" target="_blank" rel="noopener"&gt;Elliptic Curves&lt;/a&gt; · Retrieved 2026-03-29</em></p></div>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Elliptic_curve" target="_blank" rel="noopener"&gt;Elliptic Curves&lt;/a&gt; · Retrieved 2026-07-05</em></p>
+
+<p><strong>Recent arXiv papers:</strong></p>
+<ul>
+<li><a href="https://arxiv.org/abs/2607.02506v1" target="_blank" rel="noopener">On the emergence of quantum many-body chaos for tunably-broken integrability</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02505v1" target="_blank" rel="noopener">A critical look at low-scale cosmological phase transitions in the PTA era</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02498v1" target="_blank" rel="noopener">Alleviating prior dependencies for DESI DR1 clustering fits through reparameterization</a> (2026)</li>
+</ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Elliptic+Curves&labels=discussion&body=Topic:+[Elliptic+Curves](https://dhein.github.io/daily_knowledge/topic/elliptic_curves/)
 
