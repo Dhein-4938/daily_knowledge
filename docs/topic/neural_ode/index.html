@@ -219,71 +219,73 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>Neural ODE</strong> models the hidden state $\mathbf{h}(t)$ of a network as the solution to an initial-value problem driven by a learned vector field: $$\frac{d\mathbf{h}(t)}{dt} = f_\theta(\mathbf{h}(t),\, t)$$ where $f_\theta$ is any differentiable neural network and $\mathbf{h}(t_0) = \mathbf{h}_0$ is the input embedding. The output is $\mathbf{h}(t_1)$, obtained by calling a black-box ODE solver.</div></div>
+<p>A <strong>Neural ODE</strong> replaces discrete layer stacking in a residual network with a continuous-depth analogue. Instead of defining a sequence of transformations $\mathbf{h}_{t+1} = \mathbf{h}_t + f(\mathbf{h}_t, \theta)$, it posits a hidden state governed by an ordinary differential equation:</p>
 
-<p>Introduced by Chen et al. (NeurIPS 2018), the key observation is that a residual block $\mathbf{h}_{t+1} = \mathbf{h}_t + f(\mathbf{h}_t)$ is simply an <strong>Euler step</strong> of this ODE. Taking the step size to zero yields a continuous-depth network. The number of "layers" is replaced by a time horizon $[t_0, t_1]$, and depth becomes a continuous variable controlled by the solver's adaptive step size.</p>
+<p>$$\frac{d\mathbf{h}(t)}{dt} = f\bigl(\mathbf{h}(t),\, t,\, \theta\bigr)$$</p>
 
-<p>Gradients flow via the <strong>adjoint method</strong>: rather than backpropagating through solver steps (memory-intensive), define the adjoint $\mathbf{a}(t) = -\partial \mathcal{L}/\partial \mathbf{h}(t)$ and solve a second, augmented ODE backwards in time:</p>
+<p>where $f$ is a neural network. The output at "depth" $T$ is obtained by integrating from an initial condition $\mathbf{h}(0) = \mathbf{x}$:</p>
 
-<p>$$\frac{d\mathbf{a}}{dt} = -\mathbf{a}(t)^\top \frac{\partial f_\theta}{\partial \mathbf{h}}$$</p>
+<p>$$\mathbf{h}(T) = \mathbf{h}(0) + \int_0^T f\bigl(\mathbf{h}(t), t, \theta\bigr)\, dt$$</p>
 
-<p>This gives $O(1)$ memory cost in depth—only the final state and the adjoint ODE need be stored.</p>
+<p>Any black-box ODE solver (Dormand–Prince, Adams–Bashforth, etc.) can approximate this integral. The solver chooses its own step sizes adaptively, making the computational graph implicit rather than fixed.</p>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>The number of function evaluations (NFE) of the ODE solver plays the role of "depth." Tighter error tolerances → more NFE → higher effective depth. This depth is <strong>dynamic</strong> and input-dependent.</div></div>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p><strong>Continuous-time dynamics</strong> are the natural language for irregularly sampled data, physics simulations, and control. Neural ODEs bridge deep learning and classical dynamical systems, enabling:</p>
+<p><strong>Memory efficiency.</strong> Backpropagation through the solver would store all intermediate states. Instead, Chen et al. (2018) derived the <em>adjoint sensitivity method</em>: integrate a co-state $\mathbf{a}(t) = -\partial L/\partial \mathbf{h}(t)$ <em>backwards</em> in time, requiring only $O(1)$ memory regardless of integration depth.</p>
 
-<ul>
-<li><strong>Latent ODE models</strong> for time series with missing observations (fit an encoder → solve ODE → decode)</li>
-<li><strong>Normalizing flows via CNFs</strong> (Continuous Normalizing Flows): instead of composing discrete bijections, flow a density along a learned vector field. The log-likelihood change is the trace of the Jacobian, integrated over time:</li>
-</ul>
-<p>$$\log p(\mathbf{x}(t_1)) = \log p(\mathbf{x}(t_0)) - \int_{t_0}^{t_1} \operatorname{tr}\!\left(\frac{\partial f_\theta}{\partial \mathbf{x}}\right) dt$$</p>
-<ul>
-<li><strong>Physical inductive biases</strong>: Hamiltonian Neural ODEs and Lagrangian Neural ODEs encode energy conservation by construction.</li>
-<li><strong>Parameter efficiency</strong>: depth is decoupled from the number of parameters—the same $f_\theta$ is reused at every time step.</li>
-</ul>
+<p>$$\frac{d\mathbf{a}}{dt} = -\mathbf{a}(t)^\top \frac{\partial f}{\partial \mathbf{h}}$$</p>
 
-<div class="callout tip"><div class="callout-title">TIP: Connection to Numerical Analysis</div><div>The choice of ODE solver (Euler, RK4, Dormand-Prince, etc.) directly trades off accuracy vs. NFE (number of function evaluations). Adaptive solvers act as implicit regularizers: a smooth $f_\theta$ → fewer steps → faster inference. This creates a natural coupling between the loss landscape and the computational budget.</div></div>
+<p><strong>Continuous-time modeling.</strong> Time-series with irregular sampling (clinical records, financial ticks, physical sensors) fit naturally — no need to impute or bin. <strong>Latent ODEs</strong> combine a recurrent encoder with an ODE decoder to learn dynamics from sparse, irregular observations.</p>
+
+<p><strong>Normalizing flows.</strong> The <em>FFJORD</em> variant replaces change-of-variables determinant computation $\log|\det J|$ with the instantaneous form:</p>
+
+<p>$$\frac{d \log p(\mathbf{z}(t))}{dt} = -\operatorname{tr}\!\left(\frac{\partial f}{\partial \mathbf{z}}\right)$$</p>
+
+<p>This makes exact maximum-likelihood training of continuous flows tractable via Hutchinson's trace estimator ($O(d)$ vs. $O(d^3)$).</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Adjoint sensitivity vs. direct backprop</strong>: The adjoint saves memory but can accumulate numerical error when integrating backwards through chaotic regions. Checkpointing strategies (store intermediate states) can mitigate this.</li>
+<li><strong>Adjoint method caveats.</strong> Numerical errors in the reverse-time integration can cause gradient inaccuracies. Checkpointing intermediate states or using symplectic solvers mitigates this; the "vanilla" adjoint can be unstable for stiff systems.</li>
 </ol>
 
 <ol>
-<li><strong>Stiffness</strong>: If $f_\theta$ has large Lipschitz constants, the ODE becomes stiff and solvers require tiny steps—training becomes prohibitively slow. Regularizing the Jacobian's spectral norm or adding a kinetic energy penalty $\int \|f_\theta\|^2\,dt$ helps.</li>
+<li><strong>Stiffness and solver choice.</strong> Many physical and learned dynamics are <em>stiff</em> (fast and slow timescales coexist). Explicit solvers (RK45) become prohibitively expensive; implicit or semi-implicit solvers (Radau, BDF) are needed but harder to differentiate through.</li>
 </ol>
 
 <ol>
-<li><strong>FFJORD</strong> (Grathwohl et al., 2018) makes CNF training tractable by estimating $\operatorname{tr}(\partial f / \partial \mathbf{x})$ via Hutchinson's trace estimator, avoiding the $O(d^2)$ full Jacobian.</li>
+<li><strong>Augmented Neural ODEs (ANODE).</strong> The universal approximation argument for Neural ODEs requires the vector field to be non-crossing (by uniqueness of ODE solutions). Augmenting the state with extra dimensions $[\mathbf{h}(t), \mathbf{a}(t)] \in \mathbb{R}^{d+p}$ breaks this constraint and dramatically expands expressibility.</li>
 </ol>
 
 <ol>
-<li><strong>Augmented Neural ODEs</strong>: The base state space may be too low-dimensional for $f_\theta$ to form a valid flow (flows cannot cross). Augmenting with extra zero-initialized dimensions resolves topological obstructions.</li>
+<li><strong>Relation to ResNets.</strong> Euler discretization of the ODE ($\Delta t = 1$) recovers the standard residual block. Neural ODEs are thus the continuum limit of very deep, weight-tied ResNets.</li>
 </ol>
 
 <ol>
-<li><strong>Discrete vs. continuous spectrum</strong>: For sequence modeling, Neural ODEs can be discretized to match arbitrary time grids at test time—unlike RNNs with fixed Δt—making them robust to irregular sampling.</li>
+<li><strong>Hamiltonian / symplectic variants.</strong> Constraining $f$ to derive from a learned Hamiltonian $H(\mathbf{q}, \mathbf{p})$ enforces energy conservation and reversibility — critical for physical simulation and molecular dynamics.</li>
 </ol>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>The field of continuous-depth models is moving rapidly. Diffusion models and flow-matching methods (which generalize CNFs) have emerged as dominant generative frameworks; Neural ODEs in their original form are more common in scientific ML and time-series applications than in image generation as of mid-2020s.</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>The adjoint method is essentially the continuous analogue of backpropagation: both propagate a co-state signal backward through a computational process. This unification hints at why Neural ODEs sit at the intersection of optimal control theory and deep learning.</div></div>
 
 <hr>
 
 <h2>Current State</h2>
 
-<p>Active research directions include:</p>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
+
+<p>Active lines of work include:</p>
 
 <ul>
-<li><strong>Neural SDEs</strong>: replace the deterministic vector field with $d\mathbf{h} = f_\theta\,dt + g_\theta\,dW_t$ for stochastic dynamics and uncertainty quantification.</li>
-<li><strong>Flow Matching</strong> (Lipman et al., 2022): train a CNF by regressing against a conditional vector field targeting the data distribution—avoids maximum likelihood training of the ODE entirely and is significantly more stable.</li>
-<li><strong>Physics-informed Neural ODEs</strong>: hybrid models that constrain $f_\theta$ to satisfy known partial differential equations, used in climate modeling and molecular dynamics.</li>
-<li><strong>Koopman operator methods</strong>: lifting nonlinear ODEs to linear dynamics in a high-dimensional feature space, where Neural ODEs serve as the finite-dimensional approximator.</li>
+<li><strong>Score-based diffusion meets Neural ODEs.</strong> Diffusion models can be cast as SDEs/ODEs via the probability flow ODE (Song et al.), enabling deterministic sampling and exact likelihoods. Efficient ODE solvers (DPM-Solver, DDIM) are a major practical lever.</li>
+<li><strong>Neural PDEs and operator learning.</strong> Extending the ODE framework to PDEs via neural operators (FNO, DeepONet) for weather, fluid, and quantum systems.</li>
+<li><strong>Scalability.</strong> Training cost scales with NFE; recent work on <em>step distillation</em> and <em>flow matching</em> reduces this, trading the full solver for a learned few-step surrogate.</li>
+<li><strong>Theoretical expressiveness.</strong> Characterizing which flows are learnable and when augmentation is necessary remains open; connections to optimal transport (Brenier maps, Wasserstein geodesics) are being formalized.</li>
 </ul>
 
 <hr>
@@ -293,9 +295,9 @@ MathJax = {
 <ul>
 <li><a href="/daily_knowledge/topic/Residual Networks">Residual Networks</a></li>
 <li><a href="/daily_knowledge/topic/Normalizing Flows">Normalizing Flows</a></li>
-<li><a href="/daily_knowledge/topic/Stochastic Differential Equations">Stochastic Differential Equations</a></li>
-<li><a href="/daily_knowledge/topic/Hamiltonian Mechanics in ML">Hamiltonian Mechanics in ML</a></li>
-<li><a href="/daily_knowledge/topic/Flow Matching">Flow Matching</a></li>
+<li><a href="/daily_knowledge/topic/Score-Based Diffusion Models">Score-Based Diffusion Models</a></li>
+<li><a href="/daily_knowledge/topic/Adjoint Method in Optimal Control">Adjoint Method in Optimal Control</a></li>
+<li><a href="/daily_knowledge/topic/Hamiltonian Neural Networks">Hamiltonian Neural Networks</a></li>
 <li><a href="/daily_knowledge/topic/Latent Variable Models">Latent Variable Models</a></li>
 </ul>
 
@@ -304,26 +306,26 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Expressivity vs. topology</strong>: A Neural ODE defines a homeomorphism (continuous bijection) on $\mathbb{R}^d$—it cannot change the topology of the input distribution. How does this constrain what CNFs can model compared to discrete normalizing flows or diffusion models, and when does it actually matter in practice?</li>
+<li>The adjoint sensitivity method assumes the ODE solver produces a smooth, reversible trajectory — but adaptive solvers introduce discontinuous step-size jumps. How does this interact with gradient accuracy in practice, and are there regimes where the adjoint is genuinely unreliable?</li>
 </ol>
 
 <ol>
-<li><strong>Solver as a hyperparameter</strong>: Adaptive step-size solvers implicitly regularize smoothness of $f_\theta$ during training. Could one explicitly co-optimize the solver schedule alongside the network weights to achieve a better accuracy/compute Pareto frontier?</li>
+<li>Flow matching reframes generative modeling as learning a vector field interpolating between noise and data distributions, bypassing the ODE solver during training. Does this make Neural ODEs obsolete as generative tools, or do exact-likelihood applications preserve their niche?</li>
 </ol>
 
 <ol>
-<li><strong>The stiffness problem at scale</strong>: Large-scale Neural ODEs in scientific ML (e.g., climate emulation) encounter stiff systems where standard solvers fail. What are the most promising approaches—implicit solvers, spectral normalization, operator splitting—and how do they interact with the adjoint training procedure?</li>
+<li>Hamiltonian Neural ODEs conserve energy by construction, which is a strong inductive bias. When modeling real physical systems with dissipation (friction, viscosity), is it better to break the Hamiltonian constraint deliberately, or to model dissipation as a separate perturbation term?</li>
 </ol>
 
 
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.26665v1" target="_blank" rel="noopener">Detailed Geometry and Appearance from Opportunistic Motion</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26664v1" target="_blank" rel="noopener">Learning to Commit: Generating Organic Pull Requests via Online Repository Memory</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26662v1" target="_blank" rel="noopener">Gaia Sees Blazars Move: Locating Optical Flares Using Astrometry</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26661v1" target="_blank" rel="noopener">GaussianGPT: Towards Autoregressive 3D Gaussian Scene Generation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26659v1" target="_blank" rel="noopener">Partial Motion Imitation for Learning Cart Pushing with Legged Manipulators</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02517v1" target="_blank" rel="noopener">WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02516v1" target="_blank" rel="noopener">Alignment Is All You Need For X-to-4D Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02515v1" target="_blank" rel="noopener">PointDiT: Pixel-Space Diffusion for Monocular Geometry Estimation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02513v1" target="_blank" rel="noopener">LACUNA: A Testbed for Evaluating Localization Precision for LLM Unlearning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02512v1" target="_blank" rel="noopener">Program-as-Weights: A Programming Paradigm for Fuzzy Functions</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Neural+ODEs&labels=discussion&body=Topic:+[Neural+ODEs](https://dhein.github.io/daily_knowledge/topic/neural_ode/)

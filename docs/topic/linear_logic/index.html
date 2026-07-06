@@ -219,64 +219,68 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Linear logic</strong> (Girard, 1987) is a <em>substructural</em> logic that restricts the structural rules of <strong>contraction</strong> (reusing a hypothesis) and <strong>weakening</strong> (discarding a hypothesis). Every assumption must be used <strong>exactly once</strong> unless explicitly marked otherwise — making it a <em>logic of resources</em>.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Linear logic</strong> is a substructural logic introduced by Jean-Yves Girard (1987) that controls the use of the structural rules of <strong>contraction</strong> (using a hypothesis multiple times) and <strong>weakening</strong> (discarding a hypothesis). The result is a logic where propositions denote <em>resources</em> — entities that must be used exactly once unless explicitly marked otherwise.</div></div>
 
-<p>Classical sequent calculus permits free use of two structural rules:</p>
+<p>In classical sequent calculus, Gentzen's structural rules allow:</p>
 
-<p>$$\frac{\Gamma, A, A \vdash B}{\Gamma, A \vdash B} \text{ (contraction)} \qquad \frac{\Gamma \vdash B}{\Gamma, A \vdash B} \text{ (weakening)}$$</p>
+<p>$$\frac{\Gamma, A, A \vdash B}{\Gamma, A \vdash B} \text{(contraction)} \qquad \frac{\Gamma \vdash B}{\Gamma, A \vdash B} \text{(weakening)}$$</p>
 
-<p>Linear logic removes both by default, introducing explicit <em>modalities</em> to recover them when needed. The <strong>exponential</strong> <code>!A</code> ("of course A") marks a formula as freely duplicable and discardable, restoring classical behaviour locally:</p>
+<p>Linear logic restricts both. The canonical reading: if $A \vdash B$, consuming resource $A$ <em>produces</em> resource $B$ — you cannot freely copy or discard $A$.</p>
 
-<p>$$!A \vdash A \quad !A \vdash !A \otimes !A \quad !A \vdash \mathbf{1}$$</p>
+<p>Linear logic introduces a richer connective vocabulary to recover expressiveness:</p>
 
-<p>The connectives split into two dual families:</p>
+<p>| Connective | Symbol | Flavor | Intuition |</p>
+<p>|---|---|---|---|</p>
+<p>| Tensor | $A \otimes B$ | Multiplicative | Have <em>both</em> A and B simultaneously |</p>
+<p>| Par | $A \parr B$ | Multiplicative | Dual of tensor |</p>
+<p>| With | $A \mathbin{\&} B$ | Additive | <em>Choose</em> one of A or B |</p>
+<p>| Plus | $A \oplus B$ | Additive | Externally <em>given</em> one of A or B |</p>
+<p>| Of course | $!A$ | Exponential | A is <em>unlimited</em> (contraction/weakening restored) |</p>
+<p>| Why not | $?A$ | Exponential | Dual of $!A$ |</p>
 
-<p>| Multiplicative | Additive |</p>
-<p>|---|---|</p>
-<p>| $A \otimes B$ (tensor) | $A \mathbin{\&} B$ (with) |</p>
-<p>| $A \parr B$ (par) | $A \oplus B$ (plus) |</p>
-<p>| $A \multimap B$ (lollipop / linear implication) | |</p>
-
-<p>The multiplicative connectives combine resources; the additive connectives represent <em>choice</em> between resources.</p>
+<p>The exponential modalities $!$ and $?$ are the precise gatekeepers that re-admit classical structural freedom when needed.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Linear logic resolves a fundamental mismatch in classical and intuitionistic logic: truth is <em>stateless</em>, but computation and physics are not. By tracking resource usage, it provides:</p>
+<p>Linear logic sits at an unusual crossroads — it is simultaneously a foundational proof theory, a practical programming language model, and a physics-adjacent formalism.</p>
 
+<p><strong>Programming languages.</strong> The Curry–Howard correspondence extends to linear logic: linear types correspond to linear proofs. A linear type system enforces that a value is used exactly once, making it ideal for modeling:</p>
 <ul>
-<li><strong>Programming languages</strong> — the theoretical backbone of <em>linear types</em> and <em>affine types</em> (Rust's ownership system is a practical descendant). A linear function $A \multimap B$ consumes its argument, preventing use-after-free, double-free, and aliasing errors at the type level.</li>
-<li><strong>Proof-nets</strong> — a canonical, graph-based proof representation that eliminates bureaucratic sequentialisation, yielding a geometry of interaction.</li>
-<li><strong>Game semantics</strong> — proofs correspond to winning strategies in two-player games; the resource discipline maps to the rule that each move is played exactly once.</li>
-<li><strong>Quantum information</strong> — the <em>no-cloning</em> and <em>no-deleting</em> theorems of quantum mechanics are precisely the logical prohibition of contraction and weakening. Linear logic can be read as the internal logic of quantum processes.</li>
-<li><strong>Concurrency</strong> — session types (choreographic communication protocols with guaranteed absence of deadlock) are a direct application of the multiplicative/additive structure.</li>
+<li>Memory ownership (Rust's borrow checker is a practical descendant)</li>
+<li>Session types for typed communication protocols</li>
+<li>Safe resource management without garbage collection</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: The Curry-Howard angle</div><div>Under the Curry-Howard correspondence, linear logic proofs are programs, and the cut-elimination procedure is <em>computation</em>. Specifically, the multiplicative fragment corresponds to the <strong>linear lambda-calculus</strong>, and <code>!</code> corresponds to the comonad structure of a "reusable thunk" — essentially, a <a href="/daily_knowledge/topic/Comonad">comonadic</a> modality.</div></div>
+<p><strong>Game semantics.</strong> Girard's <em>Geometry of Interaction</em> reframes cut-elimination as token passing on a graph, with proofs as <em>strategies</em> in a game between Proponent and Opponent. This gives a fully abstract model for PCF and related languages.</p>
+
+<p><strong>Quantum information.</strong> No-cloning and no-deleting theorems in quantum mechanics mirror exactly the prohibition on contraction and weakening. Linear logic is therefore a natural logical substrate for quantum computation — $!A$ corresponds to classical (freely copyable) data.</p>
+
+<div class="callout tip"><div class="callout-title">TIP: The Resource Metaphor</div><div>Think of linear implication $A \multimap B$ as a <em>vending machine</em>: insert one $A$, receive one $B$. The machine is consumed in the transaction. Classical implication $A \Rightarrow B$ is a <em>theorem</em> that can be applied infinitely; linear implication is a <em>process</em>.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Multiplicative/Additive split is not cosmetic.</strong> Tensor $\otimes$ means "both resources are present simultaneously"; with $\mathbin{\&}$ means "you may <em>choose</em> one, but not both." This distinction has no classical analog and is the source of most of linear logic's expressiveness.</li>
+<li><strong>Multiplicative vs. Additive split.</strong> The two flavors of conjunction ($\otimes$ vs $\&$) and disjunction ($\parr$ vs $\oplus$) are genuinely distinct. $A \otimes B$ means you hold both resources simultaneously; $A \mathbin{\&} B$ means you can redeem <em>either</em>, but choosing one forfeits the other. Confusing these is the most common error for newcomers.</li>
 </ol>
 
 <ol>
-<li><strong>De Morgan duality is total.</strong> Unlike intuitionistic logic, linear logic is fully symmetric under negation $(-)^\perp$. Every connective has a dual: $(\!A \otimes B)^\perp = A^\perp \parr B^\perp$, recovering classical duality while remaining constructive.</li>
+<li><strong>MLL is decidable; MELL is not.</strong> Multiplicative linear logic (MLL, without exponentials) is decidable and has clean combinatorial proof theory. Adding exponentials ($!$/$?$) yields MELL, which is Turing-complete and undecidable — the exponentials recover the full power of classical logic.</li>
 </ol>
 
 <ol>
-<li><strong>Proof nets are the canonical proof objects.</strong> Sequent proofs suffer from "bureaucratic" rule-order choices. Proof nets identify these as equivalent, giving a geometric/graph-theoretic account. Correctness of a proof net is decidable via the <em>Danos–Regnier</em> criterion (acyclicity + connectedness of a "switching").</li>
+<li><strong>Proof nets.</strong> Girard introduced proof nets as a <em>canonical</em> (syntax-independent) representation of MLL proofs, eliminating bureaucratic rule-permutations. Correctness of a proof net is checkable by the <em>Danos–Regnier</em> criterion (acyclicity + connectedness of a "correction graph"). Extending proof nets to MELL remains an active research problem.</li>
 </ol>
 
 <ol>
-<li><strong>The exponential <code>!</code> is a comonad.</strong> The denotational semantics in symmetric monoidal closed categories identifies <code>!</code> with a comonad satisfying specific coherence conditions. This cleanly separates reusable ("classical") data from ephemeral ("linear") data.</li>
+<li><strong>Denotational semantics via monoidal categories.</strong> Linear logic corresponds to <em>-autonomous categories</em> (the categorical semantics of classical linear logic), while intuitionistic linear logic corresponds to symmetric monoidal closed categories. This is a strict refinement: cartesian closed categories (for intuitionistic logic) embed into SMCCs via the $!$ comonad.</li>
 </ol>
 
 <ol>
-<li><strong>Phase semantics provides completeness.</strong> Girard gave a simple algebraic completeness proof via <em>phase spaces</em> — commutative monoids with a distinguished set of "facts" closed under a biorthogonality operator. This is analogous to Boolean algebra semantics for classical logic, but significantly richer.</li>
+<li><strong>Phase semantics.</strong> The original Girard semantics uses <em>phases</em> — a commutative monoid with a distinguished set of "facts." This gives completeness but is not fully abstract; coherence spaces and later game-semantic models provide more refined interpretations.</li>
 </ol>
 
 <hr>
@@ -288,25 +292,23 @@ MathJax = {
 <p>Active research threads include:</p>
 
 <ul>
-<li><strong>Differential linear logic</strong> (Ehrhard & Regnier) — extends linear logic with a <em>differentiation</em> operator on proofs, connecting to power series and the Taylor expansion of $\lambda$-terms. Links to <a href="/daily_knowledge/topic/Differential Categories">Differential Categories</a> and denotational models using analytic functions.</li>
-<li><strong>Graded/Quantitative type systems</strong> — generalise <code>!</code> to a semiring of <em>usage grades</em> (e.g., "used at most $n$ times"), directly influencing languages like Granule and extensions to Haskell's linear types (GHC 9.x+).</li>
-<li><strong>Linear logic and deep learning</strong> — connections between the geometry of interaction and <em>string diagrams</em> for neural networks are being actively explored, with potential for categorical foundations of differentiable programming.</li>
-<li><strong>Ludics</strong> — Girard's radical reconstruction of logic from <em>designs</em> (abstract interaction trees), aiming to derive both syntax and semantics from a single primitive notion of dialogue.</li>
+<li><strong>Differential linear logic</strong> (Ehrhard & Regnier): adds a <em>differentiation</em> operator, connecting linear logic to Taylor expansion and the semantics of probabilistic and differentiable programs.</li>
+<li><strong>Graded/quantitative type systems</strong>: generalizing $!$ to a semiring of usage counts (e.g., use <em>at most twice</em>), giving finer resource tracking. This underlies systems like Granule and Idris 2's quantitative types.</li>
+<li><strong>Cyclic and non-wellfounded proofs</strong>: extending linear logic to infinite proof trees with productivity conditions, relevant for reasoning about coinductive data and streams.</li>
+<li><strong>Linear logic and deep learning</strong>: the connection to differential linear logic and automatic differentiation is being explored as a semantic foundation for gradient-based learning.</li>
 </ul>
-
-<p>The <a href="/daily_knowledge/topic/Session Types">session types</a> literature continues to expand, with multiparty session types and their connections to choreographic programming remaining particularly active.</p>
 
 <hr>
 
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Substructural Logics">Substructural Logics</a> — the broader family (relevant logic, affine logic, ordered logic)</li>
-<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a> — proofs-as-programs; linear logic extends this to resource-aware computation</li>
-<li><a href="/daily_knowledge/topic/Session Types">Session Types</a> — direct application of linear logic to communication protocol typing</li>
-<li><a href="/daily_knowledge/topic/Monoidal Categories">Monoidal Categories</a> — the categorical semantics replacing cartesian closed categories</li>
-<li><a href="/daily_knowledge/topic/Quantum Computing">Quantum Computing</a> — no-cloning theorem as linear logic; categorical quantum mechanics</li>
-<li><a href="/daily_knowledge/topic/Rust Ownership System">Rust Ownership System</a> — industrial realisation of affine (near-linear) types</li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Substructural Type Systems">Substructural Type Systems</a></li>
+<li><a href="/daily_knowledge/topic/Session Types">Session Types</a></li>
+<li><a href="/daily_knowledge/topic/Monoidal Categories">Monoidal Categories</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Computing - Type Theory">Quantum Computing - Type Theory</a></li>
+<li><a href="/daily_knowledge/topic/Proof Nets">Proof Nets</a></li>
 </ul>
 
 <hr>
@@ -314,27 +316,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li><strong>Expressiveness vs. ergonomics:</strong> Rust's ownership model uses <em>affine</em> types (use at most once) rather than strictly linear (exactly once). What does allowing weakening but not contraction buy you in practice, and what theorems break?</li>
+<li>The $!$ modality restores contraction and weakening — so classical logic embeds into linear logic via $!A \vdash B \Leftrightarrow A \Rightarrow B$. Does this mean linear logic is <em>strictly more expressive</em> than classical logic, or merely a finer decomposition of the same truths? What does "expressive" even mean here?</li>
 </ol>
 
 <ol>
-<li><strong>The exponential <code>!</code> is underspecified:</strong> Multiple non-isomorphic denotational models interpret <code>!</code> differently (e.g., the "free commutative comonoid" model vs. coherence spaces). Does this plurality indicate fundamental incompleteness in the logic, or richness in the semantics?</li>
+<li>Rust's ownership system is often cited as a practical descendant of linear types, yet it adds <em>borrowing</em> (temporary shared access) which has no clean linear logic counterpart. What is the right logical primitive for borrowing, and does it break the resource metaphor?</li>
 </ol>
 
 <ol>
-<li><strong>Linear logic and physics:</strong> If linear logic is genuinely the internal logic of quantum information, what would it mean to do <em>mathematics</em> inside a linear-logic framework? Could a linear-logic foundation replace or supplement constructive type theories like <a href="/daily_knowledge/topic/Homotopy Type Theory">HoTT</a> for quantum-native reasoning?</li>
+<li>The no-cloning theorem makes linear logic appealing for quantum computation, but quantum states live in Hilbert spaces with <em>superposition</em> — a phenomenon classical linear logic doesn't model. What extensions (e.g., probabilistic linear logic, quantum lambda calculi) are necessary, and do they preserve the clean proof-theoretic properties of the original?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Linear_logic" target="_blank" rel="noopener"&gt;Linear Logic&lt;/a&gt; · Retrieved 2026-03-30</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Linear_logic" target="_blank" rel="noopener"&gt;Linear Logic&lt;/a&gt; · Retrieved 2026-07-06</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.26653v1" target="_blank" rel="noopener">PerceptionComp: A Video Benchmark for Complex Perception-Centric Reasoning</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26649v1" target="_blank" rel="noopener">Beyond the Quantum Picture: The Electrodynamic Origin of Chiral Nanoplasmonics</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26647v1" target="_blank" rel="noopener">An LP-based Sampling Policy for Multi-Armed Bandits with Side-Observations and Stochastic Availability</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02517v1" target="_blank" rel="noopener">WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02513v1" target="_blank" rel="noopener">LACUNA: A Testbed for Evaluating Localization Precision for LLM Unlearning</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02493v1" target="_blank" rel="noopener">Stability of global self-similar solutions to the cubic wave equation and the wave maps equation</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Linear+Logic&labels=discussion&body=Topic:+[Linear+Logic](https://dhein.github.io/daily_knowledge/topic/linear_logic/)

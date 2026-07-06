@@ -219,59 +219,54 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Descriptive complexity characterizes computational complexity classes not by resource bounds on abstract machines, but by the <strong>expressive power of logical languages</strong> over finite structures. The central insight: a decision problem belongs to a complexity class if and only if it can be expressed as a query in a corresponding logical system.</p>
+<p>Descriptive complexity characterizes computational complexity classes by the <em>expressive power of logical languages</em> over finite structures, rather than by resource bounds on abstract machines. The central insight: a decision problem is in a given complexity class if and only if it is definable by a sentence in a corresponding logical system.</p>
 
-<div class="callout info"><div class="callout-title">INFO: Formal Setup</div><div>A <em>query</em> on finite structures is a mapping $Q : \text{STRUCT}[\sigma] \to \{0,1\}$ for some vocabulary $\sigma$. Descriptive complexity asks: for a given logic $\mathcal{L}$, which complexity class $\mathcal{C}$ satisfies $$\mathcal{C} = \{ L \subseteq \Sigma^* \mid L \text{ is expressible in } \mathcal{L} \}?$$ The encoding of strings as finite structures (e.g., via a successor relation on positions) is a crucial technical detail — results depend on the chosen encoding and whether an order relation is built in.</div></div>
+<div class="callout info"><div class="callout-title">INFO: Formal Setup</div><div>Fix a finite relational vocabulary $\sigma$. A <em>query</em> is a mapping from finite $\sigma$-structures to $\{0, 1\}$. Descriptive complexity identifies logical fragments $\mathcal{L}$ such that: $$\text{QUERY}(\mathcal{L}) = \mathcal{C}$$ where $\mathcal{C}$ is a complexity class and $\text{QUERY}(\mathcal{L})$ is the set of queries expressible in $\mathcal{L}$ (restricted to finite models).</div></div>
 
-<p>The foundational result is <strong>Fagin's Theorem</strong> (1974): a property of finite structures is in NP iff it is definable in <strong>existential second-order logic</strong> (ESO / $\Sigma_1^1$). ESO allows first-order quantification over elements plus existential quantification over relations and functions — enough to "guess" a certificate and verify it.</p>
+<p>The canonical correspondences (all on ordered structures unless noted):</p>
+
+<p>| Logic | Complexity Class |</p>
+<p>|---|---|</p>
+<p>| $\Sigma_1^1$ (existential SO) | <strong>NP</strong> |</p>
+<p>| SO (full second-order) | <strong>PH</strong> |</p>
+<p>| FO + LFP (least fixed point) | <strong>P</strong> |</p>
+<p>| FO + TC (transitive closure) | <strong>NL</strong> |</p>
+<p>| FO + PFP (partial fixed point) | <strong>PSPACE</strong> |</p>
+<p>| FO alone | <strong>AC⁰</strong> (roughly) |</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Descriptive complexity offers three major payoffs:</p>
+<p>The machine-independence of logical definitions provides evidence that complexity classes like P and NP are mathematically <em>natural</em> — they do not merely reflect quirks of Turing machines or RAM models. If a class has a clean logical characterization, it suggests the class carves nature at its joints.</p>
 
-<ol>
-<li><strong>Machine-independence</strong>: Complexity classes like NP and P are defined relative to Turing machines or circuits. Logical characterizations show these classes have an intrinsic, model-theoretic meaning — they aren't artifacts of the machine model chosen.</li>
-<li><strong>Transfer of proofs</strong>: Techniques from finite model theory (Ehrenfeucht–Fraïssé games, locality, 0-1 laws) become tools in complexity theory, and vice versa.</li>
-<li><strong>Evidence for naturality</strong>: If NP, P, PSPACE all admit clean logical descriptions, this strengthens the case that the polynomial hierarchy reflects something deep about definability, not just algorithmic convention.</li>
-</ol>
+<div class="callout tip"><div class="callout-title">TIP: Logic as a Proof Transfer Mechanism</div><div>Results proven in finite model theory (e.g., preservation theorems, 0-1 laws) automatically carry implications for complexity, and vice versa. The <em>Immerman–Szelepcsényi theorem</em> (NL = co-NL) was essentially rediscovered via the inductive definability of transitive closure in both directions.</div></div>
 
-<div class="callout tip"><div class="callout-title">TIP: The Holy Grail: P vs NP as a Logic Problem</div><div>Capturing P in pure logic (without a built-in order relation) remains <strong>open</strong>. On ordered structures, Immerman and Vardi independently showed P = FO(LFP) — first-order logic extended with a <em>least fixed-point</em> operator. Proving P ≠ NP would require showing no FO(LFP) sentence defines some NP-complete property, a potentially more tractable framing.</div></div>
+<p>The framework also clarifies <em>why</em> certain reductions work: many natural problems are NP-complete because they express existential quantification over combinatorial structures (colorings, satisfying assignments, matchings) — exactly $\Sigma_1^1$ sentences.</p>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. The Immerman–Vardi Theorem</strong></p>
-<p>On ordered finite structures, $\text{P} = \text{FO(LFP)}$ — properties decidable in polynomial time are exactly those expressible using a least fixed-point closure. The order is essential: without it, fixed-point logic cannot even express parity.</p>
+<p><strong>1. Fagin's Theorem (1974)</strong> — The foundational result. NP = $\Sigma_1^1$: a class of finite structures is in NP iff it is the set of models of some existential second-order sentence. The proof is elegant: a Turing machine's accepting computation is itself a finite structure existentially quantifiable over.</p>
 
-<p><strong>2. The Full Polynomial Hierarchy</strong></p>
-<p>The entire polynomial hierarchy PH collapses logically:</p>
-<p>$$\text{PH} = \text{SO} \quad \text{(full second-order logic over finite structures)}$$</p>
-<p>$\Sigma_k^p$ corresponds to $\Sigma_k^1$ (SO with $k$ alternating blocks starting with existential), making the arithmetical hierarchy in logic mirror the computational hierarchy exactly.</p>
+<p><strong>2. The Role of Order</strong> — Most logical characterizations require a <em>built-in linear order</em> on the domain. Without it, FO + LFP does not capture P, and many correspondences break. Whether P has an <em>order-independent</em> logical characterization is tied to open questions about isomorphism-invariant computation.</p>
 
-<p><strong>3. PSPACE and Partial Fixed Points</strong></p>
-<p>$\text{PSPACE} = \text{FO(PFP)}$, where PFP is the <em>partial fixed-point</em> operator — an operator that returns the stable value of an iterated relation if convergence occurs, and $\emptyset$ otherwise. This is strictly more powerful than LFP.</p>
+<p><strong>3. Fixed-Point Operators as Iteration</strong> — LFP extends FO by allowing inductive definitions: you iteratively apply a formula until it stabilizes. Each stage corresponds to one step of a polynomial-time computation. PFP allows the fixpoint to <em>not</em> converge (divergence = reject), yielding PSPACE.</p>
 
-<p><strong>4. Logspace and Symmetric Transitive Closure</strong></p>
-<p>$\text{L} = \text{FO(DTC)}$ (deterministic transitive closure) on ordered structures, and $\text{NL} = \text{FO(TC)}$ (non-deterministic/symmetric transitive closure). NL = co-NL is thus visible as a logical symmetry.</p>
+<p><strong>4. Immerman's Theorem</strong> — FO + TC captures NL on ordered structures. Transitive closure is the key primitive: graph reachability is the NL-complete problem, and all NL queries reduce to iterated reachability.</p>
 
-<p><strong>5. The Order Problem</strong></p>
-<p>Without a built-in linear order, even basic properties like EVEN (strings of even length) fall outside FO. Most characterizations implicitly assume an order — a philosophically awkward dependency that motivates research into <em>order-independent</em> or <em>generic</em> queries.</p>
-
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div>Active research into capturing P without built-in order, connections to choiceless polynomial time (CPT), and circuit complexity characterizations is ongoing and results shift. Verify against current literature (post-2020) for the frontier.</div></div>
+<p><strong>5. Descriptive vs. Circuit Complexity</strong> — FO alone corresponds roughly to constant-depth circuits (AC⁰), connecting logical quantifier depth to circuit depth. FO + COUNT (with modular counting) extends to TC⁰, linking numerical quantifiers to threshold gates.</p>
 
 <hr>
 
 <h2>Current State</h2>
 
-<ul>
-<li><strong>Choiceless Polynomial Time (CPT)</strong>: A candidate logic for capturing P on unordered structures, based on hereditarily finite sets. Recent work probes its expressive limits via pebble games and rank logic, but capturing P remains unresolved.</li>
-<li><strong>Rank Logic</strong>: Extensions of FO with operators for computing matrix rank over finite fields; conjectured to be more expressive than CPT on certain graph families.</li>
-<li><strong>Finite Model Theory meets Proof Complexity</strong>: Connections between bounded arithmetic, propositional proof systems, and logical definability are being explored — descriptive complexity may illuminate why certain tautologies are hard to prove.</li>
-<li><strong>Parameterized Descriptive Complexity</strong>: Characterizing FPT and W[1]-hardness via logical fragments with bounded quantifier depth or width.</li>
-</ul>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated.</div></div>
+
+<p>Active research concentrates on: (a) capturing P <em>without</em> an order predicate — the so-called <strong>order problem</strong>, related to the graph isomorphism question; (b) extending the framework to <strong>probabilistic</strong> and <strong>parameterized</strong> complexity classes; (c) connections to <strong>database query languages</strong> (Datalog ↔ LFP, SQL ↔ FO), where descriptive complexity directly informs query expressibility and optimization; and (d) links to <strong>proof complexity</strong>, where the logical depth of a formula correlates with the length of formal proofs.</p>
+
+<p>The open question of whether there is a logic for P (on unordered structures) remains one of the deepest problems in finite model theory.</p>
 
 <hr>
 
@@ -283,7 +278,7 @@ MathJax = {
 <li><a href="/daily_knowledge/topic/Fixed-Point Logics">Fixed-Point Logics</a></li>
 <li><a href="/daily_knowledge/topic/Fagin's Theorem">Fagin's Theorem</a></li>
 <li><a href="/daily_knowledge/topic/Circuit Complexity">Circuit Complexity</a></li>
-<li><a href="/daily_knowledge/topic/Ehrenfeucht-Fraïssé Games">Ehrenfeucht-Fraïssé Games</a></li>
+<li><a href="/daily_knowledge/topic/Datalog and Database Query Languages">Datalog and Database Query Languages</a></li>
 </ul>
 
 <hr>
@@ -291,27 +286,21 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The order problem reveals that logical characterizations of P are "fragile" — dependent on an encoding artifact. Does this undermine the machine-independence argument for descriptive complexity, or is it a feature that distinguishes <em>intrinsic</em> from <em>extrinsic</em> complexity?</li>
-</ol>
-
-<ol>
-<li>Fagin's Theorem gives a syntax for NP: an ESO sentence. Can this be leveraged constructively — e.g., to automatically reduce one NP problem to another, or to infer circuit lower bounds from logical inexpressibility results?</li>
-</ol>
-
-<ol>
-<li>If CPT (or rank logic) is eventually shown to capture P, what does that imply philosophically about the nature of polynomial-time computation — is it fundamentally about <em>symmetric, resource-bounded definability</em> over abstract structures?</li>
+<li>If P = NP were proven, what would the logical consequence be for the relationship between $\Sigma_1^1$ and FO + LFP — would those logical fragments collapse in some sense?</li>
+<li>The order problem asks for a logic capturing P on <em>unordered</em> structures. Why does the absence of a canonical ordering make logical characterization so much harder, and what would a solution imply for graph isomorphism?</li>
+<li>FO + LFP captures P, but real programs use while-loops, recursion, and mutable state beyond pure induction. Is LFP genuinely capturing <em>why</em> polynomial time is natural, or is it a syntactic coincidence?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Descriptive_complexity_theory" target="_blank" rel="noopener"&gt;Descriptive Complexity&lt;/a&gt; · Retrieved 2026-03-30</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Descriptive_complexity_theory" target="_blank" rel="noopener"&gt;Descriptive Complexity&lt;/a&gt; · Retrieved 2026-07-06</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.26666v1" target="_blank" rel="noopener">VLA-OPD: Bridging Offline SFT and Online RL for Vision-Language-Action Models via On-Policy Distillation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26665v1" target="_blank" rel="noopener">Detailed Geometry and Appearance from Opportunistic Motion</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.26664v1" target="_blank" rel="noopener">Learning to Commit: Generating Organic Pull Requests via Online Repository Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02517v1" target="_blank" rel="noopener">WorldDirector: Building Controllable World Simulators with Persistent Dynamic Memory</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02516v1" target="_blank" rel="noopener">Alignment Is All You Need For X-to-4D Generation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.02515v1" target="_blank" rel="noopener">PointDiT: Pixel-Space Diffusion for Monocular Geometry Estimation</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Descriptive+Complexity&labels=discussion&body=Topic:+[Descriptive+Complexity](https://dhein.github.io/daily_knowledge/topic/descriptive_complexity/)
