@@ -215,67 +215,74 @@ MathJax = {
 <article>
 <div class="topic-header">
 <h2>Game Semantics<span class="badge-reviewed">✓ reviewed</span></h2>
-<div class="topic-meta">Logic · Semantics &nbsp;·&nbsp; ~4 min read</div>
+<div class="topic-meta">Logic · Semantics &nbsp;·&nbsp; ~5 min read</div>
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Game semantics reinterprets logical truth not as static set-theoretic satisfaction, but as the <strong>existence of a winning strategy</strong> in an adversarial dialogue game. A formula $\varphi$ is "true" or "valid" iff a designated player — the <em>Proponent</em> (P) or <em>Verifier</em> — has a winning strategy against the <em>Opponent</em> (O) or <em>Falsifier</em>, regardless of O's moves.</p>
+<div class="callout info"><div class="callout-title">INFO</div><div><strong>Game semantics</strong> interprets logical formulas as two-player games between a <strong>Verifier</strong> (∃loïse, Prover) and a <strong>Falsifier</strong> (∀bélarD, Opponent). A formula is <em>true</em> (or <em>valid</em>) in a given model if and only if the Verifier possesses a <strong>winning strategy</strong> — a function from game histories to moves that guarantees a win regardless of the Opponent's play.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO</div><div><strong>Formal kernel.</strong> Given formula $\varphi$, the game $\mathcal{G}(\varphi)$ is defined inductively on the structure of $\varphi$: - $\varphi \land \psi$: O chooses which conjunct to play next. - $\varphi \lor \psi$: P chooses. - $\neg \varphi$: roles swap; play continues in $\mathcal{G}(\varphi)$. - $\exists x.\, \varphi(x)$: P provides a witness $t$; play continues in $\mathcal{G}(\varphi(t))$. - $\forall x.\, \varphi(x)$: O chooses the witness.  P wins an atomic position iff the atom is true in the underlying model.</div></div>
+<p>Two distinct but related traditions dominate:</p>
 
-<p>A <strong>winning strategy</strong> for P is a function from game histories to P-moves such that every play consistent with the strategy ends in a P-win. $\varphi$ is valid iff such a strategy exists. This immediately connects semantic truth to <em>constructive</em> content: a proof of $\exists x.\,\varphi(x)$ must exhibit the witness.</p>
-
-<p>Two major traditions diverge here:</p>
 <ul>
-<li><strong>Dialogical Logic</strong> (Lorenzen & Lorenz, 1950s–60s): rules are purely syntactic; no background model. Validity = P has a formal winning strategy.</li>
-<li><strong>Game-Theoretical Semantics / GTS</strong> (Hintikka, 1960s–): a model $\mathcal{M}$ is fixed; games are evaluation games over $\mathcal{M}$.</li>
+<li><strong>Dialogical Logic</strong> (Lorenzen & Lorenz, 1950s–60s): proof-theoretic in spirit; the game is between a <em>Proponent</em> defending a thesis and an <em>Opponent</em> attacking it. Validity is defined without reference to models — purely through the existence of a formal winning dialogue.</li>
+<li><strong>Game-Theoretical Semantics (GTS)</strong> (Hintikka, 1960s–): model-theoretic in spirit. For a formula $\varphi$ and model $\mathcal{M}$, the game $G(\mathcal{M}, \varphi)$ decomposes $\varphi$ structurally:</li>
 </ul>
+
+<p>$$
+G(\mathcal{M}, \varphi \lor \psi): \text{ Verifier chooses a disjunct.}
+\quad
+G(\mathcal{M}, \varphi \land \psi): \text{ Falsifier chooses a conjunct.}
+$$</p>
+<p>$$
+G(\mathcal{M}, \exists x\, \varphi): \text{ Verifier picks a witness } a \in |\mathcal{M}|.
+\quad
+G(\mathcal{M}, \forall x\, \varphi): \text{ Falsifier picks.}
+$$</p>
+
+<p>Terminal positions are atomic: Verifier wins iff the atom holds in $\mathcal{M}$. <strong>Determined</strong> games (where one player always has a winning strategy) recover classical semantics; restricting to <em>finite</em> or <em>constructive</em> strategies yields intuitionistic or linear logics.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Game semantics is more than a curiosity — it fills genuine gaps left by Tarskian model theory.</p>
+<p>Game semantics isn't merely a reformulation of Tarski-style truth — it reframes logic as <em>interaction</em>, which opens several crucial doors:</p>
 
 <ol>
-<li><strong>Intuitionistic and substructural logics.</strong> The Curry-Howard correspondence tells us proofs are programs, but <em>what are proofs of?</em> Game semantics gives a direct answer: a proof is a P-strategy. This is especially clean for <strong>linear logic</strong> (Girard), where structural rules (contraction, weakening) correspond precisely to game resources.</li>
+<li><strong>Full Abstraction for PCF</strong>: Abramsky, Jagadeesan, Malacaria (and independently Hyland & Ong) used game semantics in the 1990s to give the first <em>fully abstract</em> denotational model for PCF (a prototypical functional language). This solved a ~20-year open problem by capturing <em>observational equivalence</em> exactly — strategies model programs up to their interactive behavior, not just their input-output functions.</li>
 </ol>
 
 <ol>
-<li><strong>Full abstraction for programming languages.</strong> Abramsky, Jagadeesan, Malacaria, and Hyland & Ong (mid-1990s) used game semantics to solve the long-open full abstraction problem for PCF (a typed $\lambda$-calculus with recursion). A denotational model is <em>fully abstract</em> iff contextual equivalence ⟺ semantic equality; game models achieve this where Scott domains famously failed.</li>
+<li><strong>Linear Logic</strong>: The Curry-Howard correspondence for linear logic finds its most natural semantics here. The Opponent/Proponent duality maps cleanly onto the resource-sensitive connectives $\otimes, \parr, !$.</li>
 </ol>
 
 <ol>
-<li><strong>Concurrency and interaction.</strong> Concurrent computation is inherently dialogic. Game models naturally handle the interleaving of moves between components, making them a natural fit for process calculi and session types.</li>
+<li><strong>Concurrency &amp; Types</strong>: Game models handle concurrency naturally — interleaving of moves corresponds to thread scheduling. This yields compositional type systems for concurrent languages.</li>
 </ol>
 
-<div class="callout tip"><div class="callout-title">TIP</div><div>Game semantics makes the <strong>compositionality of interaction</strong> structurally explicit: composing two strategies (via "hiding" internal moves) corresponds directly to cut-elimination in proof theory and to linking components in a hardware or software system.</div></div>
+<ol>
+<li><strong>Complexity</strong>: Winning strategies in games with bounded resources correspond to complexity classes; e.g., alternating polynomial-time ≅ PSPACE.</li>
+</ol>
+
+<div class="callout tip"><div class="callout-title">TIP</div><div>The shift from static truth-tables to dynamic strategy profiles is philosophically profound: it makes <em>use</em> of a formula (its role in dialogue or computation) constitutive of its <em>meaning</em>. This resonates with Wittgenstein's meaning-as-use, but with full mathematical precision.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<ul>
-<li><strong>Strategies as morphisms.</strong> In the Abramsky–Hyland categorical framework, arenas (game types) are objects and strategies (P's behavior) are morphisms. Composition is defined by parallel play plus hiding — a precise categorical structure (compact closed, or *-autonomous categories for linear logic).</li>
-</ul>
+<p><strong>1. Strategies as morphisms.</strong></p>
+<p>In the categorical formulation (Hyland-Ong style), games are objects and <em>innocent strategies</em> (strategies whose moves depend only on the visible history, not the full play) are morphisms. This gives a <em>compact closed category</em> modeling higher-order computation.</p>
 
-<ul>
-<li><strong>Innocence and history-freeness.</strong> A strategy is <em>innocent</em> if P's move depends only on the current O-move and P's own prior moves, not O's full history. Innocence characterizes definability in higher-order functional languages.</li>
-</ul>
+<p><strong>2. Innocence and definability.</strong></p>
+<p>Not every strategy corresponds to a computable function. <em>Innocent</em> strategies — where the Verifier's next move depends only on the P-view (the Verifier's perspective of the history) — characterize exactly the <em>definable</em> higher-order functions in PCF. Without this restriction the model is too large.</p>
 
-<ul>
-<li><strong>Positionality vs. history-dependence.</strong> Classical logic admits <em>positional</em> (memoryless) winning strategies for certain games; intuitionistic logic typically requires history-sensitivity, reflecting the constructive content of proofs.</li>
-</ul>
+<p><strong>3. Imperfect information &amp; IF logic.</strong></p>
+<p>Hintikka's Independence-Friendly (IF) logic extends GTS to games of <em>imperfect information</em>, where the Verifier must sometimes move without knowing the Opponent's prior choices. This breaks the duality between $\exists/\forall$ and allows expression of game-theoretically intermediate notions of truth — the logic is not axiomatizable by any r.e. set.</p>
 
-<ul>
-<li><strong>Independence-Friendly (IF) logic.</strong> Hintikka extended GTS to IF logic, where $\forall / \exists$ quantifiers can be <em>informationally independent</em> — P cannot see all of O's prior choices. This captures imperfect information and yields a logic strictly beyond first-order expressibility.</li>
-</ul>
+<p><strong>4. Proof-search as game play.</strong></p>
+<p>In dialogical logic, a formula is intuitionistically provable iff the Proponent has a winning strategy under <em>intuitionistic dialogue rules</em> (Proponent may only use the last granted concession). This gives a <em>proof-search procedure</em>, not just a semantic criterion.</p>
 
-<ul>
-<li><strong>Complexity classes via games.</strong> Polynomial-time strategies in evaluation games characterize complexity classes: e.g., PTIME ↔ strategies computable in polynomial time. This gives a game-semantic account of descriptive complexity.</li>
-</ul>
-
-<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated — active research into game semantics for quantum computing, probabilistic languages, and higher-order model checking is moving quickly; specific claims about open problems may no longer hold.</div></div>
+<p><strong>5. Connection to mu-calculus.</strong></p>
+<p>Model-checking for the modal mu-calculus $L_\mu$ is equivalent to determining winners of <em>parity games</em>. Parity games are in NP ∩ co-NP, and whether they're in P was a longstanding open question — resolved in 2017 by Calude et al. with a quasi-polynomial algorithm.</p>
 
 <hr>
 
@@ -283,14 +290,14 @@ MathJax = {
 
 <div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active threads as of the mid-2020s include:</p>
+<p>Active research threads include:</p>
 
 <ul>
-<li><strong>Higher-order model checking</strong> using game semantics (Ong's HORS model-checking, decidability results).</li>
-<li><strong>Probabilistic game semantics</strong>: extending arenas and strategies to handle probabilistic branching, relevant to probabilistic programming languages.</li>
-<li><strong>Quantum game semantics</strong>: replacing deterministic strategies with quantum strategies (superposition of moves), connecting to categorical quantum mechanics.</li>
-<li><strong>Session types and deadlock freedom</strong>: game-theoretic proofs of type-safety properties in concurrent $\pi$-calculi.</li>
-<li><strong>Automated synthesis</strong>: game-solving algorithms applied directly to program synthesis and reactive system verification.</li>
+<li><strong>Quantum game semantics</strong>: extending the arena/strategy framework to quantum strategies and types for quantum programming languages.</li>
+<li><strong>Probabilistic and stochastic games</strong>: handling probability in denotational models, connecting to Markov decision processes and probabilistic programming.</li>
+<li><strong>Nominal game semantics</strong>: incorporating name generation and fresh-name binding, targeting languages like $\nu$-calculus and object calculi.</li>
+<li><strong>Efficient model-checking via parity games</strong>: following the Calude et al. quasi-polynomial breakthrough, finding practically efficient algorithms remains open.</li>
+<li><strong>Game-semantic foundations for differential privacy and security</strong>: interaction-based models for information-flow security are an emerging application.</li>
 </ul>
 
 <hr>
@@ -298,11 +305,11 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Model-Theoretic Semantics">Model-Theoretic Semantics</a></li>
-<li><a href="/daily_knowledge/topic/Linear Logic">Linear Logic</a></li>
-<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
 <li><a href="/daily_knowledge/topic/Denotational Semantics">Denotational Semantics</a></li>
-<li><a href="/daily_knowledge/topic/Independence-Friendly Logic">Independence-Friendly Logic</a></li>
+<li><a href="/daily_knowledge/topic/Linear Logic">Linear Logic</a></li>
+<li><a href="/daily_knowledge/topic/Modal Mu-Calculus">Modal Mu-Calculus</a></li>
+<li><a href="/daily_knowledge/topic/Curry-Howard Correspondence">Curry-Howard Correspondence</a></li>
+<li><a href="/daily_knowledge/topic/Intuitionistic Logic">Intuitionistic Logic</a></li>
 <li><a href="/daily_knowledge/topic/Full Abstraction Problem">Full Abstraction Problem</a></li>
 </ul>
 
@@ -311,27 +318,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Dialogical logic derives validity without a background model, while GTS fixes one — does this difference matter for foundations, or is it merely a presentation choice? Can one be faithfully embedded in the other?</li>
+<li>Innocent strategies in Hyland-Ong game semantics precisely characterize PCF-definable functions. What does it mean, philosophically and technically, for <em>definability</em> to be captured by an information-hiding constraint on strategies? Does this suggest something deep about the relationship between sequentiality and observability?</li>
 </ol>
 
 <ol>
-<li>Innocence restricts P-strategies to those that ignore O's history; what is the precise correspondence between innocence and <em>purely functional</em> (side-effect-free) computation, and how does it break down for stateful languages?</li>
+<li>IF logic (imperfect information) produces a non-axiomatizable logic that is strictly more expressive than first-order logic. How does this compare to the incompleteness phenomena in Gödel's theorems — is the non-axiomatizability here of the same character, or is it a fundamentally different kind of logical limitation?</li>
 </ol>
 
 <ol>
-<li>IF logic escapes the Löwenheim-Skolem theorem and collapses the $\Sigma^1_1 / \Pi^1_1$ boundary in expressiveness — does this make it a <em>better</em> logic for mathematics, or do the costs (loss of compactness, non-axiomatizability) outweigh the gains?</li>
+<li>The move from Tarski's static truth conditions to game-semantic winning strategies parallels the move in computation from denotational to operational models. Is game semantics best understood as a <em>bridge</em> between these paradigms, or does it constitute a genuinely third kind of semantics?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Game_semantics" target="_blank" rel="noopener"&gt;Game Semantics&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Game_semantics" target="_blank" rel="noopener"&gt;Game Semantics&lt;/a&gt; · Retrieved 2026-07-07</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.28766v1" target="_blank" rel="noopener">HandX: Scaling Bimanual Motion and Interaction Generation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.28765v1" target="_blank" rel="noopener">Adaptive Block-Scaled Data Types</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.28762v1" target="_blank" rel="noopener">On-the-fly Repulsion in the Contextual Space for Rich Diversity in Diffusion Transformers</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05396v1" target="_blank" rel="noopener">From Fixed to Free Cameras: Calibration-Free View-Robust Vision-Language-Action Model</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05394v1" target="_blank" rel="noopener">Weak-to-Strong Generalization via Direct On-Policy Distillation</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05386v1" target="_blank" rel="noopener">Logical Spectroscopy: Lifted-Product Codes with Addressable Bases</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Game+Semantics&labels=discussion&body=Topic:+[Game+Semantics](https://dhein.github.io/daily_knowledge/topic/game_semantics/)

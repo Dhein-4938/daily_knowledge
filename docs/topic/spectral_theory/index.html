@@ -219,70 +219,76 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Spectral theory</strong> generalizes the eigenvalue/eigenvector decomposition of finite-dimensional matrices to linear operators acting on infinite-dimensional spaces — chiefly Hilbert and Banach spaces. The <strong>spectrum</strong> of an operator $T$ on a Banach space $X$ is $$\sigma(T) = \{\lambda \in \mathbb{C} : (T - \lambda I) \text{ is not boundedly invertible}\}$$ Its complement $\rho(T) = \mathbb{C} \setminus \sigma(T)$ is the <strong>resolvent set</strong>, and the <strong>resolvent operator</strong> $R(\lambda, T) = (T - \lambda I)^{-1}$ is analytic on $\rho(T)$.</div></div>
+<p>Spectral theory generalizes the classical eigenvalue problem from finite-dimensional matrices to operators acting on infinite-dimensional spaces — chiefly Hilbert and Banach spaces. The central object is the <strong>spectrum</strong> of an operator $T$, defined as:</p>
 
-<p>Unlike the finite-dimensional case, the spectrum decomposes into three disjoint parts:</p>
-<ul>
-<li><strong>Point spectrum</strong> $\sigma_p(T)$: $\lambda$ is an eigenvalue (kernel of $T - \lambda I$ nontrivial)</li>
-<li><strong>Continuous spectrum</strong> $\sigma_c(T)$: $T - \lambda I$ injective with dense but non-closed range</li>
-<li><strong>Residual spectrum</strong> $\sigma_r(T)$: $T - \lambda I$ injective with range not dense</li>
-</ul>
+<p>$$\sigma(T) = \{\lambda \in \mathbb{C} : (T - \lambda I) \text{ is not boundedly invertible}\}$$</p>
 
-<p>For <strong>self-adjoint</strong> operators on Hilbert spaces, $\sigma(T) \subseteq \mathbb{R}$ and the residual spectrum vanishes entirely — the spectral theorem then provides a projection-valued measure $E$ such that:</p>
+<p>Its complement $\rho(T) = \mathbb{C} \setminus \sigma(T)$ is the <strong>resolvent set</strong>, on which the resolvent operator</p>
+
+<p>$$R(\lambda, T) = (T - \lambda I)^{-1}$$</p>
+
+<p>is well-defined and analytic. This analytic dependence on $\lambda$ is what ties spectral theory deeply to complex analysis.</p>
+
+<div class="callout info"><div class="callout-title">INFO</div><div>The spectrum decomposes into three disjoint parts: the <strong>point spectrum</strong> $\sigma_p(T)$ (eigenvalues), the <strong>continuous spectrum</strong> $\sigma_c(T)$ (no eigenvalue, but range not dense), and the <strong>residual spectrum</strong> $\sigma_r(T)$ (range not dense). For self-adjoint operators on Hilbert spaces, $\sigma_r(T) = \emptyset$.</div></div>
+
+<p>For self-adjoint operators $T = T^*$, the <strong>spectral theorem</strong> guarantees a projection-valued measure $E$ such that:</p>
+
 <p>$$T = \int_{\sigma(T)} \lambda \, dE(\lambda)$$</p>
+
+<p>This is the infinite-dimensional analogue of diagonalization.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Spectral theory is the mathematical backbone of quantum mechanics — observables are self-adjoint operators, and their spectra are the possible measurement outcomes. Beyond physics, it underpins:</p>
+<p>Spectral theory is the mathematical backbone of quantum mechanics — the spectrum of a self-adjoint Hamiltonian $H$ is exactly the set of measurable energy values. Beyond physics, it permeates:</p>
 
 <ul>
-<li><strong>PDE analysis</strong>: Understanding the Laplacian's spectrum controls heat diffusion, wave propagation, and stability of equilibria</li>
-<li><strong>Numerical linear algebra</strong>: Iterative solvers, preconditioning, and convergence rates are all spectral phenomena</li>
-<li><strong>Data science / ML</strong>: PCA, graph Laplacians, and kernel methods are finite-rank approximations to infinite-dimensional spectral problems</li>
-<li><strong>Dynamical systems</strong>: Koopman operator theory lifts nonlinear dynamics into a linear (spectral) framework on function spaces</li>
+<li><strong>PDEs</strong>: Sturm–Liouville theory, where solutions decompose via eigenfunction expansions (e.g., Fourier series as spectral decomposition of $-d^2/dx^2$)</li>
+<li><strong>Numerical analysis</strong>: Stability and convergence of iterative solvers depend on the spectral radius $\rho(T) = \sup_{\lambda \in \sigma(T)} |\lambda|$</li>
+<li><strong>Graph theory / data science</strong>: Graph Laplacian spectra encode connectivity, enabling spectral clustering</li>
+<li><strong>Dynamical systems</strong>: Koopman operator theory recasts nonlinear dynamics as linear spectral problems on function spaces</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Analytic functions are central, not peripheral</div><div>The resolvent $R(\lambda, T)$ is a Banach-space-valued analytic function on $\rho(T)$. Nearly all spectral theory can be recovered from complex analysis applied to this function — the spectrum is literally the set of singularities of the resolvent, making Cauchy's theorem, Laurent expansions, and contour integrals essential tools.</div></div>
+<div class="callout tip"><div class="callout-title">TIP</div><div>The connection to analytic function theory isn't merely formal. The resolvent $R(\lambda, T)$ is analytic on $\rho(T)$, and spectral projections are recovered via contour integrals — the <strong>Dunford–Riesz calculus</strong> — meaning you can define $f(T)$ for any function analytic on a neighborhood of $\sigma(T)$.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Spectral radius formula</strong>: For any bounded operator, $r(T) = \lim_{n\to\infty} \|T^n\|^{1/n} = \sup_{\lambda \in \sigma(T)} |\lambda|$. This links iteration behavior directly to spectral geometry.</li>
+<li><strong>Compact operators</strong>: On infinite-dimensional spaces, compact operators behave most like matrices. Their spectrum consists of $\{0\}$ plus at most countably many eigenvalues accumulating only at 0 (Riesz–Schauder theorem).</li>
 </ol>
 
 <ol>
-<li><strong>Compact operators</strong>: If $T$ is compact on an infinite-dimensional Hilbert space, then $0 \in \sigma(T)$ always, and any nonzero spectral point is an isolated eigenvalue of finite multiplicity — a structure much closer to finite dimensions.</li>
+<li><strong>Continuous vs. point spectrum</strong>: Unlike matrices, infinite-dimensional operators can have eigenvalue-free spectra. The free particle Hamiltonian $H = -\Delta$ on $L^2(\mathbb{R}^n)$ has purely continuous spectrum $[0, \infty)$ — no $L^2$ eigenfunctions exist, only distributional ones.</li>
 </ol>
 
 <ol>
-<li><strong>Functional calculus</strong>: For a normal operator $T$, one can define $f(T)$ for any bounded Borel function $f : \sigma(T) \to \mathbb{C}$, extending polynomial calculus in a spectrally consistent way. This is the rigorous foundation of expressions like $e^{itH}$ in quantum evolution.</li>
+<li><strong>Spectral gap</strong>: The gap $\delta = \inf\{|\lambda - \mu| : \lambda \in \sigma(T),\, \mu \in \sigma(T),\, \lambda \neq \mu\}$ controls mixing times in Markov chains and stability of ground states. A nonzero spectral gap is a prized property.</li>
 </ol>
 
 <ol>
-<li><strong>Unbounded operators</strong>: Physically relevant operators (position, momentum, Hamiltonians) are typically unbounded and only densely defined. Self-adjointness must be carefully distinguished from mere symmetry; self-adjoint extensions (von Neumann theory) govern whether a spectral theorem applies.</li>
+<li><strong>Non-self-adjoint operators</strong>: The spectrum becomes highly sensitive to perturbations — <strong>pseudospectral</strong> analysis ($\varepsilon$-pseudospectra) replaces sharp spectral analysis. This matters for non-normal matrices and hydrodynamic stability.</li>
 </ol>
 
 <ol>
-<li><strong>Pseudospectrum</strong>: For non-normal operators, $\sigma(T)$ can be wildly sensitive to perturbations. The $\epsilon$-pseudospectrum $\sigma_\epsilon(T) = \{\lambda : \|R(\lambda,T)\| > \epsilon^{-1}\}$ gives a more physically honest picture of spectral sensitivity.</li>
+<li><strong>$C^*$-algebra framework</strong>: Spectral theory lifts naturally to abstract $C^*$-algebras via the Gelfand transform: a commutative $C^*$-algebra is isometrically isomorphic to $C(\sigma(a))$ for a normal element $a$, revealing spectrum as a purely algebraic invariant.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active research frontiers include:</p>
+<p>Active research fronts include:</p>
 
 <ul>
-<li><strong>Spectral geometry on Riemannian manifolds</strong>: Understanding how the intrinsic geometry of a manifold encodes information in the eigenvalues of its Laplace–Beltrami operator (inverse problem: "can you hear the shape of a drum?"). Recent ML work (e.g., metric similarity analysis using Riemannian tools) repurposes these ideas to compare learned neural representations by their intrinsic spectral geometry — treating representation spaces as statistical manifolds.</li>
-<li><strong>Koopman spectral methods</strong>: Data-driven algorithms (DMD, EDMD) approximate infinite-dimensional Koopman spectra from trajectory data, connecting spectral theory to nonlinear dynamical systems and control.</li>
-<li><strong>Random matrix theory</strong>: Spectral statistics of large random matrices (GUE, Wigner semicircle) have deep connections to number theory, quantum chaos, and the universality phenomenon.</li>
-<li><strong>Non-self-adjoint and non-normal operators</strong>: Classical theory assumed self-adjointness. Modern PDE and control theory increasingly demands spectral tools for operators with no such symmetry, where pseudospectra and resolvent estimates are central.</li>
+<li><strong>Random matrix theory</strong>: The empirical spectral distribution of large random matrices (Wigner semicircle law, free probability) is central to statistical physics and high-dimensional statistics.</li>
+<li><strong>Spectral geometry</strong>: Inverse problems — "Can you hear the shape of a drum?" (Kac, 1966) — remain open in general; isospectral non-isometric manifolds exist.</li>
+<li><strong>AdS/CFT and operator algebras</strong>: Spectral properties of bulk operators in anti-de Sitter space connect to conformal field theory data via the operator-state correspondence, with recent work on Liénard–Wiechert fields in AdS illuminating how spectral/analytic structure controls boundary behavior at null infinity.</li>
+<li><strong>Koopman operator learning</strong>: Data-driven approximation of infinite-dimensional Koopman spectra (via DMD, EDMD) is an active intersection of spectral theory and machine learning.</li>
 </ul>
 
 <hr>
@@ -290,12 +296,12 @@ MathJax = {
 <h2>See Also</h2>
 
 <ul>
-<li><a href="/daily_knowledge/topic/Functional Analysis">Functional Analysis</a></li>
-<li><a href="/daily_knowledge/topic/Operator Theory">Operator Theory</a></li>
+<li><a href="/daily_knowledge/topic/Operator Algebras">Operator Algebras</a></li>
 <li><a href="/daily_knowledge/topic/Hilbert Space">Hilbert Space</a></li>
-<li><a href="/daily_knowledge/topic/Quantum Mechanics — Mathematical Formalism">Quantum Mechanics — Mathematical Formalism</a></li>
+<li><a href="/daily_knowledge/topic/Functional Calculus">Functional Calculus</a></li>
+<li><a href="/daily_knowledge/topic/Quantum Mechanics — Mathematical Foundations">Quantum Mechanics — Mathematical Foundations</a></li>
+<li><a href="/daily_knowledge/topic/Random Matrix Theory">Random Matrix Theory</a></li>
 <li><a href="/daily_knowledge/topic/Koopman Operator Theory">Koopman Operator Theory</a></li>
-<li><a href="/daily_knowledge/topic/Riemannian Geometry">Riemannian Geometry</a></li>
 </ul>
 
 <hr>
@@ -303,27 +309,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>Self-adjoint operators have purely real spectra, but many physically relevant operators (e.g., in open quantum systems or fluid stability) are decidedly non-self-adjoint. How does one recover useful spectral information when the classical spectral theorem breaks down?</li>
+<li>Self-adjoint operators have real spectrum — but what conditions on a non-self-adjoint operator guarantee that its spectrum still lies in the right half-plane? How does this relate to dissipativity and semigroup generation?</li>
 </ol>
 
 <ol>
-<li>The resolvent operator $R(\lambda, T)$ is analytic on $\rho(T)$ — in what sense does complex analytic continuation give you <em>more</em> information about an operator than purely real-variable methods can? Are there concrete examples where this insight changes what's provable?</li>
+<li>The spectral theorem provides a "diagonal form" for normal operators via projection-valued measures. What is the precise obstruction to extending this to general bounded operators, and how does the Jordan normal form hint at the structure of the failure?</li>
 </ol>
 
 <ol>
-<li>Koopman theory linearizes nonlinear dynamics by lifting to an infinite-dimensional function space — but practical computation requires truncating to finite rank. What spectral properties of the infinite-dimensional operator are reliably preserved under such truncation, and which are catastrophically lost?</li>
+<li>In quantum chaos, spectra of classically chaotic Hamiltonians exhibit level repulsion matching GUE/GOE random matrix statistics. What does it mean, philosophically and mathematically, for a deterministic operator to have a "random" spectrum?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Spectral_theory" target="_blank" rel="noopener"&gt;Spectral Theory&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Spectral_theory" target="_blank" rel="noopener"&gt;Spectral Theory&lt;/a&gt; · Retrieved 2026-07-07</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.28764v1" target="_blank" rel="noopener">Geometry-aware similarity metrics for neural representations on Riemannian and statistical manifolds</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.28761v1" target="_blank" rel="noopener">Cosmic Shear in Effective Field Theory at Two-Loop Order: Revisiting $S_8$ in Dark Energy Survey Data</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.28758v1" target="_blank" rel="noopener">$\mathcal{L}_1$-Certified Distributionally Robust Planning for Safety-Constrained Adaptive Control</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05395v1" target="_blank" rel="noopener">Liénard--Wiechert fields in AdS and flat-space antipodal matching from geodesic-centered Coulombic data</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05392v1" target="_blank" rel="noopener">SynCity 3000: Bootstrapping Scene-Scale 3D Diffusion</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05390v1" target="_blank" rel="noopener">Deform360: A Massive Multi-view Visuotactile Dataset for Deformable World Models</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Spectral+Theory&labels=discussion&body=Topic:+[Spectral+Theory](https://dhein.github.io/daily_knowledge/topic/spectral_theory/)

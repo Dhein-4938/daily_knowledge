@@ -6,6 +6,13 @@
   <description>Automated daily notes: Science, Tech, Math, Logic</description>
   <language>en-us</language>
   <item>
+    <title>July 7, 2026</title>
+    <link>https://dhein.github.io/daily_knowledge/digests/2026-07-07/</link>
+    <guid>https://dhein.github.io/daily_knowledge/digests/2026-07-07/</guid>
+    <pubDate>Tue, 07 Jul 2026 07:00:00 +0000</pubDate>
+    <description>~17 min · Game Semantics, Riemannian Geometry, Spectral Theory, Materials Science</description>
+  </item>
+  <item>
     <title>July 6, 2026</title>
     <link>https://dhein.github.io/daily_knowledge/digests/2026-07-06/</link>
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-07-06/</guid>
@@ -207,13 +214,6 @@
     <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-25/</guid>
     <pubDate>Sat, 25 Apr 2026 07:00:00 +0000</pubDate>
     <description>Daily Knowledge Digest for April 25, 2026</description>
-  </item>
-  <item>
-    <title>April 24, 2026</title>
-    <link>https://dhein.github.io/daily_knowledge/digests/2026-04-24/</link>
-    <guid>https://dhein.github.io/daily_knowledge/digests/2026-04-24/</guid>
-    <pubDate>Fri, 24 Apr 2026 07:00:00 +0000</pubDate>
-    <description>Daily Knowledge Digest for April 24, 2026</description>
   </item>
 </channel>
 </rss>

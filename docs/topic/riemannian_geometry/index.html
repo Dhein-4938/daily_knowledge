@@ -219,78 +219,71 @@ MathJax = {
 </div>
 <div class="body"><h2>Core Concept</h2>
 
-<p>Riemannian geometry is the study of smooth manifolds equipped with a <strong>Riemannian metric</strong> — a smoothly varying inner product on each tangent space.</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div>A <strong>Riemannian manifold</strong> is a smooth manifold $M$ equipped with a <strong>Riemannian metric</strong> $g$: a family of inner products $g_p : T_pM \times T_pM \to \mathbb{R}$ on each tangent space, varying smoothly in $p$. This single structure encodes lengths, angles, areas, and volumes intrinsically — without reference to an ambient space.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Formal Definition</div><div>A <strong>Riemannian manifold</strong> is a pair $(M, g)$ where $M$ is a smooth manifold and $g$ is a smooth section of the symmetric tensor bundle $T^*M \otimes T^*M$ such that $g_p : T_pM \times T_pM \to \mathbb{R}$ is a positive-definite inner product for every $p \in M$.</div></div>
+<p>The length of a smooth curve $\gamma : [a,b] \to M$ is:</p>
 
-<p>The metric $g$ induces local structure: the length of a curve $\gamma : [a,b] \to M$ is</p>
+<p>$$L(\gamma) = \int_a^b \sqrt{g_{\gamma(t)}\!\left(\dot\gamma(t),\, \dot\gamma(t)\right)}\, dt$$</p>
 
-<p>$$L(\gamma) = \int_a^b \sqrt{g_{\gamma(t)}\!\left(\dot\gamma(t),\, \dot\gamma(t)\right)}\; dt$$</p>
+<p>Geodesics — locally length-minimizing curves — satisfy the geodesic equation derived from the <strong>Levi-Civita connection</strong> $\nabla$ (the unique torsion-free metric-compatible connection):</p>
 
-<p>and geodesics — length-minimizing curves — satisfy the geodesic equation</p>
+<p>$$\nabla_{\dot\gamma} \dot\gamma = 0 \quad \Longleftrightarrow \quad \ddot\gamma^k + \Gamma^k_{ij}\,\dot\gamma^i\dot\gamma^j = 0$$</p>
 
-<p>$$\ddot\gamma^k + \Gamma^k_{ij}\,\dot\gamma^i\,\dot\gamma^j = 0$$</p>
-
-<p>where $\Gamma^k_{ij}$ are the <strong>Christoffel symbols</strong> of the Levi-Civita connection, uniquely determined by compatibility with $g$ and torsion-freeness.</p>
-
-<p>Curvature is encoded in the <strong>Riemann curvature tensor</strong> $R^l{}_{kij}$, which measures the failure of parallel transport to commute. Its contractions give the Ricci tensor $R_{ij}$ and scalar curvature $R$.</p>
+<p>where $\Gamma^k_{ij}$ are the Christoffel symbols of $g$. Curvature is encoded in the <strong>Riemann tensor</strong> $R(X,Y)Z = \nabla_X\nabla_Y Z - \nabla_Y\nabla_X Z - \nabla_{[X,Y]}Z$, capturing how parallel transport around infinitesimal loops fails to be trivial.</p>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Riemannian geometry is the mathematical backbone of <strong>general relativity</strong>: spacetime is a pseudo-Riemannian manifold (signature $(-,+,+,+)$), and Einstein's field equations</p>
-
-<p>$$G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$$</p>
-
-<p>are purely statements about its curvature. Beyond physics, the framework drives:</p>
+<p>Riemannian geometry is the mathematical backbone of <strong>Einstein's general relativity</strong>, where spacetime is a pseudo-Riemannian manifold (signature $(-,+,+,+)$) and gravity is curvature. Beyond physics, it is foundational to:</p>
 
 <ul>
-<li><strong>Global analysis</strong> (index theorems, spectral geometry on manifolds)</li>
-<li><strong>Geometric group theory</strong> (symmetric spaces, lattices)</li>
-<li><strong>Machine learning</strong> (optimisation on manifolds, information geometry)</li>
-<li><strong>Topology</strong> (soul theorem, Sphere theorem, Perelman's proof of the Poincaré conjecture via Ricci flow)</li>
+<li><strong>Machine learning / data science</strong>: Optimization on matrix manifolds (e.g., SPD matrices, Grassmannians, Lie groups) uses Riemannian gradient descent.</li>
+<li><strong>Geometric analysis</strong>: Ricci flow (Perelman's proof of the Poincaré conjecture) evolves the metric by $\partial_t g_{ij} = -2R_{ij}$.</li>
+<li><strong>Representation theory</strong>: Symmetric spaces $G/K$ carry canonical invariant metrics, linking geometry to Lie group structure.</li>
+<li><strong>Topology</strong>: Comparison theorems (Bishop–Gromov, Bonnet–Myers) use curvature bounds to constrain global topology.</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Ricci Flow as a Canonical Smoothing</div><div>The Ricci flow $\partial_t g_{ij} = -2R_{ij}$ can be thought of as a nonlinear heat equation on the space of metrics — it diffuses curvature, driving a manifold toward constant curvature. This is why it could resolve the Geometrisation Conjecture.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Intrinsic vs. Extrinsic</div><div>Gauss's <em>Theorema Egregium</em> was the first hint: the Gaussian curvature of a surface is <strong>intrinsic</strong> — it depends only on the metric, not how the surface sits in $\mathbb{R}^3$. Riemann's 1854 <em>Habilitationsvortrag</em> radicalized this: geometry is entirely determined by $g$, no embedding required.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
 <ol>
-<li><strong>Levi-Civita uniqueness.</strong> Among all affine connections on $(M,g)$, exactly one is torsion-free and metric-compatible. This uniqueness is what makes the Riemannian framework so rigid and powerful.</li>
+<li><strong>Sectional, Ricci, and Scalar Curvature</strong>: The Riemann tensor $R_{ijkl}$ has 20 independent components in 4D. Contracting gives the <strong>Ricci tensor</strong> $R_{ij} = R^k{}_{ikj}$ and then <strong>scalar curvature</strong> $R = g^{ij}R_{ij}$. The sectional curvature $K(\sigma)$ for a 2-plane $\sigma \subset T_pM$ is a single number measuring how geodesics through $p$ in that plane diverge relative to flat space.</li>
 </ol>
 
 <ol>
-<li><strong>Sectional curvature controls topology.</strong> Comparison theorems (Bonnet–Myers, Cartan–Hadamard, Toponogov) relate the sign of sectional curvature $K$ to global topology: $K > 0$ forces finite $\pi_1$; $K \leq 0$ makes the universal cover diffeomorphic to $\mathbb{R}^n$.</li>
+<li><strong>Comparison Geometry</strong>: If $\text{Ric} \geq (n-1)\kappa\, g$, the manifold behaves no worse than the space form of constant curvature $\kappa$. This lets you bound diameter, volume, and fundamental group purely from a curvature inequality — a powerful "soft" technique.</li>
 </ol>
 
 <ol>
-<li><strong>Geodesic completeness vs. metric completeness.</strong> By the Hopf–Rinow theorem, for connected Riemannian manifolds these are equivalent, and further equivalent to any two points being joinable by a minimising geodesic.</li>
+<li><strong>The Exponential Map</strong>: $\exp_p : T_pM \to M$ sends a tangent vector $v$ to the endpoint of the unit-speed geodesic from $p$ in direction $v/|v|$ at time $|v|$. It is a local diffeomorphism near $0$; its breakdown radius is the <strong>injectivity radius</strong> $\text{inj}(p)$.</li>
 </ol>
 
 <ol>
-<li><strong>Exponential map and normal coordinates.</strong> The map $\exp_p : T_pM \to M$ is a local diffeomorphism near the origin; in normal coordinates, $g_{ij}(p) = \delta_{ij}$ and $\Gamma^k_{ij}(p) = 0$, isolating curvature effects to second order.</li>
+<li><strong>Hodge Theory</strong>: On a compact Riemannian manifold, each de Rham cohomology class has a unique <strong>harmonic representative</strong> — a differential form $\omega$ with $\Delta \omega = 0$ (where $\Delta = d\delta + \delta d$ is the Hodge Laplacian). This bridges analysis and topology.</li>
 </ol>
 
 <ol>
-<li><strong>Intrinsic vs. extrinsic.</strong> Gauss's <em>Theorema Egregium</em> showed that Gaussian curvature of a surface is intrinsic — determined by $g$ alone, not by how the surface sits in $\mathbb{R}^3$. Riemannian geometry fully abstracts away the ambient space.</li>
+<li><strong>Curvature–Topology Theorems</strong>: Positive sectional curvature $\Rightarrow$ finite fundamental group (Bonnet–Myers). Non-positive sectional curvature $\Rightarrow$ contractible universal cover (Cartan–Hadamard). These are among the deepest results tying local metric data to global structure.</li>
 </ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active research frontiers include:</p>
+<p>Active research fronts include:</p>
 
 <ul>
-<li><strong>Manifold optimisation</strong> — algorithms (gradient descent, interior-point methods) that respect group structure (SO$(n)$, SL$(n)$, Stiefel manifolds) without projecting back from an ambient Euclidean space. A 2026 paper (Santos et al.) proposes a Matrix Lie Group Interior-Point Method exploiting Lie algebra parametrisation to outperform classical Riemannian IPM approaches on SO$(n)$ and SL$(n)$.</li>
-<li><strong>Neural representation geometry</strong> — <em>metric similarity analysis</em> (MSA, Cayco Gajic & Pellegrino 2026) uses Riemannian tools to compare the <strong>intrinsic</strong> geometry of neural network representations under the manifold hypothesis, going beyond standard CKA or RSA which only capture extrinsic structure.</li>
-<li><strong>Ricci flow in higher dimensions</strong> and its role in geometric topology remains open beyond dimension 3.</li>
-<li><strong>Spectral geometry</strong>: Can you hear the shape of a drum? (Kac's question) — answered "no" in general, but refined inverse spectral problems continue.</li>
+<li><strong>Ricci flow with surgery</strong> and its applications to 3-manifold geometrization (post-Perelman, still being refined for 4-manifolds).</li>
+<li><strong>Optimal transport geometry</strong>: The curvature-dimension condition $\mathrm{CD}(K,N)$ of Lott–Sturm–Villani extends Riemannian ideas to metric measure spaces, enabling "Riemannian geometry without smoothness."</li>
+<li><strong>Sub-Riemannian geometry</strong>: When the metric is defined only on a subbundle of $TM$, qualitatively different phenomena emerge (hypoelliptic operators, Carnot groups).</li>
+<li><strong>Applications in physics</strong>: Recent arXiv work (e.g., Duary 2026) exploits geodesic-adapted coordinate systems in global AdS spacetime — a pseudo-Riemannian setting — to derive Liénard–Wiechert fields and antipodal matching conditions, illustrating how intrinsic Riemannian toolkit transfers directly to curved spacetime electrodynamics.</li>
+<li><strong>Bakry–Émery curvature</strong>: The $\Gamma_2$ calculus (curvature as $\gamma_\star$ in Markov process mixing, Pedrotti–Salez 2026) demonstrates Riemannian curvature notions propagating into probability and Markov chain theory.</li>
 </ul>
 
 <hr>
@@ -299,11 +292,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/Differential Geometry">Differential Geometry</a></li>
-<li><a href="/daily_knowledge/topic/Lie Groups and Lie Algebras">Lie Groups and Lie Algebras</a></li>
-<li><a href="/daily_knowledge/topic/General Relativity">General Relativity</a></li>
-<li><a href="/daily_knowledge/topic/Information Geometry">Information Geometry</a></li>
-<li><a href="/daily_knowledge/topic/Ricci Flow">Ricci Flow</a></li>
-<li><a href="/daily_knowledge/topic/Manifold Hypothesis in Machine Learning">Manifold Hypothesis in Machine Learning</a></li>
+<li><a href="/daily_knowledge/topic/General Relativity and Spacetime Curvature">General Relativity and Spacetime Curvature</a></li>
+<li><a href="/daily_knowledge/topic/Ricci Flow and Geometrization">Ricci Flow and Geometrization</a></li>
+<li><a href="/daily_knowledge/topic/Lie Groups and Symmetric Spaces">Lie Groups and Symmetric Spaces</a></li>
+<li><a href="/daily_knowledge/topic/Hodge Theory">Hodge Theory</a></li>
+<li><a href="/daily_knowledge/topic/Optimal Transport and Metric Geometry">Optimal Transport and Metric Geometry</a></li>
 </ul>
 
 <hr>
@@ -311,21 +304,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The Levi-Civita connection is "forced" by the metric — but in gauge theory, connections are independent dynamical fields. What breaks this rigidity, and what does it buy physically?</li>
-<li>MSA compares intrinsic geometries of neural representations. Could the Gromov–Hausdorff distance (a metric on the space of metric spaces) serve as a theoretically cleaner foundation than the Fisher–Rao metric used there?</li>
-<li>Ricci flow develops singularities in finite time that Perelman resolves by "surgery." Is there a canonical, singularity-free flow on the space of Riemannian metrics, and what would it converge to?</li>
+<li><strong>Curvature as obstruction</strong>: Positive curvature forces topological constraints (finite $\pi_1$, etc.), while negative curvature forces others (hyperbolicity). Is there a unified principle, or are these genuinely separate phenomena?</li>
+</ol>
+
+<ol>
+<li><strong>Discretization</strong>: Forman curvature and Ollivier–Ricci curvature define "curvature" on graphs and networks. How faithfully do these capture the Riemannian intuition, and where do the analogies break down?</li>
+</ol>
+
+<ol>
+<li><strong>Physics feedback</strong>: General relativity demanded pseudo-Riemannian geometry; string theory demanded Calabi–Yau manifolds. What geometric structures might future physical theories force mathematicians to develop?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Riemannian_geometry" target="_blank" rel="noopener"&gt;Riemannian Geometry&lt;/a&gt; · Retrieved 2026-03-31</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Riemannian_geometry" target="_blank" rel="noopener"&gt;Riemannian Geometry&lt;/a&gt; · Retrieved 2026-07-07</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.28764v1" target="_blank" rel="noopener">Geometry-aware similarity metrics for neural representations on Riemannian and statistical manifolds</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.28752v1" target="_blank" rel="noopener">Topological Optical Chirality Dichroism</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.28747v1" target="_blank" rel="noopener">Constrained Optimization on Matrix Lie Groups via Interior-Point Method</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05395v1" target="_blank" rel="noopener">Liénard--Wiechert fields in AdS and flat-space antipodal matching from geodesic-centered Coulombic data</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05360v1" target="_blank" rel="noopener">Noncommutative Cartier Formulae</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.05345v1" target="_blank" rel="noopener">The local product condition implies cutoff</a> (2026)</li>
 </ul></div>
 </article>
 <div style="margin-top:2rem;padding:1rem;background:#111828;border:1px solid #2e4a6e;border-radius:6px"><p style="color:#7a8db0;font-size:0.9rem;margin-bottom:0.6rem">Have thoughts on this topic?</p><a href="https://github.com/dhein/knowledge/issues/new?title=Discussion:+Riemannian+Geometry&labels=discussion&body=Topic:+[Riemannian+Geometry](https://dhein.github.io/daily_knowledge/topic/riemannian_geometry/)
