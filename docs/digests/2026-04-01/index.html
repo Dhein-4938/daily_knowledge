@@ -214,61 +214,76 @@ MathJax = {
 <nav class="topic-nav"><a href="#persistent_homology">Persistent Homology</a></nav>
 <article id="persistent_homology"><div class="topic-header"><h2>Persistent Homology<span class="badge-reviewed">✓ reviewed</span></h2><div class="topic-meta">Math · Topology &nbsp;·&nbsp; ~4 min read</div></div><div class="body"><h2>Core Concept</h2>
 
-<p>Persistent homology is the central tool of <a href="/daily_knowledge/topic/Topological Data Analysis">Topological Data Analysis</a> (TDA): it tracks how topological features — connected components, loops, voids, and higher-dimensional holes — appear and disappear as you sweep a scale parameter across a filtered simplicial complex.</p>
+<div class="callout info"><div class="callout-title">INFO: Definition</div><div><strong>Persistent homology</strong> tracks how topological features (connected components, loops, voids) appear and disappear as a scale parameter $\epsilon$ grows across a filtration of simplicial complexes built from data.</div></div>
 
-<div class="callout info"><div class="callout-title">INFO: Formal Setup</div><div>Given a point cloud $X \subset \mathbb{R}^n$, construct a <strong>filtration</strong> — a nested sequence of simplicial complexes: $$\emptyset = K_0 \subseteq K_1 \subseteq K_2 \subseteq \cdots \subseteq K_m$$ parameterized by a radius $\epsilon$. Applying the $k$-th homology functor $H_k(-)$ over a field $\mathbb{F}$ turns inclusions into linear maps, yielding a <strong>persistence module</strong>: $$H_k(K_0) \to H_k(K_1) \to \cdots \to H_k(K_m)$$ By the <strong>structure theorem</strong> (Zomorodian–Carlsson 2005), this decomposes uniquely into interval summands $[b_i, d_i)$, each encoding a feature that <em>is born</em> at scale $b_i$ and <em>dies</em> at $d_i$.</div></div>
+<p>Given a point cloud $X \subset \mathbb{R}^n$, one constructs a nested sequence of simplicial complexes:</p>
 
-<p>The collection of intervals is the <strong>persistence diagram</strong> (or barcode). Long bars correspond to robust topological signal; short bars are likely noise.</p>
+<p>$$\emptyset = K_0 \subseteq K_1 \subseteq K_2 \subseteq \cdots \subseteq K_m$$</p>
+
+<p>Each inclusion $K_i \hookrightarrow K_j$ induces a map on homology groups $H_k(K_i) \to H_k(K_j)$. The <strong>persistent homology groups</strong> $H_k^{i,j}$ are the images of these maps — they capture which $k$-dimensional classes are "born" at scale $i$ and "die" at scale $j$. The collection of all birth-death pairs $(b, d)$ across all $k$ is encoded in the <strong>persistence diagram</strong> $\text{Dgm}_k$, a multiset of points in $\mathbb{R}^2$.</p>
+
+<p>The <strong>persistence</strong> of a feature is simply $d - b$. Features near the diagonal ($d \approx b$) are topological noise; features far from it are structurally significant.</p>
+
+<p>Two canonical filtrations:</p>
+<ul>
+<li><strong>Čech filtration</strong>: build the nerve of $\epsilon$-balls around each point. Exact but computationally expensive. Collapses to a Vietoris–Rips complex by the nerve lemma.</li>
+<li><strong>Vietoris–Rips filtration</strong>: insert edge $(u, v)$ when $d(u, v) \leq \epsilon$; higher simplices fill in whenever all pairwise distances are within $\epsilon$. Computationally tractable; a 2-approximation to the Čech complex.</li>
+</ul>
 
 <hr>
 
 <h2>Why It Matters</h2>
 
-<p>Persistent homology bridges pure algebraic topology and practical data analysis. Its power lies in being <strong>metric-agnostic at the level of features</strong>: you don't need to choose a single scale, and the output summarizes multi-scale topology in a single diagram.</p>
+<p>Persistent homology is the central tool of <strong>topological data analysis (TDA)</strong>: it extracts shape information that is invisible to statistical or metric methods. Its stability theorem — that the bottleneck distance between persistence diagrams is bounded by the Hausdorff distance between the underlying spaces — gives it rigorous robustness guarantees absent from most geometric descriptors.</p>
 
-<p><strong>Applications span many domains:</strong></p>
+<p><strong>Application domains:</strong></p>
 <ul>
-<li><strong>Computational biology</strong> — protein folding landscapes, cancer genomics via mapper graphs</li>
-<li><strong>Materials science</strong> — characterizing amorphous solids and porous media</li>
-<li><strong>Neuroscience</strong> — neural firing patterns modeled as simplicial complexes</li>
-<li><strong>Sensor networks</strong> — coverage verification without coordinates</li>
-<li><strong>Machine learning</strong> — topological regularizers, data augmentation, manifold detection</li>
+<li><strong>Neuroscience</strong>: detecting loop structure in neural activity manifolds</li>
+<li><strong>Materials science</strong>: characterizing porous media, amorphous solids</li>
+<li><strong>Genomics/single-cell RNA</strong>: topology of differentiation trajectories</li>
+<li><strong>Cosmology</strong>: probing the large-scale structure (cosmic web filaments and voids) of the universe — a rare case where the "ground truth" topology is theoretically motivated</li>
+<li><strong>Machine learning</strong>: persistence diagrams as features fed into kernel methods or, via differentiable persistence, directly into gradient-based pipelines</li>
 </ul>
 
-<div class="callout tip"><div class="callout-title">TIP: Stability is the killer feature</div><div>The <strong>bottleneck stability theorem</strong> guarantees: $$d_B(\mathrm{dgm}(f), \mathrm{dgm}(g)) \leq \|f - g\|_\infty$$ where $d_B$ is the bottleneck distance between diagrams. This means small perturbations in input (noise, sampling) cause small perturbations in the persistence diagram — a non-trivial and deeply useful result absent from most topological constructions.</div></div>
+<div class="callout tip"><div class="callout-title">TIP: Connection to sheaf theory</div><div>Persistent homology generalizes to <strong>sheaf-theoretic</strong> settings, where the data is not a scalar filtration but a sheaf over a poset. This unifies multi-parameter persistence and opens connections to derived categories and intersection homology.</div></div>
 
 <hr>
 
 <h2>Key Details</h2>
 
-<p><strong>1. Filtration constructions</strong></p>
-<p>Two workhorses: the <strong>Čech filtration</strong> (balls of radius $\epsilon$ around each point, nerve taken as the complex — theoretically clean via the Nerve Lemma, but computationally expensive) and the <strong>Vietoris–Rips filtration</strong> (connect points within distance $2\epsilon$ — cheaper, but approximates Čech only up to a factor of $\sqrt{2}$).</p>
+<ol>
+<li><strong>Structure theorem</strong>: Over a field $\mathbb{F}$, the persistence module $\{H_k(K_\epsilon)\}_\epsilon$ decomposes uniquely as a direct sum of interval modules $\mathbb{F}[b, d)$. This gives a complete discrete invariant — the barcode — in the 1-parameter case.</li>
+</ol>
 
-<p><strong>2. The persistence algorithm</strong></p>
-<p>Computed via reduction of the boundary matrix $\partial$ to a column-echelon form (elder rule). Runtime is $O(n^3)$ in the worst case, but near-linear in practice for sparse filtrations. Software libraries: <strong>Ripser</strong> (Bauer 2021, near-optimal), <strong>Gudhi</strong>, <strong>Dionysus 2</strong>.</p>
+<ol>
+<li><strong>Multi-parameter persistence lacks a complete discrete invariant.</strong> When two filtration parameters are used simultaneously (e.g., scale <em>and</em> density), the algebraic structure is a module over $\mathbb{F}[x, y]$, and such modules need not decompose cleanly. Finding tractable invariants here is an active open problem.</li>
+</ol>
 
-<p><strong>3. Persistence diagrams as metric spaces</strong></p>
-<p>Diagrams are compared via the <strong>bottleneck distance</strong> $d_B$ (worst-case matching to the diagonal) or the <strong>Wasserstein-$p$ distance</strong> $W_p$ (optimal transport cost). This equips the space of diagrams with well-defined geometry, though it is <em>not</em> a Hilbert space, complicating statistical inference.</p>
+<ol>
+<li><strong>Computational complexity</strong>: Computing persistent homology reduces to matrix reduction over $\mathbb{F}$. The standard algorithm runs in $O(n^3)$ but near-linear algorithms exist for specific complexes. The Ripser software achieves remarkable practical speed via apparent-pair collapse and cohomology.</li>
+</ol>
 
-<p><strong>4. Vectorization for ML pipelines</strong></p>
-<p>Raw diagrams don't live in $\mathbb{R}^n$, so integration with standard ML requires vectorization: <strong>persistence images</strong> (Adams et al.), <strong>persistence landscapes</strong> (Bubenik, provably stable in $L^p$), or <strong>kernel methods</strong> (sliced Wasserstein, persistence Fisher kernel).</p>
+<ol>
+<li><strong>Stability is metric-sensitive.</strong> The bottleneck stability theorem holds for the <em>sublevel set</em> filtration under $L^\infty$ perturbation. Extending stability guarantees to stochastic settings requires careful handling of the empirical measure convergence rate.</li>
+</ol>
 
-<p><strong>5. Relative and extended persistence</strong></p>
-<p>Sublevel-set persistence on a real-valued function $f: \mathcal{M} \to \mathbb{R}$ is a special case where barcodes read directly as Morse-theoretic information: bars correspond to pairs of critical points, connecting TDA to <a href="/daily_knowledge/topic/Morse Theory">Morse Theory</a> and <a href="/daily_knowledge/topic/Reeb Graphs">Reeb Graphs</a>.</p>
+<ol>
+<li><strong>Persistent homology is <em>not</em> a homotopy invariant</strong> of the underlying space alone — it depends on the choice of filtration. Different filtrations (Čech vs. Rips vs. alpha complex) yield different barcodes, though with known interleaving bounds.</li>
+</ol>
 
 <hr>
 
 <h2>Current State</h2>
 
-<div class="callout warning"><div class="callout-title">WARNING: Note: this information may be dated</div><div></div></div>
+<div class="callout warning"><div class="callout-title">WARNING</div><div>Note: this information may be dated</div></div>
 
-<p>Active research threads (as of early 2026):</p>
-
+<p>Active research threads as of mid-2026:</p>
 <ul>
-<li><strong>Multiparameter persistence</strong> — extending from a single filtration parameter to two or more (e.g., scale + density). The structure theorem fails; the algebraic landscape is richer and harder. Approximation via <strong>fibered barcodes</strong> and <strong>signed barcodes</strong> is ongoing.</li>
-<li><strong>Statistical foundations</strong> — bootstrap confidence sets for barcodes, hypothesis testing via permutation on Wasserstein distances.</li>
-<li><strong>Deep learning integration</strong> — differentiable topology layers (e.g., <strong>Topological Loss</strong> via cubical persistence) enabling end-to-end gradient flow through topological features.</li>
-<li><strong>Sheaf-theoretic generalizations</strong> — replacing homology with sheaf cohomology to encode richer local data on the filtration, connecting to <a href="/daily_knowledge/topic/Cellular Sheaves">Cellular Sheaves</a> and network science.</li>
+<li><strong>Differentiable persistence</strong>: libraries like <code>Giotto-TDA</code> and <code>TopologyLayer</code> allow backpropagating through persistence diagrams, enabling topology-regularized neural networks.</li>
+<li><strong>Probabilistic TDA</strong>: convergence rates of empirical persistence diagrams under measure-theoretic frameworks; connections to optimal transport.</li>
+<li><strong>Multi-parameter persistence</strong>: rank invariants, fibered barcodes, and the RIVET software for 2-parameter modules remain central open challenges.</li>
+<li><strong>Magnitude homology</strong>: a competing topological invariant from enriched category theory; its relationship to persistent homology is under active investigation.</li>
+<li><strong>Cosmological TDA</strong>: persistent homology is increasingly used to characterize cosmic web topology — filaments as 1-cycles, voids as 2-cycles — providing observational constraints complementary to two-point statistics.</li>
 </ul>
 
 <hr>
@@ -277,11 +292,11 @@ MathJax = {
 
 <ul>
 <li><a href="/daily_knowledge/topic/Simplicial Homology">Simplicial Homology</a></li>
+<li><a href="/daily_knowledge/topic/Filtration (Algebraic Topology)">Filtration (Algebraic Topology)</a></li>
 <li><a href="/daily_knowledge/topic/Topological Data Analysis">Topological Data Analysis</a></li>
 <li><a href="/daily_knowledge/topic/Vietoris-Rips Complex">Vietoris-Rips Complex</a></li>
-<li><a href="/daily_knowledge/topic/Morse Theory">Morse Theory</a></li>
 <li><a href="/daily_knowledge/topic/Mapper Algorithm">Mapper Algorithm</a></li>
-<li><a href="/daily_knowledge/topic/Optimal Transport">Optimal Transport</a></li>
+<li><a href="/daily_knowledge/topic/Stability Theorem (TDA)">Stability Theorem (TDA)</a></li>
 </ul>
 
 <hr>
@@ -289,27 +304,27 @@ MathJax = {
 <h2>Discussion Prompts</h2>
 
 <ol>
-<li>The structure theorem for persistence modules relies on working over a field $\mathbb{F}$. What breaks — algebraically and computationally — when you use integer coefficients, and does it ever matter in practice?</li>
+<li>The structure theorem guarantees a unique barcode decomposition in the 1-parameter case, but fails in multi-parameter settings. What is the deepest algebraic reason for this, and could a derived-category perspective recover a useful notion of "canonical form"?</li>
 </ol>
 
 <ol>
-<li>Persistence diagrams are stable under $\|\cdot\|_\infty$ perturbations of the filter function, but Wasserstein distances are sensitive to the <em>number</em> of points in the diagram. How should this inform your choice of distance when comparing datasets of different sizes or densities?</li>
+<li>Persistent homology is stable under Hausdorff perturbation of point clouds, yet real datasets have non-uniform sampling density. How does the choice between Čech, Rips, and alpha-complex filtrations affect sensitivity to density artifacts, and when does the density-weighted DTM (distance-to-measure) filtration strictly dominate?</li>
 </ol>
 
 <ol>
-<li>Multiparameter persistence lacks a complete discrete invariant analogous to the barcode. Is this fundamentally a computational obstacle, an algebraic one, or both — and what would a "good enough" approximation theory look like?</li>
+<li>Given that cosmological simulations predict specific topological signatures of the cosmic web (genus curves, Betti number ratios), what would it mean observationally to detect a <em>persistent</em> topological anomaly in large-scale structure that conflicts with $\Lambda$CDM predictions?</li>
 </ol>
 
 
 
 <hr>
-<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Persistent_homology" target="_blank" rel="noopener"&gt;Persistent Homology&lt;/a&gt; · Retrieved 2026-04-01</em></p>
+<p><em>Wikipedia source: &lt;a href="https://en.wikipedia.org/wiki/Persistent_homology" target="_blank" rel="noopener"&gt;Persistent Homology&lt;/a&gt; · Retrieved 2026-07-08</em></p>
 
 <p><strong>Recent arXiv papers:</strong></p>
 <ul>
-<li><a href="https://arxiv.org/abs/2603.30043v1" target="_blank" rel="noopener">Video Models Reason Early: Exploiting Plan Commitment for Maze Solving</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.30042v1" target="_blank" rel="noopener">HapCompass: A Rotational Haptic Device for Contact-Rich Robotic Teleoperation</a> (2026)</li>
-<li><a href="https://arxiv.org/abs/2603.30040v1" target="_blank" rel="noopener">Automatic Identification of Parallelizable Loops Using Transformer-Based Source Code Representations</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.06567v1" target="_blank" rel="noopener">Skipping the rungs! Calibrating distance indicators through their clustering with galaxies</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.06566v1" target="_blank" rel="noopener">The Chiral Random-Matrix Ensemble of the Type-IIB Axion--Dilaton Wormhole Partition Function</a> (2026)</li>
+<li><a href="https://arxiv.org/abs/2607.06564v1" target="_blank" rel="noopener">Lift3D-VLA: Lifting VLA Models to 3D Geometry and Dynamics-Aware Manipulation</a> (2026)</li>
 </ul></div></article>
 </div>
 </body>
